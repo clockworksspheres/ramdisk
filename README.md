@@ -1,4 +1,9 @@
 # ramdisk
+
+Expects python 2.7 - tested on:
+   macOS Catalina (os python)
+   macOS Big Sur  (os python)
+   
 Interface to use, eventually for cross-platform setup and maintenance of ramdisk, primarily for unittesting and compiling code.
 
 Initial work done only for the Mac platform.
