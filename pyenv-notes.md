@@ -4,6 +4,9 @@ Pyenv provides a framework for managing different versions of python, so one can
 
 Please note: some videos install tools straight from github - some can be installed using the 'pip' method, or downloading directly from pypi.org
 
+The [pyenv project on github](https://github.com/pyenv/pyenv)
+
+Decent instructions there - 
 
 ## Some youtube videos
 
