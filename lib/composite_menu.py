@@ -4,7 +4,7 @@ be used to create a basic menu.
 
 @author: Roy Nielsen
 """
-from __future__ import absolute_import
+
 # system libraries
 import re
 import sys
@@ -107,13 +107,13 @@ class MenuComponent(object):
         @author: Roy Nielsen
         """
         retval = False
-        if isinstance(g_key, basestring):
+        if isinstance(g_key, str):
             while not self.anchor:
                 self = self.previous
             try:
                 retval = self.g_dict[g_key]
             except IndexError:
-                print "Damn it Jim!!! Key: " + str(g_key) + " is missing..."
+                print("Damn it Jim!!! Key: " + str(g_key) + " is missing...")
 
         return retval
 
@@ -129,14 +129,14 @@ class MenuComponent(object):
         Author: Roy Nielsen
         """
         success = False
-        if isinstance(g_key, basestring) and \
-           isinstance(g_value, (bool, basestring, int)):
+        if isinstance(g_key, str) and \
+           isinstance(g_value, (bool, str, int)):
             while not self.anchor :
                 self = self.previous
             try:
                 self.g_dict[g_key] = g_value
                 success = True
-            except (KeyError, IndexError), err:
+            except (KeyError, IndexError) as err:
                 pass
 
         return success
@@ -147,7 +147,7 @@ class MenuComponent(object):
         potentially mallicious characters.
         """
         sane = False
-        if isinstance(name, basestring):
+        if isinstance(name, str):
             try:
                 re.match("^[A-Za-z0-9\s\.,]*", name)
             except:
@@ -163,7 +163,7 @@ class MenuComponent(object):
         """
         sane = False
         action = str(action)
-        if isinstance(action, (basestring, bool)) and action is not True:
+        if isinstance(action, (str, bool)) and action is not True:
             try:
                 re.match("^[A-Za-z0-9]*", str(action))
             except:
@@ -181,7 +181,7 @@ class MenuComponent(object):
 
         Author: Roy Nielsen
         """
-        print self.name
+        print(self.name)
 
 
 class MenuItem(MenuComponent) :
@@ -198,7 +198,7 @@ class MenuItem(MenuComponent) :
         MenuComponent.__init__(self, name)
         try:
             self.isSaneName(name)
-        except NotASaneNameError, err:
+        except NotASaneNameError as err:
             self.logger.log(lp.DEBUG, str(err))
             self.logger.log(lp.DEBUG, "name or action: " + str(name) + " is not valid.")
         else:
@@ -206,7 +206,7 @@ class MenuItem(MenuComponent) :
 
         try:
             self.isSaneAction(action)
-        except NotASaneActionError, err:
+        except NotASaneActionError as err:
             self.logger.log(lp.DEBUG, str(err))
             self.logger.log(lp.DEBUG, "name or action: " + str(action) + " is not valid.")
         else:
@@ -223,7 +223,7 @@ class MenuItem(MenuComponent) :
             if self.isSaneAction(self.action):
                 success = self.action(*args, **kwargs)
 
-            print self.name
+            print(self.name)
 
         return success
 
@@ -243,7 +243,7 @@ class MenuComposite(MenuComponent) :
         MenuComponent.__init__(self, name, action)
         try:
             self.isSaneName(name)
-        except NotASaneNameError, err:
+        except NotASaneNameError as err:
             self.logger.log(lp.DEBUG, str(err))
             self.logger.log(lp.DEBUG, "name or action: " + str(name) + " is not valid.")
         else:
@@ -251,7 +251,7 @@ class MenuComposite(MenuComponent) :
 
         try:
             self.isSaneAction(action)
-        except NotASaneActionError, err:
+        except NotASaneActionError as err:
             self.logger.log(lp.DEBUG, str(err))
             self.logger.log(lp.DEBUG, "name or action: " + str(action) + " is not valid.")
         else:
@@ -299,31 +299,31 @@ class MenuComposite(MenuComponent) :
             #####
             # Write out the ANSI code to clear the screen - might not work
             # if a user's terminal is set to unicode
-            print "\033c"
+            print("\033c")
             sys.stdout.write("\033c")
             #####
             # Start menu logic
-            print "\n" + self.name + " Menu\n"
+            print("\n" + self.name + " Menu\n")
             i = 1
             for item in self.child_nodes :
-                print "[" + str(i) + "] " + self.child_nodes[(i-1)].name
+                print("[" + str(i) + "] " + self.child_nodes[(i-1)].name)
                 i = i + 1
             if not self.anchor :
                 if not self.anchor:
-                    print "[" + str(i) + "] Return to " + \
+                    print("[" + str(i) + "] Return to " + \
                           self.previous.name + \
-                          " Menu"
+                          " Menu")
                 if self.anchor:
-                    print "[" + str(i+1) + "] Quit"
+                    print("[" + str(i+1) + "] Quit")
                 elif self.previous.anchor:
-                    print "[" + str(i+1) + "] Quit"
+                    print("[" + str(i+1) + "] Quit")
                 elif not self.anchor and not self.previous.anchor:
-                    print "[" + str(i+1) + "] Main menu"
-                    print "[" + str(i+2) + "] Quit"
+                    print("[" + str(i+1) + "] Main menu")
+                    print("[" + str(i+2) + "] Quit")
             else :
-                print "[" + str(i) + "] Quit"
+                print("[" + str(i) + "] Quit")
 
-            print "\nSelect an option and hit Enter"
+            print("\nSelect an option and hit Enter")
 
             # get input from the command line
             enter = sys.stdin.readline()
@@ -336,7 +336,7 @@ class MenuComposite(MenuComponent) :
             elif re.match("^[Qq]$", enter) and quit:
                 try :
                     sys.exit()
-                except OSError, err :
+                except OSError as err :
                     self.logger.log(lp.DEBUG, "OSError on attempt to exit: " + \
                                     str(err))
             elif re.match("^[Mm]$", enter):
@@ -351,7 +351,7 @@ class MenuComposite(MenuComponent) :
             if enter == (len(self.child_nodes)+1) and self.anchor and quit:
                 try :
                     sys.exit()
-                except OSError, err :
+                except OSError as err :
                     self.logger.log(lp.DEBUG, "OSError on attempt to exit: " + \
                                     str(err))
             # go back to the previous menu    
@@ -371,7 +371,7 @@ class MenuComposite(MenuComponent) :
             if enter == (len(self.child_nodes)+ 1) and self.anchor and quit:
                 try :
                     sys.exit()
-                except OSError, err :
+                except OSError as err :
                     self.logger.log(lp.DEBUG, "OSError on attempt to exit: " + str(err))
             elif enter == (len(self.child_nodes)+ 2) and self.previous.anchor and not quit:
                 while not self.anchor:
@@ -380,7 +380,7 @@ class MenuComposite(MenuComponent) :
             elif enter == (len(self.child_nodes)+ 2) and self.previous.anchor and quit:
                 try :
                     sys.exit()
-                except OSError, err :
+                except OSError as err :
                     self.logger.log(lp.DEBUG, "OSError on attempt to exit: " + str(err))
             elif enter == (len(self.child_nodes)+ 2) and not self.previous.anchor:
                 self.goToMainMenu()
@@ -391,14 +391,14 @@ class MenuComposite(MenuComponent) :
             elif enter == (len(self.child_nodes)+ 3) and not self.previous.anchor:
                 try :
                     sys.exit()
-                except OSError, err :
+                except OSError as err :
                     self.logger.log(lp.DEBUG, "OSError on attempt to exit: " + str(err))
                                     
             elif enter >= 0 and enter <= len(self.child_nodes) :
                 #####
                 # If the action parameter
                 if self.action:
-                    print "Action: " + str(self.action)
+                    print("Action: " + str(self.action))
                     success = self.action(self, *args, **kwargs)
 
                 self.logger.log(lp.DEBUG, "Action returns success: " + str(success))
@@ -434,32 +434,32 @@ class MenuComposite(MenuComponent) :
 def basic():
     """
     """
-    print "You have chosen a basic choice"
-    print "Press any key to continue"
+    print("You have chosen a basic choice")
+    print("Press any key to continue")
     # get input from the command line
     sys.stdin.readline()
     
 def advanced1():
     """
     """
-    print "You have chosen the first advanced option"
-    print "Press any key to continue"
+    print("You have chosen the first advanced option")
+    print("Press any key to continue")
     # get input from the command line
     sys.stdin.readline()
     
 def advanced2():
     """
     """
-    print "You have chosen the second advanced option"
-    print "Press any key to continue"
+    print("You have chosen the second advanced option")
+    print("Press any key to continue")
     # get input from the command line
     sys.stdin.readline()
     
 def advanced3():
     """
     """
-    print "You have chosen the third advanced option"
-    print "Press any key to continue"
+    print("You have chosen the third advanced option")
+    print("Press any key to continue")
     # get input from the command line
     sys.stdin.readline()
 
@@ -491,10 +491,10 @@ if __name__ == "__main__" :
     # Call main menu
     main_menu.menuAction()
 
-    print "---------------------------------------"
-    print "======================================="
-    print "### Ready To Work...                ###"
-    print "======================================="
-    print "---------------------------------------"
+    print("---------------------------------------")
+    print("=======================================")
+    print("### Ready To Work...                ###")
+    print("=======================================")
+    print("---------------------------------------")
 
 

@@ -2,7 +2,7 @@
 """
 @author: Roy Nielsen
 """
-from __future__ import absolute_import
+
 #--- Native python libraries
 import re
 import sys
@@ -34,7 +34,7 @@ elif opts.debug != 0:
 else:
     level=lp.WARNING
 
-if (not isinstance(opts.device, basestring) and \
+if (not isinstance(opts.device, str) and \
    re.match("^[A-Za-z0-9/]+$", opts.device)) or not opts.device:
     print("Cannot detach a device with no name..")
     parser.print_help()

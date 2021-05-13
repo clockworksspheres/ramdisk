@@ -1,6 +1,6 @@
 #!/usr/bin/python -u
 
-from __future__ import absolute_import
+
 
 import os
 import re
@@ -13,7 +13,7 @@ from optparse import Option, OptionValueError
 
 mydir = os.path.dirname(os.path.abspath(__file__))
 parentdir = "/" + "/".join(mydir.split("/")[:-1])
-print parentdir
+print(parentdir)
 sys.path.append(parentdir)
 
 from lib.loggers import CyLogger
@@ -37,7 +37,7 @@ def getRecursiveTree(targetRootDir="."):
                 if not os.geteuid() == 0:
                     if myfile in excludeUnlessUid0:
                         continue
-                        print ("........... Testing " + str(myfile) + " requires uid 0 ..............")
+                        print(("........... Testing " + str(myfile) + " requires uid 0 .............."))
                         #print myfile
                 filesList.append(os.path.abspath(os.path.join(root, myfile)))
     return filesList
@@ -49,7 +49,7 @@ def getDirList(targetDir="."):
             if not os.geteuid() == 0:
                 if myfile in excludeUnlessUid0:
                     continue
-                    print ("........... Testing " + str(myfile) + " requires uid 0 ..............")
+                    print(("........... Testing " + str(myfile) + " requires uid 0 .............."))
                     #print myfile
             filesList.append(os.path.abspath(os.path.join(targetDir, myfile)))
     return filesList
@@ -214,7 +214,7 @@ if __name__=="__main__":
     '''
 
     if not opts.treeRoot and not opts.dirToCheck and not opts.doFiles and not opts.confFile:
-        print "\n\n\nNeed to choose a file acquisition method.\n\n"
+        print("\n\n\nNeed to choose a file acquisition method.\n\n")
         parser.parse_args(["--help"])
         sys.exit(0)
 

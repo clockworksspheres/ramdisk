@@ -16,7 +16,7 @@ logger.initializeLogs()
 mu = ManageUser(logger)
 mk = ManageKeychain(logger)
 
-username = raw_input("Username: " )
+username = input("Username: " )
 oldPass = getpass.getpass("Password: ")
 oneNewPass = getpass.getpass("New Password: ")
 twoNewPass = getpass.getpass("Repeat New Password: ")
@@ -37,7 +37,7 @@ if oneNewPass == twoNewPass:
         upass_success = mu.setUserPassword(username, oneNewPass, oldPass)
     except:
         raise Exception(traceback.format_exc())
-    print str(upass_success)
+    print(str(upass_success))
     mk.setUser(username)
     keychain = "/Users/" + username + "/Library/Keychains/login.keychain"
     try:

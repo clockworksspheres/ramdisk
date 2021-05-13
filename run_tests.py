@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 """
 Test harness creating a test suite, and running it.
 
@@ -9,8 +9,10 @@ Test harness creating a test suite, and running it.
 import os
 import re
 import sys
+import importlib
 import traceback
 import unittest
+
 from optparse import OptionParser, SUPPRESS_HELP, OptionValueError, Option
 
 testdir = "./tests"
@@ -73,9 +75,9 @@ class BuildAndRunSuite(object):
                     os.unlink(pycfile)
                 for item in self.prefix:
                     if re.match("^%s.+\.py$"%item, check_file):
-                        print "Loading test: " + str(check_file)
+                        print("Loading test: " + str(check_file))
                         test_list.append(os.path.join("./tests/", check_file))
-            print str(test_list)
+            print(str(test_list))
 
         return test_list
 
@@ -117,13 +119,14 @@ class BuildAndRunSuite(object):
                 # Test class needs to be named the same as the
                 #   filename for this to work.
                 # import the file named in "test_name" variable
-                module_to_run = __import__(test_name_import_path, 
-                                           fromlist=test_name, level=-1)
+                module_to_run = importlib.import_module(test_name_import_path)
                 # getattr(x, 'foobar') is equivalent to x.foobar
                 test_to_run = getattr(module_to_run, test_name)
                 # Add the test class to the test suite
                 self.test_suite.addTest(unittest.makeSuite(test_to_run))
-            except AttributeError, err:
+            except AttributeError as err:
+                self.logger.log(lp.ERROR, traceback.format_exc())
+                self.logger.log(lp.ERROR, "WTF homeslice!")
                 pass
         #####
         # calll the run_action to execute the test suite
@@ -237,7 +240,7 @@ if __name__ == "__main__":
 
     if os.geteuid != 0:
         print("\n\nNote - Some tests will fail if not run with superuser privilege.")
-        raw_input("Press any key to continue...\n\n")
+        input("Press any key to continue...")
 
     bars = BuildAndRunSuite(logger)
     bars.setPrefix(prefix)

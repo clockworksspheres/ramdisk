@@ -7,11 +7,11 @@ Template for the ramdisk classes
 from tempfile import mkdtemp
 
 #--- non-native python libraries in this source tree
-from lib.loggers import LogPriority as lp
-from lib.loggers import CyLogger
-from lib.environment import Environment
-from lib.CheckApplicable import CheckApplicable
-from commonRamdiskTemplate import RamDiskTemplate, BadRamdiskArguments, NotValidForThisOS
+from .lib.loggers import LogPriority as lp
+from .lib.loggers import CyLogger
+from .lib.environment import Environment
+from .lib.CheckApplicable import CheckApplicable
+from .commonRamdiskTemplate import RamDiskTemplate, BadRamdiskArguments, NotValidForThisOS
 
 ###############################################################################
 
@@ -53,10 +53,10 @@ class RamDisk(object):
         linuxApplicableHere = self.chkApp.isApplicable(linuxApplicable)        
 
         if linuxApplicableHere:
-            from linuxTmpfsRamdisk import RamDisk
+            from .linuxTmpfsRamdisk import RamDisk
             self.ramdisk = RamDisk(*args, **kwargs)
         elif macApplicableHere:
-            from macRamdisk import RamDisk
+            from .macRamdisk import RamDisk
             self.ramdisk = RamDisk(*args, **kwargs)
         else:
             raise NotValidForThisOS("Ramdisk not available here...")

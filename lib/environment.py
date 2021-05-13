@@ -42,7 +42,7 @@ Created on Aug 24, 2010
 @change: 2017/03/07 - dkennel - added fisma risk level support
 @change: 2017.09/01 - rsn - taking out stonix specifics
 '''
-from __future__ import absolute_import
+
 #--- Native python libraries
 import os
 import re
@@ -155,14 +155,14 @@ class Environment(object):
                             self.systemtype = vt
 
             else:
-                print str(__name__) + ":Unable to determine systemtype. Required utility 'ps' does not exist on this system"
+                print(str(__name__) + ":Unable to determine systemtype. Required utility 'ps' does not exist on this system")
         except OSError:
-            print str(__name__) + ":Unable to determine systemtype. Required utility 'ps' does not exist on this system"
+            print(str(__name__) + ":Unable to determine systemtype. Required utility 'ps' does not exist on this system")
 
         if self.systemtype not in validtypes:
-            print str(__name__) + ":This system is based on an unknown architecture"
+            print(str(__name__) + ":This system is based on an unknown architecture")
         else:
-            print str(__name__) + ":Determined that this system is based on " + str(self.systemtype) + " architecture"
+            print(str(__name__) + ":Determined that this system is based on " + str(self.systemtype) + " architecture")
 
     def getsystemtype(self):
         '''
@@ -188,7 +188,7 @@ class Environment(object):
         @author: D. Kennel
         """
         try:
-            if type(installmode) is types.BooleanType:
+            if type(installmode) is bool:
                 self.installmode = installmode
         except (NameError):
             # installmode was undefined
@@ -988,7 +988,7 @@ class Environment(object):
                     self.test_mode = True
                     self.script_path = os.path.dirname(os.path.realpath(sys.argv[1]))
                 else:
-                    print "ERROR: Cannot run using this method"
+                    print("ERROR: Cannot run using this method")
             else:
                 #print "DEBUG: Cannot find appropriate path, building paths for current directory"
                 try:

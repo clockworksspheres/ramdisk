@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+
 import unittest
 import time
 import sys
@@ -7,6 +7,8 @@ from datetime import datetime
 
 appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
 sys.path.append(appendDir)
+
+# sys.path.append("..")
 
 from lib.loggers import CyLogger
 from lib.loggers import LogPriority as lp
@@ -58,12 +60,12 @@ class test_run_commands(unittest.TestCase):
 
         self.rw.setCommand('/bin/ls /var/spool', myshell=True)
         _, _, retval = self.rw.communicate(silent=False)
-        self.assertEquals(retval, 0,
+        self.assertEqual(retval, 0,
                           "Valid [] command execution failed: " +
                           '/bin/ls /var/spool --- retval: ' + str(retval))
         self.rw.setCommand(['/bin/ls', '-l', '/usr/local'])
         _, _, retval = self.rw.communicate(silent=False)
-        self.assertEquals(retval, 0,
+        self.assertEqual(retval, 0,
                           "Valid [] command execution failed: " +
                           '/bin/ls /var/spool --- retval: ' + str(retval))
 
@@ -77,13 +79,13 @@ class test_run_commands(unittest.TestCase):
 
         self.rw.setCommand('/bin/ls /var/spool')
         _, _, retval = self.rw.communicate(silent=False)
-        self.assertEquals(retval, 0,
+        self.assertEqual(retval, 0,
                           "Valid [] command execution failed: " +
                           '/bin/ls /var/spool --- retval: ' + str(retval))
 
         self.rw.setCommand(['/bin/ls', '-l', '/usr/local'])
         _, _, retval = self.rw.communicate(silent=False)
-        self.assertEquals(retval, 0,
+        self.assertEqual(retval, 0,
                           "Valid [] command execution failed: " +
                           '/bin/ls /var/spool --- retval: ' + str(retval))
 
@@ -92,9 +94,9 @@ class test_run_commands(unittest.TestCase):
         _, _, retcode = self.rw.wait()
         self.logger.log(lp.WARNING, "retcode: " + str(retcode))
         if sys.platform == 'darwin':
-            self.assertEquals(retcode, 1, "Returncode Test failed...")
+            self.assertEqual(retcode, 1, "Returncode Test failed...")
         else:
-            self.assertEquals(retcode, 2, "Returncode Test failed...")
+            self.assertEqual(retcode, 2, "Returncode Test failed...")
 
     def test_waitNpassThruStdout(self):
         """
@@ -102,16 +104,16 @@ class test_run_commands(unittest.TestCase):
         self.rw.__init__(self.logger)
         self.rw.setCommand(['/bin/ls', '-l', '/usr/local'])
         _, _, retval = self.rw.waitNpassThruStdout()
-        self.assertEquals(retval, 0,
+        self.assertEqual(retval, 0,
                           "Valid [] command execution failed: " +
                           '/bin/ls /var/spool --- retval: ' + str(retval))
 
         self.rw.setCommand(['/bin/ls', '/1', '/'])
         _, _, retval = self.rw.waitNpassThruStdout()
         if sys.platform == 'darwin':
-            self.assertEquals(retval, 1, "Returncode Test failed...")
+            self.assertEqual(retval, 1, "Returncode Test failed...")
         else:
-            self.assertEquals(retval, 2, "Returncode Test failed...")
+            self.assertEqual(retval, 2, "Returncode Test failed...")
 
     def test_timeout(self):
         """

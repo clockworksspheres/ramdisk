@@ -22,7 +22,7 @@ class Spinner(object):
 
     def init_spin(self):
         while not self.stop_running.is_set():
-            sys.stdout.write(self.spinner_cycle.next())
+            sys.stdout.write(next(self.spinner_cycle))
             sys.stdout.flush()
             time.sleep(.33)
             sys.stdout.write('\b')
@@ -33,7 +33,7 @@ def do_work():
 if __name__ == "__main__":
     """
     """
-    print 'starting work'    
+    print('starting work')    
 
     spinner = Spinner()
     spinner.start()
@@ -41,5 +41,5 @@ if __name__ == "__main__":
     do_work()
 
     spinner.stop()
-    print 'all done!'
+    print('all done!')
 

@@ -41,32 +41,32 @@ else:
 def basic():
     """ 
     """
-    print "You have chosen a basic choice"
-    print "Press any key to continue"
+    print("You have chosen a basic choice")
+    print("Press any key to continue")
     # get input from the command line
     sys.stdin.readline()
     
 def advanced1():
     """ 
     """
-    print "You have chosen the first advanced option"
-    print "Press any key to continue"
+    print("You have chosen the first advanced option")
+    print("Press any key to continue")
     # get input from the command line
     sys.stdin.readline()
     
 def advanced2():
     """ 
     """
-    print "You have chosen the second advanced option"
-    print "Press any key to continue"
+    print("You have chosen the second advanced option")
+    print("Press any key to continue")
     # get input from the command line
     sys.stdin.readline()
     
 def advanced3():
     """ 
     """
-    print "You have chosen the third advanced option"
-    print "Press any key to continue"
+    print("You have chosen the third advanced option")
+    print("Press any key to continue")
     # get input from the command line
     sys.stdin.readline()
        

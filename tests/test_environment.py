@@ -53,7 +53,7 @@ class test_environment(unittest.TestCase):
     def testGetostype(self):
         validtypes = 'Red Hat Enterprise Linux|Debian|Ubuntu|CentOS|Fedora|' + \
                      'openSUSE|Mac OS X'
-        print 'OS Type: ' + self.to.getostype()
+        print('OS Type: ' + self.to.getostype())
         self.assertTrue(re.search(validtypes, self.to.getostype()))
 
     def testGetosfamily(self):
@@ -100,25 +100,25 @@ class test_environment(unittest.TestCase):
 
     def testGetSysSerNo(self):
         self.assertTrue(self.to.get_system_serial_number())
-        print 'SysSer: ' + self.to.get_system_serial_number()
+        print('SysSer: ' + self.to.get_system_serial_number())
 
     def testGetChassisSerNo(self):
         self.assertTrue(self.to.get_chassis_serial_number())
-        print 'Ser: ' + self.to.get_chassis_serial_number()
+        print('Ser: ' + self.to.get_chassis_serial_number())
 
     def testGetSysMfg(self):
         mfg = self.to.get_system_manufacturer()
-        print 'SysMFG: ' + mfg
+        print('SysMFG: ' + mfg)
         self.assertTrue(mfg)
 
     def testGetChassisMfg(self):
         mfg = self.to.get_chassis_manfacturer()
-        print 'MFG: ' + mfg
+        print('MFG: ' + mfg)
         self.assertTrue(mfg)
 
     def testGetSysUUID(self):
         uuid = self.to.get_sys_uuid()
-        print 'UUID: ' + uuid
+        print('UUID: ' + uuid)
         self.assertTrue(uuid)
 
     def testIsMobile(self):

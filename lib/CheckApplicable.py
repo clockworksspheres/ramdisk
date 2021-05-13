@@ -31,7 +31,7 @@ Created on Aug 24, 2010
 @change: rsn 2017/09/01 Port from stonix
 @change: 2017/11/13 ekkehard - make eligible for OS X El Capitan 10.11+
 '''
-from __future__ import absolute_import
+
 #--- Native python libraries
 import re
 import traceback
@@ -71,7 +71,7 @@ class CheckApplicable(object):
             keysSuccess = []
             valueSuccess = []
             validKeys = ['type', 'os', 'family', 'noroot', 'fisma']
-            for key, value in applicable.items():
+            for key, value in list(applicable.items()):
                 if key in validKeys:
                     keysSuccess.append(True)
                 else:
@@ -222,7 +222,7 @@ class CheckApplicable(object):
 
         # Process the OS list
         if 'os' in applicable:
-            for ostype, osverlist in applicable['os'].iteritems():
+            for ostype, osverlist in applicable['os'].items():
                 if re.search(ostype, self.myostype):
                     inRange = self.isInRange(osverlist)
                     if inRange:

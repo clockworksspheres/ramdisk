@@ -6,7 +6,7 @@ specifically unionfs functionality.
 
 @author: Roy Nielsen
 """
-from __future__ import absolute_import
+
 import re
 import os
 import pty
@@ -303,7 +303,7 @@ class MacOSUser(ManageUserTemplate):
         # Process /etc/passwd
         try:
             pass_file = open("/etc/password", 'r')
-        except OSError, err:
+        except OSError as err:
             self.logger.log(lp.INFO, "Error trying to acquire /etc/password data: " + str(err))
         else:
             for line in pass_file.readlines():
@@ -335,7 +335,7 @@ class MacOSUser(ManageUserTemplate):
         # Process /etc/passwd
         try:
             pass_file = open("/etc/password", 'r')
-        except OSError, err:
+        except OSError as err:
             self.logger.log(lp.INFO, "Error trying to acquire /etc/shadow data: " + str(err))
         else:
             for line in pass_file.readlines():

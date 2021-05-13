@@ -6,7 +6,7 @@ unionfs functionality.
 
 @author: Roy Nielsen
 """
-from __future__ import absolute_import
+
 
 import re
 import os
@@ -666,7 +666,7 @@ class MacOSUser(ManageUserTemplate):
         """
         success = False
         reterr = ""
-        if isinstance(userName, basestring)\
+        if isinstance(userName, str)\
            and re.match("^[A-Za-z][A-Za-z0-9]*$", userName):
             cmd = [self.dscl, ".", "-create", "/Users/" + str(userName)]
             self.runner.setCommand(cmd)
@@ -872,7 +872,7 @@ class MacOSUser(ManageUserTemplate):
                 userUid = self.getUserUid(userName)
                 userPriGid = self.getUserPriGid(userName)
                 userHomeDir = self.getUserHomeDir(userName)
-            except BadUserInfoError, err:
+            except BadUserInfoError as err:
                 self.logger.log(lp.INFO, "Exception trying to find: \"" +
                                          str(userName) + "\" user information")
                 self.logger.log(lp.INFO, "err: " + str(err))
@@ -943,7 +943,7 @@ class MacOSUser(ManageUserTemplate):
             #
             try:
                 shutil.rmtree("/Users/" + str(user))
-            except IOError or OSError, err:
+            except IOError or OSError as err:
                 self.logger.log(lp.INFO, "Exception trying to " +
                                 "remove user home...")
                 self.logger.log(lp.INFO, "Exception: " + str(err))
@@ -996,7 +996,7 @@ class MacOSUser(ManageUserTemplate):
         else:
             #self.logger.log(lp.DEBUG, "cmd: " + str(command))
             commands = 0
-            for subCommand, args in command.iteritems():
+            for subCommand, args in command.items():
                 commands += 1
                 #####
                 # Check to make sure only one command is in the dictionary
@@ -1024,7 +1024,7 @@ class MacOSUser(ManageUserTemplate):
                 #####
                 # Check to make sure the key or subCommand is a string, and the value is
                 # alist and args are
-                if not isinstance(subCommand, basestring) or not isinstance(args, list):
+                if not isinstance(subCommand, str) or not isinstance(args, list):
                     self.logger.log(lp.ERROR, "subcommand needs to be a string, and args needs to be a list of strings")
                     success = False
                 else:
@@ -1032,7 +1032,7 @@ class MacOSUser(ManageUserTemplate):
                     # Check the arguments to make sure they are all strings
                     success = True
                     for arg in args:
-                        if not isinstance(arg, basestring):
+                        if not isinstance(arg, str):
                             self.logger.log(lp.ERROR, "Arg '" + str(arg) + "'needs to be a string...")
                             success = False
                             break
@@ -1186,22 +1186,22 @@ class MacOSUser(ManageUserTemplate):
 
         #####
         # FIRST VALIDATE INPUT!!
-        if isinstance(directory, basestring) and \
+        if isinstance(directory, str) and \
            re.match("^[/\.][A-Za-z0-9/]*", directory):
             success = True
         else:
             success = False
-        if isinstance(action, basestring) and \
+        if isinstance(action, str) and \
            re.match("^[-]*[a-z]+", action) and success:
             success = True
         else:
             success = False
-        if isinstance(dirobj, basestring) and \
+        if isinstance(dirobj, str) and \
            re.match("^[A-Za-z0=9/]+", dirobj) and success:
             success = True
         else:
             success = False
-        if isinstance(dirprop, basestring) and \
+        if isinstance(dirprop, str) and \
            re.match("^[A-Za-z0-9]+", dirprop) and success:
             success = True
         else:

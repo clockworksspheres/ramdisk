@@ -4,7 +4,7 @@ Test for basic functionality of CheckApplicable
 
 @author: Roy Nielsen
 """
-from __future__ import absolute_import
+
 # --- Native python libraries
 
 import sys

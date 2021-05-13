@@ -96,9 +96,9 @@ class RamDiskTemplate(object):
         """
         Getter for mount data, and if the mounting of a ramdisk was successful
         """
-        print "Success: " + str(self.success)
-        print "Mount point: " + str(self.mntPoint)
-        print "Device: " + str(self.myRamdiskDev)
+        print("Success: " + str(self.success))
+        print("Mount point: " + str(self.mntPoint))
+        print("Device: " + str(self.myRamdiskDev))
         return (self.success, str(self.mntPoint), str(self.myRamdiskDev))
 
     ###########################################################################
@@ -114,7 +114,7 @@ class RamDiskTemplate(object):
         self.mntPoint = ""
         try :
             self.mntPoint = mkdtemp()
-        except Exception, err :
+        except Exception as err :
             self.logger.log(lp.WARNING, "Exception trying to create temporary directory")
             raise err
         else :

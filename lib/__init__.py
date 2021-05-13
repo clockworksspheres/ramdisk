@@ -1,2 +1,2 @@
-import manage_user
-import manage_keychain
+from . import manage_user
+from . import manage_keychain
