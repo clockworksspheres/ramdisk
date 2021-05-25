@@ -2,17 +2,17 @@
 PyLintIface
 """
 
-from __future__ import absolute_import
+
 import sys
 import json
 import contextlib
-from StringIO import StringIO
+from io import StringIO
 from optparse import OptionParser, SUPPRESS_HELP
 
 #####
 # 3rd party libraries
 from pylint.lint import Run
-from pylint.reporters.json import JSONReporter
+from pylint.reporters import JSONReporter
 #####
 # cds libraries
 from lib.loggers import CyLogger
@@ -26,7 +26,7 @@ def _patch_streams(out):
     try:
         yield
     except:
-        print "DAMN IT JIM!!!"
+        print("DAMN IT JIM!!!")
     finally:
         sys.stderr = old_stdout
         sys.stdout = old_stderr
@@ -92,7 +92,7 @@ class PylintIface():
         try:
             yield
         except:
-            print "DAMN IT JIM!!!"
+            print("DAMN IT JIM!!!")
         finally:
             sys.stderr = old_stdout
             sys.stdout = old_stderr

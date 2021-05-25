@@ -5,7 +5,7 @@ Should be OS agnostic
 
 @author: Roy Nielsen
 """
-from __future__ import absolute_import
+
 
 
 class UnsupportedOSError(Exception):

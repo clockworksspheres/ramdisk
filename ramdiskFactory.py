@@ -11,9 +11,9 @@ from tempfile import mkdtemp
 from subprocess import Popen, PIPE, STDOUT
 
 #--- non-native python libraries in this source tree
-from lib.loggers import CyLogger
-from lib.loggers import LogPriority as lp
-from lib.run_commands import RunWith
+from .lib.loggers import CyLogger
+from .lib.loggers import LogPriority as lp
+from .lib.run_commands import RunWith
 
 
 def BadRamdiskTypeException(Exception):
@@ -97,19 +97,19 @@ class RamDiskFactory(object):
             if self.myosfamily == "darwin":
                 #####
                 # Found MacOS
-                from macRamdisk import RamDisk
+                from .macRamdisk import RamDisk
                 self.activeRamdisk = RamDisk(size, mountpoint, self.logger)
 
             elif self.myosfamily == "linux" and ramdiskType == "loop":
                 #####
                 # Found Linux with a loopback ramdisk request
-                from linuxLoopRamdisk import RamDisk
+                from .linuxLoopRamdisk import RamDisk
                 self.activeRamdisk = RamDisk(mountpoint, self.logger)
 
             elif self.myosfamily == "linux" and ramdiskType == "tmpfs":
                 #####
                 # Found Linux with a tmpfs ramdisk request.
-                from linuxTmpfsRamdisk import RamDisk
+                from .linuxTmpfsRamdisk import RamDisk
                 self.activeRamdisk = RamDisk(size, mountpoint, self.logger)
 
             else:
