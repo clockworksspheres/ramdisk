@@ -9,6 +9,7 @@ Test harness creating a test suite, and running it.
 import os
 import re
 import sys
+import importlib
 import traceback
 import unittest
 from optparse import OptionParser, SUPPRESS_HELP, OptionValueError, Option
