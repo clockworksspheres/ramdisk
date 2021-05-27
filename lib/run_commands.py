@@ -284,7 +284,7 @@ class RunWith(object):
                 proc.wait()
                 for line in proc.stdout.readline():
                     if line:
-                        self.stdout = self.stdout + str(line) + "\n"
+                        self.stdout = str(self.stdout) + str(line) + "\n"
                 if proc.stderr:
                     for line in proc.stderr.readline():
                         if line:
@@ -346,7 +346,7 @@ class RunWith(object):
                         myout = proc.stdout.readline()
                         if myout == '' and proc.poll() is not None:
                             break
-                        tmpline = myout.strip()
+                        tmpline = str(myout).strip()
                         self.stdout += tmpline + "\n"
 
                         if tmpline and not silent:
@@ -392,7 +392,7 @@ class RunWith(object):
                         myerr = proc.stderr.readline()
                         if myerr == '' and proc.poll() is not None:
                             break
-                        tmpline = myerr.strip()
+                        tmpline = str(myerr).strip()
                         self.stderr += tmpline + "\n"
 
                         if tmpline and not silent:
