@@ -15,6 +15,7 @@ import select
 import termios
 import threading
 import traceback
+import tracemalloc
 from subprocess import Popen, PIPE
 
 from . loggers import CyLogger
@@ -92,6 +93,10 @@ class RunWith(object):
         #####
         # setting up to call ctypes to do a filesystem sync
         self.libc = getLibc()
+
+        #####
+        # Extra stuff to assist in debugging
+        tracemalloc.start(16)
 
     def setCommand(self, command, env=None, myshell=None, close_fds=None):
         """
@@ -227,9 +232,13 @@ class RunWith(object):
             try:
                 proc = Popen(self.command, stdout=PIPE, stderr=PIPE, shell=self.myshell, env=self.environ, close_fds=self.cfds)
                 self.stdout, self.stderr = proc.communicate()
+                self.stdout = str(self.stdout)
+                self.stderr = str(self.stderr)
+
                 self.retcode = proc.returncode
+
                 self.libc.sync()
-            except Exception as err:
+            except SubprocessError as err:
                 if not silent:
                     self.logger.log(lp.WARNING, "command: " + str(self.printcmd))
                     self.logger.log(lp.DEBUG, "stdout: " + str(self.stdout))
@@ -288,13 +297,13 @@ class RunWith(object):
                 if proc.stderr:
                     for line in proc.stderr.readline():
                         if line:
-                            self.stderr = self.stderr + str(line) + "\n"
+                            self.stderr = str(self.stderr) + str(line) + "\n"
                 else:
                     self.stderr = ""
                 proc.wait()
                 self.retcode = proc.returncode
                 self.libc.sync()
-            except Exception as err:
+            except SubprocessError as err:
                 if not silent:
                     self.logger.log(lp.WARNING, "command: " + str(self.printcmd))
                 self.logger.log(lp.WARNING, "stderr: " + str(self.stderr))
@@ -306,6 +315,12 @@ class RunWith(object):
                     self.logger.log(lp.DEBUG, "Done with: " + self.printcmd)
                 self.logger.log(lp.DEBUG, "Command returned with error/returncode: " + str(self.retcode))
             finally:
+                try:
+                    proc.stdout.close()
+                except SubprocessError as err:
+                    self.loggre.log(lp.WARNING, traceback.format_exc())
+                    raise err
+        
                 if not silent:
                     self.logger.log(lp.DEBUG, "Done with command: " + self.printcmd)
                     self.logger.log(lp.DEBUG, "stdout: " + str(self.stdout))
@@ -347,7 +362,8 @@ class RunWith(object):
                         if myout == '' and proc.poll() is not None:
                             break
                         tmpline = str(myout).strip()
-                        self.stdout += tmpline + "\n"
+                        tmpline = str(tmpline)
+                        self.stdout += str(tmpline) + "\n"
 
                         if tmpline and not silent:
                             self.logger.log(lp.DEBUG, str(tmpline))
@@ -357,8 +373,15 @@ class RunWith(object):
                                 continue
                             else:
                                 if re.search(chk_string, tmpline):
-                                    # proc.stdout.close()
-                                    # proc.stderr.close()
+                                    try:
+                                        proc.stdout.close()
+                                    except SubprocessError as err:
+                                        self.logger.log(lp.INFO, traceback.format_exc())
+                                    try:
+                                        proc.stderr.close()
+                                    except SubprocessError as err:
+                                        self.logger.log(lp.INFO, traceback.format_exc())
+
                                     if respawn:
                                         pass
                                     else:
@@ -374,8 +397,17 @@ class RunWith(object):
                                 found = False
                                 for mystring in chk_string:
                                     if chk_string(mystring, tmpline):
-                                        # proc.stdout.close()
-                                        # proc.stderr.close()
+                                        try:
+                                            proc.stdout.close()
+                                        except SubprocessError as err:
+                                            self.logger.log(lp.INFO, traceback.format_exc())
+
+                                        try:
+                                            proc.stderr.close()
+                                        except SubprocessError as err:
+                                            self.logger.log(lp.INFO, traceback.format_exc())
+
+                                        proc.stderr.close()
                                         if respawn:
                                             pass
                                         else:
@@ -403,8 +435,16 @@ class RunWith(object):
                                 continue
                             else:
                                 if re.search(chk_string, tmpline):
-                                    # proc.stdout.close()
-                                    # proc.stderr.close()
+                                    try:
+                                        proc.stdout.close()
+                                    except SubprocessError as err:
+                                        self.logger.log(lp.INFO, traceback.format_exc())
+
+                                    try:
+                                        proc.stderr.close()
+                                    except SubprocessError as err:
+                                        self.logger.log(lp.INFO, traceback.format_exc())
+
                                     if respawn:
                                         pass
                                     else:
@@ -420,8 +460,16 @@ class RunWith(object):
                                 found = False
                                 for mystring in chk_string:
                                     if chk_string(mystring, tmpline):
-                                        # proc.stdout.close()
-                                        # proc.stderr.close()
+                                        try:
+                                            proc.stdout.close()
+                                        except SubprocessError as err:
+                                            self.logger.log(lp.INFO, traceback.format_exc())
+
+                                        try:
+                                            proc.stderr.close()
+                                        except SubprocessError as err:
+                                            self.logger.log(lp.INFO, traceback.format_exc())
+
                                         if respawn:
                                             pass
                                         else:
@@ -435,12 +483,19 @@ class RunWith(object):
                                     break
 
                 proc.wait()
-                # proc.stdout.close()
-                # proc.stderr.close()
+                try:
+                    proc.stdout.close()
+                except SubprocessError as err:
+                    self.logger.log(lp.INFO, traceback.format_exc())
+                try:
+                    proc.stderr.close()
+                except SubprocessError as err:
+                    self.logger.log(lp.INFO, traceback.format_exc())
+
                 self.retcode = proc.returncode
                 self.libc.sync()
 
-            except Exception as err:
+            except SubprocessError as err:
                 if not silent:
                     self.logger.log(lp.WARNING, "command: " + str(self.printcmd))
                 self.logger.log(lp.WARNING, "stderr: " + str(self.stderr))
@@ -503,7 +558,7 @@ class RunWith(object):
                 self.stdout, self.stderr = proc.communicate()
                 timer.cancel()
                 self.retcode = proc.returncode
-            except Exception as err:
+            except SubprocessError as err:
                 if not silent:
                     self.logger.log(lp.WARNING, "command: " + str(self.printcmd))
                 self.logger.log(lp.WARNING, "stderr: " + str(self.stderr))
@@ -801,7 +856,7 @@ class RunWith(object):
 
             try:
                 (master, slave) = pty.openpty()
-            except Exception as err:
+            except SubprocessError as err:
                 self.logger.log(lp.WARNING, "Error trying to open pty: " +
                                 str(err))
                 self.logger.log(lp.WARNING, traceback.format_exc())
@@ -812,7 +867,7 @@ class RunWith(object):
                     proc = Popen(internal_command,
                                  stdin=slave, stdout=slave, stderr=slave,
                                  close_fds=True)
-                except Exception as err:
+                except SubprocessError as err:
                     self.logger.log(lp.WARNING,
                                     "Error opening process to pty: " +
                                     str(err))
@@ -915,7 +970,7 @@ class RunWith(object):
 
             try:
                 (master, slave) = pty.openpty()
-            except Exception as err:
+            except SubprocessError as err:
                 self.logger.log(lp.WARNING, "Error trying to open pty: " +
                                 str(err))
                 self.logger.log(lp.WARNING, traceback.format_exc())
@@ -925,7 +980,7 @@ class RunWith(object):
                 try:
                     proc = Popen(cmd, stdin=slave, stdout=slave, stderr=slave,
                                  close_fds=True)
-                except Exception as err:
+                except SubprocessError as err:
                     self.logger.log(lp.WARNING,
                                     "Error opening process to pty: " +
                                     str(err))
@@ -1035,7 +1090,7 @@ class RunThread(threading.Thread):
                 self.retout, self.reterr = p.communicate()
                 self.logger.log(lp.WARNING, "Finished \"run\" of: " +
                                 str(self.command))
-            except Exception as err:
+            except SubprocessError as err:
                 self.logger.log(lp.WARNING, "Exception trying to open: " +
                                 str(self.command))
                 self.logger.log(lp.WARNING, traceback.format_exc())
@@ -1044,7 +1099,7 @@ class RunThread(threading.Thread):
             else:
                 try:
                     self.retout, self.reterr = p.communicate()
-                except Exception as err:
+                except SubprocessError as err:
                     self.logger.log(lp.WARNING, "Exception trying to open: " +
                                     str(self.printcmd))
                     self.logger.log(lp.WARNING, "Associated exception: " +

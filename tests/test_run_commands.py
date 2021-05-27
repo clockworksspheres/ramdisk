@@ -1,9 +1,11 @@
+#!/usr/bin/env -S python -u
 
 import unittest
 import time
 import sys
 import os
 import traceback
+import tracemalloc
 from datetime import datetime
 
 appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
@@ -81,7 +83,7 @@ class test_run_commands(unittest.TestCase):
             _, _, retval = self.rw.communicate(silent=False)
         except Exception as err:
             self.logger.log(ERROR, traceback.format_exc())
-            raise err
+            # raise err
 
         self.assertEqual(retval, 0,
                           "Valid [] command execution failed: " +
@@ -92,18 +94,19 @@ class test_run_commands(unittest.TestCase):
             _, _, retval = self.rw.communicate(silent=False)
         except Exception as err:
             self.logger.log(ERROR, traceback.format_exc())
-            raise err
+            # raise err
 
         self.assertEqual(retval, 0,
                           "Valid [] command execution failed: " +
                           '/bin/ls /var/spool --- retval: ' + str(retval))
 
         self.rw.setCommand(['/bin/ls', '/1', '/'])
+        tracemalloc.start(25)
         try:
             _, _, retcode = self.rw.wait()
         except Exception as err:
             self.logger.log(ERROR, traceback.format_exc())
-            raise err
+            # raise err
 
         self.logger.log(lp.WARNING, "retcode: " + str(retcode))
         if sys.platform == 'darwin':
