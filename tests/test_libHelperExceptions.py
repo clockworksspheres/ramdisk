@@ -1,4 +1,4 @@
-#!/usr/bin/python -u
+#!/usr/bin/env -S python -u
 """
 Test the helper exceptions.
 
@@ -14,6 +14,11 @@ import unittest
 import tempfile
 import ctypes as C
 from datetime import datetime
+
+#####
+# Include the parent project directory in the PYTHONPATH
+appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
+sys.path.append(appendDir)
 
 #--- non-native python libraries in this source tree
 from lib.loggers import CyLogger
@@ -47,6 +52,7 @@ class test_libHelperExceptions(unittest.TestCase):
         self.test_start_time = datetime.now()
 
         self.logger = CyLogger()
+        self.logger.initializeLogs()
 
         self.libcPath = None # initial initialization
 
@@ -124,7 +130,7 @@ class test_libHelperExceptions(unittest.TestCase):
         """
         disconnect ramdisk
         """
-        logger = CyLogger()
+        # self.logger = CyLogger()
         #####
         # capture end time
         test_end_time = datetime.now()
@@ -133,7 +139,14 @@ class test_libHelperExceptions(unittest.TestCase):
         # Calculate and log how long it took...
         test_time = (test_end_time - self.test_start_time)
 
-        logger.log(lp.INFO, self.__module__ + " took " + str(test_time) + \
-                  " time to complete...")
+        self.logger.log(lp.INFO, self.__module__ + " took " + str(test_time) + \
+                        " time to complete...")
 
 ###############################################################################
+
+
+if __name__ == "__main__":
+
+    unittest.main()
+
+

@@ -17,6 +17,7 @@ import threading
 import traceback
 import tracemalloc
 from subprocess import Popen, PIPE
+from subprocess import SubprocessError as SubprocessError
 
 from . loggers import CyLogger
 from . loggers import LogPriority as lp
@@ -253,6 +254,14 @@ class RunWith(object):
                     self.logger.log(lp.DEBUG, "Done with: " + self.printcmd)
                 self.logger.log(lp.DEBUG, "Command returned with error/returncode: " + str(self.retcode))
             finally:
+                try:
+                    proc.stdout.close()
+                except SubprocessError:
+                    pass
+                try:
+                    proc.stderr.close()
+                except SubprocessError:
+                    pass
                 #####
                 # Lines below could reveal a password if it is passed as an
                 # argument to the command.  Could reveal in whatever stream
@@ -317,10 +326,12 @@ class RunWith(object):
             finally:
                 try:
                     proc.stdout.close()
-                except SubprocessError as err:
-                    self.loggre.log(lp.WARNING, traceback.format_exc())
-                    raise err
-        
+                except SubprocessError:
+                    pass 
+                try:
+                    proc.stderr.close()
+                except SubprocessError:
+                    pass 
                 if not silent:
                     self.logger.log(lp.DEBUG, "Done with command: " + self.printcmd)
                     self.logger.log(lp.DEBUG, "stdout: " + str(self.stdout))
@@ -361,12 +372,12 @@ class RunWith(object):
                         myout = proc.stdout.readline()
                         if myout == '' and proc.poll() is not None:
                             break
-                        tmpline = str(myout).strip()
-                        tmpline = str(tmpline)
+                        tmpline = str(myout)
+                        tmpline = str(tmpline).strip()
                         self.stdout += str(tmpline) + "\n"
 
-                        if tmpline and not silent:
-                            self.logger.log(lp.DEBUG, str(tmpline))
+                        # if tmpline and not silent:
+                        #     self.logger.log(lp.DEBUG, str(tmpline))
 
                         if isinstance(chk_string, str):
                             if not chk_string:

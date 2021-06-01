@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env -S python -u
 """
 Test for basic functionality of the basic libc
 functionality provided by getLibc
@@ -17,7 +17,10 @@ import unittest
 import ctypes as C
 from datetime import datetime
 
-sys.path.append("..")
+#####
+# Include the parent project directory in the PYTHONPATH
+appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
+sys.path.append(appendDir)
 
 # --- Non-native python libraries in this source tree
 from lib.loggers import CyLogger
