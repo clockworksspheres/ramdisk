@@ -150,6 +150,7 @@ class Environment(object):
                 cmdoutput = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, close_fds=True)
                 outputlines = cmdoutput.stdout.readlines()
                 for line in outputlines:
+                    line = str(line)
                     for vt in validtypes:
                         if re.search(vt, line, re.IGNORECASE):
                             self.systemtype = vt
@@ -578,6 +579,7 @@ class Environment(object):
         netdata = proc.stdout.readlines()
 
         for line in netdata:
+            line = str(line)
             # print "processing: " + line
             match = re.search(macre, line)
             if match is not None:
@@ -631,6 +633,7 @@ class Environment(object):
             except OSError:
                 return ipaddr
             for line in routedata:
+                line = str(line)
                 if re.search('gateway:', line):
                     line = line.split()
                     try:
@@ -704,6 +707,7 @@ class Environment(object):
             # TODO - Need error handler
             raise
         for line in ifdata:
+            line = str(line)
             if re.search('inet addr:', line):
                 try:
                     line = line.split()

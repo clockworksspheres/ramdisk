@@ -47,7 +47,7 @@ class test_CheckApplicable(unittest.TestCase):
 
         #####
         # Start timer in miliseconds
-        self.test_start_time = datetime.now()
+        self.testStartTime = datetime.now()
 
     ##################################
 
@@ -61,7 +61,7 @@ class test_CheckApplicable(unittest.TestCase):
 
         #####
         # Calculate and log how long it took...
-        test_time = (testEndTime - self.metaVars['testStartTime'])
+        test_time = (testEndTime - self.testStartTime)
         # print str(test_time)
         # global LOGGER
         self.logger.log(lp.INFO, self.__module__ + " took " + str(test_time) + " time so far...")
