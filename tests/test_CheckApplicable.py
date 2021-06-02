@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env -S python -u
 """
 Test for basic functionality of CheckApplicable
 
@@ -6,16 +6,20 @@ Test for basic functionality of CheckApplicable
 """
 
 # --- Native python libraries
-
+import os
 import sys
 import unittest
 from datetime import datetime
 
-sys.path.append("..")
+#####
+# Include the parent project directory in the PYTHONPATH
+appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
+sys.path.append(appendDir)
 
-# --- Non-native python libraries in this source tree
+#--- non-native python libraries in this source tree
 from lib.loggers import CyLogger
 from lib.loggers import LogPriority as lp
+from lib.run_commands import RunWith
 from lib.environment import Environment
 from lib.CheckApplicable import CheckApplicable
 
@@ -25,31 +29,44 @@ LOGGER = CyLogger()
 class test_CheckApplicable(unittest.TestCase):
     """
     """
-    metaVars = {'setupDone': None, 'testStartTime': 0, 'setupCount': 0}
 
     ##################################
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(self):
         """
-        This method runs before each test run.
-
-        @author: Roy Nielsen
         """
-        self.metaVars['setupCount'] = self.metaVars['setupCount'] + 1
+        #####
+        # Set up logging
+        self.logger = CyLogger(debug_mode=True)
+        self.logger.initializeLogs()
+        self.rw = RunWith(self.logger)
 
-        if self.metaVars['setupDone']:
-            return
-        #####
-        # setUpClass functionality here.
-        # self.libc = getLibc()
-        #####
-        # Start timer in miliseconds
-        self.metaVars['testStartTime'] = datetime.now()
-        self.metaVars['setupDone'] = True
         self.enviro = Environment()
         self.ca = CheckApplicable(self.enviro, LOGGER)
 
+        #####
+        # Start timer in miliseconds
+        self.test_start_time = datetime.now()
+
     ##################################
+
+    @classmethod
+    def tearDownClass(self):
+        """
+        """
+        #####
+        # capture end time
+        testEndTime = datetime.now()
+
+        #####
+        # Calculate and log how long it took...
+        test_time = (testEndTime - self.metaVars['testStartTime'])
+        # print str(test_time)
+        # global LOGGER
+        self.logger.log(lp.INFO, self.__module__ + " took " + str(test_time) + " time so far...")
+
+   ##################################
 
     def testCheckRedHatApplicable(self):
         """
@@ -102,38 +119,10 @@ class test_CheckApplicable(unittest.TestCase):
         """
         """
 
-    ##################################
-
-    def tearDown(self):
-        """
-        Final cleanup actions...
-        """
-        # libc = getLibc()
-        
-        self.metaVars['setupCount'] = self.metaVars['setupCount'] - 1
-
-        #####
-        # capture end time
-        testEndTime = datetime.now()
-
-        #####
-        # Calculate and log how long it took...
-        test_time = (testEndTime - self.metaVars['testStartTime'])
-        # print str(test_time)
-        # global LOGGER
-        LOGGER.log(lp.INFO, self.__module__ + " took " + str(test_time) + " time so far...")
-
-        if self.metaVars['setupCount'] == 0:
-            #####
-            # TearDownClass functionality here.
-            pass
-            # time.sleep(5)
-
 ###############################################################################
 
 
 if __name__ == "__main__":
-    #LOGGER.setInitialLoggingLevel(10)
-    LOGGER.initializeLogs()
+
     unittest.main()
 

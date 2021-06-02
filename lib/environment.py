@@ -463,7 +463,7 @@ class Environment(object):
                                      close_fds=True)
             build = proc3.stdout.readline()
             build = build.strip()
-            opsys = description + ' ' + release + ' ' + build
+            opsys = str(description) + ' ' + str(release) + ' ' + str(build)
             self.osreportstring = opsys
 
     def getosmajorver(self):
