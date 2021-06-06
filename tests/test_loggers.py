@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env -S python -u
 """
 Testing logging functionality via CyLogger
 
@@ -11,6 +11,7 @@ import unittest
 from datetime import datetime
 
 sys.path.append("..")
+import lib.environment as environment
 
 # --- Non-native python libraries in this source tree
 from lib.loggers import CyLogger
@@ -71,6 +72,10 @@ class test_CyLogger(unittest.TestCase):
         except:
             self.fail("Failed to write DEBUG to log file")
 
+###############################################################################
+
 
 if __name__ == "__main__":
+
     unittest.main()
+

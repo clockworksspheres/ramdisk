@@ -1,10 +1,11 @@
-#!/usr/bin/python
+#!/usr/bin/env -S python -u
 '''
 Test for testing the libHelperFunctions library.
 '''
 import sys
 
-sys.path.append("../")
+sys.path.append("..")
+import lib.environment as environment
 
 import unittest
 from lib.loggers import CyLogger
@@ -44,4 +45,10 @@ class test_libHelperFunctions(unittest.TestCase):
         """
         pass
 
+###############################################################################
+
+
+if __name__ == "__main__":
+
+    unittest.main()
 

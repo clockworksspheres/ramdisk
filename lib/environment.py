@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env -S python -u
 
 ###############################################################################
 #                                                                             #
@@ -450,12 +450,12 @@ class Environment(object):
                                      shell=True, stdout=subprocess.PIPE,
                                      close_fds=True)
             description = proc1.stdout.readline()
-            description = description.strip()
+            description = description.decode().strip()
             proc2 = subprocess.Popen('/usr/bin/sw_vers -productVersion',
                                      shell=True, stdout=subprocess.PIPE,
                                      close_fds=True)
             release = proc2.stdout.readline()
-            release = release.strip()
+            release = release.decode().strip()
             self.operatingsystem = description
             self.osversion = release
 
@@ -463,7 +463,7 @@ class Environment(object):
                                      shell=True, stdout=subprocess.PIPE,
                                      close_fds=True)
             build = proc3.stdout.readline()
-            build = build.strip()
+            build = build.decode().strip()
             opsys = str(description) + ' ' + str(release) + ' ' + str(build)
             self.osreportstring = opsys
 
@@ -744,6 +744,7 @@ class Environment(object):
                         systemserial = system[key]['data']['Serial Number']
                     except(IndexError, KeyError):
                         continue
+                    system = system.decode().strip()
             except(IndexError, KeyError):
                 # got unexpected data back from dmidecode
                 pass
@@ -754,13 +755,14 @@ class Environment(object):
                                     close_fds=True)
             cmd3output = cmd3.stdout.readlines()
             for line in cmd3output:
+                line = line.decode().strip()
                 if re.search('Serial Number (system):', line):
                     line = line.split(':')
                     try:
                         systemserial = line[1]
                     except(IndexError, KeyError):
                         pass
-        systemserial = systemserial.strip()
+        systemserial = systemserial
         return systemserial
 
     def get_chassis_serial_number(self):
@@ -776,10 +778,11 @@ class Environment(object):
                 chassis = dmidecode.chassis()
                 for key in chassis:
                     chassisserial = chassis[key]['data']['Serial Number']
+                chassisserial = chassisserial.decode().strip()
             except(IndexError, KeyError):
                 # got unexpected data back from dmidecode
                 pass
-        chassisserial = chassisserial.strip()
+        
         return chassisserial
 
     def get_system_manufacturer(self):
@@ -798,10 +801,10 @@ class Environment(object):
                         systemmfr = system[key]['data']['Manufacturer']
                     except(IndexError, KeyError):
                         continue
+                systemfr = systemfr.decode().strip()
             except(IndexError, KeyError):
                 # got unexpected data back from dmidecode
                 pass
-        systemmfr = systemmfr.strip()
         return systemmfr
 
     def get_chassis_manfacturer(self):
@@ -817,10 +820,10 @@ class Environment(object):
                 chassis = dmidecode.chassis()
                 for key in chassis:
                     chassismfr = chassis[key]['data']['Manufacturer']
+                chassismfr = chassismfr.decode().strip()
             except(IndexError, KeyError):
                 # got unexpected data back from dmidecode
                 pass
-        chassismfr = chassismfr.strip()
         return chassismfr
 
     def get_sys_uuid(self):
@@ -856,6 +859,7 @@ class Environment(object):
                                     stdout=subprocess.PIPE,
                                     close_fds=True)
             cmdoutput = cmd2.stdout.readlines()
+            line = line.decode().strip()
             for line in cmdoutput:
                 if re.search('UUID:', line):
                     line = line.split()
@@ -870,6 +874,7 @@ class Environment(object):
                                     close_fds=True)
             cmd3output = cmd3.stdout.readlines()
             for line in cmd3output:
+                line = line.decode().strip()
                 if re.search('UUID:', line):
                     line = line.split()
                     try:
@@ -882,7 +887,7 @@ class Environment(object):
                                     stdout=subprocess.PIPE,
                                     close_fds=True)
             uuid = cmd1.stdout.readline()
-        uuid = uuid.strip()
+            uuid = uuid.decode().strip()
         return uuid
 
     def ismobile(self):
@@ -914,7 +919,7 @@ class Environment(object):
                                     close_fds=True)
             cmd3output = cmd3.stdout.readlines()
             for line in cmd3output:
-                if re.search('Book', line):
+                if re.search('Book', line.decode()):
                     ismobile = True
                     break
         return ismobile
