@@ -12,6 +12,7 @@ import sys
 import importlib
 import traceback
 import unittest
+
 from optparse import OptionParser, SUPPRESS_HELP, OptionValueError, Option
 
 testdir = "./tests"
@@ -131,7 +132,8 @@ class BuildAndRunSuite(object):
                 # Add the test class to the test suite
                 self.test_suite.addTest(unittest.makeSuite(test_to_run))
             except AttributeError as err:
-                pass
+                self.logger.log(lp.ERROR, traceback.format_exc())
+                self.logger.log(lp.ERROR, "WTF homeslice!")
         #####
         # calll the run_action to execute the test suite
         self.run_action()
