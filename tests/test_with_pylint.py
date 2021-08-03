@@ -79,22 +79,26 @@ def genTestData(fileList=[], excludeFiles=[], excludeFromLines=[]):
                 #print myfile
                 jsonData = processFile(myfile)
                 jsonData = pIface.processFile(myfile)
-                #print jsonData
+                print(json.dumps(jsonData, indent=4))
                 for item in jsonData:
-                    if re.match("^error$", item['type']) or re.match("^fatal$", item['type']):
-                        #print "Found: " + str(item['type']) + " (" + str(item['line']) + ") : " + str(item['message'])
-                        item['message'] = re.sub("'", "", item['message'])
-                        #####
-                        # Don't include json data that has a string from the
-                        # excludeLinesWith exclude list.
-                        # that contain a search string in excludeFromLines
-                        found = False
-                        for searchItem in excludeFromLines:
-                            #print searchItem
-                            if re.search("%s"%searchItem, item['message']):
-                                found = True
-                        if not found:
-                                test_case_data.append((myfile, item['line'], item['message']))
+                    # print(item[4])
+                    try:
+                        if re.match("^error$", item[4]) or re.match("^fatal$", item[4]):
+                            print("Found: " + str(item[4]) + " (" + str(item[10]) + ") : " + str(item[2]))
+                            message = re.sub("'", "", item[2])
+                            #####
+                            # Don't include json data that has a string from the
+                            # excludeLinesWith exclude list.
+                            # that contain a search string in excludeFromLines
+                            found = False
+                            for searchItem in excludeFromLines:
+                                #print searchItem
+                                if re.search("%s"%searchItem, message):
+                                    found = True
+                            if not found:
+                                    test_case_data.append((myfile, item[10], message))
+                    except KeyError:
+                        print(traceback.format_exc())
         except AttributeError:
             pass
     #for data in test_case_data:

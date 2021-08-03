@@ -11,8 +11,10 @@ from optparse import OptionParser, SUPPRESS_HELP
 
 #####
 # 3rd party libraries
-from pylint.lint import Run
-from pylint.reporters import JSONReporter
+from pylint.lint.run import Run
+
+from pylint.reporters.json_reporter import JSONReporter
+
 #####
 # cds libraries
 from lib.loggers import CyLogger
@@ -34,6 +36,7 @@ def _patch_streams(out):
 class AjsonReporter(JSONReporter):
     """ Add a getter for messages..."""
     def get_messages(self):
+        json.dumps(self.messages, indent=4)
         """ Getter for messages """
         return self.messages
 
@@ -101,6 +104,7 @@ class PylintIface():
         """ Add a getter for messages..."""
         def get_messages(self):
             """ Getter for messages """
+            # self.display_messages(json)
             return self.messages
 
     def processFile(self, filename):

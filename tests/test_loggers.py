@@ -5,9 +5,12 @@ Testing logging functionality via CyLogger
 @author: Roy Nielsen
 """
 # --- Native python libraries
-import sys
 import unittest
-
+import time
+import sys
+import os
+import traceback
+import tracemalloc
 from datetime import datetime
 
 sys.path.append("..")
@@ -17,7 +20,7 @@ import lib.environment as environment
 from lib.loggers import CyLogger
 from lib.loggers import LogPriority
 
-class test_CyLogger(unittest.TestCase):
+class test_loggers(unittest.TestCase):
     """
     Test for the CyLogger class, based on the STONIX project's test
     for it's logdispatcher.
@@ -41,6 +44,24 @@ class test_CyLogger(unittest.TestCase):
         self.metaVars['setupDone'] = True
         self.logger.initializeLogs()
 
+    @classmethod
+    def setUpClass(self):
+        """
+        """
+        #####
+        # Set up logging
+        self.logger = CyLogger(debug_mode=True)
+        self.logger.initializeLogs()
+        self.rw = RunWith(self.logger)
+        #####
+        # Start timer in miliseconds
+        self.test_start_time = datetime.now()
+
+    @classmethod
+    def tearDownClass(self):
+        """
+        """
+        pass
 
     def testLogCritical(self):
         try:
