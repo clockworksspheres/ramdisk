@@ -2,7 +2,6 @@
 PyLintIface
 """
 
-
 import sys
 import json
 import contextlib

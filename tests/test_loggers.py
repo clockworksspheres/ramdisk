@@ -14,9 +14,9 @@ import tracemalloc
 from datetime import datetime
 
 sys.path.append("..")
-import lib.environment as environment
 
 # --- Non-native python libraries in this source tree
+from lib.environment import Environment
 from lib.loggers import CyLogger
 from lib.loggers import LogPriority
 
@@ -97,6 +97,5 @@ class test_loggers(unittest.TestCase):
 
 
 if __name__ == "__main__":
-
     unittest.main()
 

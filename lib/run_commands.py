@@ -15,7 +15,7 @@ import select
 import termios
 import threading
 import traceback
-import tracemalloc
+# import tracemalloc
 from subprocess import Popen, PIPE
 from subprocess import SubprocessError as SubprocessError
 
@@ -97,7 +97,7 @@ class RunWith(object):
 
         #####
         # Extra stuff to assist in debugging
-        tracemalloc.start(16)
+        # tracemalloc.start(16)
 
     def setCommand(self, command, env=None, myshell=None, close_fds=None):
         """
