@@ -28,15 +28,16 @@ Maybe function, method  or other module
 import os
 import re
 import shutil
+import traceback
 from subprocess import Popen, PIPE
 
 #--- non-native python libraries in this source tree
-from commonRamdiskTemplate import RamDiskTemplate
-from lib.run_commands import RunWith
-from lib.loggers import CyLogger
-from lib.loggers import LogPriority as lp
-from lib.environment import Environment
-from lib.libHelperExceptions import NotValidForThisOS
+from ramdisk.commonRamdiskTemplate import RamDiskTemplate
+from ramdisk.lib.run_commands import RunWith
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority as lp
+from ramdisk.lib.environment import Environment
+from ramdisk.lib.libHelperExceptions import NotValidForThisOS
 
 ###############################################################################
 
@@ -180,10 +181,9 @@ class RamDisk(RamDiskTemplate) :
         self.runWith.communicate()
         retval, reterr, retcode = self.runWith.getNlogReturns()
 
-        if reterr:
+        if retcode == '':
             success = False
-            raise Exception("Error trying to create ramdisk(" + \
-                            str(reterr).strip() + ")")
+            raise Exception("Error trying to create ramdisk(" + str(reterr).strip() + ")")
         else:
             self.myRamdiskDev = retval.strip()
             self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
@@ -510,7 +510,7 @@ class RamDisk(RamDiskTemplate) :
         @author: Roy Nielsen
         """
         success=False
-        size = str(int(self.diskSize)/(2*1024))
+        size = str(int(float(self.diskSize)/(2*1024)))
         cmd = [self.diskutil, "partitionDisk", self.myRamdiskDev, str(1),
                "MBR", "HFS+", "ramdisk", str(size) + "M"]
         self.runWith.setCommand(cmd)
@@ -571,9 +571,9 @@ class RamDisk(RamDiskTemplate) :
             # Get the last item in the list
             found = line[-1]
             almost_size = line[:-1]
-            size = almost_size[-1]
+            size = almost_size[-1].decode()
 
-            found = found.strip()
+            found = found.decode().strip()
             #almost_size = almost_size.strip()
             size = size.strip()
 
@@ -607,7 +607,7 @@ class RamDisk(RamDiskTemplate) :
                             self.free = freeNumber
         self.logger.log(lp.DEBUG, "free: " + str(self.free))
         self.logger.log(lp.DEBUG, "Size requested: " + str(self.diskSize))
-        if int(self.free) > int(self.diskSize)/(2*1024):
+        if int(self.free) > int(float(self.diskSize)/(2*1024)):
             success = True
         print(str(self.free))
         print(str(success))

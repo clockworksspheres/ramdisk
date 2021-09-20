@@ -13,6 +13,8 @@ https://docs.python.org/2/library/multiprocessing.html?highlight=logging#logging
 @author: Roy Nielsen
 """
 
+# TODO: Check values to be logged to see whether they are strings or byte streams and treat accordingly
+
 import os
 import re
 import sys

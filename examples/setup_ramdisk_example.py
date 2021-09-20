@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env -S python -u
 """
 @author: Roy Nielsen
 
@@ -6,7 +6,8 @@
 
 #--- Native python libraries
 import sys
-from optparse import OptionParser, SUPPRESS_HELP
+from optparse import OptionParser
+
 sys.path.append("../..")
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import CyLogger
@@ -18,12 +19,10 @@ if sys.platform.startswith("darwin"):
     #####
     # For Mac
     from ramdisk.macRamdisk import RamDisk
-    from ramdisk.macRamdisk import detach
 elif sys.platform.startswith("linux"):
     #####
     # For Linux
     from ramdisk.linuxTmpfsRamdisk import RamDisk
-    from ramdisk.linuxTmpfsRamdisk import umount
 else:
     print("'" + str(sys.platform) + "' platform not supported...")
 
@@ -59,8 +58,8 @@ logger = CyLogger()
 logger.initializeLogs()
 
 ramdisk = RamDisk(str(size), mntpnt, logger)
-ramdisk.logData()
-ramdisk.printData()
+ramdisk.getNlogData()
+ramdisk.getNprintData()
 
 if not ramdisk.success:
     raise Exception("Ramdisk setup failed..")

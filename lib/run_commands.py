@@ -6,6 +6,9 @@ Inspiration for some of the below found on the internet.
 @author: Roy Nielsen
 """
 
+# TODO: BUG - Class needs to return either byte streams or strings.  Check return, error and retcode values to see if they are strings, byte streams or int and treat accordingly
+# TODO: FEATURE - Possibly have a bool to set or not determining if the class will return byte streams or strings
+
 import os
 import re
 import pty
@@ -91,6 +94,7 @@ class RunWith(object):
         self.prompt = ""
         self.environ = None
         self.cfds = None
+        self.text = True
         #####
         # setting up to call ctypes to do a filesystem sync
         self.libc = getLibc()
@@ -99,7 +103,7 @@ class RunWith(object):
         # Extra stuff to assist in debugging
         # tracemalloc.start(16)
 
-    def setCommand(self, command, env=None, myshell=None, close_fds=None):
+    def setCommand(self, command, env=None, myshell=None, close_fds=None, text=True):
         """
         initialize a command to run
 
@@ -231,7 +235,7 @@ class RunWith(object):
         self.retcode = 999
         if self.command and isinstance(silent, bool):
             try:
-                proc = Popen(self.command, stdout=PIPE, stderr=PIPE, shell=self.myshell, env=self.environ, close_fds=self.cfds)
+                proc = Popen(self.command, stdout=PIPE, stderr=PIPE, shell=self.myshell, env=self.environ, close_fds=self.cfds, text=self.text)
                 self.stdout, self.stderr = proc.communicate()
                 self.stdout = str(self.stdout)
                 self.stderr = str(self.stderr)
@@ -298,7 +302,8 @@ class RunWith(object):
                              stdout=PIPE, stderr=PIPE,
                              shell=self.myshell,
                              env=self.environ,
-                             close_fds=self.cfds)
+                             close_fds=self.cfds,
+                             text=self.text)
                 proc.wait()
                 for line in proc.stdout.readline():
                     if line:
@@ -364,7 +369,8 @@ class RunWith(object):
                 proc = Popen(self.command, stdout=PIPE, stderr=PIPE,
                              shell=self.myshell,
                              env=self.environ,
-                             close_fds=self.cfds)
+                             close_fds=self.cfds,
+                             text=self.text)
                 if proc:
                     while True:
                         #####
@@ -645,7 +651,7 @@ class RunWith(object):
 
             proc = Popen(internal_command,
                          stdin=slave, stdout=slave, stderr=slave,
-                         close_fds=True)
+                         close_fds=True, text=self.text)
 
             prompt = os.read(master, 10)
 
@@ -877,7 +883,8 @@ class RunWith(object):
                 try:
                     proc = Popen(internal_command,
                                  stdin=slave, stdout=slave, stderr=slave,
-                                 close_fds=True)
+                                 close_fds=True,
+                                 text=self.text)
                 except SubprocessError as err:
                     self.logger.log(lp.WARNING,
                                     "Error opening process to pty: " +
@@ -990,7 +997,8 @@ class RunWith(object):
             else:
                 try:
                     proc = Popen(cmd, stdin=slave, stdout=slave, stderr=slave,
-                                 close_fds=True)
+                                 close_fds=True,
+                                 text=self.text)
                 except SubprocessError as err:
                     self.logger.log(lp.WARNING,
                                     "Error opening process to pty: " +

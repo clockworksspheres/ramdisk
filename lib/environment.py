@@ -40,7 +40,8 @@ Created on Aug 24, 2010
 @author: dkennel
 @change: 2014/05/29 - ekkehard j. koch - pep8 and comment updates
 @change: 2017/03/07 - dkennel - added fisma risk level support
-@change: 2017.09/01 - rsn - taking out stonix specifics
+@change: 2017/09/01 - rsn - taking out stonix specifics
+@change: 2021/09/16 - rsn - adding traceback.format_exc calls before raising exceptions
 '''
 
 #--- Native python libraries
@@ -53,6 +54,7 @@ import types
 import platform
 import pwd
 import time
+import traceback
 
 try:
     from localize import VERSION
@@ -704,6 +706,9 @@ class Environment(object):
                                      close_fds=True)
             ifdata = ifcmd.stdout.readlines()
         except(OSError):
+            # self.logdispatch, self.logger are not used in this file, as this code is intended to be run before
+            # a logger is loaded
+            print(traceback.format_exc())
             # TODO - Need error handler
             raise
         for line in ifdata:
