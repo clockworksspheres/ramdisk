@@ -16,22 +16,22 @@ from datetime import datetime
 
 #--- non-native python libraries in this source tree
 from tests.genericRamdiskTest import GenericRamdiskTest
-from lib.loggers import CyLogger
-from lib.loggers import LogPriority as lp
-from lib.libHelperExceptions import NotValidForThisOS
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority as lp
+from ramdisk.lib.libHelperExceptions import NotValidForThisOS
 
 #####
 # Load OS specific Ramdisks
 if sys.platform.startswith("darwin"):
     #####
     # For Mac
-    from macRamdisk import RamDisk
-    from macRamdisk import detach
+    from ramdisk.macRamdisk import RamDisk
+    from ramdisk.macRamdisk import detach
 elif sys.platform.startswith("linux"):
     #####
     # For Linux
-    from linuxTmpfsRamdisk import RamDisk
-    from linuxTmpfsRamdisk import umount
+    from ramdisk.linuxTmpfsRamdisk import RamDisk
+    from ramdisk.linuxTmpfsRamdisk import umount
 
 
 class test_macRamdisk(GenericRamdiskTest):

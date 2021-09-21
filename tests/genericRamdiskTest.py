@@ -15,23 +15,23 @@ import ctypes
 from datetime import datetime
 #sys.path.append("../")
 #--- non-native python libraries in this source tree
-from lib.loggers import CyLogger
-from lib.loggers import LogPriority as lp
-from lib.getLibc import getLibc
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority as lp
+from ramdisk.lib.getLibc import getLibc
 from tests.genericTestUtilities import GenericTestUtilities
 #####
 # Load OS specific Ramdisks
 if sys.platform.startswith("darwin"):
     #####
     # For Mac
-    from macRamdisk import RamDisk
-    from macRamdisk import detach
-    from macRamdisk import umount
+    from ramdisk.macRamdisk import RamDisk
+    from ramdisk.macRamdisk import detach
+    from ramdisk.macRamdisk import umount
 elif sys.platform.startswith("linux"):
     #####
     # For Linux
-    from linuxTmpfsRamdisk import RamDisk
-    from linuxTmpfsRamdisk import umount
+    from ramdisk.linuxTmpfsRamdisk import RamDisk
+    from ramdisk.linuxTmpfsRamdisk import umount
 else:
     raise Exception("Damn it Jim!!! What OS is this???")
 

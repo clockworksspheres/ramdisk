@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env -S python -u
 """
 @author: Roy Nielsen
 
@@ -8,7 +8,7 @@
 import os
 import sys
 from optparse import OptionParser, SUPPRESS_HELP
-sys.path.append("../..")
+sys.path.append("../")
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
@@ -70,12 +70,12 @@ logger = CyLogger(level=level)
 logger.initializeLogs()
 
 ramdisk = RamDisk(size=size, logger=logger)
-ramdisk.logData()
-ramdisk.printData()
+ramdisk.getNlogData()
+ramdisk.getNprintData()
 
 ramdisk.unionOver(mntpnt)
 
-ramdisk.printData()
+ramdisk.getNprintData()
 
 if not ramdisk.success:
     raise Exception("Ramdisk setup failed..")

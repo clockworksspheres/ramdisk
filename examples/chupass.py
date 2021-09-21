@@ -1,10 +1,10 @@
-#!/usr/bin/python
+#!/usr/bin/env -S python -u
  
 import traceback
 import getpass
 import sys
 
-sys.path.append("../..")
+sys.path.append("../")
 
 from ramdisk.lib.manage_user.manage_user import ManageUser
 from ramdisk.lib.manage_keychain.manage_keychain import ManageKeychain

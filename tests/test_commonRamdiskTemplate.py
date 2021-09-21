@@ -17,11 +17,11 @@ from datetime import datetime
 sys.path.append("..")
 
 #--- non-native python libraries in this source tree
-from lib.loggers import CyLogger
-from lib.loggers import LogPriority as lp
-from commonRamdiskTemplate import RamDiskTemplate, \
-                                  BadRamdiskArguments, \
-                                  NotValidForThisOS
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority as lp
+from ramdisk.commonRamdiskTemplate import RamDiskTemplate, \
+                                          BadRamdiskArguments, \
+                                          NotValidForThisOS
 
 LOGGER = CyLogger()
 

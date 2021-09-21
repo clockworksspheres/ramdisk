@@ -45,7 +45,7 @@ appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
 sys.path.append(appendDir)
 
 # --- Non-native python libraries in this source tree
-import lib.environment as environment
+import ramdisk.lib.environment as environment
 
 
 class test_environment(unittest.TestCase):

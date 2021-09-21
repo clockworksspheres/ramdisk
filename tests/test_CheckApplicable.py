@@ -17,11 +17,11 @@ appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
 sys.path.append(appendDir)
 
 #--- non-native python libraries in this source tree
-from lib.loggers import CyLogger
-from lib.loggers import LogPriority as lp
-from lib.run_commands import RunWith
-from lib.environment import Environment
-from lib.CheckApplicable import CheckApplicable
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority as lp
+from ramdisk.lib.run_commands import RunWith
+from ramdisk.lib.environment import Environment
+from ramdisk.lib.CheckApplicable import CheckApplicable
 
 LOGGER = CyLogger()
 #LOGGER.setInitialLoggingLevel(30)

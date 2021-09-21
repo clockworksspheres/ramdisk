@@ -5,11 +5,11 @@ Test for testing the libHelperFunctions library.
 import sys
 
 sys.path.append("..")
-import lib.environment as environment
+import ramdisk.lib.environment as environment
 
 import unittest
-from lib.loggers import CyLogger
-from lib.loggers import LogPriority as lp
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority as lp
 
 
 class test_libHelperFunctions(unittest.TestCase):

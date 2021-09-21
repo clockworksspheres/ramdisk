@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env -S python -u
 """
 @author: Roy Nielsen
 """
@@ -6,7 +6,7 @@
 import sys
 from optparse import OptionParser, SUPPRESS_HELP
 
-sys.path.append("../..")
+sys.path.append("../")
 #--- non-native python libraries in this source tree
 import ramdisk
 from ramdisk.lib.run_commands import RunWith

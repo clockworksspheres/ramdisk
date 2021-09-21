@@ -20,9 +20,9 @@ from datetime import datetime
 sys.path.append("..")
 
 # --- Non-native python libraries in this source tree
-from lib.loggers import CyLogger
-from lib.loggers import LogPriority as lp
-from lib.getLibc import getLibc
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority as lp
+from ramdisk.lib.getLibc import getLibc
 
 LOGGER = CyLogger()
 #LOGGER.setInitialLoggingLevel(30)
