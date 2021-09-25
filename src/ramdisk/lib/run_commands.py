@@ -756,7 +756,7 @@ class RunWith(object):
                 cmd = []
                 for i in range(len(self.command)):
                     try:
-                        cmd.append(str(self.command[i].decode('utf-8')))
+                        cmd.append(str(self.command[i]('utf-8')))
                     except UnicodeDecodeError:
                         cmd.append(str(self.command[i]))
 
@@ -854,7 +854,7 @@ class RunWith(object):
                 cmd = []
                 for i in range(len(self.command)):
                     try:
-                        cmd.append(str(self.command[i].decode('utf-8')))
+                        cmd.append(str(self.command[i]('utf-8')))
                     except UnicodeDecodeError:
                         cmd.append(str(self.command[i]))
 
@@ -864,7 +864,7 @@ class RunWith(object):
                 try:
                     internal_command.append(str("/usr/bin/sudo -E -S -s " +
                                                 "'" +
-                                                str(self.command.decode('utf-8')) +
+                                                str(self.command('utf-8')) +
                                                 "'"))
                 except UnicodeDecodeError:
                     internal_command.append(str("/usr/bin/sudo -E -S -s " +

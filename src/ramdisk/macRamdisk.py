@@ -76,7 +76,11 @@ class RamDisk(RamDiskTemplate) :
 
         #####
         # Calculating the size of ramdisk in 1Mb chunks
-        self.diskSize = str(int(size) * 1024 * 1024 / 512)
+        numerator = int(size) * 1024 * 1024  # 1024 * 1024 = 1 megabyte
+        denominator = 512    # block size
+        fSize = numerator / denominator
+        iSize = int(fSize)
+        self.diskSize = str(iSize)
 
         self.hdiutil = "/usr/bin/hdiutil"
         self.diskutil = "/usr/sbin/diskutil"
@@ -510,7 +514,10 @@ class RamDisk(RamDiskTemplate) :
         @author: Roy Nielsen
         """
         success=False
-        size = str(int(float(self.diskSize)/(2*1024)))
+        numerator = int(self.diskSize)
+        denominator = 2*1024
+        fSize = int(numerator/denominator)
+        size = str(fSize)
         cmd = [self.diskutil, "partitionDisk", self.myRamdiskDev, str(1),
                "MBR", "HFS+", "ramdisk", str(size) + "M"]
         self.runWith.setCommand(cmd)
@@ -571,9 +578,9 @@ class RamDisk(RamDiskTemplate) :
             # Get the last item in the list
             found = line[-1]
             almost_size = line[:-1]
-            size = almost_size[-1].decode()
+            size = almost_size[-1]
 
-            found = found.decode().strip()
+            found = found.strip()
             #almost_size = almost_size.strip()
             size = size.strip()
 

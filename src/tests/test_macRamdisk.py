@@ -88,3 +88,7 @@ class test_macRamdisk(GenericRamdiskTest):
         pass
 
 ###############################################################################
+
+
+if __name__ == "__main__":
+    unittest.main()

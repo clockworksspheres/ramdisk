@@ -42,6 +42,7 @@ Created on Aug 24, 2010
 @change: 2017/03/07 - dkennel - added fisma risk level support
 @change: 2017/09/01 - rsn - taking out stonix specifics
 @change: 2021/09/16 - rsn - adding traceback.format_exc calls before raising exceptions
+@change: 2021/09/26 - rsn - changing file open statements to "with open" methodology, for better python 3 compatibility
 '''
 
 #--- Native python libraries
@@ -149,7 +150,7 @@ class Environment(object):
 
             if cmd:
                 # run the command
-                cmdoutput = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, close_fds=True)
+                cmdoutput = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, close_fds=True, text=True)
                 outputlines = cmdoutput.stdout.readlines()
                 for line in outputlines:
                     line = str(line)
@@ -375,7 +376,7 @@ class Environment(object):
         if os.path.exists('/usr/bin/lsb_release'):
             proc = subprocess.Popen('/usr/bin/lsb_release -dr',
                                     shell=True, stdout=subprocess.PIPE,
-                                    close_fds=True)
+                                    close_fds=True, text=True)
             description = proc.stdout.readline()
             release = proc.stdout.readline()
             description = description.split()
@@ -388,9 +389,8 @@ class Environment(object):
             release = release[1]
             self.osversion = release
         elif os.path.exists('/etc/redhat-release'):
-            relfile = open('/etc/redhat-release')
-            release = relfile.read()
-            relfile.close()
+            with open('/etc/redhat-release', 'r') as relfile:
+                release = relfile.read()
             release = release.split()
             opsys = ''
             for element in release:
@@ -409,9 +409,8 @@ class Environment(object):
                     index = index + 1
             self.osversion = osver
         elif os.path.exists('/etc/gentoo-release'):
-            relfile = open('/etc/gentoo-release')
-            release = relfile.read()
-            relfile.close()
+            with open('/etc/gentoo-release', 'r') as relfile:
+                release = relfile.read()
             release = release.split()
             opsys = ''
             for element in release:
@@ -433,9 +432,8 @@ class Environment(object):
         # Breen Malmberg added support for os-release file
         # method of getting version information
         elif os.path.exists('/etc/os-release'):
-            relfile = open('/etc/os-release', 'r')
-            contentlines = relfile.readlines()
-            relfile.close()
+            with open('/etc/os-release', 'r') as relfile:
+                contentlines = relfile.readlines()
             for line in contentlines:
                 if re.search('VERSION\=', line, re.IGNORECASE):
                     sline = line[+8:].split()
@@ -450,22 +448,22 @@ class Environment(object):
         elif os.path.exists('/usr/bin/sw_vers'):
             proc1 = subprocess.Popen('/usr/bin/sw_vers -productName',
                                      shell=True, stdout=subprocess.PIPE,
-                                     close_fds=True)
+                                     close_fds=True, text=True)
             description = proc1.stdout.readline()
-            description = description.decode().strip()
+            description = description.strip()
             proc2 = subprocess.Popen('/usr/bin/sw_vers -productVersion',
                                      shell=True, stdout=subprocess.PIPE,
-                                     close_fds=True)
+                                     close_fds=True, text=True)
             release = proc2.stdout.readline()
-            release = release.decode().strip()
+            release = release.strip()
             self.operatingsystem = description
             self.osversion = release
 
             proc3 = subprocess.Popen('/usr/bin/sw_vers -buildVersion',
                                      shell=True, stdout=subprocess.PIPE,
-                                     close_fds=True)
+                                     close_fds=True, text=True)
             build = proc3.stdout.readline()
-            build = build.decode().strip()
+            build = build.strip()
             opsys = str(description) + ' ' + str(release) + ' ' + str(build)
             self.osreportstring = opsys
 
@@ -577,7 +575,7 @@ class Environment(object):
         else:
             cmd = '/sbin/ifconfig -a'
         proc = subprocess.Popen(cmd, shell=True,
-                                stdout=subprocess.PIPE, close_fds=True)
+                                stdout=subprocess.PIPE, close_fds=True, text=True)
         netdata = proc.stdout.readlines()
 
         for line in netdata:
@@ -611,7 +609,7 @@ class Environment(object):
             try:
                 routecmd = subprocess.Popen('/sbin/route -n', shell=True,
                                             stdout=subprocess.PIPE,
-                                            close_fds=True)
+                                            close_fds=True, text=True)
                 routedata = routecmd.stdout.readlines()
             except OSError:
                 return ipaddr
@@ -630,7 +628,7 @@ class Environment(object):
                     cmd = '/sbin/route -n get default'
                 routecmd = subprocess.Popen(cmd, shell=True,
                                             stdout=subprocess.PIPE,
-                                            close_fds=True)
+                                            close_fds=True, text=True)
                 routedata = routecmd.stdout.readlines()
             except OSError:
                 return ipaddr
@@ -703,7 +701,7 @@ class Environment(object):
         try:
             ifcmd = subprocess.Popen(cmd, shell=True,
                                      stdout=subprocess.PIPE,
-                                     close_fds=True)
+                                     close_fds=True, text=True)
             ifdata = ifcmd.stdout.readlines()
         except(OSError):
             # self.logdispatch, self.logger are not used in this file, as this code is intended to be run before
@@ -749,7 +747,7 @@ class Environment(object):
                         systemserial = system[key]['data']['Serial Number']
                     except(IndexError, KeyError):
                         continue
-                    system = system.decode().strip()
+                    system = system.strip()
             except(IndexError, KeyError):
                 # got unexpected data back from dmidecode
                 pass
@@ -757,10 +755,10 @@ class Environment(object):
             profilerfetch = '/usr/sbin/system_profiler SPHardwareDataType'
             cmd3 = subprocess.Popen(profilerfetch, shell=True,
                                     stdout=subprocess.PIPE,
-                                    close_fds=True)
+                                    close_fds=True, text=True)
             cmd3output = cmd3.stdout.readlines()
             for line in cmd3output:
-                line = line.decode().strip()
+                line = line.strip()
                 if re.search('Serial Number (system):', line):
                     line = line.split(':')
                     try:
@@ -783,7 +781,7 @@ class Environment(object):
                 chassis = dmidecode.chassis()
                 for key in chassis:
                     chassisserial = chassis[key]['data']['Serial Number']
-                chassisserial = chassisserial.decode().strip()
+                chassisserial = chassisserial.strip()
             except(IndexError, KeyError):
                 # got unexpected data back from dmidecode
                 pass
@@ -806,7 +804,7 @@ class Environment(object):
                         systemmfr = system[key]['data']['Manufacturer']
                     except(IndexError, KeyError):
                         continue
-                systemfr = systemfr.decode().strip()
+                systemfr = systemfr.strip()
             except(IndexError, KeyError):
                 # got unexpected data back from dmidecode
                 pass
@@ -825,7 +823,7 @@ class Environment(object):
                 chassis = dmidecode.chassis()
                 for key in chassis:
                     chassismfr = chassis[key]['data']['Manufacturer']
-                chassismfr = chassismfr.decode().strip()
+                chassismfr = chassismfr.strip()
             except(IndexError, KeyError):
                 # got unexpected data back from dmidecode
                 pass
@@ -856,15 +854,15 @@ class Environment(object):
             uuidfetch = '/usr/sbin/dmidecode -s system-uuid'
             cmd1 = subprocess.Popen(uuidfetch, shell=True,
                                     stdout=subprocess.PIPE,
-                                    close_fds=True)
+                                    close_fds=True, text=True)
             uuid = cmd1.stdout.readline()
         elif os.path.exists('/usr/sbin/smbios'):
             smbiosfetch = '/usr/sbin/smbios -t SMB_TYPE_SYSTEM 2>/dev/null'
             cmd2 = subprocess.Popen(smbiosfetch, shell=True,
                                     stdout=subprocess.PIPE,
-                                    close_fds=True)
+                                    close_fds=True, text=True)
             cmdoutput = cmd2.stdout.readlines()
-            line = line.decode().strip()
+            line = line.strip()
             for line in cmdoutput:
                 if re.search('UUID:', line):
                     line = line.split()
@@ -876,10 +874,10 @@ class Environment(object):
             profilerfetch = '/usr/sbin/system_profiler SPHardwareDataType'
             cmd3 = subprocess.Popen(profilerfetch, shell=True,
                                     stdout=subprocess.PIPE,
-                                    close_fds=True)
+                                    close_fds=True, text=True)
             cmd3output = cmd3.stdout.readlines()
             for line in cmd3output:
-                line = line.decode().strip()
+                line = line.strip()
                 if re.search('UUID:', line):
                     line = line.split()
                     try:
@@ -890,9 +888,9 @@ class Environment(object):
             fetchhostid = '/usr/bin/hostid'
             cmd1 = subprocess.Popen(fetchhostid, shell=True,
                                     stdout=subprocess.PIPE,
-                                    close_fds=True)
+                                    close_fds=True, text=True)
             uuid = cmd1.stdout.readline()
-            uuid = uuid.decode().strip()
+            uuid = uuid.strip()
         return uuid
 
     def ismobile(self):
@@ -921,10 +919,11 @@ class Environment(object):
             profilerfetch = '/usr/sbin/system_profiler SPHardwareDataType'
             cmd3 = subprocess.Popen(profilerfetch, shell=True,
                                     stdout=subprocess.PIPE,
-                                    close_fds=True)
+                                    close_fds=True,
+                                    text=True)
             cmd3output = cmd3.stdout.readlines()
             for line in cmd3output:
-                if re.search('Book', line.decode()):
+                if re.search('Book', line):
                     ismobile = True
                     break
         return ismobile
@@ -942,7 +941,7 @@ class Environment(object):
             cmd = 'ps axc -o comm | grep lsd'
             littlesnitch = 'lsd'
             proc = subprocess.Popen(cmd, shell=True,
-                                    stdout=subprocess.PIPE, close_fds=True)
+                                    stdout=subprocess.PIPE, close_fds=True, text=True)
             netdata = proc.stdout.readlines()
             for line in netdata:
                 # print "processing: " + line

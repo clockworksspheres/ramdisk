@@ -19,6 +19,8 @@ sys.path.append("..")
 from ramdisk.lib.environment import Environment
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority
+from ramdisk.lib.run_commands import RunWith
+
 
 class test_loggers(unittest.TestCase):
     """
