@@ -78,12 +78,16 @@ class RunWith(object):
 
     @author: Roy Nielsen
     """
-    def __init__(self, logger):
-        if isinstance(logger, CyLogger):
-            self.logger = logger
-        else:
-            raise NotACyLoggerError("Passed in value for logger" +
-                                    " is invalid, try again.")
+    def __init__(self, logger, use_logger=True):
+        if use_logger == True:
+
+            if isinstance(logger, CyLogger):
+                self.logger = logger
+            else:
+                raise NotACyLoggerError("Passed in value for logger" +
+                                        " is invalid, try again.")
+        elif use_logger == False:
+            self.logger = self.
         self.command = None
         self.stdout = None
         self.stderr = None

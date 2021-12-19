@@ -43,6 +43,7 @@ Created on Aug 24, 2010
 @change: 2017/09/01 - rsn - taking out stonix specifics
 @change: 2021/09/16 - rsn - adding traceback.format_exc calls before raising exceptions
 @change: 2021/09/26 - rsn - changing file open statements to "with open" methodology, for better python 3 compatibility
+@change: 2021/09/26 - rsn - changing subprocess usage to calling run_commands.RunWith
 '''
 
 #--- Native python libraries
@@ -51,7 +52,7 @@ import re
 import sys
 import socket
 import subprocess
-import types
+# import types
 import platform
 import pwd
 import time
@@ -78,6 +79,8 @@ if os.geteuid() == 0:
 else:
     DMI = False
 
+# third party libraries
+from run_commands import RunWith as RunWith
 
 class Environment(object):
     """
@@ -121,6 +124,7 @@ class Environment(object):
         self.systemfismacat = 'low'
         self.determinefismacat()
         self.collectinfo()
+        self.rw = RunWith()
 
     def setsystemtype(self):
         '''
