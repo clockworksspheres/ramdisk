@@ -26,7 +26,7 @@ import traceback
 import logging
 import logging.handlers
 
-from . singleton import Singleton
+from ramdisk.lib.singleton import Singleton
 #from logging.handlers import RotatingFileHandler
 #sys.path.append("..")
 ###############################################################################
@@ -79,6 +79,35 @@ class SingletonCyLogger(type):
         if cls not in cls._instances:
             cls._instances[cls] = super(SingletonCyLogger, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
+
+
+###############################################################################
+# Mock Logger class
+
+class MockLogger(Singleton):
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def setInitialLoggingLevel(self, *args, **kwargs):
+        pass
+
+    def validateLevel(self, *args, **kwargs):
+        pass
+
+    def doRollover(self, *args, **kwargs):
+        pass
+
+    def initializeLogs(self, *args, **kwargs):
+        pass
+
+    def setUpHandler(self, *args, **kwargs):
+        pass
+
+    def setUpLogger(self, *args, **kwargs):
+        pass
+
+    def log(self, *args, **kwargs):
+        pass
 
 
 ###############################################################################

@@ -59,14 +59,15 @@ import time
 import traceback
 
 try:
-    from localize import VERSION
+    from ramdisk.lib.localize import VERSION
 except ImportError or AssertionError:
     VERSION = '0.0.1'
+
 
 # FISMACAT must be one of ['high', 'medium', 'low']
 
 try:
-    from localize import FISMACAT
+    from randisk.lib.localize import FISMACAT
 except ImportError or AssertionError:
     FISMACAT = 'low'
 
@@ -80,7 +81,7 @@ else:
     DMI = False
 
 # third party libraries
-from run_commands import RunWith as RunWith
+from ramdisk.lib.run_commands import RunWith as RunWith
 
 class Environment(object):
     """

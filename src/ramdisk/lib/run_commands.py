@@ -22,9 +22,10 @@ import traceback
 from subprocess import Popen, PIPE
 from subprocess import SubprocessError as SubprocessError
 
-from . loggers import CyLogger
-from . loggers import LogPriority as lp
-from . getLibc import getLibc
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority as lp
+from ramdisk.lib.loggers import MockLogger
+from ramdisk.lib.getLibc import getLibc
 
 
 class OSNotValidForRunWith(BaseException):
@@ -78,16 +79,17 @@ class RunWith(object):
 
     @author: Roy Nielsen
     """
-    def __init__(self, logger, use_logger=True):
+    def __init__(self, logger=None, use_logger=True):
         if use_logger == True:
 
             if isinstance(logger, CyLogger):
                 self.logger = logger
             else:
-                raise NotACyLoggerError("Passed in value for logger" +
-                                        " is invalid, try again.")
+                self.logger = MockLogger
+                # raise NotACyLoggerError("Passed in value for logger" +
+                #                        " is invalid, try again.")
         elif use_logger == False:
-            self.logger = self.
+            self.logger = MockLogger
         self.command = None
         self.stdout = None
         self.stderr = None
