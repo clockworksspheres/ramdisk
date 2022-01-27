@@ -57,7 +57,7 @@ mntpnt = opts.mntpnt
 logger = CyLogger()
 logger.initializeLogs()
 
-ramdisk = RamDisk(str(size), mntpnt, logger)
+ramdisk = RamDisk(str(size), str(mntpnt), logger)
 ramdisk.getNlogData()
 ramdisk.getNprintData()
 

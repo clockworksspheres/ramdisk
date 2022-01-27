@@ -21,6 +21,7 @@ import sys
 import time
 import socket
 import inspect
+#import calendar
 import datetime
 import traceback
 import logging
@@ -165,8 +166,11 @@ class CyLogger(Singleton):
     #############################################
 
     def setInitialLoggingLevel(self, level=30):
-        """
-        """
+        '''
+
+        @param level:  (Default value = 30)
+
+        '''
         success = False
         if self.validateLevel():
             self.lvl = level
@@ -180,6 +184,9 @@ class CyLogger(Singleton):
         Input validation for the logging level
 
         @author: Roy Nielsen
+
+        @param level:  (Default value = 30)
+ 
         """
         
         success = False
@@ -198,6 +205,9 @@ class CyLogger(Singleton):
         rotate the log.
         
         @author: Roy Nielsen
+
+        @param rothandler: 
+
         """
         if self.rotate:
             try:
@@ -346,6 +356,9 @@ class CyLogger(Singleton):
         In future there should be children, or methods to handle different
         log handlers...
 
+        @param *args: 
+        @param **kwargs: 
+
         @author: Roy Nielsen
         """
         pass
@@ -364,11 +377,14 @@ class CyLogger(Singleton):
 
     #############################################
 
-    def log(self, priority, msg):
+    def log(self, priority=0, msg=""):
         """
         Interface to work similar to Stonix's LogDispatcher.py
 
         @note: Stonix's LogDispatcher.py authored by: scmcleni
+
+        @param priority:  (Default value = 0)
+        @param msg:  (Default value = "")
 
         @author: Roy Nielsen
         """
@@ -441,7 +457,10 @@ class CyLogger(Singleton):
             for mymsg in first_msg_list:
                 msg_list.append(mymsg + "\n")
         elif isinstance(msg, dict):
-            for key, value in msg.items():
+            # 
+            # TODO: What's up here???
+            # 
+            for key, value in list(msg.items()):
                 msg_list.append(str(key) + " : " + str(value))
         else:
             msg_list = msg

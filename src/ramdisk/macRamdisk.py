@@ -580,9 +580,9 @@ class RamDisk(RamDiskTemplate) :
             almost_size = line[:-1]
             size = almost_size[-1]
 
-            found = found.strip()
+            found = str(found).strip()
             #almost_size = almost_size.strip()
-            size = size.strip()
+            size = str(size).strip()
 
             self.logger.log(lp.INFO, "size: " + str(size))
             self.logger.log(lp.INFO, "found: " + str(found))
@@ -601,6 +601,9 @@ class RamDisk(RamDiskTemplate) :
             split_size = sizeCompile.search(size)
             freeNumber = split_size.group(1)
             freeMagnitude = split_size.group(2)
+            
+            freeNumber = str(freeNumber).strip()
+            freeMagnitude = str(freeMagnitude).strip()
 
             if re.match("^\d+$", freeNumber.strip()):
                 if re.match("^\w$", freeMagnitude.strip()):
