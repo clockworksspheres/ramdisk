@@ -1,0 +1,3 @@
+VERSION="0.0.7"
+FISMACAT="low"
+
