@@ -68,6 +68,7 @@ class test_getLibc(unittest.TestCase):
 
     ##################################
 
+    @unittest.skip("no longer cross platform")
     def test_uname(self):
         """
         """
@@ -90,6 +91,7 @@ class test_getLibc(unittest.TestCase):
         
     ##################################
 
+    @unittest.skip("no longer cross platform")
     def test_symlink(self):
         """
         """
