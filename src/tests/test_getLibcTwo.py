@@ -1,4 +1,6 @@
-#!/usr/bin/python
+#!/usr/bin/env -S python -u
+
+# ! /usr/bin/python
 """
 Test for basic functionality of the basic libc
 functionality provided by getLibc

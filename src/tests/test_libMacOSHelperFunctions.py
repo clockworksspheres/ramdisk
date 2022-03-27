@@ -1,3 +1,4 @@
+#!/usr/bin/env -S python -u
 
 import unittest
 import time
