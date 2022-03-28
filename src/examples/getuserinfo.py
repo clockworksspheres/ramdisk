@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/env -S python -u
+# ! /usr/bin/python
 
 '''
 TODO: Fix this example
