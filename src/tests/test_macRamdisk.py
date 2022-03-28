@@ -1,5 +1,4 @@
 #!/usr/bin/env -S python -u
-
 # ! /usr/bin/python -u
 """
 
@@ -15,6 +14,8 @@ import unittest
 import tempfile
 import ctypes as C
 from datetime import datetime
+
+sys.path.append("..")
 
 #--- non-native python libraries in this source tree
 from tests.genericRamdiskTest import GenericRamdiskTest
