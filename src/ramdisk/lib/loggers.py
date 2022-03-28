@@ -486,8 +486,8 @@ class CyLogger(Singleton):
                 try:
                     self.logr.log(validatedLvl, longPrefix + "DEBUG: (" + str(pri) + ") " + str(line))
                 except Exception as err:
-                    self.logr.log(LogPriority.DEBUG, str(traceback.format_exc()))
-                    self.logr.log(LogPriority.DEBUG, str(err))
+                    print(LogPriority.DEBUG + " : "  + str(traceback.format_exc()))
+                    print(LogPriority.DEBUG + " : " + str(err))
             elif int(self.lvl) >= 40 and int(self.lvl) < 50:
                 #####
                 # Error
