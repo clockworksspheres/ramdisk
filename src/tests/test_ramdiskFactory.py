@@ -1,5 +1,4 @@
 #!/usr/bin/env -S python -u
-
 # ! /usr/bin/python -u
 """
 Test for the RamdiskFactory
