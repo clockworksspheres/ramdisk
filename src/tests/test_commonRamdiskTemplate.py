@@ -1,7 +1,6 @@
 #!/usr/bin/env -S python -u
 
 # ! /usr/bin/python -u
-
 """
 CommonRamdiskTemplate test.
 

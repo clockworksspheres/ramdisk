@@ -1,5 +1,4 @@
 #!/usr/bin/env -S python -u
-
 # ! /usr/bin/python -u
 """
 Test of the Linux tmpfs ramdisk
