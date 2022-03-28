@@ -109,3 +109,8 @@ class test_ramdiskFactory(unittest.TestCase, GenericTestUtilities):
         self.logger.log(lp.INFO, self.__module__ + " took " + str(test_time) + " time to complete...")
 
 ###############################################################################
+
+if __name__ == "__main__":
+
+    unittest.main()
+

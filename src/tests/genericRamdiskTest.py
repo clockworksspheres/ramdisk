@@ -13,7 +13,12 @@ import traceback
 import unittest
 import ctypes
 from datetime import datetime
-#sys.path.append("../")
+
+#####
+# Include the parent project directory in the PYTHONPATH
+appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
+sys.path.append(appendDir)
+
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
@@ -51,6 +56,7 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
         self.libc = getLibc()
         self.subdirs = ["two", "three" "one/four"]
         self.logger = CyLogger()
+        self.logger.initializeLogs()
         self.logger.log(lp.CRITICAL, "Logger initialized............................")
 
         """

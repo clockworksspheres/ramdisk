@@ -16,6 +16,11 @@ import tempfile
 import ctypes as C
 from datetime import datetime
 
+#####
+# Include the parent project directory in the PYTHONPATH
+appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
+sys.path.append(appendDir)
+
 #--- non-native python libraries in this source tree
 from tests.genericRamdiskTest import GenericRamdiskTest
 from ramdisk.lib.loggers import CyLogger
@@ -113,4 +118,8 @@ class test_linuxTmpfsRamdisk(GenericRamdiskTest):
         pass
 
 ###############################################################################
+
+if __name__ == "__main__":
+
+    unittest.main()
 
