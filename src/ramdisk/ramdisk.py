@@ -46,6 +46,7 @@ class RamDisk(object):
         macApplicable = {'type': 'white',
                          'family': ['darwin'],
                          'os': {'Mac OS X': ['10.8', '+']}}
+                         'os': {'macOS': ['12.1', '+']}}
         macApplicableHere = self.chkApp.isApplicable(macApplicable)
 
         linuxApplicable = {'type': 'white',
