@@ -6,9 +6,13 @@ Generic class based Yutilities for ramdisk testing...
 #--- Native python libraries
 
 import os
+import io
 import re
 import sys
+import random
 import tempfile
+import traceback
+import inspect
 import unittest
 import ctypes
 from datetime import datetime
@@ -108,12 +112,15 @@ class GenericTestUtilities(object):
             self.logger.log(lp.WARNING, "Cannot touch a file without a filename....")
         else:
             try:
-                os.utime(fname, None)
-            except:
-                try:
-                    open(fname, 'a').close()
-                except Exception as err:
-                    self.logger.log(lp.WARNING, "Cannot open to touch: " + str(fname))
+                fhandle = io.open(fname, "w")
+            except io.BlockingIOError as err:
+                self.logger.log(lp.warning, traceback.format_exc())
+                self.logger.log(lp.WARNING, "Cannot open to touch: " + str(fname))
+            except io.UnsupportedOperation as err:
+                self.logger.log(lp.warning, traceback.format_exc())
+                self.logger.log(lp.WARNING, "Cannot open to touch: " + str(fname))
+            else:
+                fhandle.close() 
 
     ################################################
 
@@ -121,6 +128,15 @@ class GenericTestUtilities(object):
         """
         A function to do an equivalent of "mkdir -p"
         """
+        if not path:
+            self.logger.log(lp.WARNING, "Bad path...")
+        else:
+            if not os.path.exists(str(path)):
+                try:
+                    os.makedirs(str(path))
+                except OSError as err1:
+                    self.logger.log(lp.WARNING, traceback.format_exc())
+                    self.logger.log(lp.WARNING, "Exception: " + str(err1))
         if not path:
             self.logger.log(lp.WARNING, "Bad path...")
         else:
@@ -162,28 +178,28 @@ class GenericTestUtilities(object):
             self.logger.log(lp.DEBUG, "Writing to: " + tmpfile_path)
             try:
                 # Get the number of blocks to create
-                blocks = file_size/block_size
+                blocks = file_size//block_size
 
                 # Start timer in miliseconds
                 start_time = datetime.now()
 
                 # do low level file access...
-                tmpfile = os.open(tmpfile_path, os.O_WRONLY | os.O_CREAT, mode)
-
-                # do file writes...
-                for i in range(blocks):
-                    tmp_buffer = os.urandom(block_size)
-                    os.write(tmpfile, str(tmp_buffer))
-                    os.fsync(tmpfile)
-                self.libc.sync()
-                os.close(tmpfile)
-                self.libc.sync()
-                os.unlink(tmpfile_path)
-                self.libc.sync()
+                with io.open(tmpfile_path, "wb", buffering=0) as tmpfile:
+                    for i in range(blocks):
+                        for j in range(block_size):
+                            # Bottleneck - should be writing a block at a time...
+                            tmpfile.write(str.encode(str(random.randint(0, 15))))
+                            os.fsync(tmpfile)
+                    self.libc.sync()
+                    os.close(tmpfile)
+                    self.libc.sync()
+                    os.unlink(tmpfile_path)
+                    self.libc.sync()
 
                 # capture end time
                 end_time = datetime.now()
             except Exception as err:
+                self.logger.log(lp.WARNING, traceback.format_exc())
                 self.logger.log(lp.WARNING, "Exception trying to write temp file for "  + \
                                 "benchmarking...")
                 self.logger.log(lp.WARNING, "Exception thrown: " + str(err))
