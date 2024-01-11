@@ -184,7 +184,7 @@ class GenericTestUtilities(object):
                 start_time = datetime.now()
 
                 # do low level file access...
-                with os.open(tmpfile_path, os.O_WRONLY | os.O_CREAT, mode) as tmpfile
+                with os.open(tmpfile_path, os.O_WRONLY | os.O_CREAT, mode) as tmpfile:
 
                     # do file writes...
                     for i in range(blocks):
