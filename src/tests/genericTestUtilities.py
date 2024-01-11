@@ -184,18 +184,18 @@ class GenericTestUtilities(object):
                 start_time = datetime.now()
 
                 # do low level file access...
-                tmpfile = os.open(tmpfile_path, os.O_WRONLY | os.O_CREAT, mode)
+                with os.open(tmpfile_path, os.O_WRONLY | os.O_CREAT, mode) as tmpfile
 
-                # do file writes...
-                for i in range(blocks):
-                    tmp_buffer = os.urandom(block_size)
-                    os.write(tmpfile, str(tmp_buffer))
-                    os.fsync(tmpfile)
-                self.libc.sync()
-                os.close(tmpfile)
-                self.libc.sync()
-                os.unlink(tmpfile_path)
-                self.libc.sync()
+                    # do file writes...
+                    for i in range(blocks):
+                        tmp_buffer = os.urandom(block_size)
+                        os.write(tmpfile, str(tmp_buffer))
+                        os.fsync(tmpfile)
+                    self.libc.sync()
+                    os.close(tmpfile)
+                    self.libc.sync()
+                    os.unlink(tmpfile_path)
+                    self.libc.sync()
 
                 # capture end time
                 end_time = datetime.now()
