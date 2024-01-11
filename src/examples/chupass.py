@@ -1,5 +1,4 @@
 #!/usr/bin/env -S python -u
-# ! /usr/bin/env -S python -u
  
 import traceback
 import getpass

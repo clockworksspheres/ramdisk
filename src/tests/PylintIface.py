@@ -16,8 +16,8 @@ from pylint.reporters.json_reporter import JSONReporter
 
 #####
 # cds libraries
-from lib.loggers import CyLogger
-from lib.loggers import LogPriority as lp
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority as lp
 
 @contextlib.contextmanager
 def _patch_streams(out):

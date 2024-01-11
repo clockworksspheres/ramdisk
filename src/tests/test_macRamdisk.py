@@ -50,36 +50,6 @@ class test_macRamdisk(GenericRamdiskTest):
         # If we don't have a supported platform, skip this test.
         if not sys.platform.startswith("darwin"):
             raise unittest.SkipTest("This is not valid on this OS")
-        self.getLibc()
-        
-
-    ##################################
-
-    def setUp(self):
-        """
-        This method runs before each test run.
-
-        @author: Roy Nielsen
-        """
-        #self.getLibc()
-        pass
-
-###############################################################################
-##### Method Tests
-
-    ##################################
-
-    def test_macRamdiskFirstTest(self):
-        """
-        """
-        pass
-
-    ##################################
-
-    def test_macRamdiskSecondTest(self):
-        """
-        """
-        pass
 
 ###############################################################################
 ##### unittest Tear down

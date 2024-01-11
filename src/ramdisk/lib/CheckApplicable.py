@@ -136,6 +136,7 @@ class CheckApplicable(object):
                              os: {'Mac OS X': ['10.11.5']
                              To match a series of OS types:
                              os: {'Mac OS X': ['10.11', 'r', '10.13'],
+                                  'macOS': ['12.1', 'r', '13.6'],
                                   'Red Hat Enterprise Linux': ['6.0', '+'],
                                   'Ubuntu: ['14.04']}
         noroot   True|False This is an option, needed on systems like OS X,
@@ -153,9 +154,9 @@ class CheckApplicable(object):
         An Example dictionary might look like this:
         applicable = {'type': 'white',
                            'family': Linux,
-                           'os': {'Mac OS X': ['10.11', 'r', '10.13.10']}
-        That example whitelists all Linux operating systems and Mac OS X from
-        10.11.0 to 10.13.10.
+                           'os': {'macOS': ['12.1', 'r', '13.6']}
+        That example whitelists all Linux operating systems and Mac OS from
+        10.11.0 to 13.6.
 
         The family and os keys may be combined. Note that specifying a family
         will mask the behavior of the more specific os key.
@@ -172,6 +173,7 @@ class CheckApplicable(object):
         @change: 2015/04/13 added this method to template class
         @change: 2017/03/18 rsn adding fisma check as well as vaildating both
                                 self.applicable and passed in applicableDict.
+        @change: 2023/01/08 rsn adding changes to macOS version applicable specification
         """
         applies = False
 
