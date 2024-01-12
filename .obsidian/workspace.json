@@ -11,11 +11,9 @@
             "id": "9921ba1fec688a00",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "vscode-editor",
               "state": {
-                "file": "src/examples/README.md",
-                "mode": "source",
-                "source": false
+                "file": "src/examples/menu.py"
               }
             }
           }
@@ -85,7 +83,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "src/examples/README.md",
+                "file": "src/examples/menu.py",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +100,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "src/examples/README.md",
+                "file": "src/examples/menu.py",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +123,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "src/examples/README.md"
+                "file": "src/examples/menu.py"
               }
             }
           }
@@ -149,10 +147,10 @@
   },
   "active": "9921ba1fec688a00",
   "lastOpenFiles": [
+    "src/examples/README.md",
     "src/examples/menu.py",
     "src/examples/setup_ramdisk_example.py",
     "src/examples/setup_union_example.py",
-    "README.md",
-    "src/examples/README.md"
+    "README.md"
   ]
 }
