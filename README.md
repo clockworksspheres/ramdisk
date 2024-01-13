@@ -20,7 +20,7 @@ Then the importance of the prior paragraph makes more sense.  Cache poisoning be
 
 
 ## NOTE:
-The code has two branches, master (hopefully stable) and develop (not necessarily stable).  The goal is to only merge to develop when functionality is stable and tests have been written for that functionality.
+The code has two branches, master (hopefully stable) and dev (not necessarily stable).  The goal is to only merge to develop when functionality is stable and tests have been written for that functionality.
 
 Initially developed for python 2.6, but code has since been migrated to 3.9+.  Not believed to work on the python 2 branch any longer.
 
