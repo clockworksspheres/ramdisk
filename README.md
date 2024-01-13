@@ -18,6 +18,12 @@ Caches are great.  What happens with caching - if part of a cached build is foun
 
 Then the importance of the prior paragraph makes more sense.  Cache poisoning becomes a big deal, and ramdisks become very important in build chains when specific needs aren't met, especially when building per specific needs in scientific build tool stacks.a build will skip compiling and one will never be able to get the feature one needs in the build tool unless they can figure out how to fix the build tool chain.  Or use a ramdisk, or similar method to get past the cache poisoning problem.
 
+One can recursively remove or erase caches - but they're not in the same location from project to project.
+
+Recursively removing directory structures is very dangerous, if one gets it wrong, parts of the operating system can go missing, personal directories, shared scientific data that is worth millions of dollars, etc, etc.  It's easier to deal with mounted ramdisks, that if necessary, can be mounted safely over top of existing structures, than arbitrarily erasing potentially large parts of a file system without a safe recovery mechanism.
+
+Unmounting a ramdisk is much faster than removing or erasing a potentially large cashe set as well.
+
 
 ## NOTE:
 The code has two branches, master (hopefully stable) and dev (not necessarily stable).  The goal is to only merge to develop when functionality is stable and tests have been written for that functionality.
