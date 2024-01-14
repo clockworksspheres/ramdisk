@@ -1,3 +1,5 @@
+
+Runs on both macOS and Linux.
 # ramdisk
 
 Interface to use, eventually for cross-platform setup and maintenance of ramdisk, primarily for build pipelines and unittesting, for DevOps purposes.
@@ -34,12 +36,11 @@ Initially developed for python 2.6, but code has since been migrated to 3.9+.  N
 
 Instanciating the RamDisk class will create a ramdisk that you can use - in chunks of 1Mb.
 
-Initial work done only for the Mac platform.
+ramdisks do not need to be managed by root on macOS.   Tests & DevOps creating and managing ramdisks can be run as a user.
 
 ### Linux Note
 
-Ramdisk class that can use either current method for creating a ramdisk on Linux, currently working on a tmpfs version....
-
+Ramdisk class that can use either current method for creating a ramdisk on Linux, currently working on a tmpfs version....  Tests & DevOps creating and managing ramdisks must be carefully managed by root.
 
 ## Used As a library
 
