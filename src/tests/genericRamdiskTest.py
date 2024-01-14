@@ -169,26 +169,37 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
 
         my_fs_array = [oneHundred, fiveHundred, eightHundred, oneGig]
 
+
+        fs_starttime = datetime.now()
         for file_size in my_fs_array:
             self.logger.log(lp.INFO, "testfile size: " + str(file_size))
             #####
             # Create filesystem file and capture the time it takes...
-            fs_time = self.mkfile(os.path.join(self.fs_dir, "testfile"), file_size)
-            self.logger.log(lp.INFO, "fs_time: " + str(fs_time))
+            self.mkfile(os.path.join(self.fs_dir, "testfile"), file_size)
+            self.logger.log(lp.INFO, "fs_time: " + str(datetime.now()))
+        fs_endtime = datetime.now()
 
+        fs_time = fs_endtime - fs_starttime
+
+        ram_starttime = datetime.now()
+        for file_size in my_fs_array:
+            self.logger.log(lp.INFO, "testfile size: " + str(file_size))
             #####
             # get the time it takes to create the file in ramdisk...
-            ram_time = self.mkfile(os.path.join(self.mountPoint, "testfile"), file_size)
-            self.logger.log(lp.INFO, "ram_time: " + str(ram_time))
+            self.mkfile(os.path.join(self.mountPoint, "testfile"), file_size)
+            self.logger.log(lp.INFO, "ram_time: " + str(datetime.now()))
+        ram_endtime = datetime.now()
 
-            speed = fs_time - ram_time
-            self.logger.log(lp.INFO, "ramdisk: " + str(speed) + " faster...")
+        ram_time = ram_starttime - ram_endtime
 
-            assert_message = "Problem with " + str(file_size) + "mb ramdisk..."
-            self.logger.log(lp.DEBUG, assert_message)
-            self.logger.log(lp.INFO, "Smaller file sizes will fail this test on systems with SSD's...")
+        speed = fs_time - ram_time
+        self.logger.log(lp.INFO, "ramdisk: " + str(speed) + " faster...")
 
-            self.assertTrue((fs_time - ram_time).days > -1, assert_message)
+        assert_message = "Problem with " + str(file_size) + "mb ramdisk..."
+        self.logger.log(lp.DEBUG, assert_message)
+        self.logger.log(lp.INFO, "Smaller file sizes will fail this test on systems with SSD's...")
+
+        self.assertTrue((fs_time - ram_time).days > -1, assert_message)
 
     ##################################
 

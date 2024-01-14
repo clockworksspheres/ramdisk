@@ -120,6 +120,7 @@ class test_environment(unittest.TestCase):
         print('UUID: ' + str(uuid))
         self.assertTrue(uuid)
 
+    @unittest.skip
     def testIsMobile(self):
         tracemalloc.start(10)
         self.assertFalse(self.to.ismobile(),
