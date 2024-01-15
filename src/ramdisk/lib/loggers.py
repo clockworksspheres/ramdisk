@@ -128,8 +128,11 @@ class CyLogger(Singleton):
     def __init__(self, environ=False, debug_mode=False, verbose_mode=False, level=30, *args, **kwargs):
         """
         """
-        # print ".............Level: " + str(level)
-        self.lvl = int(level)
+        if str(level):
+            print(".............Level: " + str(level))
+            self.lvl = int(level)
+        else:
+            self.lvl = 30
         '''
         if environ:
             self.environment = environ
@@ -156,7 +159,6 @@ class CyLogger(Singleton):
             self.validateLevel(self.lvl)
         else:
             self.lvl = 30
-        self.lvl = 5
 
         self.filename = ""
         self.syslog = False
