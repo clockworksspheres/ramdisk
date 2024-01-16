@@ -149,16 +149,16 @@
   },
   "active": "c52fe03ac0d1d93f",
   "lastOpenFiles": [
-    "src/tests/__pycache__/test_environment.cpython-311.pyc",
-    "src/tests/__pycache__/test_ramdiskFactory.cpython-311.pyc",
-    "src/tests/__pycache__/test_libHelperExceptions.cpython-311.pyc",
-    "src/tests/__pycache__/test_libMacOSHelperFunctions.cpython-311.pyc",
-    "src/tests/__pycache__/test_getLibc.cpython-311.pyc",
-    "src/tests/__pycache__/test_linuxTmpfsRamdisk.cpython-311.pyc",
-    "src/ramdisk/lib/__pycache__/CheckApplicable.cpython-311.pyc",
-    "src/tests/__pycache__/test_CheckApplicable.cpython-311.pyc",
-    "src/tests/__pycache__/test_loggers.cpython-311.pyc",
-    "src/tests/__pycache__/test_libHelperFunctions.cpython-311.pyc",
-    "src/tests/__pycache__/test_macRamdisk.cpython-311.pyc"
+    "src/ramdisk/lib/environment.py~",
+    "src/ramdisk/lib/manage_keychain/__pycache__/manage_keychain_template.cpython-311.pyc",
+    "src/ramdisk/lib/manage_keychain/__pycache__/macos_keychain.cpython-311.pyc",
+    "src/ramdisk/lib/__pycache__/libHelperFunctions.cpython-311.pyc",
+    "src/ramdisk/lib/manage_user/__pycache__/manage_user_template.cpython-311.pyc",
+    "src/ramdisk/lib/manage_user/__pycache__/macos_user.cpython-311.pyc",
+    "src/ramdisk/lib/manage_keychain/__pycache__/manage_keychain.cpython-311.pyc",
+    "src/ramdisk/lib/manage_user/__pycache__/manage_user.cpython-311.pyc",
+    "src/ramdisk/lib/__pycache__/composite_menu.cpython-311.pyc",
+    "src/examples/uniontest",
+    "src/tests/__pycache__/test_environment.cpython-311.pyc"
   ]
 }

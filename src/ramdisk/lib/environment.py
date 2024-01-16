@@ -14,8 +14,8 @@
 #               Last updated by   $Author: $
 #               Notes             Based on CIS Benchmarks, NSA RHEL
 #                                 Guidelines, NIST and DISA STIG/Checklist
-#               Release           $Revision: 1.0 $
-#               Modified Date     $Date: 2010/8/24 14:00:00 $
+#               Release           $Revision: 2.0 $
+#               Modified Date     $Date: 2024/01/16 17:00:00 $
 # ============================================================================#
 '''
 Created on Aug 24, 2010
