@@ -1,5 +1,11 @@
 
 Runs on both macOS and Linux.
+
+OS/Distro | OS Version | Kernel | Kernel Version
+--- | --- | --- | ---
+macOS | 13.6.3 | darwin | 22.6.0
+Linux Mint | Ubuntu XFCE 21.2 | Linux | 5.15  
+
 # ramdisk
 
 Interface to use, eventually for cross-platform setup and maintenance of ramdisk, primarily for build pipelines and unittesting, for DevOps purposes.
@@ -90,3 +96,10 @@ Currently written/tested in only python v3.9+
 
 Future plans to duplicate libraries, tests and examples in other languages as well.
 
+## Tracking
+
+Table tracking supported combinations of:
+
+OS's, OS versions, their kernel versions (maybe), python versions, with tagged versions of ramdisk.
+
+Very greatful for any contributions/pull requests to help with the table!

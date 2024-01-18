@@ -149,16 +149,19 @@
   },
   "active": "c52fe03ac0d1d93f",
   "lastOpenFiles": [
-    "src/ramdisk/lib/environment.py~",
-    "src/ramdisk/lib/manage_keychain/__pycache__/manage_keychain_template.cpython-311.pyc",
-    "src/ramdisk/lib/manage_keychain/__pycache__/macos_keychain.cpython-311.pyc",
-    "src/ramdisk/lib/__pycache__/libHelperFunctions.cpython-311.pyc",
-    "src/ramdisk/lib/manage_user/__pycache__/manage_user_template.cpython-311.pyc",
-    "src/ramdisk/lib/manage_user/__pycache__/macos_user.cpython-311.pyc",
-    "src/ramdisk/lib/manage_keychain/__pycache__/manage_keychain.cpython-311.pyc",
-    "src/ramdisk/lib/manage_user/__pycache__/manage_user.cpython-311.pyc",
-    "src/ramdisk/lib/__pycache__/composite_menu.cpython-311.pyc",
-    "src/examples/uniontest",
-    "src/tests/__pycache__/test_environment.cpython-311.pyc"
+    "src/build/html/objects.inv",
+    "src/build/html/searchindex.js",
+    "src/build/html/search.html",
+    "src/build/html/genindex.html",
+    "src/build/html/_sources/index.rst.txt",
+    "src/build/html/_sources",
+    "src/build/html/index.html",
+    "src/build/doctrees/index.doctree",
+    "src/build/doctrees/environment.pickle",
+    "src/build/doctrees",
+    "src/build/html/_static/sphinx_highlight.js",
+    "src/build/html/_static/plus.png",
+    "src/build/html/_static/minus.png",
+    "src/build/html/_static/file.png"
   ]
 }
