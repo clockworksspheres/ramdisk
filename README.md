@@ -1,6 +1,8 @@
 
 Runs on both macOS and Linux.
 
+Runs on more than these, but most recently tested on:
+
 OS/Distro | OS Version | Kernel | Kernel Version
 --- | --- | --- | ---
 macOS | 13.6.3 | darwin | 22.6.0
