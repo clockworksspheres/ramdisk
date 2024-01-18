@@ -6,6 +6,8 @@ OS/Distro | OS Version | Kernel | Kernel Version
 macOS | 13.6.3 | darwin | 22.6.0
 Linux Mint | Ubuntu XFCE 21.2 | Linux | 5.15  
 
+Python 3.9+
+
 # ramdisk
 
 Interface to use, eventually for cross-platform setup and maintenance of ramdisk, primarily for build pipelines and unittesting, for DevOps purposes.
