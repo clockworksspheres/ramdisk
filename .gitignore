@@ -3,3 +3,4 @@
 testlink
 *.icloud
 .idea
+__pycache__
