@@ -21,7 +21,7 @@ from datetime import datetime
 from ramdisk.lib.getLibc import getLibc
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
-
+from ramdisk.lib.run_commands import RunWith as rw
 
 class LibcNotAvailableError(BaseException):
     """
@@ -116,9 +116,11 @@ class GenericTestUtilities(object):
             except io.BlockingIOError as err:
                 self.logger.log(lp.warning, traceback.format_exc())
                 self.logger.log(lp.WARNING, "Cannot open to touch: " + str(fname))
+                raise(err)
             except io.UnsupportedOperation as err:
                 self.logger.log(lp.warning, traceback.format_exc())
                 self.logger.log(lp.WARNING, "Cannot open to touch: " + str(fname))
+                raise(err)
             else:
                 fhandle.close() 
 
@@ -137,6 +139,7 @@ class GenericTestUtilities(object):
                 except OSError as err1:
                     self.logger.log(lp.WARNING, traceback.format_exc())
                     self.logger.log(lp.WARNING, "Exception: " + str(err1))
+                    raise(err1)
         if not path:
             self.logger.log(lp.WARNING, "Bad path...")
         else:
@@ -146,8 +149,10 @@ class GenericTestUtilities(object):
                 except OSError as err1:
                     self.logger.log(lp.WARNING, "OSError exception attempting to create directory: " + str(path))
                     self.logger.log(lp.WARNING, "Exception: " + str(err1))
+                    raise(err1)
                 except Exception as err2:
                     self.logger.log(lp.WARNING, "Unexpected Exception trying to makedirs: " + str(err2))
+                    raise(err2)
 
     ################################################
 
@@ -203,6 +208,41 @@ class GenericTestUtilities(object):
                                 "benchmarking...")
                 self.logger.log(lp.WARNING, "Exception thrown: " + str(err))
                 total_time = 0
+                raise(err)
             else:
                 total_time = end_time - start_time
         return total_time
+
+    def freeSpaceLeftOnDevice(self, dev, fsType):
+        """
+        dev : device to check out
+        fsType : filesystem Type to check out apfs, hfs, etc
+        """
+
+        runcmd = ["df", "-T", fstype, dev]
+
+        available = 0
+        capacityInPercent = 0
+        inodesUsed = 0
+        inodesFree = 0
+
+        try:
+            rw.setCommand(runcmd)
+            # def waitNpassThruStdout(self, chk_string=None, respawn=False, silent=True)
+            (myout, myerr, myretcode) = rw.waitNpassThroughStdout(dev)
+            for line in myout:
+                try:
+                    # Filesystem   512-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+                    # /dev/disk3s1  478724992 219018232 195722792    53% 1167141 978613960    0%   /System/Volumes/Data
+                    look_for_freespace = re.match("\S+\s+\d+\s+\d+\s+\(d+)\s+\(d+)\S\s+\(d+)\s+(\d+)\s+\d+\S\s+\S+.*")
+                    available = look_for_freespace.group(0)
+                    capacityInPercent = look_for_freespace.group(1)
+                    inodesUsed = look_for_freespace.group(2)
+                    inodesFree = look_for_freespace.group(3)
+                except:
+                    pass 
+        except SubprocessError as Err:
+            self.logger.log(lp.WARNING, traceback.format_exc())
+            self.logger.log(lp.WARNING, "Exception thrown trying to find free space on device: " + dev + " assumed fstype: " + fstype)
+
+        return available, capacityInPercent, inodesUsed, inodesFree

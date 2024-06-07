@@ -77,7 +77,7 @@ class RamDisk(RamDiskTemplate) :
         #####
         # Calculating the size of ramdisk in 1Mb chunks
         numerator = int(size) * 1024 * 1024  # 1024 * 1024 = 1 megabyte
-        denominator = 512    # block size
+        denominator = 4096    # block size for apfs, 512 for hfs
         fSize = numerator / denominator
         iSize = int(fSize)
         self.diskSize = str(iSize)
@@ -181,6 +181,7 @@ class RamDisk(RamDiskTemplate) :
         #####
         # Create the ramdisk and attach it to a device.
         cmd = [self.hdiutil, "attach", "-nomount", "ram://" + self.diskSize]
+        self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
         self.runWith.setCommand(cmd)
         self.runWith.communicate()
         retval, reterr, retcode = self.runWith.getNlogReturns()
@@ -530,8 +531,8 @@ class RamDisk(RamDiskTemplate) :
             # Need to get the partition device out of the output to assign to
             # self.devPartition
             for line in retval.split("\n"):
-                if re.match("^Initialized (\S+)\s+", line):
-                    linematch = re.match("Initialized\s+(\S+)", line)
+                if re.match('^Initialized (\S+)\s+', line):
+                    linematch = re.match('Initialized\s+(\S+)', line)
                     rdevPartition = linematch.group(1)
                     self.devPartition = re.sub("rdisk", "disk", rdevPartition)
                     break
