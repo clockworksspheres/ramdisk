@@ -74,7 +74,7 @@ Will correctly inherit either a macRamdisk on macOS or a linuxTmpfsRamdisk (by d
 
 ## Only developed for Windows
 
-### Nothing yet
+### Looking at working with ImDisk - so far - nothing yet
 
 ## Developed for macOS, Linux and Windows
 
