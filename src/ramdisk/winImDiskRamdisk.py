@@ -1,5 +1,5 @@
 """
-Template for the ramdisk classes
+Windows Ramdisk class based on use of ImDisk windows program
 
 @author: Roy Nielsen
 """
