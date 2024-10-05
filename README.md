@@ -94,7 +94,7 @@ The menu code is cross platform, in an alpha state.
 
 ## Windows
 
-Will call a currently available ramdisk executable to create a ramdisk.
+Will call a currently available ramdisk executable, like ImDisk, to create a ramdisk.
 
 ## Languages
 
