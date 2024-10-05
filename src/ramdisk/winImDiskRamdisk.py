@@ -9,6 +9,7 @@ from tempfile import mkdtemp
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.run_commands import RunWith
 
 ###########################################################################
 
@@ -32,16 +33,51 @@ class RamDisk(object):
         self.diskSize = size
         self.success = False
         self.myRamdiskDev = None
+        # Need to have a config file or pass in a location for or hard code or
+        # command line pass in the location of the ImDisk binary
+        self.imdisk = "" 
         if not mountpoint:
             self.getRandomizedMountpoint()
         else:
             self.mntPoint = mountpoint
+        self.rw = RunWith(self.logger)
 
         #####
         # Get an ImDisk Ram Disk
+        if(__isMemoryAvailable()):
+            __createRamdisk()
 
         self.logger.log(lp.DEBUG, "disk size: " + str(self.diskSize))
         self.logger.log(lp.DEBUG, "volume name: " + str(self.mntPoint))
+
+    ###########################################################################
+
+    def __createRamdisk(self):
+        """
+        Create a ramdisk device
+
+        @author: Roy Nielsen
+        """
+        retval = None
+        reterr = None
+        success = False
+        #####
+        # Create the ramdisk and attach it to a device.
+        cmd = [self.imdisk, "attach", "-nomount", "ram://" + self.diskSize]
+        self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
+        self.rw.setCommand(cmd)
+        self.rw.communicate()
+        retval, reterr, retcode = self.rw.getNlogReturns()
+
+        if retcode == '':
+            success = False
+            raise Exception("Error trying to create ramdisk(" + str(reterr).strip() + ")")
+        else:
+            self.myRamdiskDev = retval.strip()
+            self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
+            success = True
+        self.logger.log(lp.DEBUG, "Success: " + str(success) + " in __create")
+        return success
 
     ###########################################################################
 
