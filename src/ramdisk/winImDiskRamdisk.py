@@ -39,7 +39,15 @@ class RamDisk(object):
         if not mountpoint:
             self.getRandomizedMountpoint()
         else:
-            self.mntPoint = mountpoint
+            if self.mntPointAvailable():
+                self.mntPoint = mountpoint
+
+        #command to see what mountpoints have already been taken:
+        self.getMntPntsCmd = ["wmic", "logicaldisk", "get", "caption"]
+
+
+
+
         self.rw = RunWith(self.logger)
 
         cmd = [self.imdisk, "-a", "-s", self.diskSize, "-m" self.mountPoint, -p "\"/fs:" + self.fsType + " /q /y\"", "-o" self.driveType + "," + self.writeMode]
@@ -71,9 +79,7 @@ class RamDisk(object):
         # Create the ramdisk and attach it to a device.
 
 
-imdisk -a -s 512M -m X: -p "/fs:ntfs /q /y"
-
-#        cmd = [self.imdisk, "-a", "-s", self.diskSize, "-m" self.mountPoint, -p "\"/fs:" + self.fsType + " /q /y\"", "-o" self.driveType + "," + self.writeMode]
+        # cmd = [self.imdisk, "-a", "-s", self.diskSize, "-m" self.mountPoint, -p "\"/fs:" + self.fsType + " /q /y\"", "-o" self.driveType + "," + self.writeMode]
 
         cmd = [self.imdisk, "-a", "-s", self.diskSize, "-m" self.mountPoint, -p "\"/fs:" + self.fsType + " /q /y\""]
 
@@ -156,6 +162,37 @@ imdisk -a -s 512M -m X: -p "/fs:ntfs /q /y"
                             str(self.mntPoint))
         self.logger.log(lp.WARNING, "Randomized mount point: \"" + str(self.mntPoint) + "\"")
         return success
+
+
+    def mntPointAvailable(self, mntPoint):
+        """
+        Check if the passed in mount point is available, or if it's already being used.
+
+            valid values: D - Z
+        """
+        success = False
+
+        self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(self.getMntPntsCmd))
+        self.rw.setCommand(self.getMntPntsCmd)
+        self.rw.communicate()
+        retval, reterr, retcode = self.rw.getNlogReturns()
+
+        if retcode == '':
+            success = False
+            raise Exception("Error trying to get list of mount points(" + str(reterr).strip() + ")")
+        else:
+
+            invalidMntPoints = []
+            #####
+            # Get the output and process it - for every line, put it in a list
+            for line in retval:
+                line = line.strip()
+                invalidMntPoints.append(line.strip(":")
+
+            if mntPoint in [D-Z] and  not in invalidMntPonts:
+                success = True
+        return success
+
 
     ###########################################################################
 
