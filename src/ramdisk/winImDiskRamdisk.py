@@ -35,12 +35,18 @@ class RamDisk(object):
         self.myRamdiskDev = None
         # Need to have a config file or pass in a location for or hard code or
         # command line pass in the location of the ImDisk binary
-        self.imdisk = "" 
+        self.imdisk = "imdisk" 
         if not mountpoint:
             self.getRandomizedMountpoint()
         else:
             self.mntPoint = mountpoint
         self.rw = RunWith(self.logger)
+
+        cmd = [self.imdisk, "-a", "-s", self.diskSize, "-m" self.mountPoint, -p "\"/fs:" + self.fsType + " /q /y\"", "-o" self.driveType + "," + self.writeMode]
+
+        self.fsType = "ntfs"
+        self.driveType = "hd"
+        self.writeMode = "rw"
 
         #####
         # Get an ImDisk Ram Disk
@@ -63,7 +69,16 @@ class RamDisk(object):
         success = False
         #####
         # Create the ramdisk and attach it to a device.
-        cmd = [self.imdisk, "attach", "-nomount", "ram://" + self.diskSize]
+
+
+imdisk -a -s 512M -m X: -p "/fs:ntfs /q /y"
+
+#        cmd = [self.imdisk, "-a", "-s", self.diskSize, "-m" self.mountPoint, -p "\"/fs:" + self.fsType + " /q /y\"", "-o" self.driveType + "," + self.writeMode]
+
+        cmd = [self.imdisk, "-a", "-s", self.diskSize, "-m" self.mountPoint, -p "\"/fs:" + self.fsType + " /q /y\""]
+
+        print(str(cmd))
+
         self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
         self.rw.setCommand(cmd)
         self.rw.communicate()
