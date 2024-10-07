@@ -32,6 +32,11 @@ https://forums.guru3d.com/threads/guide-using-imdisk-to-set-up-ram-disk-s-in-win
 
 imdisk -a -s 512M -m X: -p "/fs:ntfs /q /y"
 
+This command yeilded a raw disk, so probably should do -o hd...or do some tests to see if RAW is ok for processing...
+
+
+
+
 • -a initializes the virtual disk.
 • -s 512M is the size, 512 MegaBytes.
 The full choices are b, k, m, g, t, K, M, G, or T.
