@@ -22,7 +22,7 @@ hd hard drive (default)
 
 -m mountpoint
 
--p format    -p "fs:ntfs /q /y"
+-p format    -p "/fs:ntfs /q /y"
 
 -a attach
 
@@ -30,7 +30,6 @@ hd hard drive (default)
 
 https://forums.guru3d.com/threads/guide-using-imdisk-to-set-up-ram-disk-s-in-windows-with-no-limit-on-disk-size.356046/
 
-imdisk -a -s 512M -m X: -p “fs:ntfs /q /y” (tested command)
 imdisk -a -s 512M -m X: -p "/fs:ntfs /q /y"
 
 • -a initializes the virtual disk.
