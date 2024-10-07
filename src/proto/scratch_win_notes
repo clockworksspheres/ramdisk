@@ -1,0 +1,57 @@
+https://github.com/clockworksspheres/ramdisk.git
+
+(in Windows Powershell, run as Administrator)
+choco install imdisk
+
+(respond to prompt)
+a
+
+The ImDisk command may be only as a user to create ramdisks.  It may not be able to be run as an an administrator to create ramdisks (to my knowledge).
+
+
+-s size
+-v partition
+
+
+-o option
+ro
+rw (default)
+cd cdrom
+fd floppy
+hd hard drive (default)
+
+-m mountpoint
+
+-p format    -p "fs:ntfs /q /y"
+
+-a attach
+
+-a -s <size> -m <mountpoint>   
+
+https://forums.guru3d.com/threads/guide-using-imdisk-to-set-up-ram-disk-s-in-windows-with-no-limit-on-disk-size.356046/
+
+imdisk -a -s 512M -m X: -p “fs:ntfs /q /y”
+imimdisk -a -s 512M -m X: -p "/fs:ntfs /q /y"
+
+• -a initializes the virtual disk.
+• -s 512M is the size, 512 MegaBytes.
+The full choices are b, k, m, g, t, K, M, G, or T.
+These denote a number of 512-byte blocks, thousand bytes, million bytes, billion bytes, trillion bytes, KB, MB, GB, and TB, respectively.
+• -m X: sets up the mount point a.k.a. the drive letter, X:.
+• -p "fs:ntfs /q /y" formats the drive.
+-p's parameters are actually for Windows' format program.
+So, if you want the RAM disk in a different filesystem, just change ntfs to fat (FAT16) or fat32 (FAT32).
+
+
+
+
+(disk number for -u) 
+imdisk -l
+\Device\ImDisk0
+
+imdisk -l -u 0 
+Drive letter: X
+No image file.
+Size: 536870912 bytes (512 MB), Virtual Memory, HDD.
+
+
