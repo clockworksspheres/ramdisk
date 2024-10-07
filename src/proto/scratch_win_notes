@@ -6,7 +6,7 @@ choco install imdisk
 (respond to prompt)
 a
 
-The ImDisk command may be only as a user to create ramdisks.  It may not be able to be run as an an administrator to create ramdisks (to my knowledge).
+The ImDisk command may be only as administrator to create ramdisks (to my knowledge).
 
 
 -s size
@@ -30,8 +30,8 @@ hd hard drive (default)
 
 https://forums.guru3d.com/threads/guide-using-imdisk-to-set-up-ram-disk-s-in-windows-with-no-limit-on-disk-size.356046/
 
-imdisk -a -s 512M -m X: -p “fs:ntfs /q /y”
-imimdisk -a -s 512M -m X: -p "/fs:ntfs /q /y"
+imdisk -a -s 512M -m X: -p “fs:ntfs /q /y” (tested command)
+imdisk -a -s 512M -m X: -p "/fs:ntfs /q /y"
 
 • -a initializes the virtual disk.
 • -s 512M is the size, 512 MegaBytes.
@@ -53,5 +53,7 @@ imdisk -l -u 0
 Drive letter: X
 No image file.
 Size: 536870912 bytes (512 MB), Virtual Memory, HDD.
+
+outputs above need to be parsed for relevant information...
 
 
