@@ -5,6 +5,7 @@ Windows Ramdisk class based on use of ImDisk windows program
 """
 #--- Native python libraries
 from tempfile import mkdtemp
+import re
 
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import LogPriority as lp
@@ -22,7 +23,7 @@ class RamDisk(object):
         """
         #####
         # Version/timestamp is
-        # <YYYY><MM><DD>.<HH><MM><SS>.<microseconds>
+        # <YYYY><MM><DD>.<HH><MM>
         # in UTC time
         self.module_version = '2024.10051117'
         if not isinstance(logger, CyLogger):
@@ -32,17 +33,17 @@ class RamDisk(object):
         self.logger.log(lp.INFO, "Logger: " + str(self.logger))
         self.diskSize = size
         self.success = False
-        self.myRamdiskDev = None
+        self.myRamdiskDev = self.imDiskNumber = None
+
         # Need to have a config file or pass in a location for or hard code or
         # command line pass in the location of the ImDisk binary
         self.imdisk = "imdisk" 
+
         if not mountpoint:
             self.getRandomizedMountpoint()
         else:
             if self.mntPointAvailable():
                 self.mntPoint = mountpoint
-
-        self.imDiskNumber
 
         #command to see what mountpoints have already been taken:
         self.getMntPntsCmd = ["wmic", "logicaldisk", "get", "caption"]
@@ -51,7 +52,7 @@ class RamDisk(object):
         self.getImDiskIdsCmd = ["imdisk", -l"]
 
         # command to get imdisk info on a specificly numbered disk
-        self.getIdXNameCmd = ["imdisk", "-l", "-u", "self.imDiskNumber"]
+        self.getIdXNameCmd = ["imdisk", "-l", "-u", self.imDiskNumber]
 
         self.rw = RunWith(self.logger)
 
@@ -192,7 +193,7 @@ class RamDisk(object):
                 line = line.strip()
                 invalidMntPoints.append(line.strip(":")
 
-            if mntPoint in [D-Z] and  not in invalidMntPonts:
+            if re.search('^[D-Z]$', mountpoint) and not in invalidMntPonts:
                 success = True
         return success
 
