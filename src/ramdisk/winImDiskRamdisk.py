@@ -234,6 +234,19 @@ class RamDisk(object):
         @author: Roy Nielsen
         """
         success = False
+
+        cmd = ['systeminfo', '|', 'find' '"Available Physical Memory"']
+
+        # returns:
+        # Available Physical Memory: 56,861 Mb
+
+         
+
+
+
+
+
+
         return success
 
     ###########################################################################
