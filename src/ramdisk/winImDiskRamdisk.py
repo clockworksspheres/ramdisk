@@ -42,15 +42,18 @@ class RamDisk(object):
             if self.mntPointAvailable():
                 self.mntPoint = mountpoint
 
+        self.imDiskNumber
+
         #command to see what mountpoints have already been taken:
         self.getMntPntsCmd = ["wmic", "logicaldisk", "get", "caption"]
 
+        # get the disk id's of imdisk disks, including disk numbers
+        self.getImDiskIdsCmd = ["imdisk", -l"]
 
-
+        # command to get imdisk info on a specificly numbered disk
+        self.getIdXNameCmd = ["imdisk", "-l", "-u", "self.imDiskNumber"]
 
         self.rw = RunWith(self.logger)
-
-        cmd = [self.imdisk, "-a", "-s", self.diskSize, "-m" self.mountPoint, -p "\"/fs:" + self.fsType + " /q /y\"", "-o" self.driveType + "," + self.writeMode]
 
         self.fsType = "ntfs"
         self.driveType = "hd"
