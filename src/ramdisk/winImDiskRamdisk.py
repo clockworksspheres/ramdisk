@@ -238,7 +238,7 @@ class RamDisk(object):
         cmd = ['systeminfo', '|', 'find' '"Available Physical Memory"']
 
         # returns:
-        # Available Physical Memory: 56,861 Mb
+        # Available Physical Memory: 12,861 Mb
 
          
 
