@@ -10,7 +10,7 @@ import re
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.loggers import CyLogger
-from ramdisk.lib.run_commands import RunWith
+from ramdisk.lib.run_communicate import RunWith
 
 ###########################################################################
 
