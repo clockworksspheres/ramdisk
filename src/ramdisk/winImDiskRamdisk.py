@@ -237,16 +237,32 @@ class RamDisk(object):
 
         cmd = ['systeminfo', '|', 'find' '"Available Physical Memory"']
 
-        # returns:
-        # Available Physical Memory: 12,861 Mb
+        self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
+        self.rw.setCommand(cmd)
+        self.rw.communicate()
+        retval, reterr, retcode = self.rw.getNlogReturns()
 
-         
+        if retcode == '':
+            success = False
+            raise Exception("Error trying to get list of mount points(" + str(reterr).strip() + ")")
+        else:
 
+            # returns:
+            # Available Physical Memory: 56,861 Mb
 
+            tmplist = retval.split()
+            tmpmem = retval[3]
+            mem = re.sub(",", "", tmpmem) 
 
+            lvl = retval[4]
 
-
-
+            if int(self.diskSize) < int(mem):
+                success = True
+            elif re.match("^kb$", lvl):
+                self.logger.log(ERR, "NOT ENOUGH PHYSICAL MEMORY............................................")
+            else:
+                self.logger.log(ERR, "NOT ENOUGH PHYSICAL MEMORY............................................")
+                
         return success
 
     ###########################################################################
