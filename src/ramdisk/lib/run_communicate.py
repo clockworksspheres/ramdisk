@@ -11,11 +11,9 @@ Inspiration for some of the below found on the internet.
 
 import os
 import re
-import pty
 import time
 import types
 import select
-import termios
 import threading
 import traceback
 # import tracemalloc
