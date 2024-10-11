@@ -49,7 +49,7 @@ class RamDisk(object):
         self.getMntPntsCmd = ["wmic", "logicaldisk", "get", "caption"]
 
         # get the disk id's of imdisk disks, including disk numbers
-        self.getImDiskIdsCmd = ["imdisk", -l"]
+        self.getImDiskIdsCmd = ["imdisk", "-l"]
 
         # command to get imdisk info on a specificly numbered disk
         self.getIdXNameCmd = ["imdisk", "-l", "-u", self.imDiskNumber]
