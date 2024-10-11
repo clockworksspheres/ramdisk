@@ -37,6 +37,11 @@ elif sys.platform.startswith("linux"):
     # For Linux
     from ramdisk.linuxTmpfsRamdisk import RamDisk
     from ramdisk.linuxTmpfsRamdisk import umount
+elif sys.platform.startswith("win32"):
+    #####
+    # For ImDisk for Windows
+    from ramdisk.winImDiskRamdisk import RamDisk
+    from ramdisk.winImDiskRamdisk import umount
 else:
     raise Exception("Damn it Jim!!! What OS is this???")
 
