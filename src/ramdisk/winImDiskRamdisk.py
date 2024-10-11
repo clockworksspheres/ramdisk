@@ -191,7 +191,7 @@ class RamDisk(object):
             # Get the output and process it - for every line, put it in a list
             for line in retval:
                 line = line.strip()
-                invalidMntPoints.append(line.strip(":")
+                invalidMntPoints.append(line.strip(":"))
 
             if re.search('^[D-Z]$', mountpoint) and not in invalidMntPonts:
                 success = True
