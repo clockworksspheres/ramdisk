@@ -193,7 +193,7 @@ class RamDisk(object):
                 line = line.strip()
                 invalidMntPoints.append(line.strip(":"))
             self.logger.log(INFO, str(invalidMntPoints))
-            if re.search('^[D-Z]$', mountpoint) and not in invalidMntPonts:
+            if re.search('^[D-Z]$', mountpoint) and mountpoint not in invalidMntPonts:
                 success = True
         return success
 
