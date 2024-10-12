@@ -421,7 +421,7 @@ def detach(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
 
     else:
         logger.log(ERR, "Sorry, Invalid Command...")
-            return success
+        return success
 
         logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(umountCmd))
         rw.setCommand(umountCmd)
