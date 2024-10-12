@@ -200,7 +200,7 @@ class RamDisk(object):
 
     ###########################################################################
 
-    def umount(self):
+    def umount(self, detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
         """
         Unmount the disk - same functionality as __eject on the mac
 
@@ -209,11 +209,66 @@ class RamDisk(object):
         @author: Roy Nielsen
         """
         success = False
+
+        detachCmdOne = [ self.imdisk, "-d", "-m", self.mountPoint ]
+        detachCmdTwo = [ self.imdisk, "-d", "-u", self.device ] 
+        dForceCmdOne = [ self.imdisk, "-D", "-m", self.mountPoint ] 
+        dForceCmdTwo = [ self.imdisk, "-D", "-u", self.device ] 
+        rForceCmd = [ self.imdisk, "-R", "-u", self.device ] 
+
+
+        detachCmdThree = [ self.imdisk, "-d", "-m", mountPoint ]
+        detachCmdFour = [ self.imdisk, "-d", "-u", unit ] 
+        dForceCmdThree = [ self.imdisk, "-D", "-m", mountPoint ] 
+        dForceCmdFour = [ self.imdisk, "-D", "-u", unit ] 
+        rForceCmdTwo = [ self.imdisk, "-R", "-u", unit ] 
+
+
+        if not detach and not dForce and rForce and not mountpoint and unit == True and isinstance(unit, bool):
+            umountCmd = rForceCmd
+        if detach and not dForce and not rForce and not mountpoint and not unit:
+            umountCmd = detachCmdOne
+        if detach and not dForce and not rForce and not mountpoint and unit == True and isinstance(unit, bool):
+            umountCmd = detachCmdTwo
+        if not detach and dForce and not rForce and not mountpoint and not unit:
+            umountCmd = dForceCmdOne
+        if not detach and dForce and not rForce and not mountpoint and unit == True and isinstance(unit, bool):
+            umountCmd = dForceCmdTwo
+
+        if not detach and not dForce and rForce and not mountpoint and unit and isinstance(unit, int):
+            umountCmd = rForceCmdTwo
+        if detach and not dForce and not rForce and mountpoint and not unit:
+            # at some point in the future the will be a function with a regex to validate a good mountpoint.
+            umountCmd = dtachCmdThree
+        if detach and not dForce and not rForce and not mountpoint and unit and isinstance(unit, int):
+            umountCmd = dtachCmdFour
+        if not detach and dForce and not rForce and mountpoint and not unit:
+            # at some point in the future the will be a function with a regex to validate a good mountpoint.
+            umountCmd = dForceCmdThree
+        if not detach and dForce and not rForce and not mountpoint and unit and isinstance(unit, int):
+            umountCmd = dForceCmdFour
+
+        else:
+            self.logger.log(ERR, "Sorry, Invalid Command...") 
+            return success
+
+        self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(umountCmd))
+        self.rw.setCommand(umountCmd)
+        self.rw.communicate()
+        retval, reterr, retcode = self.rw.getNlogReturns()
+
+        if retcode == '':
+            success = False
+            raise Exception("Error trying to unmount drive : (" + str(reterr).strip() + ")")
+        else:
+            success = True
+            self.logger.log(INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
+
         return success
 
     ###########################################################################
 
-    def unmount(self):
+    def unmount(self, detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
         """
         Unmount the disk - same functionality as __eject on the mac
 
@@ -222,6 +277,7 @@ class RamDisk(object):
         @author: Roy Nielsen
         """
         success = False
+        success = self.umount(detach, dForce, rForce, mountpoint, unit)
         return success
 
     ###########################################################################
@@ -328,8 +384,9 @@ class RamDisk(object):
 
 ###############################################################################
 
+logger = CyLogger()
 
-def detach(device=None):
+def detach(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
     """
     Eject the ramdisk
 
@@ -338,5 +395,45 @@ def detach(device=None):
     @author: Roy Nielsen
     """
     success = False
+
+
+    rw = RunWith()
+    umountcmd = ''
+
+    detachCmdOne = [ "imdisk", "-d", "-m", mountPoint ]
+    detachCmdTwo = [ "imdisk", "-d", "-u", unit ]
+    dForceCmdOne = [ "imdisk", "-D", "-m", mountPoint ]
+    dForceCmdTwo = [ "imdisk", "-D", "-u", unit ]
+    rForceCmd    = [ "imdisk", "-R", "-u", unit ]
+
+    if not detach and not dForce and rForce and not mountpoint and unit and isinstance(unit, int):
+        umountCmd = rForceCmdTwo
+    if detach and not dForce and not rForce and mountpoint and not unit:
+        # at some point in the future the will be a function with a regex to validate a good mountpoint.
+        umountCmd = dtachCmdThree
+    if detach and not dForce and not rForce and not mountpoint and unit and isinstance(unit, int):
+        umountCmd = dtachCmdFour
+    if not detach and dForce and not rForce and mountpoint and not unit:
+        # at some point in the future the will be a function with a regex to validate a good mountpoint.
+            umountCmd = dForceCmdThree
+    if not detach and dForce and not rForce and not mountpoint and unit and isinstance(unit, int):
+        umountCmd = dForceCmdFour
+
+    else:
+        logger.log(ERR, "Sorry, Invalid Command...")
+            return success
+
+        logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(umountCmd))
+        rw.setCommand(umountCmd)
+        rw.communicate()
+        retval, reterr, retcode = rw.getNlogReturns()
+
+        if retcode == '':
+            success = False
+            raise Exception("Error trying to unmount drive : (" + str(reterr).strip() + ")")
+        else:
+            success = True
+            logger.log(INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
+
     return success
 
