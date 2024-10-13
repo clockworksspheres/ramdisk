@@ -175,9 +175,9 @@ class RamDisk(object):
             valid values: D - Z
         """
         success = False
-
-        self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(self.getMntPntsCmd))
-        self.rw.setCommand(self.getMntPntsCmd)
+        getMntPntsCmd  = ["wmic", "logicaldisk", "get", "caption"]
+        self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(getMntPntsCmd))
+        self.rw.setCommand(getMntPntsCmd)
         self.rw.communicate()
         retval, reterr, retcode = self.rw.getNlogReturns()
 
