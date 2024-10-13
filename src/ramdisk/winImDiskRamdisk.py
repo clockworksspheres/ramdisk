@@ -54,7 +54,7 @@ class RamDisk(object):
         # command to get imdisk info on a specificly numbered disk
         self.getIdXNameCmd = ["imdisk", "-l", "-u", self.imDiskNumber]
 
-        self.rw = RunWith(self.logger)
+        self.runCmd = RunWith(self.logger)
 
         self.fsType = "ntfs"
         self.driveType = "hd"
@@ -424,9 +424,9 @@ def umount(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
         return success
 
         logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(umountCmd))
-        rw.setCommand(umountCmd)
-        rw.communicate()
-        retval, reterr, retcode = rw.getNlogReturns()
+        runCmd.setCommand(umountCmd)
+        runCmd.communicate()
+        retval, reterr, retcode = runCmd.getNlogReturns()
 
         if retcode == '':
             success = False
