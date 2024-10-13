@@ -90,9 +90,9 @@ class RamDisk(object):
         print(str(cmd))
 
         self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
-        self.rw.setCommand(cmd)
-        self.rw.communicate()
-        retval, reterr, retcode = self.rw.getNlogReturns()
+        self.runCmd.setCommand(cmd)
+        self.runCmd.communicate()
+        retval, reterr, retcode = self.runCmd.getNlogReturns()
 
         if retcode == '':
             success = False
@@ -177,9 +177,9 @@ class RamDisk(object):
         success = False
         getMntPntsCmd  = ["wmic", "logicaldisk", "get", "caption"]
         self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(getMntPntsCmd))
-        self.rw.setCommand(getMntPntsCmd)
-        self.rw.communicate()
-        retval, reterr, retcode = self.rw.getNlogReturns()
+        self.runCmd.setCommand(getMntPntsCmd)
+        self.runCmd.communicate()
+        retval, reterr, retcode = self.runCmd.getNlogReturns()
 
         if retcode == '':
             success = False
@@ -253,9 +253,9 @@ class RamDisk(object):
             return success
 
         self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(umountCmd))
-        self.rw.setCommand(umountCmd)
-        self.rw.communicate()
-        retval, reterr, retcode = self.rw.getNlogReturns()
+        self.runCmd.setCommand(umountCmd)
+        self.runCmd.communicate()
+        retval, reterr, retcode = self.runCmd.getNlogReturns()
 
         if retcode == '':
             success = False
@@ -294,9 +294,9 @@ class RamDisk(object):
         cmd = ['systeminfo', '|', 'find' '"Available Physical Memory"']
 
         self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
-        self.rw.setCommand(cmd)
-        self.rw.communicate()
-        retval, reterr, retcode = self.rw.getNlogReturns()
+        self.runCmd.setCommand(cmd)
+        self.runCmd.communicate()
+        retval, reterr, retcode = self.runCmd.getNlogReturns()
 
         if retcode == '':
             success = False
@@ -397,7 +397,7 @@ def umount(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
     success = False
 
 
-    rw = RunWith()
+    runCmd = RunWith()
     umountcmd = ''
 
     detachCmdOne = [ "imdisk", "-d", "-m", mountPoint ]
