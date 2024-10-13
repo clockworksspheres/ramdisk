@@ -168,7 +168,7 @@ class RamDisk(object):
         return success
 
 
-    def mntPointAvailable(self, mntPoint):
+    def mntPointAvailable(self, mntPoint=""):
         """
         Check if the passed in mount point is available, or if it's already being used.
 
