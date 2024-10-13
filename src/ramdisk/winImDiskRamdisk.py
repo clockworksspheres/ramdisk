@@ -42,7 +42,7 @@ class RamDisk(object):
         if not mountpoint:
             self.getRandomizedMountpoint()
         else:
-            if self.mntPointAvailable():
+            if self.mntPointAvailable(mountpoint):
                 self.mntPoint = mountpoint
 
         #command to see what mountpoints have already been taken:
@@ -193,7 +193,7 @@ class RamDisk(object):
                 line = line.strip()
                 invalidMntPoints.append(line.strip(":"))
             self.logger.log(INFO, str(invalidMntPoints))
-            if re.search('^[D-Z]$', mountpoint) and mountpoint not in invalidMntPonts:
+            if re.search('^[D-Z]$', mntpoint) and mountpoint not in invalidMntPonts:
                 success = True
         return success
 
