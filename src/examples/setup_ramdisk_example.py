@@ -23,6 +23,10 @@ elif sys.platform.startswith("linux"):
     #####
     # For Linux
     from ramdisk.linuxTmpfsRamdisk import RamDisk
+elif sys.platform.startswith("win32"):
+    #####
+    # For Linux
+    from ramdisk.winImDiskRamdisk import RamDisk
 else:
     print("'" + str(sys.platform) + "' platform not supported...")
 
