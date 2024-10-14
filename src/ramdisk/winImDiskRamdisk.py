@@ -307,7 +307,7 @@ class RamDisk(object):
             # Available Physical Memory: 56,861 Mb
 
             tmplist = retval.split()
-            tmpmem = retval[3]
+            tmpmem = retval[4]
             if re.search(",", tmpmem):
                 mem = re.sub(",", "", tmpmem)
             else:
