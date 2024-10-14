@@ -298,6 +298,8 @@ class RamDisk(object):
         self.runCmd.communicate()
         retval, reterr, retcode = self.runCmd.getNlogReturns()
 
+        self.logger.log(lp.INFO, "retval: \n str(retval)\n\n")
+
         if retcode == '':
             success = False
             raise Exception("Error trying to get list of mount points(" + str(reterr).strip() + ")")
