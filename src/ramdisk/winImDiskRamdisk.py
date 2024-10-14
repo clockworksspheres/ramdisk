@@ -288,8 +288,6 @@ class RamDisk(object):
 
         @author: Roy Nielsen
         """
-        success = False
-        
         # Commands with pipes, better off as strings - and with quotes, done as below, with myshell=True in the cmd call
         cmd = 'systeminfo|find "Available Physical Memory"'
 
@@ -312,7 +310,7 @@ class RamDisk(object):
             tmpmem = retval[3]
             if re.search(",", tmpmem):
                 mem = re.sub(",", "", tmpmem)
-            else
+            else:
                 mem = tmpmem
 
             lvl = retval[4]
