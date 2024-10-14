@@ -26,6 +26,7 @@ class RamDisk(object):
         # <YYYY><MM><DD>.<HH><MM>
         # in UTC time
         self.module_version = '2024.10051117'
+        self.runCmd = RunWith(self.logger)
         if not isinstance(logger, CyLogger):
             self.logger = CyLogger()
         else:
@@ -53,8 +54,6 @@ class RamDisk(object):
 
         # command to get imdisk info on a specificly numbered disk
         self.getIdXNameCmd = ["imdisk", "-l", "-u", self.imDiskNumber]
-
-        self.runCmd = RunWith(self.logger)
 
         self.fsType = "ntfs"
         self.driveType = "hd"
