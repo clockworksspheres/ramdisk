@@ -296,7 +296,7 @@ class RamDisk(object):
         self.runCmd.communicate()
         retval, reterr, retcode = self.runCmd.getNlogReturns()
 
-        self.logger.log(lp.ERROR, "retval: \n str(retval)\n\n")
+        self.logger.log(lp.ERROR, "retval: {0}".format(retval))
 
         if retcode == '':
             success = False
