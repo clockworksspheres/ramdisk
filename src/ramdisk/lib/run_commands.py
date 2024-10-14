@@ -100,7 +100,7 @@ class RunWith(object):
         self.text = True
         #####
         # setting up to call ctypes to do a filesystem sync
-        self.libc = getLibc()
+        # self.libc = getLibc()
 
         #####
         # Extra stuff to assist in debugging
@@ -245,7 +245,7 @@ class RunWith(object):
 
                 self.retcode = proc.returncode
 
-                self.libc.sync()
+                # self.libc.sync()
             except SubprocessError as err:
                 if not silent:
                     self.logger.log(lp.WARNING, "command: " + str(self.printcmd))
@@ -319,7 +319,7 @@ class RunWith(object):
                     self.stderr = ""
                 proc.wait()
                 self.retcode = proc.returncode
-                self.libc.sync()
+                # self.libc.sync()
             except SubprocessError as err:
                 if not silent:
                     self.logger.log(lp.WARNING, "command: " + str(self.printcmd))
@@ -513,7 +513,7 @@ class RunWith(object):
                     self.logger.log(lp.INFO, traceback.format_exc())
 
                 self.retcode = proc.returncode
-                self.libc.sync()
+                # self.libc.sync()
 
             except SubprocessError as err:
                 if not silent:
@@ -591,7 +591,7 @@ class RunWith(object):
                 self.stdout = proc.stdout
                 self.stderr = proc.stderr
                 self.retcode = proc.returncode
-                self.libc.sync()
+                # self.libc.sync()
                 proc.stdout.close()
                 proc.stderr.close()
             finally:
@@ -680,9 +680,9 @@ class RunWith(object):
                         break
                 os.close(master)
                 os.close(slave)
-                self.libc.sync()
+                # self.libc.sync()
                 proc.wait()
-                self.libc.sync()
+                # self.libc.sync()
                 self.stdout = proc.stdout
                 self.stderr = proc.stderr
                 self.retcode = proc.returncode
