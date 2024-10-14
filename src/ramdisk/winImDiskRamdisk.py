@@ -308,7 +308,10 @@ class RamDisk(object):
 
             tmplist = retval.split()
             tmpmem = retval[3]
-            mem = re.sub(",", "", tmpmem) 
+            if re.search(",", tmpmem):
+                mem = re.sub(",", "", tmpmem)
+            else
+                mem = tmpmem
 
             lvl = retval[4]
 
