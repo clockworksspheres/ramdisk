@@ -82,9 +82,9 @@ class RamDisk(object):
         # Create the ramdisk and attach it to a device.
 
 
-        # cmd = [self.imdisk, "-a", "-s", self.diskSize, "-m" self.mountPoint, -p "\"/fs:" + self.fsType + " /q /y\"", "-o" self.driveType + "," + self.writeMode]
+        # cmd = [self.imdisk, "-a", "-s", self.diskSize, "-m" self.mntPoint, -p "\"/fs:" + self.fsType + " /q /y\"", "-o" self.driveType + "," + self.writeMode]
 
-        cmd = [self.imdisk, "-a", "-s", self.diskSize, "-m", self.mountPoint, -p, "\"/fs:" + self.fsType + " /q /y\""]
+        cmd = [self.imdisk, "-a", "-s", self.diskSize, "-m", self.mntPoint, -p, '"/fs:' + self.fsType + ' /q /y"']
 
         print(str(cmd))
 
@@ -209,9 +209,9 @@ class RamDisk(object):
         """
         success = False
 
-        detachCmdOne = [ self.imdisk, "-d", "-m", self.mountPoint ]
+        detachCmdOne = [ self.imdisk, "-d", "-m", self.mntPoint ]
         detachCmdTwo = [ self.imdisk, "-d", "-u", self.device ] 
-        dForceCmdOne = [ self.imdisk, "-D", "-m", self.mountPoint ] 
+        dForceCmdOne = [ self.imdisk, "-D", "-m", self.mntPoint ] 
         dForceCmdTwo = [ self.imdisk, "-D", "-u", self.device ] 
         rForceCmd = [ self.imdisk, "-R", "-u", self.device ] 
 
