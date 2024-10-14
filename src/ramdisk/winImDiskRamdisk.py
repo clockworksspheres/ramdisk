@@ -311,11 +311,14 @@ class RamDisk(object):
             if re.search(",", tmpmem):
                 mem = re.sub(",", "", tmpmem)
             else:
-                mem = tmpmem
+                mem = tmpmem.strip()
 
-            lvl = retval[4]
+            lvl = retval[5]
 
-            if int(self.diskSize) < int(mem):
+            self.logger.log(lp.ERROR, "mem: {0}  lvl: {1} ...".format(mem, lvl))
+            
+
+            if int(self.diskSize) < int(mem) and re.match("^\d+$", mem):
                 success = True
             elif re.match("^kb$", lvl):
                 self.logger.log(lp.ERROR, "NOT ENOUGH PHYSICAL MEMORY............................................")
