@@ -26,11 +26,11 @@ class RamDisk(object):
         # <YYYY><MM><DD>.<HH><MM>
         # in UTC time
         self.module_version = '2024.10051117'
-        self.runCmd = RunWith(self.logger)
         if not isinstance(logger, CyLogger):
             self.logger = CyLogger()
         else:
             self.logger = logger
+        self.runCmd = RunWith(self.logger)
         self.logger.log(lp.INFO, "Logger: " + str(self.logger))
         self.diskSize = size
         self.success = False
