@@ -61,8 +61,8 @@ class RamDisk(object):
 
         #####
         # Get an ImDisk Ram Disk
-        if(__isMemoryAvailable()):
-            __createRamdisk()
+        if(self.__isMemoryAvailable()):
+            self.__createRamdisk()
 
         self.logger.log(lp.DEBUG, "disk size: " + str(self.diskSize))
         self.logger.log(lp.DEBUG, "volume name: " + str(self.mntPoint))
