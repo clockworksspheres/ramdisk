@@ -289,11 +289,12 @@ class RamDisk(object):
         @author: Roy Nielsen
         """
         success = False
-
-        cmd = ['systeminfo', '|', 'find' '"Available Physical Memory"', myshell=True]
+        
+        # Commands with pipes, better off as strings - and with quotes, done as below, with myshell=True in the cmd call
+        cmd = 'systeminfo|find "Available Physical Memory"'
 
         self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
-        self.runCmd.setCommand(cmd)
+        self.runCmd.setCommand(cmd, myshell=True)
         self.runCmd.communicate()
         retval, reterr, retcode = self.runCmd.getNlogReturns()
 
