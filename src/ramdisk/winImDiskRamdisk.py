@@ -290,7 +290,7 @@ class RamDisk(object):
         """
         success = False
 
-        cmd = ['systeminfo', '|', 'find' '"Available Physical Memory"']
+        cmd = ['systeminfo', '\\|', 'find' '"Available Physical Memory"']
 
         self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
         self.runCmd.setCommand(cmd)
