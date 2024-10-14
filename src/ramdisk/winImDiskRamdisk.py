@@ -191,7 +191,7 @@ class RamDisk(object):
             for line in retval:
                 line = line.strip()
                 invalidMntPoints.append(line.strip(":"))
-            self.logger.log(INFO, str(invalidMntPoints))
+            self.logger.log(lp.INFO, str(invalidMntPoints))
             if re.search('^[D-Z]$', mntpoint) and mountpoint not in invalidMntPonts:
                 success = True
         return success
@@ -248,7 +248,7 @@ class RamDisk(object):
             umountCmd = dForceCmdFour
 
         else:
-            self.logger.log(ERR, "Sorry, Invalid Command...") 
+            self.logger.log(lp.ERROR, "Sorry, Invalid Command...") 
             return success
 
         self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(umountCmd))
@@ -261,7 +261,7 @@ class RamDisk(object):
             raise Exception("Error trying to unmount drive : (" + str(reterr).strip() + ")")
         else:
             success = True
-            self.logger.log(INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
+            self.logger.log(lp.INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
 
         return success
 
@@ -314,9 +314,9 @@ class RamDisk(object):
             if int(self.diskSize) < int(mem):
                 success = True
             elif re.match("^kb$", lvl):
-                self.logger.log(ERR, "NOT ENOUGH PHYSICAL MEMORY............................................")
+                self.logger.log(lp.ERROR, "NOT ENOUGH PHYSICAL MEMORY............................................")
             else:
-                self.logger.log(ERR, "NOT ENOUGH PHYSICAL MEMORY............................................")
+                self.logger.log(lp.ERROR, "NOT ENOUGH PHYSICAL MEMORY............................................")
                 
         return success
 
@@ -419,7 +419,7 @@ def umount(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
         umountCmd = dForceCmdFour
 
     else:
-        logger.log(ERR, "Sorry, Invalid Command...")
+        logger.log(lp.ERROR, "Sorry, Invalid Command...")
         return success
 
         logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(umountCmd))
@@ -432,7 +432,7 @@ def umount(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
             raise Exception("Error trying to unmount drive : (" + str(reterr).strip() + ")")
         else:
             success = True
-            logger.log(INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
+            logger.log(lp.INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
 
     return success
 
