@@ -23,7 +23,7 @@ from subprocess import SubprocessError as SubprocessError
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.loggers import MockLogger
-from ramdisk.lib.getLibc import getLibc
+# from ramdisk.lib.getLibc import getLibc
 
 
 class OSNotValidForRunWith(BaseException):
@@ -101,7 +101,7 @@ class RunWith(object):
         self.text = True
         #####
         # setting up to call ctypes to do a filesystem sync
-        self.libc = getLibc()
+        # self.libc = getLibc()
 
         #####
         # Extra stuff to assist in debugging
@@ -246,7 +246,7 @@ class RunWith(object):
 
                 self.retcode = proc.returncode
 
-                self.libc.sync()
+                # self.libc.sync()
             except SubprocessError as err:
                 if not silent:
                     self.logger.log(lp.WARNING, "command: " + str(self.printcmd))

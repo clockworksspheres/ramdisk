@@ -22,7 +22,7 @@ from subprocess import SubprocessError as SubprocessError
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.loggers import MockLogger
-from ramdisk.lib.getLibc import getLibc
+# from ramdisk.lib.getLibc import getLibc
 
 
 class OSNotValidForRunWith(BaseException):
