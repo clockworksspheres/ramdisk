@@ -16,6 +16,7 @@ import types
 import threading
 import traceback
 # import tracemalloc
+import subprocess
 from subprocess import Popen, PIPE
 from subprocess import SubprocessError as SubprocessError
 
@@ -106,7 +107,7 @@ class RunWith(object):
         # Extra stuff to assist in debugging
         # tracemalloc.start(16)
 
-    def setCommand(self, command, env=None, myshell=None, close_fds=None, text=True):
+    def setCommand(self, command, env=None, myshell=None, close_fds=None, text=True, creationflags=None):
         """
         initialize a command to run
 
@@ -148,6 +149,28 @@ class RunWith(object):
             self.cfds = False
         else:
             self.cfds = close_fds
+
+        # Windows Parameters - pass in a comma separated list of parameters, will deal with in here...
+        valid_creationflags = [ "CREATE_NEW_CONSOLE",
+                                "CREATE_NEW_PROCESS_GROUP",
+                                "ABOVE_NORMAL_PRIORITY_CLASS",
+                                "BELOW_NORMAL_PRIORITY_CLASS",
+                                "HIGH_PRIORITY_CLASS",
+                                "IDLE_PRIORITY_CLASS",
+                                "NORMAL_PRIORITY_CLASS",
+                                "REALTIME_PRIORITY_CLASS",
+                                "CREATE_NO_WINDOW",
+                                "DETACHED_PROCESS",
+                                "CREATE_DEFAULT_ERROR_MODE",
+                                "CREATE_BREAKAWAY_FROM_JOB"
+                               ]
+        self.logger.log(lp.WARNING, "creationflags: {0}".format(str(creationflags)))
+        self.creationflags = ""
+        # if creationflags is not None:
+        #    if re.search(",", creationflags):
+        #        self.creationflags = re.sub(",", " | ", creationflags)
+        if creationflags is True:
+            self.creationflags = subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP
 
     ###########################################################################
 
@@ -238,7 +261,12 @@ class RunWith(object):
         self.retcode = 999
         if self.command and isinstance(silent, bool):
             try:
-                proc = Popen(self.command, stdout=PIPE, stderr=PIPE, shell=self.myshell, env=self.environ, close_fds=self.cfds, text=self.text)
+                if not self.creationflags:
+                    proc = Popen(self.command, stdout=PIPE, stderr=PIPE, shell=self.myshell, env=self.environ, close_fds=self.cfds, text=self.text)
+                if self.creationflags:
+                    proc = Popen(self.command, stdout=PIPE, stderr=PIPE, shell=self.myshell, env=self.environ, close_fds=self.cfds, text=self.text, creationflags=self.creationflags)
+                self.logger.log(lp.WARNING, "creationflags: {0}".format(str(self.creationflags)))
+
                 self.stdout, self.stderr = proc.communicate()
                 self.stdout = str(self.stdout)
                 self.stderr = str(self.stderr)

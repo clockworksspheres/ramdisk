@@ -6,6 +6,7 @@
 
 #--- Native python libraries
 import sys
+import time
 from optparse import OptionParser
 
 sys.path.append("../")
@@ -69,4 +70,4 @@ if not ramdisk.success:
     raise Exception("Ramdisk setup failed..")
 
 print(ramdisk.getDevice())
-
+time.sleep(9000)

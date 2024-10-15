@@ -10,7 +10,7 @@ import re
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.loggers import CyLogger
-from ramdisk.lib.run_communicate import RunWith
+from ramdisk.lib.run_commands import RunWith
 
 ###########################################################################
 
@@ -18,7 +18,7 @@ from ramdisk.lib.run_communicate import RunWith
 class RamDisk(object):
     """
     """
-    def __init__(self, size=0, mountpoint=False, logger=False):
+    def __init__(self, size=512, mountpoint=False, logger=False):
         """
         """
         #####
@@ -39,7 +39,7 @@ class RamDisk(object):
         # Need to have a config file or pass in a location for or hard code or
         # command line pass in the location of the ImDisk binary
         self.imdisk = "imdisk" 
-
+        self.mntPoint = ""
         if not mountpoint:
             self.getRandomizedMountpoint()
         else:
@@ -84,12 +84,12 @@ class RamDisk(object):
 
         # cmd = [self.imdisk, "-a", "-s", self.diskSize, "-m" self.mntPoint, -p "\"/fs:" + self.fsType + " /q /y\"", "-o" self.driveType + "," + self.writeMode]
 
-        cmd = [self.imdisk, "-a", "-s", self.diskSize, "-m", self.mntPoint, -p, '"/fs:' + self.fsType + ' /q /y"']
+        cmd = [self.imdisk, "-a", "-s", self.diskSize + "M", "-m", self.mntPoint, "-p", '"/fs:' + self.fsType + ' /q /y"', "-P"]
 
         print(str(cmd))
 
         self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
-        self.runCmd.setCommand(cmd)
+        self.runCmd.setCommand(cmd, creationflags=True)
         self.runCmd.communicate()
         retval, reterr, retcode = self.runCmd.getNlogReturns()
 
@@ -180,6 +180,8 @@ class RamDisk(object):
         self.runCmd.communicate()
         retval, reterr, retcode = self.runCmd.getNlogReturns()
 
+        self.logger.log(lp.WARNING, "retval: {0}".format(retval))
+
         if retcode == '':
             success = False
             raise Exception("Error trying to get list of mount points(" + str(reterr).strip() + ")")
@@ -189,10 +191,16 @@ class RamDisk(object):
             #####
             # Get the output and process it - for every line, put it in a list
             for line in retval:
-                line = line.strip()
-                invalidMntPoints.append(line.strip(":"))
+                if line is not None:
+                    if re.match('^[A-Z]', line):
+                        line = line.strip()
+                        invalidMntPoints.append(line.strip(":"))
+                    else:
+                        continue
+                else:
+                    continue
             self.logger.log(lp.INFO, str(invalidMntPoints))
-            if re.match('^[D-Z]', mntPoint) and mntPoint not in invalidMntPonts:
+            if re.match('^[D-Z]', mntPoint) and mntPoint not in invalidMntPoints:
                 success = True
         return success
 
