@@ -84,7 +84,7 @@ class RamDisk(object):
 
         # cmd = [self.imdisk, "-a", "-s", self.diskSize, "-m" self.mntPoint, -p "\"/fs:" + self.fsType + " /q /y\"", "-o" self.driveType + "," + self.writeMode]
 
-        cmd = [self.imdisk, "-a", "-s", self.diskSize + "M", "-m", self.mntPoint, "-p", '"/fs\\:' + self.fsType + ' /q /y"', "-P"]
+        cmd = [self.imdisk, "-a", "-s", self.diskSize + "M", "-m", self.mntPoint, "-p", '"/fs\\\:' + self.fsType + ' /q /y"', "-P"]
 
         print(str(cmd))
 
