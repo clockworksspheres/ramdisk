@@ -4,7 +4,7 @@
 
 # --- Native python libraries
 import os
-import ctypes
+import sys
 
 # --- non-native python libraries in this source tree
 
@@ -15,6 +15,13 @@ class LibcNotAvailableError(BaseException):
     """
     def __init__(self, *args, **kwargs):
         BaseException.__init__(self, *args, **kwargs)
+
+
+if sys.platform is "win32":
+    raise LibcNotAvailableError("Libc not available - You are on a Windows Platform")
+else:
+    import ctypes
+
 
 ##############################################################################
 
@@ -29,6 +36,13 @@ def getLibc( ):
     @author: Roy Nielsen
     """
     # libc = True
+
+    if sys.platform is "win32":
+        return(0)
+    else:
+        import ctypes
+
+
     #####
     # For Mac
     try:
@@ -45,8 +59,6 @@ def getLibc( ):
                           "/lib/libc.so.6"]
         for path in possible_paths:
 
-            if os.path.exists(path):
-                libc = ctypes.CDLL(path)
                 break
 
     try:
