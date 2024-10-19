@@ -17,7 +17,7 @@ class LibcNotAvailableError(BaseException):
         BaseException.__init__(self, *args, **kwargs)
 
 
-if sys.platform is "win32":
+if sys.platform == "win32":
     raise LibcNotAvailableError("Libc not available - You are on a Windows Platform")
 else:
     import ctypes
