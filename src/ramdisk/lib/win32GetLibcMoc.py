@@ -33,7 +33,7 @@ except LibcNotAvailableError as err:
 class libc(object):
     """
     """
-    def ___init___():
+    def ___init___(self):
 
 
     def sync(self):
