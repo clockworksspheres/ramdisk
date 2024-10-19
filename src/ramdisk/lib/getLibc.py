@@ -23,7 +23,7 @@ try:
         import ctypes
 
 except LibcNotAvailableError as err:
-    pass
+    raise err
 
 
 ##############################################################################
