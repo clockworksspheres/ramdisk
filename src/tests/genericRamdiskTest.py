@@ -27,7 +27,6 @@ try:
     from ramdisk.lib.getLibc import getLibc
 except LibcNotAvailableError as err:
     print("platform not supported: {0}".format(err))
-    pass
 from tests.genericTestUtilities import GenericTestUtilities
 #####
 # Load OS specific Ramdisks
