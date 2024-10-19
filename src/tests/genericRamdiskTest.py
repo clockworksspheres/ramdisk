@@ -22,7 +22,10 @@ sys.path.append(appendDir)
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
-from ramdisk.lib.getLibc import getLibc
+try:
+    from ramdisk.lib.getLibc import getLibc
+except LibcNotAvailableError as err:
+    print("platform not supported: {0}".format(err)
 from tests.genericTestUtilities import GenericTestUtilities
 #####
 # Load OS specific Ramdisks
