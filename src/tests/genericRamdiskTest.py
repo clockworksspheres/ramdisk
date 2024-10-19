@@ -22,6 +22,7 @@ sys.path.append(appendDir)
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
+from ramdisk.lib.getLibc import LibcNotAvailableError
 try:
     from ramdisk.lib.getLibc import getLibc
 except LibcNotAvailableError as err:
