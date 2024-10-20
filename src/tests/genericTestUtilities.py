@@ -18,7 +18,16 @@ import ctypes
 from datetime import datetime
 #sys.path.append("../")
 #--- non-native python libraries in this source tree
-from ramdisk.lib.getLibc import getLibc
+
+if sys.platform.startswith("darwin"):
+    from ramdisk.lib.getLibc.macGetLibc import getLibc
+elif sys.platform.startswith("linux"):
+    from ramdisk.lib.getLibc.linuxGetLibc import getLibc
+elif sys.platform.startswith("win32"):
+    from ramdisk.lib.getLibc.winGetLibc import getLibc
+else:
+    raise Exception("Damn it Jim!!! What OS is this???")
+
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.run_commands import RunWith as rw
@@ -47,35 +56,6 @@ class GenericTestUtilities(object):
     ################################################
     ##### Helper Methods
     @classmethod
-    def getLibc(self):
-        """
-        """
-        #####
-        # For Mac
-        try:
-            libc = ctypes.CDLL("/usr/lib/libc.dylib")
-            # libc = ctypes.CDLL("libc.dylib")
-        except OSError:
-            #####
-            # For Linux
-            possible_paths = ["/lib/x86_64-linux-gnu/libc.so.6",
-                              "/lib/i386-linux-gnu/libc.so.6",
-                              "/usr/lib64/libc.so.6"]
-            for path in possible_paths:
-    
-                if os.path.exists(path):
-                    libc = ctypes.CDLL(path)
-                    break
-    
-        try:
-            if libc:
-                libc.sync()
-        except AttributeError:
-            raise LibcNotAvailableError("............................Cannot Sync.")
-    
-        return libc
-
-    ################################################
 
     def findLinuxLibC(self):
         """
