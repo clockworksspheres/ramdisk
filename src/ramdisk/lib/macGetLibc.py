@@ -7,7 +7,7 @@ import os
 import sys
 
 # --- non-native python libraries in this source tree
-
+from . PlatformFoundErrors import Win32PlatformFoundError
 
 class LibcNotAvailableError(BaseException):
     """
@@ -17,22 +17,7 @@ class LibcNotAvailableError(BaseException):
         BaseException.__init__(self, *args, **kwargs)
 
 
-
 ##############################################################################
-
-
-
-class libc(object):
-    """
-    """
-    def ___init___(self):
-
-
-    def sync(self):
-        """
-        """
-        pass
-
 
 def getLibc( ):
     """
@@ -44,6 +29,18 @@ def getLibc( ):
 
     @author: Roy Nielsen
     """
+    # libc = True
+
+    import ctypes
+
+    libc = ctypes.CDLL("/usr/lib/libc.dylib")
+    # libc = ctypes.CDLL("libc.dylib")
+
+    try:
+        if libc:
+            libc.sync()
+    except AttributeError:
+        raise LibcNotAvailableError("............................Cannot Sync.")
 
     return libc
 

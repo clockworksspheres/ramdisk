@@ -93,5 +93,8 @@ if sys.platform.strip() == "win32":
 # Can immediately create darwin (macOS) and win32 (Windows) platforms...
 
 
+getLibc should be an interface and there should be concrete instances that are spawned...
+
+
 
 
