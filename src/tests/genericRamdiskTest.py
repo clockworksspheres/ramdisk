@@ -22,34 +22,36 @@ sys.path.append(appendDir)
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
-from ramdisk.lib.getLibc import LibcNotAvailableError
-try:
-    from ramdisk.lib.getLibc import getLibc
-except LibcNotAvailableError as err:
-    print("platform not supported: {0}".format(err))
-    from ramdisk.lib.win32GetLibcMoc import libc
-    from ramdisk.lib.win32GenLibcMoc import getLibc
 from tests.genericTestUtilities import GenericTestUtilities
 #####
 # Load OS specific Ramdisks
 if sys.platform.startswith("darwin"):
     #####
     # For Mac
+    from ramdisk.lib.getLibc.macGetRamdisk import getLibc
+    from tests.genericTestUtilities import GenericTestUtilities
     from ramdisk.macRamdisk import RamDisk
     from ramdisk.macRamdisk import detach
     from ramdisk.macRamdisk import umount
 elif sys.platform.startswith("linux"):
     #####
     # For Linux
+    from ramdisk.lib.getLibc.linuxGetRamdisk import getLibc
+    from tests.genericTestUtilities import GenericTestUtilities
     from ramdisk.linuxTmpfsRamdisk import RamDisk
     from ramdisk.linuxTmpfsRamdisk import umount
 elif sys.platform.startswith("win32"):
     #####
     # For ImDisk for Windows
+    from ramdisk.lib.getLibc.winGetRamdisk import getLibc
+    from tests.genericTestUtilities import GenericTestUtilities
     from ramdisk.winImDiskRamdisk import RamDisk
     from ramdisk.winImDiskRamdisk import umount
 else:
     raise Exception("Damn it Jim!!! What OS is this???")
+
+from tests.genericTestUtilities import GenericTestUtilities
+
 
 class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
     """
