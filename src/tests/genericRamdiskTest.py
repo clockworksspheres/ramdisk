@@ -28,7 +28,7 @@ from tests.genericTestUtilities import GenericTestUtilities
 if sys.platform.startswith("darwin"):
     #####
     # For Mac
-    from ramdisk.lib.getLibc.macGetRamdisk import getLibc
+    from ramdisk.lib.getLibc.macGetLibc import getLibc
     from tests.genericTestUtilities import GenericTestUtilities
     from ramdisk.macRamdisk import RamDisk
     from ramdisk.macRamdisk import detach
@@ -36,14 +36,14 @@ if sys.platform.startswith("darwin"):
 elif sys.platform.startswith("linux"):
     #####
     # For Linux
-    from ramdisk.lib.getLibc.linuxGetRamdisk import getLibc
+    from ramdisk.lib.getLibc.linuxGetLibc import getLibc
     from tests.genericTestUtilities import GenericTestUtilities
     from ramdisk.linuxTmpfsRamdisk import RamDisk
     from ramdisk.linuxTmpfsRamdisk import umount
 elif sys.platform.startswith("win32"):
     #####
     # For ImDisk for Windows
-    from ramdisk.lib.getLibc.winGetRamdisk import getLibc
+    from ramdisk.lib.getLibc.winGetLibc import getLibc
     from tests.genericTestUtilities import GenericTestUtilities
     from ramdisk.winImDiskRamdisk import RamDisk
     from ramdisk.winImDiskRamdisk import umount
