@@ -60,4 +60,38 @@ Size: 536870912 bytes (512 MB), Virtual Memory, HDD.
 
 outputs above need to be parsed for relevant information...
 
+##################
+#
+
+###################
+# Platform related notes...
+
+exeption for specific platform.
+
+raise platform specific exeption
+
+handle platform specific exception
+
+moc platform specific libs
+    (libc for instance)
+
+if re.match("^win32$", sys.platform.strip()):
+    raise Win32PlatformFoundError("Windows Platform Found Error...")
+  -or maybe-
+if sys.platform.strip() == "win32":
+    raise Win32PlatformFoundError("Windows Platform Found Error...")
+
+ - or - 
+
+if re.match("^win32$", sys.platform.strip()):
+    import win
+  -or maybe-
+if sys.platform.strip() == "win32":
+
+# Create a PlatformFoundErrors.py exceptions..
+
+# Can immediately create darwin (macOS) and win32 (Windows) platforms...
+
+
+
 

@@ -7,7 +7,7 @@ import os
 import sys
 
 # --- non-native python libraries in this source tree
-
+from PlatformFoundErrors import Win32PlatformFoundError
 
 class LibcNotAvailableError(BaseException):
     """
@@ -17,12 +17,12 @@ class LibcNotAvailableError(BaseException):
         BaseException.__init__(self, *args, **kwargs)
 
 try:
-    if sys.platform == "win32":
-        raise LibcNotAvailableError("Libc not available - You are on a Windows Platform")
+    if sys.platform.strip() == "win32":
+        raise Win32PlatformFoundError("Libc not available - You are on a Windows Platform")
     else:
         import ctypes
 
-except LibcNotAvailableError as err:
+except Win32PlatformFoundError as err:
     raise err
 
 
