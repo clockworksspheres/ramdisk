@@ -7,7 +7,7 @@ import os
 import sys
 
 # --- non-native python libraries in this source tree
-from PlatformFoundErrors import Win32PlatformFoundError
+from . PlatformFoundErrors import Win32PlatformFoundError
 
 class LibcNotAvailableError(BaseException):
     """
