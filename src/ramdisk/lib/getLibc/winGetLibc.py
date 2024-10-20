@@ -26,7 +26,7 @@ class libc(object):
     """
     """
     def ___init___(self):
-
+        pass
 
     def sync(self):
         """
