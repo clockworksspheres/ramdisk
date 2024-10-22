@@ -415,9 +415,9 @@ def umount(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
     runCmd = RunWith()
     umountcmd = ''
 
-    detachCmdOne = [ "imdisk", "-d", "-m", mountPoint ]
+    detachCmdOne = [ "imdisk", "-d", "-m", mountpoint ]
     detachCmdTwo = [ "imdisk", "-d", "-u", unit ]
-    dForceCmdOne = [ "imdisk", "-D", "-m", mountPoint ]
+    dForceCmdOne = [ "imdisk", "-D", "-m", mountpoint ]
     dForceCmdTwo = [ "imdisk", "-D", "-u", unit ]
     rForceCmd    = [ "imdisk", "-R", "-u", unit ]
 
