@@ -1,5 +1,5 @@
 """
-Generic class based Yutilities for ramdisk testing...
+Generic class based utilities for ramdisk testing...
 
 @author: Roy Nielsen
 """
@@ -52,7 +52,8 @@ class GenericTestUtilities(object):
         """
         self.logger = CyLogger()
         
-        self.getLibc()
+        self.libc = getLibc()
+
     ################################################
     ##### Helper Methods
     @classmethod
