@@ -58,14 +58,15 @@ class RamDisk(object):
         self.fsType = "ntfs"
         self.driveType = "hd"
         self.writeMode = "rw"
-
+        success = False
         #####
         # Get an ImDisk Ram Disk
         if(self.__isMemoryAvailable()):
-            self.__createRamdisk()
+            success = self.__createRamdisk()
 
         self.logger.log(lp.DEBUG, "disk size: " + str(self.diskSize))
         self.logger.log(lp.DEBUG, "volume name: " + str(self.mntPoint))
+        return success
 
     ###########################################################################
 
