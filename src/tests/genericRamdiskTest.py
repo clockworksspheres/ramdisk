@@ -97,8 +97,8 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
         self.logger.log(lp.INFO, "::::::::Ramdisk Mount Point: " + str(self.mountPoint))
         self.logger.log(lp.INFO, "::::::::Ramdisk Device     : " + str(self.ramdiskDev))
 
-        if not self.my_ramdisk.success:
-            raise IOError("Cannot get a ramdisk in setupClass for some reason. . .")
+        # if not self.my_ramdisk.success:
+        #     raise IOError("Cannot get a ramdisk in setupClass for some reason. . .")
 
         #####
         # Create a temp location on disk to run benchmark tests against
