@@ -66,7 +66,7 @@ class RamDisk(object):
 
         self.logger.log(lp.DEBUG, "disk size: " + str(self.diskSize))
         self.logger.log(lp.DEBUG, "volume name: " + str(self.mntPoint))
-        return success
+        # return success
 
     ###########################################################################
 

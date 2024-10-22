@@ -97,7 +97,7 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
         self.logger.log(lp.INFO, "::::::::Ramdisk Mount Point: " + str(self.mountPoint))
         self.logger.log(lp.INFO, "::::::::Ramdisk Device     : " + str(self.ramdiskDev))
 
-        if not self.success:
+        if not self.my_ramdisk.success:
             raise IOError("Cannot get a ramdisk in setupClass for some reason. . .")
 
         #####
