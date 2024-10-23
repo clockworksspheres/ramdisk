@@ -9,6 +9,7 @@ import os
 import io
 import re
 import sys
+import time
 import random
 import tempfile
 import traceback
@@ -83,6 +84,28 @@ class GenericTestUtilities(object):
 
     ################################################
 
+    def getWin32BlockSize(self, path):
+        """
+        import win32api
+
+        def get_block_size(path):
+            "Gets the block size of the file system for the given path."
+    
+            sectors_per_cluster, bytes_per_sector, _ = win32api.GetDiskFreeSpace(path)
+            return sectors_per_cluster * bytes_per_sector
+
+        path = "C:\\"  # Replace with the path you want to check
+        block_size = get_block_size(path)
+        print(f"Block size: {block_size} bytes")
+
+        """
+        "Gets the block size of the file system for the given path."
+    
+        sectors_per_cluster, bytes_per_sector, _ = pywin32.GetDiskFreeSpace(path)
+        return sectors_per_cluster * bytes_per_sector
+ 
+    ################################################
+
     def touch(self, fname="", message_level="normal"):
         """
         Python implementation of the touch command..
@@ -136,8 +159,29 @@ class GenericTestUtilities(object):
                     raise(err2)
 
     ################################################
-
     def mkfile(self, file_path="", file_size=0, pattern="rand", block_size=512, mode=0o777):
+        """
+        """
+        total_time = 0
+        time.sleep(.05)
+        if file_path and file_size:
+            self.libc.sync()
+            file_size = file_size * 1024 * 1024
+            if os.path.isdir(file_path):
+                tmpfile_path = os.path.join(file_path, "testfile")
+            else:
+                tmpfile_path = file_path
+            self.logger.log(lp.DEBUG, "Writing to: " + tmpfile_path)
+        
+            # Start timer in miliseconds
+            start_time = datetime.now()
+
+            # do low level file access...
+            with os.fdopen(os.open(tmpfile_path, os.O_WRONLY | os.O_CREAT), 'w') as tmpfile_fd:
+                tmpfile_fd.tell() < file_size
+                tmpfile_fd.write(str(os.urandom(1024)))
+
+    def old_mkfile(self, file_path="", file_size=0, pattern="rand", block_size=512, mode=0o777):
         """
         Create a file with "file_path" and "file_size".  To be used in
         file creation benchmarking - filesystem vs ramdisk.
