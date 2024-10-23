@@ -401,6 +401,20 @@ class RamDisk(object):
 
 logger = CyLogger()
 
+def detach(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
+    """
+    """
+    success = False
+    success = umount(detach, dForce, rForce, mountpoint, unit)
+    return success
+
+
+def unmount(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
+    success = False
+    success = umount(detach, dForce, rForce, mountpoint, unit)
+    return success
+
+
 def umount(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
     """
     Eject the ramdisk
