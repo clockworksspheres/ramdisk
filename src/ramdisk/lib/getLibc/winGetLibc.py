@@ -45,7 +45,7 @@ def getLibc( ):
 
     @author: Roy Nielsen
     """
-
-    return libc
+    mylibc = libc()
+    return mylibc
 
 ##############################################################################
