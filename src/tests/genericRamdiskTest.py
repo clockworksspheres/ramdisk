@@ -262,7 +262,7 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
         """
         self.tearDownInstanceSpecifics()
         try:
-            umount(self.mount)
+            self.my_ramdisk.umount()
             self.logger.log(lp.INFO, r"Successfully detached disk: " + \
                        str(self.my_ramdisk.mntPoint).strip())
         except Exception:

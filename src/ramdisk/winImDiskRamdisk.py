@@ -452,7 +452,7 @@ def umount(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
         logger.log(lp.ERROR, "Sorry, Invalid Command...")
         return success
 
-        logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(umountCmd))
+        logger.log(lp.WARNING, "Running command to unmount ramdisk: \n\t" + str(umountCmd))
         runCmd.setCommand(umountCmd)
         runCmd.communicate()
         retval, reterr, retcode = runCmd.getNlogReturns()
