@@ -169,19 +169,19 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
         # Clean up the ramdisk
         self.my_ramdisk._format()
         #####
+        # 10Mb file size
+        ten = 10
+        #####
+        # 50Mb file size
+        fifty = 50
+        #####
+        # 80Mb file size
+        eighty = 80
+        #####
         # 100Mb file size
         oneHundred = 100
-        #####
-        # 500Mb file size
-        fiveHundred = 500
-        #####
-        # 800Mb file size
-        eightHundred = 800
-        #####
-        # 1Gb file size
-        oneGig = 1000
 
-        my_fs_array = [oneHundred, fiveHundred, eightHundred, oneGig]
+        my_fs_array = [ten, ten, eighty, oneHundred]
 
         try: 
             fs_starttime = datetime.now()

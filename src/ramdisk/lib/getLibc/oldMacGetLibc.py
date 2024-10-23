@@ -8,7 +8,6 @@ import sys
 
 # --- non-native python libraries in this source tree
 
-
 class LibcNotAvailableError(BaseException):
     """
     Custom Exception
@@ -17,23 +16,7 @@ class LibcNotAvailableError(BaseException):
         BaseException.__init__(self, *args, **kwargs)
 
 
-
 ##############################################################################
-
-
-
-class libc(object):
-    """
-    """
-    def ___init___(self):
-        super(libc, self).__init__()
-        pass
-
-    def sync(self):
-        """
-        """
-        pass
-
 
 def getLibc( ):
     """
@@ -45,7 +28,19 @@ def getLibc( ):
 
     @author: Roy Nielsen
     """
-    mylibc = libc()
-    return mylibc
+    # libc = True
+
+    import ctypes
+
+    libc = ctypes.CDLL("/usr/lib/libc.dylib")
+    # libc = ctypes.CDLL("libc.dylib")
+
+    try:
+        if libc:
+            libc.sync()
+    except AttributeError:
+        raise LibcNotAvailableError("............................Cannot Sync.")
+
+    return libc
 
 ##############################################################################
