@@ -39,9 +39,8 @@ elif sys.platform.startswith("linux"):
 class test_macRamdisk(GenericRamdiskTest):
     """
     """
-
     @classmethod
-    def setUpInstanceSpecifics(self):
+    def setUpClass(self):
         """
         Initializer
         """
@@ -53,7 +52,7 @@ class test_macRamdisk(GenericRamdiskTest):
 ###############################################################################
 ##### unittest Tear down
     @classmethod
-    def tearDownInstanceSpecifics(self):
+    def tearDownClass(self):
         """
         disconnect ramdisk
         """

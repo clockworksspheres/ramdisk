@@ -260,7 +260,7 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
     def tearDownClass(self):
         """
         """
-        self.tearDownInstanceSpecifics()
+        # self.tearDownInstanceSpecifics()
         try:
             self.my_ramdisk.umount()
             self.logger.log(lp.INFO, r"Successfully detached disk: " + \

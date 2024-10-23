@@ -163,7 +163,7 @@ class GenericTestUtilities(object):
         """
         """
         total_time = 0
-        time.sleep(.04)
+        time.sleep(.05)
         if file_path and file_size:
             self.libc.sync()
             file_size = file_size * 1024 * 1024
