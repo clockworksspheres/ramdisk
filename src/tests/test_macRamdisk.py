@@ -54,9 +54,29 @@ class test_macRamdisk(GenericRamdiskTest):
     @classmethod
     def tearDownClass(self):
         """
-        disconnect ramdisk
         """
-        pass
+        # self.tearDownInstanceSpecifics()
+        try:
+            self.my_ramdisk.umount()
+            self.logger.log(lp.INFO, r"Successfully detached disk: " + \
+                       str(self.my_ramdisk.mntPoint).strip())
+        except Exception:
+            message = r"Couldn't detach disk: " + \
+                       str(self.my_ramdisk.myRamdiskDev).strip() + \
+                       " : mntpnt: " + str(self.my_ramdisk.mntPoint)
+            ex_message = message + "\n" + traceback.format_exc()
+            raise Exception(ex_message)
+
+        #####
+        # capture end time
+        test_end_time = datetime.now()
+
+        #####
+        # Calculate and log how long it took...
+        test_time = (test_end_time - self.test_start_time)
+
+        self.logger.log(lp.INFO, self.__module__ + " took " + str(test_time) + \
+                  " time to complete...")
 
 
 if __name__ == "__main__":

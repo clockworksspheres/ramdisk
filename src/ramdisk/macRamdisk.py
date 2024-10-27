@@ -431,7 +431,7 @@ class RamDisk(RamDiskTemplate) :
         @author: Roy Nielsen
         """
         success = False
-        cmd = [self.diskutil, "unmount", self.devPartition]
+        cmd = [self.diskutil, "unmount", "force", self.devPartition]
         self.runWith.setCommand(cmd)
         self.runWith.communicate()
         retval, reterr, retcode = self.runWith.getNlogReturns()
