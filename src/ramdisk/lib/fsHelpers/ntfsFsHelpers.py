@@ -6,8 +6,9 @@ import traceback
 from subprocess import Popen
 import os
 import sys
-appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-3])
-sys.path.append(appendDir)
+
+sys.path.append("../../..")
+
 ####
 # import ramdisk libraries
 #--- non-native python libraries in this source tree
@@ -21,32 +22,36 @@ class FsHelpers(object):
     def __init__(self):
         """
         """
-        #self.logger = CyLogger()
-        #self.runner = RunWith()
+        self.logger = CyLogger()
+        self.runner = RunWith()
 
     def getFsBlockSize(self, path="c:"):
         """
+        path:  path could be a drive, with a colon, or a full path - drive, plus path to
+               a mount point, ie, directory.
+
         """
         success = False
         blockSize = 0
         # Run logic or command to get block size        
-        """
-                    cmd = [self.diskutil, "mount", "-mountPoint",
-                           self.mntPoint, self.devPartition]
-                    self.runWith.setCommand(cmd)
-                    self.runWith.communicate()
-                    retval, reterr, retcode = self.runWith.getNlogReturns()
 
-                    if not reterr:
-                        success = True
-        """
         cmd = ["fsutil", "fsinfo", "ntfsinfo", path]
         self.runner.setCommand(cmd)
         self.runner.communicate()
         retval, reterr, retcode = self.runner.getNlogReturns()
+       
+        lines = retval.split("\n")
 
-        print(retval)
-
+        for line in lines:
+            try:
+                match = re.match(r"Bytes Per Cluster\s+[:;]\s+(\d+).*", line)
+                blockSize = match.group(1)
+                # print(blockSize)
+                success = True
+                break
+            except:
+                pass
+                
         return success, blockSize
 
 if __name__=="__main__":
@@ -54,7 +59,6 @@ if __name__=="__main__":
     success, blocksize = fshelpers.getFsBlockSize()
     print("success = " + str(success) + " , " + "blocksize = " +  str(blocksize))
 
-    #####
-    # Include the parent project directory in the PYTHONPATH
-    appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-3])
-    print(appendDir)
+
+
+
