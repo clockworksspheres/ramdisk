@@ -77,7 +77,7 @@ class RamDisk(RamDiskTemplate) :
         #####
         # Calculating the size of ramdisk in 1Mb chunks
         numerator = int(size) * 1024 * 1024  # 1024 * 1024 = 1 megabyte
-        denominator = 4096    # block size for apfs, 512 for hfs
+        denominator = 512    # block size for apfs, 512 for hfs
         fSize = numerator / denominator
         iSize = int(fSize)
         self.diskSize = str(iSize)

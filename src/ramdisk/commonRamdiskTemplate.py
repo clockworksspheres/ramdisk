@@ -65,7 +65,7 @@ class RamDiskTemplate(object):
 
     ###########################################################################
 
-    def getData(self):
+    def getData(self, **kwargs):
         """
         Getter for mount data, and if the mounting of a ramdisk was successful
 
@@ -77,7 +77,7 @@ class RamDiskTemplate(object):
 
     ###########################################################################
 
-    def getNlogData(self):
+    def getNlogData(self, **kwargs):
         """
         Getter for mount data, and if the mounting of a ramdisk was successful
 
@@ -92,7 +92,7 @@ class RamDiskTemplate(object):
 
     ###########################################################################
 
-    def getNprintData(self):
+    def getNprintData(self, **kwargs):
         """
         Getter for mount data, and if the mounting of a ramdisk was successful
         """
@@ -103,7 +103,7 @@ class RamDiskTemplate(object):
 
     ###########################################################################
 
-    def getRandomizedMountpoint(self):
+    def getRandomizedMountpoint(self, **kwargs):
         """
         Create a randomized (secure) mount point - per python's implementation
         of mkdtemp - a way to make an unguessable directory on the system
@@ -128,7 +128,7 @@ class RamDiskTemplate(object):
 
     ###########################################################################
 
-    def umount(self):
+    def umount(self, **kwargs):
         """
         Unmount the disk - same functionality as __eject on the mac
 
@@ -141,7 +141,7 @@ class RamDiskTemplate(object):
 
     ###########################################################################
 
-    def unmount(self):
+    def unmount(self, **kwargs):
         """
         Unmount the disk - same functionality as __eject on the mac
 
@@ -154,7 +154,7 @@ class RamDiskTemplate(object):
 
     ###########################################################################
 
-    def __isMemoryAvailable(self):
+    def __isMemoryAvailable(self, **kwargs):
         """
         Check to make sure there is plenty of memory of the size passed in
         before creating the ramdisk
@@ -166,7 +166,7 @@ class RamDiskTemplate(object):
 
     ###########################################################################
 
-    def _format(self):
+    def _format(self, **kwargs):
         """
         Format the ramdisk
 
@@ -179,7 +179,7 @@ class RamDiskTemplate(object):
 
     ###########################################################################
 
-    def getDevice(self):
+    def getDevice(self, **kwargs):
         """
         Getter for the device name the ramdisk is using
 
@@ -191,7 +191,7 @@ class RamDiskTemplate(object):
 
     ###########################################################################
 
-    def getMountPoint(self):
+    def getMountPoint(self, **kwargs):
         """
         Getter for the mount point name the ramdisk is using
 
@@ -203,7 +203,7 @@ class RamDiskTemplate(object):
 
     ###########################################################################
 
-    def setDevice(self, device=None):
+    def setDevice(self, device=None, **kwargs):
         """
         Setter for the device so it can be ejected.
 
@@ -228,7 +228,7 @@ class RamDiskTemplate(object):
 ###############################################################################
 
 
-def detach(device=None):
+def detach(device=None, **kwargs):
     """
     Eject the ramdisk
 

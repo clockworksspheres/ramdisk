@@ -99,5 +99,18 @@ getLibc should be an interface and there should be concrete instances that are s
 ####
 # May try using pywin32 for windows specific extentions: https://github.com/mhammond/pywin32
 
+#####
+# try this: https://www.bytesizedalex.com/get-windows-ntfs-block-size/
+# fsutil fsinfo ntfsinfo p:
+# Where p: is the drive or full directory path you want information for... (like mount point)
 
+"We can make use of the fsutil amd DiskPart commands. Note that in fsutil the value is ‘Byte Per Cluster’"
+
+PARSING REQUIRED...
+
+Actually, the AI search results state that the "Bytes per Physical Sector:" is a more accurate measure than the "Bytes per Cluster" in Windows 11 ...
+
+Windows 10 and Windows 11 I believe...
+
+#####
 

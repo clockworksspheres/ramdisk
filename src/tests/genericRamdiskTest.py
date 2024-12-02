@@ -79,7 +79,7 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
         filesystem functionality of what is being tested.
         """
         #Calculate size of ramdisk to make for this unit test.
-        size_in_mb = 100
+        size_in_mb = 512 * 8 * 1024 * 1024
         ramdisk_size = size = size_in_mb
         self.mnt_pnt_requested = "testmntpnt"
 

@@ -159,11 +159,11 @@ class GenericTestUtilities(object):
                     raise(err2)
 
     ################################################
-    def mkfile(self, file_path="", file_size=0, pattern="rand", block_size=512, mode=0o777):
+    def newish_proto_mkfile(self, file_path="", file_size=0, pattern="rand", block_size=512, mode=0o777):
         """
         """
         total_time = 0
-        time.sleep(.05)
+        time.sleep(.08)
         if file_path and file_size:
             self.libc.sync()
             file_size = file_size * 1024 * 1024
@@ -181,7 +181,7 @@ class GenericTestUtilities(object):
                 tmpfile_fd.tell() < file_size
                 tmpfile_fd.write(str(os.urandom(1024)))
 
-    def old_mkfile(self, file_path="", file_size=0, pattern="rand", block_size=512, mode=0o777):
+    def mkfile(self, file_path="", file_size=0, pattern="rand", block_size=512, mode=0o777):
         """
         Create a file with "file_path" and "file_size".  To be used in
         file creation benchmarking - filesystem vs ramdisk.
@@ -213,6 +213,7 @@ class GenericTestUtilities(object):
                 # Start timer in miliseconds
                 start_time = datetime.now()
 
+                """
                 # do low level file access...
                 with os.fdopen(os.open(tmpfile_path, os.O_WRONLY | os.O_CREAT), 'w') as tmpfile_fd:
 
@@ -223,6 +224,24 @@ class GenericTestUtilities(object):
                         # tmpfile_fd.fsync()
                     self.libc.sync()
                 os.unlink(tmpfile_path)
+                self.libc.sync()
+                """
+                
+                tmpfile = os.open(tmpfile_path, os.O_WRONLY | os.O_CREAT, mode)
+
+                # do file writes...
+                for i in range(blocks):
+                    tmp_buffer = os.urandom(block_size)
+                    os.write(tmpfile, tmp_buffer)
+                    os.fsync(tmpfile)
+                time.sleep(.02)
+                self.libc.sync()
+                os.close(tmpfile)
+                time.sleep(.02)
+                self.libc.sync()
+                time.sleep(.02)
+                os.unlink(tmpfile_path)
+                time.sleep(.02)
                 self.libc.sync()
 
                 # capture end time
