@@ -38,6 +38,7 @@ from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.environment import Environment
 from ramdisk.lib.libHelperExceptions import NotValidForThisOS
+from ramdisk.lib.fsHelper.macosFsHelper import FsHelper
 
 ###############################################################################
 
@@ -64,6 +65,7 @@ class RamDisk(RamDiskTemplate) :
         super(RamDisk, self).__init__(size, mountpoint, logger)
 
         self.environ = Environment()
+        self.fsHelper = FsHelper()
 
         if not self.environ.getosfamily() == "darwin":
             raise NotValidForThisOS("This ramdisk is only viable for a MacOS.")
@@ -75,9 +77,14 @@ class RamDisk(RamDiskTemplate) :
         self.runWith = RunWith(self.logger)
 
         #####
+        # Get the block size for this system
+        success, self.blockSize = self.fsHelper.getFsBlockSize()
+
+
+        #####
         # Calculating the size of ramdisk in 1Mb chunks
         numerator = int(size) * 1024 * 1024  # 1024 * 1024 = 1 megabyte
-        denominator = 512    # block size for apfs, 512 for hfs
+        denominator = self.blockSize    # block size for apfs, 512 for hfs
         fSize = numerator / denominator
         iSize = int(fSize)
         self.diskSize = str(iSize)

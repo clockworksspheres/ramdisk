@@ -17,6 +17,10 @@ from ramdisk.lib.run_commands import RunWith
 
 class RamDisk(object):
     """
+    block size not needed like it is for macos... that could change
+    and if it's needed, there is a way in fsHelper to get the block 
+    size or set the block size for the ramdisk. That function can be
+    found in the ramdisk/lib/fsHandler/ntFsHandler.py FsHandler.getFsBlockSize() method.
     """
     def __init__(self, size=512, mountpoint=False, logger=False):
         """

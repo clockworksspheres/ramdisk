@@ -79,6 +79,10 @@ class RamDisk(RamDiskTemplate):
 
     mount -t tmpfs -o size=512m tmpfs /mnt/ramdisk
 
+    nr_blocks is not the block size like on macos. The fsHelper for Linux may
+    however may provide help to get needed init fs defaults... perhaps like uid,
+    gid, size?
+
     """
     def __init__(self, size, mountpoint,  logger,
                  mode=700, uid=None, gid=None,

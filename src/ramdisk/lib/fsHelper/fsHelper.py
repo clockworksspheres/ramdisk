@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-class FsHelpers(object):
+class FsHelper(object):
     """
     """
     def __init__(self):
