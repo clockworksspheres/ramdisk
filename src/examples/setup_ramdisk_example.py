@@ -56,7 +56,7 @@ else:
     level=lp.WARNING
 
 if opts.size:
-    size = int(opts.size)  # in Megabytes
+    size = str(opts.size)  # in Megabytes
 mntpnt = opts.mntpnt
 
 logger = CyLogger()

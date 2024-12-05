@@ -11,6 +11,7 @@ import re
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.run_commands import RunWith
+from ramdisk.lib.fsHelper.ntfsFsHelper import FsHelper
 
 ###########################################################################
 
@@ -36,7 +37,7 @@ class RamDisk(object):
             self.logger = logger
         self.runCmd = RunWith(self.logger)
         self.logger.log(lp.INFO, "Logger: " + str(self.logger))
-        self.diskSize = size
+        self.diskSize = fsHelper.getDiskSize(size)
         self.success = False
         self.myRamdiskDev = self.imDiskNumber = None
 

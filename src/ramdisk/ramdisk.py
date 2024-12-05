@@ -40,6 +40,8 @@ class RamDisk(object):
 
     def createRamdisk(self, *args, **kwargs):
         """
+        when getting input for the size of the ramdisk, use \d+[GgMm][Bb] for size
+        regex
         """
         #####
         # Check applicability to the current OS

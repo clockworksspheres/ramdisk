@@ -69,9 +69,66 @@ class FsHelper(object):
 
         return success, blockSize
 
+    def getDiskSizeInMb(self, size="0"):
+        """
+        size:  when size is given without postfix, it is assumed to be in 
+               megabytes, otherwise it is in terms of postfix Gb, gb, Mb, mb.
+               Larger (Tb, Pb, etc) could be supported, and the base (currently 
+               megabyte) could be changed to suit the user.
+
+               when getting input for the size of the ramdisk, use 
+               regex \d+[GgMm][Bb] for size
+
+        """
+        success = False
+        diskSizeInMb = "0"
+        # Run logic or command to get disk size in megabytes
+        print(size) 
+        try:
+            match = re.match("^(\d+)([MmGg][Bb])", size)
+            diskSizeTmp = match.group(1)
+            diskSizePostfix = match.group(2)
+            diskSizeInMb = diskSizeTmp
+            if re.match("^[Gg][Bb]", diskSizePostfix):
+                #####
+                # Make the disk size in terms of Mb
+                diskSizeInMb = 1024 * int(diskSizeTmp)
+        except AttributeError as err:
+            try:
+                match = re.match("^(\d+)$", size)
+                diskSizeInMb = match.group(1)
+            except AttributeError as err:
+                print("Unexpected input, size input when only numbers is only in calculated in megabytes...")
+                print("Or possibly, unexpected input, size input must be XXXXSS where XXXX is decimal value and SS is either Mb or Gb")
+                raise(err)
+            except Exeption as err:
+                print(traceback.format_exc())
+                raise(err)
+        except Exeption as err:
+            print(traceback.format_exc())
+            raise(err)
+        """
+        diskSizeTmp = match.group(1)
+        diskSizePostfix = match.group(2)
+        diskSizeInMb = diskSizeTmp
+        if re.match("^[Gg][Bb]", diskSizePostfix):
+            #####
+            # Make the disk size in terms of Mb
+            diskSizeInMb = 1024 * int(diskSizeTmp)
+        """
+        print(diskSizeInMb)
+        # print(diskSizePostfix)
+
+        return success, diskSizeInMb
+
+
 if __name__=="__main__":
-    fshelpers = FsHelper()
-    success, blocksize = fshelpers.getFsBlockSize()
+    fshelper = FsHelper()
+    success, blocksize = fshelper.getFsBlockSize()
     print("success = " + str(success) + " , " + "blocksize = " +  str(blocksize))
+
+    success, diskSizeInMb = fshelper.getDiskSizeInMb("1gb")
+
+    print("success = " + str(success) + " , " + "diskSizeInMb = " +  str(diskSizeInMb))
 
 

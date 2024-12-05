@@ -17,6 +17,25 @@ class FsHelper(object):
 
         return success, blockSize
 
+    def getDiskSize(self):
+        """
+        """
+        success = False
+        diskSize = 0
+        # Run logic or command to get disk size       
+
+        return success, diskSize
+
+    def getSizeInMb(self):
+        """
+        """
+        success = False
+        diskSizeInMb = 0
+        # Run logic or command to get disk size in megabytes       
+
+        return success, diskSizeInMb
+
+        
 if __name__=="__main__":
     fshelpers = FsHelpers()
     success, blocksize = fshelpers.getFsBlockSize()

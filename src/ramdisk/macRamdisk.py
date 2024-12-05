@@ -52,6 +52,11 @@ class RamDisk(RamDiskTemplate) :
 
     @param: size - size of the ramdisk to create - must have a value on the Mac
                    or the creation will fail.
+
+                  when getting input for the size of the ramdisk, use 
+                  \d+[GgMm][Bb] for size regex
+
+
     @param: mountpoint - where to mount the disk, if left empty, will mount
                          on locaiton created by tempfile.mkdtemp.
     @param: message_level - level at which to log.
@@ -80,6 +85,10 @@ class RamDisk(RamDiskTemplate) :
         # Get the block size for this system
         success, self.blockSize = self.fsHelper.getFsBlockSize()
 
+        #####
+        # Convert size to expected size in Mb - useing \d+[GgMm][Bb] 
+        # for size regex in fsHelper to determine size in megabytes
+        success, size = self.fsHelper.getDiskSizeInMb(size)
 
         #####
         # Calculating the size of ramdisk in 1Mb chunks

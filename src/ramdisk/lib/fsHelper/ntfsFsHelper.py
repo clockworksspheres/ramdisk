@@ -56,10 +56,59 @@ class FsHelper(object):
                 
         return success, blockSize
 
+    def getDiskSize(self, size="0"):
+        """
+        size: no suffix indicates a size in megabytes, otherwize, regex like
+        macos regex:
+        (\d+)([GgMm][Bb]) => (\d+)([GgMm])[Bb], although, (\d+)([GgMm]) will
+        silently be acceptable as well, as those are some of thedefault imdisk 
+        defaults.. 
+        """
+        success = False
+        diskSize = 0
+        # Run logic or command to get disk size
+
+        print(size)
+        try:
+            match = re.match("^(\d+[MmGg])[Bb]$", size)
+            diskSize = match.group(1)
+        except AttributeError as err:
+            try:
+                match = re.match("^(\d+)[MmGg]$", size)
+                diskSize = match.group(1)
+            except AttributeError as err:
+                try:
+                    match = re.match("^(\d+)$", size)
+                    diskSizeTmp = match.group(1)
+                    diskSize = diskSizeTmp + "m"
+                except AttributeError, as err:
+                    print("Unexpected input, size input when only numbers is only in calculated in megabytes...")
+                    print("Or possibly, unexpected input, size input must be XXXXSS where XXXX is decimal value and SS is either Mb or Gb")
+                    raise(err)
+                except Exception as err:
+                    print(traceback.format_exc())
+                    raise(err)
+            except Exeption as err:
+                print(traceback.format_exc())
+                raise(err)
+        except Exeption as err:
+            print(traceback.format_exc())
+            raise(err)
+
+        return success, diskSize
+
+
+
+
 if __name__=="__main__":
     fshelpers = FsHelpers()
     success, blocksize = fshelpers.getFsBlockSize()
     print("success = " + str(success) + " , " + "blocksize = " +  str(blocksize))
+
+
+    success, diskSize = fshelper.getDiskSize("1gb")
+
+    print("success = " + str(success) + " , " + "diskSize = " +  str(diskSize))
 
 
 
