@@ -1,4 +1,4 @@
-#!/usr/bin/env -S python -u
+#!/usr/bin/env -S python3 -u
 
 ###############################################################################
 #                                                                             #
@@ -62,6 +62,8 @@ if os.geteuid() == 0:
         DMI = False
 else:
     DMI = False
+
+sys.path.append("../..")
 
 # third party libraries
 from ramdisk.lib.run_commands import RunWith as RunWith
@@ -419,19 +421,19 @@ class Environment(object):
 
         # Breen Malmberg added support for os-release file
         # method of getting version information
-        elif os.path.exists('/etc/os-release'):
+        elif os.path.isfile('/etc/os-release'):
             with open('/etc/os-release', 'r') as relfile:
                 contentlines = relfile.readlines()
-            for line in contentlines:
-                if re.search('VERSION\=', line, re.IGNORECASE):
-                    sline = line[+8:].split()
-                    sline[0] = sline[0].replace('"', '')
-                    self.osversion = sline[0]
-                elif re.search('NAME\=', line, re.IGNORECASE):
-                    sline = line[+5:].split()
-                    sline[0] = sline[0].replace('"', '')
-                    self.operatingsystem = sline[0]
-            self.osreportstring = self.operatingsystem +  ' ' + self.osversion
+                for line in contentlines:
+                    if re.search(r'VERSION\=', line, re.IGNORECASE):
+                        sline = line[+8:].split()
+                        sline[0] = sline[0].replace('"', '')
+                        self.osversion = sline[0]
+                    elif re.search(r'NAME\=', line, re.IGNORECASE):
+                        sline = line[+5:].split()
+                        sline[0] = sline[0].replace('"', '')
+                        self.operatingsystem = sline[0]
+                self.osreportstring = self.operatingsystem +  ' ' + self.osversion
 
         elif os.path.exists('/usr/bin/sw_vers'):
             proc1 = subprocess.Popen('/usr/bin/sw_vers -productName',
@@ -453,6 +455,18 @@ class Environment(object):
             build = proc3.stdout.readline()
             build = build.strip()
             opsys = str(description) + ' ' + str(release) + ' ' + str(build)
+            self.osreportstring = opsys
+
+        elif re.match(r'win32$', sys.plaform()):
+            try:
+                platform_data = platform.system()
+                description = platform_data[0]
+                release = platform_data[2]
+                build = platform_data[3]
+                opsys = str(description).strip() + ' ' + str(release) + ' ' + str(build) 
+            except Exception as err:
+                print(traceback.format_exc())
+                raise()
             self.osreportstring = opsys
 
     def getosmajorver(self):
@@ -602,7 +616,7 @@ class Environment(object):
             except OSError:
                 return ipaddr
             for line in routedata:
-                if re.search('^default|^0.0.0.0|^\*', line):
+                if re.search(r'^default|^0.0.0.0|^\*', line):
                     line = line.split()
                     try:
                         gateway = line[1]
@@ -1155,3 +1169,12 @@ class Environment(object):
             self.systemfismacat = 'high'
         elif self.systemfismacat == 'low' and category == 'high':
             self.systemfismacat = category
+
+if __name__ == "__main__":
+
+    env = Environment()
+
+    myos = env.discoveros()
+
+    print(env.osreportstring)
+
