@@ -58,11 +58,20 @@ class FsHelper(object):
 
     def getDiskSize(self, size="0"):
         """
+        This doesn't get the size of an actual disk, it checks a string for a
+        valid string indicator of types of characters that indicate the size
+        of a disk a user wants to request.  The type of characters are indicated
+        below:
+
         size: no suffix indicates a size in megabytes, otherwize, regex like
         macos regex:
-        (\d+)([GgMm][Bb]) => (\d+)([GgMm])[Bb], although, (\d+)([GgMm]) will
-        silently be acceptable as well, as those are some of thedefault imdisk 
-        defaults.. 
+
+        (\d+)([GgMm][Bb]) => (\d+)([GgMm])[Bb], although, 
+        (\d+)([GgMm]) 
+
+        will silently be acceptable as well, as those are some of the default 
+        imdisk defaults.. 
+
         """
         success = False
         diskSize = 0
@@ -81,7 +90,7 @@ class FsHelper(object):
                     match = re.match("^(\d+)$", size)
                     diskSizeTmp = match.group(1)
                     diskSize = diskSizeTmp + "m"
-                except AttributeError, as err:
+                except AttributeError as err:
                     print("Unexpected input, size input when only numbers is only in calculated in megabytes...")
                     print("Or possibly, unexpected input, size input must be XXXXSS where XXXX is decimal value and SS is either Mb or Gb")
                     raise(err)

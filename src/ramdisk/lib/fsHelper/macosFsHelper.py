@@ -62,8 +62,12 @@ class FsHelper(object):
         if re.match("default", size):
             blockSize = 512
             success = True
+        elif size == 512 or size == "512":
+            blockSize = 512
+            success = True
         elif size == 1024 or size == "1024":
             blockSize = 1024
+            success = True
         else:
             success = False
 
