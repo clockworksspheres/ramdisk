@@ -59,7 +59,7 @@ class FsHelper(object):
 
         ####
         # default
-        if re.match("default", size):
+        if re.match("default", str(size)):
             blockSize = 512
             success = True
         elif size == 512 or size == "512":
