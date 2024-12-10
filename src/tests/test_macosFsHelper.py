@@ -29,7 +29,7 @@ from ramdisk.lib.fsHelper.macosFsHelper import FsHelper
 LOGGER = CyLogger()
 #LOGGER.setInitialLoggingLevel(30)
 
-class test_CheckApplicable(unittest.TestCase):
+class test_macosFsHelper(unittest.TestCase):
     """
     """
 

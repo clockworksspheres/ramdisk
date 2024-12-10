@@ -26,7 +26,7 @@ from ramdisk.lib.CheckApplicable import CheckApplicable
 LOGGER = CyLogger()
 #LOGGER.setInitialLoggingLevel(30)
 
-class test_CheckApplicable(unittest.TestCase):
+class test_fsHelper(unittest.TestCase):
     """
     """
 

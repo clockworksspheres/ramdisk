@@ -1,6 +1,6 @@
 #!/usr/bin/env -S python -u
 """
-Test for basic functionality of CheckApplicable
+Test for basic functionality of ntfsFileHelper functionality
 
 @author: Roy Nielsen
 """
@@ -10,6 +10,7 @@ import os
 import re
 import sys
 import unittest
+from unittest import SkipTest
 from datetime import datetime
 
 #####
@@ -26,7 +27,14 @@ from ramdisk.lib.fsHelper.ntfsFsHelper import FsHelper
 LOGGER = CyLogger()
 #LOGGER.setInitialLoggingLevel(30)
 
-class test_CheckApplicable(unittest.TestCase):
+#####
+# If we don't have a supported platform, skip this test.
+if re.match(r'^darwin$', sys.platform):
+    SkipTest("This is not valid on this OS")
+        
+
+
+class test_ntfsFsHelper(unittest.TestCase):
     """
     """
 
@@ -36,6 +44,11 @@ class test_CheckApplicable(unittest.TestCase):
     def setUpClass(self):
         """
         """
+        #####
+        # If we don't have a supported platform, skip this test.
+        if not sys.platform.startswith("win32"):
+            raise unittest.SkipTest("This is not valid on this OS")
+
         #####
         # Set up logging
         self.logger = CyLogger(debug_mode=True)
@@ -73,6 +86,11 @@ class test_CheckApplicable(unittest.TestCase):
         """
         """
         #####
+        # If we don't have a supported platform, skip this test.
+        if not sys.platform.startswith("win32"):  
+            unittest.SkipTest("This is not valid on this OS")   
+
+        #####
         # Check for the existance of the fsutil binary - if it doesn't 
         # exist, fail this test, before proceeding...
         self.assertTrue(False, "Cannot find 'fsutil' binary...")
@@ -87,6 +105,11 @@ class test_CheckApplicable(unittest.TestCase):
     def testGetDiskSize(self):
         """
         """
+        #####
+        # If we don't have a supported platform, skip this test.
+        if not sys.platform.startswith("win32"):  
+            unittest.SkipTest("This is not valid on this OS")   
+
         success, diskSize = self.fshelper.getDiskSize("1gb")
         self.assertTrue(success, "Attempt to get block size FAILED...")
         self.assertEqual(diskSize, 1024, "Disk size IS NOT 1024 Megabytes size...")
@@ -126,6 +149,11 @@ class test_CheckApplicable(unittest.TestCase):
     def testCheckWin32Applicable(self):
         """
         """
+        #####
+        # If we don't have a supported platform, skip this test.
+        if not sys.platform.startswith("win32"):  
+            unittest.SkipTest("This is not valid on this OS")   
+
         myplatform = re.match(r'^win32$', sys.platform)
         self.assertTrue(myplatform, "This is NOT a WINDOWS platform...")
 

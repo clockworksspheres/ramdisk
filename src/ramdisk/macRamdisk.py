@@ -547,8 +547,8 @@ class RamDisk(RamDiskTemplate) :
             # Need to get the partition device out of the output to assign to
             # self.devPartition
             for line in retval.split("\n"):
-                if re.match('^Initialized (\S+)\s+', line):
-                    linematch = re.match('Initialized\s+(\S+)', line)
+                if re.match(r'^Initialized (\S+)\s+', line):
+                    linematch = re.match(r'Initialized\s+(\S+)', line)
                     rdevPartition = linematch.group(1)
                     self.devPartition = re.sub("rdisk", "disk", rdevPartition)
                     break
@@ -622,8 +622,8 @@ class RamDisk(RamDiskTemplate) :
             freeNumber = str(freeNumber).strip()
             freeMagnitude = str(freeMagnitude).strip()
 
-            if re.match("^\d+$", freeNumber.strip()):
-                if re.match("^\w$", freeMagnitude.strip()):
+            if re.match(r"^\d+$", freeNumber.strip()):
+                if re.match(r"^\w$", freeMagnitude.strip()):
                     if freeMagnitude:
                         #####
                         # Calculate the size of the free memory in Megabytes
@@ -711,7 +711,7 @@ def detach(device=" ", logger=False):
     else:
         logger = logger
     myRunWith = RunWith(logger)
-    if not re.match("^\s*$", device):
+    if not re.match(r"^\s*$", device):
         cmd = ["/usr/bin/hdiutil", "detach", device]
         myRunWith.setCommand(cmd)
         myRunWith.communicate()

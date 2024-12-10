@@ -15,7 +15,11 @@ import unittest
 
 from optparse import OptionParser, SUPPRESS_HELP, OptionValueError, Option
 
+sys.path.append(".")
+
 testdir = "./tests"
+import ramdisk
+import tests
 
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp

@@ -41,10 +41,19 @@ elif sys.platform.startswith("win32"):
     from ramdisk.winImDiskRamdisk import umount
 
 
-class test_macRamdisk(GenericRamdiskTest):
+class test_winImDiskRamdisk(GenericRamdiskTest):
     """
     """
 
+    @classmethod
+    def setUpClass(self):
+        """
+        """
+        #####
+        # If we don't have a supported platform, skip this test.
+        if not sys.platform.startswith("win32"):
+            raise unittest.SkipTest("This is not valid on this OS")
+     
     @classmethod
     def setUpInstanceSpecifics(self):
         """
