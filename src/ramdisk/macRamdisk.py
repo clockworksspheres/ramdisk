@@ -69,6 +69,14 @@ class RamDisk(RamDiskTemplate) :
         """
         super(RamDisk, self).__init__(size, mountpoint, logger)
 
+#####
+# Provided by commonRamdiskTemplate....
+#        if not isinstance(logger, CyLogger):
+#            self.logger = CyLogger()
+#            self.logger.initializeLogs()   
+#        else:
+#            self.logger = logger
+
         self.environ = Environment()
         self.fsHelper = FsHelper()
 

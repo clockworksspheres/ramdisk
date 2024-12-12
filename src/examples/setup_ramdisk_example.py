@@ -49,9 +49,9 @@ parser.add_option("-v", "--verbose", action="store_true",
 (opts, args) = parser.parse_args()
 
 if opts.verbose != 0:
-    level = CyLogger(level=lp.INFO)
+    level = lp.INFO
 elif opts.debug != 0:
-    level = CyLogger(level=lp.DEBUG)
+    level = level=lp.DEBUG
 else:
     level=lp.WARNING
 
@@ -59,7 +59,7 @@ if opts.size:
     size = str(opts.size)  # in Megabytes
 mntpnt = opts.mntpnt
 
-logger = CyLogger()
+logger = CyLogger(level)
 logger.initializeLogs()
 
 ramdisk = RamDisk(str(size), str(mntpnt), logger)

@@ -49,6 +49,7 @@ class RamDiskTemplate(object):
         self.module_version = '20160224.032043.009191'
         if not isinstance(logger, CyLogger):
             self.logger = CyLogger()
+            self.logger.initializeLogs()
         else:
             self.logger = logger
         self.logger.log(lp.INFO, "Logger: " + str(self.logger))
@@ -60,8 +61,8 @@ class RamDiskTemplate(object):
         else:
             self.mntPoint = mountpoint
 
-        self.logger.log(lp.DEBUG, "disk size: " + str(self.diskSize))
-        self.logger.log(lp.DEBUG, "volume name: " + str(self.mntPoint))
+        self.logger.log(lp.INFO, "disk size: " + str(self.diskSize))
+        self.logger.log(lp.INFO, "volume name: " + str(self.mntPoint))
 
     ###########################################################################
 

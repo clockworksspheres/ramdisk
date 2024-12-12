@@ -6,7 +6,8 @@ from subprocess import Popen
 import os
 import sys
 
-sys.path.append("../../..")
+if __name__ == "__main__":
+    sys.path.append("../../..")
 
 ####
 # import ramdisk libraries
@@ -87,35 +88,35 @@ class FsHelper(object):
         success = False
         diskSizeInMb = "0"
         # Run logic or command to get disk size in megabytes
-        print(size) 
+        print(str(size)) 
         try:
-            match = re.match("^(\d+)([MmGg][Bb])", size)
+            match = re.match(r"^(\d+)([MmGg][Bb])", str(size))
             diskSizeTmp = match.group(1)
             diskSizePostfix = match.group(2)
             diskSizeInMb = diskSizeTmp
-            if re.match("^[Gg][Bb]", diskSizePostfix):
+            if re.match(r"^[Gg][Bb]", diskSizePostfix):
                 #####
                 # Make the disk size in terms of Mb
                 diskSizeInMb = 1024 * int(diskSizeTmp)
         except AttributeError as err:
             try:
-                match = re.match("^(\d+)$", size)
+                match = re.match(r"^(\d+)$", str(size))
                 diskSizeInMb = match.group(1)
             except AttributeError as err:
                 print("Unexpected input, size input when only numbers is only in calculated in megabytes...")
                 print("Or possibly, unexpected input, size input must be XXXXSS where XXXX is decimal value and SS is either Mb or Gb")
                 raise(err)
-            except Exeption as err:
+            except Exception as err:
                 print(traceback.format_exc())
                 raise(err)
-        except Exeption as err:
+        except Exception as err:
             print(traceback.format_exc())
             raise(err)
         """
         diskSizeTmp = match.group(1)
         diskSizePostfix = match.group(2)
         diskSizeInMb = diskSizeTmp
-        if re.match("^[Gg][Bb]", diskSizePostfix):
+        if re.match(r"^[Gg][Bb]", diskSizePostfix):
             #####
             # Make the disk size in terms of Mb
             diskSizeInMb = 1024 * int(diskSizeTmp)

@@ -16,7 +16,7 @@ from ramdisk.lib.fsHelper.ntfsFsHelper import FsHelper
 ###########################################################################
 
 
-class RamDisk(object):
+class RamDisk(RamDiskTemplate):
     """
     block size not needed like it is for macos... that could change
     and if it's needed, there is a way in fsHelper to get the block 
@@ -31,10 +31,13 @@ class RamDisk(object):
         # <YYYY><MM><DD>.<HH><MM>
         # in UTC time
         self.module_version = '2024.10051117'
-        if not isinstance(logger, CyLogger):
-            self.logger = CyLogger()
-        else:
-            self.logger = logger
+        #####
+        # provided by RamdiskTemplate from commonRamdiskTemplate...
+        # if not isinstance(logger, CyLogger):
+        #     self.logger = CyLogger()
+        #     self.logger.initializeLogs()
+        # else:
+        #     self.logger = logger
         self.runCmd = RunWith(self.logger)
         self.logger.log(lp.INFO, "Logger: " + str(self.logger))
         self.diskSize = fsHelper.getDiskSize(size)

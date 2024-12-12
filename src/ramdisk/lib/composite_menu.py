@@ -62,7 +62,7 @@ class MenuComponent(object):
             self.action = action
 
         self.runner = RunWith(logger)
-        self.logger = CyLogger(debug_mode=True)
+        self.logger = CyLogger()
         self.logger.initializeLogs()
         
         #####

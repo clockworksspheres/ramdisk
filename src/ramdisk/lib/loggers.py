@@ -125,7 +125,7 @@ class CyLogger(Singleton):
     
     instanciatedLoggers = {}
 
-    def __init__(self, environ=False, debug_mode=False, verbose_mode=False, level=30, *args, **kwargs):
+    def __init__(self, environ=False, debug_mode=False, verbose_mode=False, level=40, *args, **kwargs):
         """
         """
         if str(level):
@@ -391,7 +391,7 @@ class CyLogger(Singleton):
         @author: Roy Nielsen
         """
         pri = str(priority)
-        if re.match("^\d\d$", pri) and self.validateLevel():
+        if re.match(r"^\d\d$", pri) and self.validateLevel():
             validatedLvl = int(pri)
         else:
             raise IllegalLoggingLevelError("Cannot log at this priority level: " + pri)
