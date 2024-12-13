@@ -28,6 +28,8 @@ import logging
 import logging.handlers
 
 from ramdisk.lib.singleton import Singleton
+from ramdisk.config import DEFAULT_LOG_LEVEL
+
 #from logging.handlers import RotatingFileHandler
 #sys.path.append("..")
 ###############################################################################
@@ -125,14 +127,14 @@ class CyLogger(Singleton):
     
     instanciatedLoggers = {}
 
-    def __init__(self, environ=False, debug_mode=False, verbose_mode=False, level=40, *args, **kwargs):
+    def __init__(self, environ=False, debug_mode=False, verbose_mode=False, level=DEFAULT_LOG_LEVEL, *args, **kwargs):
         """
         """
         if str(level):
             print(".............Level: " + str(level))
             self.lvl = int(level)
         else:
-            self.lvl = 30
+            self.lvl = DEFAULT_LOG_LEVEL
         '''
         if environ:
             self.environment = environ
@@ -158,7 +160,7 @@ class CyLogger(Singleton):
         elif self.lvl > 0:
             self.validateLevel(self.lvl)
         else:
-            self.lvl = 30
+            self.lvl = DEFAULT_LOG_LEVEL
 
         self.filename = ""
         self.syslog = False
