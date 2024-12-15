@@ -4,6 +4,16 @@
 """
 @author: Roy Nielsen
 
+This script must be run with sudo to work....
+
+To see if the user has been created:
+
+  dscl . list /Users
+
+To delete that user:
+
+  sudo dscl . delete /Users/don
+
 """
 
 #--- Native python libraries
@@ -13,7 +23,7 @@ import traceback
 from getpass import getpass
 from optparse import OptionParser
 
-sys.path.append("../")
+sys.path.append("../../../..")
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
