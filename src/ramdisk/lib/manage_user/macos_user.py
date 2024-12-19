@@ -303,7 +303,7 @@ class MacOSUser(ManageUserTemplate):
             output = self.getDscl(".", "read", "/Users/" +
                                   str(userName), "RealName")
             try:
-                userComment = output[1]
+                userComment = ' '.join(output.split()[1:])
             except (KeyError, IndexError):
                 self.logger.log(lp.INFO, "Error attempting to find user" +
                                          str(userName) + " in the " +
