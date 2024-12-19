@@ -50,6 +50,17 @@ class CreateHomeDirError(Exception):
         Exception.__init__(self, *args, **kwargs)
 
 
+class InvalidUIDError(Exception):
+    """
+    Meant for being thrown when a UID falls outside the range of the OS's 
+    range of available UID's
+
+    @author: Roy Nielsen
+    """
+    def __init__(self, *args, **kwargs):
+        Exception.__init__(self, *args, **kwargs)
+
+
 class MacOSUser(ManageUserTemplate):
     """
     Class to manage users on Mac OS.
@@ -182,6 +193,8 @@ class MacOSUser(ManageUserTemplate):
         #####
         # Sort the list, add one to the highest value and return that
         # value
+        if int(uid) < 500 or int(uid) > 65536:
+            raise(InvalidUIDError("Outside OS's Valid UID range..."))
         thisuid = ""
         for user in str(userList).split("\n"):
             #  print(user)
