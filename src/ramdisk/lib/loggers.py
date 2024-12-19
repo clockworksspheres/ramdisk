@@ -470,11 +470,11 @@ class CyLogger(Singleton):
             elif int(self.lvl) >= 10 and int(self.lvl) < 20:
                 #####
                 # Debug
-                self.logr.log(validatedLvl, longPrefix + "DEBUG: (" + pri + ") " + str(line))
+                self.logr.log(validatedLvl, longPrefix + "CRITICAL: (" + pri + ") " + str(line))
             elif int(self.lvl) >= 20 and int(self.lvl) < 30:
                 #####
                 # Info
-                self.logr.log(validatedLvl, longPrefix + "INFO/VERBOSE: (" + pri + ") " + str(line))
+                self.logr.log(validatedLvl, longPrefix + "ERROR: (" + pri + ") " + str(line))
             elif int(self.lvl) >=30 and int(self.lvl) < 40:
                 #####
                 # Warning
@@ -486,11 +486,11 @@ class CyLogger(Singleton):
             elif int(self.lvl) >= 40 and int(self.lvl) < 50:
                 #####
                 # Error
-                self.logr.log(validatedLvl, longPrefix + "ERROR: (" + pri + ") " + str(line))
+                self.logr.log(validatedLvl, longPrefix + "INFO: (" + pri + ") " + str(line))
             elif int(self.lvl) >= 50 and int(self.lvl) < 60:
                 #####
                 # Critical
-                self.logr.log(validatedLvl, longPrefix + "CRITICAL: (" + pri + ") " + str(line))
+                self.logr.log(validatedLvl, longPrefix + "DEBUG: (" + pri + ") " + str(line))
             else:
                 raise IllegalLoggingLevelError("Not a valid value for a logging level.")
 
