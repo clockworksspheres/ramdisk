@@ -89,15 +89,15 @@ class ManageUser(object):
         success = False
         #####
         # Preprocess logging
-        self.logger.log(lp.DEBUG, "processing:" + "")
+        # self.logger.log(lp.DEBUG, "processing:" + "")
         self.__calledBy()
         #####
         # Call factory created object's mirror method
         success = self.userMgr.findUniqueUid()
         #####
         # Postprocess logging
-        self.logger.log(lp.DEBUG, "processing complete with success: " +
-                        str(success))
+        # self.logger.log(lp.DEBUG, "processing complete with success: " +
+        #                str(success))
         return success
 
     # ----------------------------------------------------------------------

@@ -156,8 +156,11 @@ class MacOSUser(ManageUserTemplate):
         # Sort the list, add one to the highest value and return that
         # value
         for user in str(userList).split("\n"):
-            if int(user.split()[1]) > maxUserID:
-                maxUserID = int(user.split()[1])
+            try:
+                if int(user.split()[1]) > maxUserID:
+                    maxUserID = int(user.split()[1])
+            except:
+                pass
 
         newUserID = str(int(maxUserID + 1))
 

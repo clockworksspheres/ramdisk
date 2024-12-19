@@ -118,10 +118,7 @@ except Exception as err:
     print(traceback.format_exc())
 
 try:
-    if mu.createStandardUser(user, password):
-        logger.log(lp.INFO, "User created: " + str(user))
-    else:
-        raise(UserCreationUnsuccessfullError)
+    mu.createStandardUser(user, password)
 except UserCreationUnsuccessfullError as err:
     print("User Creation Unsuccessful, exiting... Check the system logs for more information...")
     print(traceback.format_exc())
