@@ -164,7 +164,7 @@ class RunWith(object):
                                 "CREATE_DEFAULT_ERROR_MODE",
                                 "CREATE_BREAKAWAY_FROM_JOB"
                                ]
-        self.logger.log(lp.WARNING, "creationflags: {0}".format(str(creationflags)))
+        self.logger.log(lp.INFO, "creationflags: {0}".format(str(creationflags)))
         self.creationflags = ""
         # if creationflags is not None:
         #    if re.search(",", creationflags):
@@ -214,7 +214,7 @@ class RunWith(object):
 
     ###########################################################################
 
-    def getNlogReturns(self):
+    def getNlogReturns(self, nolog=True):
         """
         Getter for the retval, reterr & retcode of the last command.
 
@@ -222,9 +222,10 @@ class RunWith(object):
 
         @author: Roy Nielsen
         """
-        self.logger.log(lp.INFO, "Output: " + str(self.stdout))
-        self.logger.log(lp.INFO, "Error: " + str(self.stderr))
-        self.logger.log(lp.INFO, "Return code: " + str(self.retcode))
+        if nolog == False:
+            self.logger.log(lp.INFO, "Output: " + str(self.stdout))
+            self.logger.log(lp.INFO, "Error: " + str(self.stderr))
+            self.logger.log(lp.INFO, "Return code: " + str(self.retcode))
         return self.stdout, self.stderr, self.retcode
 
     ###########################################################################
@@ -653,8 +654,8 @@ class RunWith(object):
         self.stderr = ""
         self.retcode = 999
         # pretcode = 0
-        if re.match("^\s*$", user) or \
-           re.match("^\s*$", password) or \
+        if re.match(r"^\s*$", user) or \
+           re.match(r"^\s*$", password) or \
            not self.command:
             self.logger.log(lp.WARNING, "Cannot pass in empty parameters...")
             self.logger.log(lp.WARNING, "user = \"" + str(user) + "\"")
@@ -773,7 +774,7 @@ class RunWith(object):
             if os.path.exists(target_dir):
                 os.chdir(target_dir)
 
-        if re.match("^\s*$", user) or not self.command:
+        if re.match(r"^\s*$", user) or not self.command:
             self.logger.log(lp.WARNING, "Cannot pass in empty parameters...")
             self.logger.log(lp.WARNING, "user = " + str(user))
             if not silent:

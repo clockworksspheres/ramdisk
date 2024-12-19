@@ -178,15 +178,21 @@ class MacOSUser(ManageUserTemplate):
         uidList = []
         success = False
         userList = self.getDscl(".", "-list", "/Users", "UniqueID")
-
+        # print("passed in uid: " + str(uid))
         #####
         # Sort the list, add one to the highest value and return that
         # value
+        thisuid = ""
         for user in str(userList).split("\n"):
-            uidList.append(str(user.split()[1]))
-
-        if str(uid) in uidList:
-            success = True
+            #  print(user)
+            try:
+              thisuid = str(user.split()[1])
+              # print(str(thisuid) + " : " + str(uid).strip().lstrip())
+              if str(uid).strip() == str(thisuid).strip():
+                  success = True
+                  break
+            except:
+                pass
 
         return success
 
@@ -604,7 +610,7 @@ class MacOSUser(ManageUserTemplate):
         error = ""
 
         if not self.isSaneUserName(user) or \
-           re.match("^\s+$", password) or not password:
+           re.match(r"^\s+$", password) or not password:
             self.logger.log(lp.INFO,
                             "Cannot pass in empty or bad parameters...")
             self.logger.log(lp.INFO, "user = \"" + str(user) + "\"")
@@ -1190,22 +1196,22 @@ class MacOSUser(ManageUserTemplate):
         #####
         # FIRST VALIDATE INPUT!!
         if isinstance(directory, str) and \
-           re.match("^[/\.][A-Za-z0-9/]*", directory):
+           re.match(r"^[/\.][A-Za-z0-9/]*", directory):
             success = True
         else:
             success = False
         if isinstance(action, str) and \
-           re.match("^[-]*[a-z]+", action) and success:
+           re.match(r"^[-]*[a-z]+", action) and success:
             success = True
         else:
             success = False
         if isinstance(dirobj, str) and \
-           re.match("^[A-Za-z0=9/]+", dirobj) and success:
+           re.match(r"^[A-Za-z0=9/]+", dirobj) and success:
             success = True
         else:
             success = False
         if isinstance(dirprop, str) and \
-           re.match("^[A-Za-z0-9]+", dirprop) and success:
+           re.match(r"^[A-Za-z0-9]+", dirprop) and success:
             success = True
         else:
             success = False
@@ -1220,7 +1226,7 @@ class MacOSUser(ManageUserTemplate):
 
             self.runner.setCommand(cmd)
             self.runner.communicate()
-            retval, reterr, _ = self.runner.getNlogReturns()
+            retval, reterr, _ = self.runner.getNlogReturns(nolog=True)
 
             if not reterr:
                 success = True

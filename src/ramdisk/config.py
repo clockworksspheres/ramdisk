@@ -7,7 +7,7 @@ sys.path.append("..")
 #               <----- Least logging    ------------    Most Logging ---------->
 LogPriority = { "CRITICAL":10, "ERROR":20, "WARNING":30, "VERBOSE":40, "INFO":20, "DEBUG":50 }
 
-DEFAULT_LOG_LEVEL=LogPriority["INFO"]
+DEFAULT_LOG_LEVEL=LogPriority["CRITICAL"]
 #                              ^^^^^ Input log level here...
 #####
 

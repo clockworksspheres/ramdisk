@@ -148,19 +148,6 @@ class CyLogger(Singleton):
             elif re.match("^verbose$", envVerboseMode):
                 self.lvl = 20
         '''
-        if debug_mode or verbose_mode:
-            if debug_mode:
-                self.lvl = 10
-            elif verbose_mode:
-                self.lvl = 20
-        #####
-        # If the first three aren't passed in, make a guess based on level
-        if self.lvl < 0:
-            self.lvl = 20
-        elif self.lvl > 0:
-            self.validateLevel(self.lvl)
-        else:
-            self.lvl = DEFAULT_LOG_LEVEL
 
         self.filename = ""
         self.syslog = False
@@ -483,23 +470,23 @@ class CyLogger(Singleton):
             elif int(self.lvl) >= 20 and int(self.lvl) < 30:
                 #####
                 # Info
-                self.logr.log(validatedLvl, longPrefix + "DEBUG: (" + pri + ") " + str(line))
+                self.logr.log(validatedLvl, longPrefix + "INFO/VERBOSE: (" + pri + ") " + str(line))
             elif int(self.lvl) >=30 and int(self.lvl) < 40:
                 #####
                 # Warning
                 try:
-                    self.logr.log(validatedLvl, longPrefix + "DEBUG: (" + str(pri) + ") " + str(line))
+                    self.logr.log(validatedLvl, longPrefix + "WARNING: (" + str(pri) + ") " + str(line))
                 except Exception as err:
                     print(LogPriority.DEBUG + " : "  + str(traceback.format_exc()))
                     print(LogPriority.DEBUG + " : " + str(err))
             elif int(self.lvl) >= 40 and int(self.lvl) < 50:
                 #####
                 # Error
-                self.logr.log(validatedLvl, longPrefix + "DEBUG: (" + pri + ") " + str(line))
+                self.logr.log(validatedLvl, longPrefix + "ERROR: (" + pri + ") " + str(line))
             elif int(self.lvl) >= 50 and int(self.lvl) < 60:
                 #####
                 # Critical
-                self.logr.log(validatedLvl, longPrefix + "DEBUG: (" + pri + ") " + str(line))
+                self.logr.log(validatedLvl, longPrefix + "CRITICAL: (" + pri + ") " + str(line))
             else:
                 raise IllegalLoggingLevelError("Not a valid value for a logging level.")
 
