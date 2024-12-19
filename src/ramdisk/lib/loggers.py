@@ -384,7 +384,11 @@ class CyLogger(Singleton):
             validatedLvl = int(pri)
         else:
             raise IllegalLoggingLevelError("Cannot log at this priority level: " + pri)
-        
+       
+
+        if int(priority) < int(self.lvl):
+            return
+ 
         if not msg:
             return
         
