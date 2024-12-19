@@ -266,7 +266,7 @@ class RunWith(object):
                     proc = Popen(self.command, stdout=PIPE, stderr=PIPE, shell=self.myshell, env=self.environ, close_fds=self.cfds, text=self.text)
                 if self.creationflags:
                     proc = Popen(self.command, stdout=PIPE, stderr=PIPE, shell=self.myshell, env=self.environ, close_fds=self.cfds, text=self.text, creationflags=self.creationflags)
-                self.logger.log(lp.WARNING, "creationflags: {0}".format(str(self.creationflags)))
+                self.logger.log(lp.INFO, "creationflags: {0}".format(str(self.creationflags)))
 
                 self.stdout, self.stderr = proc.communicate()
                 self.stdout = str(self.stdout)

@@ -1215,7 +1215,7 @@ class MacOSUser(ManageUserTemplate):
             success = True
         else:
             success = False
-        self.logger.log(lp.CRITICAL, "SUCCESS: " + str(success))
+        self.logger.log(lp.INFO, "SUCCESS: " + str(success))
         #####
         # Now do the directory lookup.
         if success:

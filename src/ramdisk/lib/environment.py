@@ -41,6 +41,9 @@ import pwd
 import time
 import traceback
 
+sys.path.append("../../..")
+from config import DEFAULT_LOG_LEVEL, LogPriority 
+
 try:
     from ramdisk.lib.localize import VERSION
 except ImportError or AssertionError:
@@ -153,9 +156,11 @@ class Environment(object):
         except OSError:
             print(str(__name__) + ":Unable to determine systemtype. Required utility 'ps' does not exist on this system")
 
-        if self.systemtype not in validtypes:
+
+
+        if self.systemtype not in validtypes and DEFAULT_LOG_LEVEL >= LogPriority["VERBOSE"]:
             print(str(__name__) + ":This system is based on an unknown architecture")
-        else:
+        elif DEFAULT_LOG_LEVEL >= LogPriority["VERBOSE"]:
             print(str(__name__) + ":Determined that this system is based on " + str(self.systemtype) + " architecture")
 
     def getsystemtype(self):

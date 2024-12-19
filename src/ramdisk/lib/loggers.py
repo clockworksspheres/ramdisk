@@ -131,7 +131,7 @@ class CyLogger(Singleton):
         """
         """
         if str(level):
-            print(".............Level: " + str(level))
+            # print(".............Level: " + str(level))
             self.lvl = int(level)
         else:
             self.lvl = DEFAULT_LOG_LEVEL
