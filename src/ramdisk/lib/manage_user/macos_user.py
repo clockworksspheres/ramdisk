@@ -23,10 +23,11 @@ from subprocess import Popen
 from ..manage_user.manage_user_template import ManageUserTemplate
 from ..manage_user.manage_user_template import BadUserInfoError
 from ..run_commands import RunWith
+from ..environment import Environment
 from ..loggers import CyLogger
 from ..loggers import LogPriority as lp
 from ..libHelperFunctions import waitnoecho
-
+from ..libHelperExceptions import NotValidForThisOS
 
 class DsclError(Exception):
     """
@@ -109,6 +110,12 @@ class MacOSUser(ManageUserTemplate):
         userPriGid
         userHomeDir
         """
+        self.environ = Environment()
+
+        if not self.environ.getosfamily() == "darwin":
+            raise NotValidForThisOS("This class is only viable for a MacOS.")
+
+
         if 'logDispatcher' not in kwargs:
             raise ValueError("Variable 'logDispatcher' a required " +
                              "parameter for " + str(self.__class__.__name__))

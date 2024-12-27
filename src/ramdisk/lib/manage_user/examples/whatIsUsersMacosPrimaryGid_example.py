@@ -17,6 +17,11 @@ from ramdisk.lib.libHelperExceptions import UnsupportedOSError
 from ramdisk.lib.manage_user.manage_user import ManageUser
 from ramdisk.lib.manage_user.manage_user_exceptions import UserExistsError, UserCreationUnsuccessfullError
 
+if not sys.platform == "darwin":
+    raise NotValidForThisOS("This example is only viable for a MacOS.")
+
+
+
 parser = OptionParser(usage="\n\n%prog [options]\n\n", version="0.8.6")
 
 user=""
@@ -55,8 +60,8 @@ logger.initializeLogs()
 
 mu = ManageUser(logger)
 
-userUid = mu.getUserUid(user)
+userPriGid = mu.getUserPriGid(user)
 
-print(str(userUid))
+print(str(userPriGid))
 
 

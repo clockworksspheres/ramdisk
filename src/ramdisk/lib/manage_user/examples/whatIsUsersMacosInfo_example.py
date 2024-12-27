@@ -13,9 +13,12 @@ sys.path.append("../../../..")
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.config import DEFAULT_LOG_LEVEL
-from ramdisk.lib.libHelperExceptions import UnsupportedOSError
+from ramdisk.lib.libHelperExceptions import UnsupportedOSError, NotValidForThisOS
 from ramdisk.lib.manage_user.manage_user import ManageUser
 from ramdisk.lib.manage_user.manage_user_exceptions import UserExistsError, UserCreationUnsuccessfullError
+
+if not sys.platform == "darwin":
+    raise NotValidForThisOS("This example is only viable for a MacOS.")
 
 parser = OptionParser(usage="\n\n%prog [options]\n\n", version="0.8.6")
 
