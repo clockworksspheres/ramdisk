@@ -10,7 +10,6 @@ https://docs.python.org/2/howto/logging-cookbook.html
 https://docs.python.org/2/library/hotshot.html
 https://docs.python.org/2/library/multiprocessing.html?highlight=logging#logging
 
-@author: Roy Nielsen
 """
 
 # TODO: Check values to be logged to see whether they are strings or byte streams and treat accordingly
