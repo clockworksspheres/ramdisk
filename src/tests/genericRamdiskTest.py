@@ -260,7 +260,9 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
     def tearDownClass(self):
         """
         """
-        # self.tearDownInstanceSpecifics()
+
+        self.tearDownInstanceSpecifics()
+
         try:
             self.my_ramdisk.umount()
             self.logger.log(lp.INFO, r"Successfully detached disk: " + \
@@ -272,15 +274,6 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
             ex_message = message + "\n" + traceback.format_exc()
             raise Exception(ex_message)
 
-        #####
-        # capture end time
-        test_end_time = datetime.now()
 
-        #####
-        # Calculate and log how long it took...
-        test_time = (test_end_time - self.test_start_time)
-
-        self.logger.log(lp.INFO, self.__module__ + " took " + str(test_time) + \
-                  " time to complete...")
 
 ###############################################################################

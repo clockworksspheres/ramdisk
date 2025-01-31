@@ -41,7 +41,7 @@ class test_macRamdisk(GenericRamdiskTest):
     """
     """
     @classmethod
-    def setUpClass(self):
+    def setUpInstanceSpecifics(self):
         """
         Initializer
         """
@@ -50,34 +50,27 @@ class test_macRamdisk(GenericRamdiskTest):
         if not sys.platform.startswith("darwin"):
             raise unittest.SkipTest("This is not valid on this OS")
 
+        #####
+        # capture end time
+        self.start_test_time = datetime.now()
+
+        self.logger.log(lp.INFO, self.__module__ + " start_test_time: " + str(self.start_test_time))
+
 ###############################################################################
 ##### unittest Tear down
     @classmethod
-    def tearDownClass(self):
+    def tearDownInstanceSpecifics(self):
         """
         """
-        # self.tearDownInstanceSpecifics()
-        try:
-            self.my_ramdisk.umount()
-            self.logger.log(lp.INFO, r"Successfully detached disk: " + \
-                       str(self.my_ramdisk.mntPoint).strip())
-        except Exception:
-            message = r"Couldn't detach disk: " + \
-                       str(self.my_ramdisk.myRamdiskDev).strip() + \
-                       " : mntpnt: " + str(self.my_ramdisk.mntPoint)
-            ex_message = message + "\n" + traceback.format_exc()
-            raise Exception(ex_message)
-
         #####
         # capture end time
         test_end_time = datetime.now()
 
         #####
         # Calculate and log how long it took...
-        test_time = (test_end_time - self.test_start_time)
+        test_time = (test_end_time - self.start_test_time)
 
-        self.logger.log(lp.INFO, self.__module__ + " took " + str(test_time) + \
-                  " time to complete...")
+        self.logger.log(lp.INFO, self.__module__ + " took " + str(test_time) + " time to complete...")
 
 
 if __name__ == "__main__":
