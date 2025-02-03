@@ -43,6 +43,11 @@ class FsHelper(object):
 
     def getFsBlockSize(self, size="default"):
         """
+        """
+        self.getFsSectorSize(size)
+
+    def getFsSectorSize(self, size="default"):
+        """
         
         Linux:
         
