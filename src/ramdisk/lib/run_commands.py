@@ -555,7 +555,8 @@ class RunWith(object):
                 if not silent:
                     self.logger.log(lp.DEBUG, "Done with: " + self.printcmd)
             finally:
-                self.retcode = proc.returncode
+                print(self.retcode)
+                # self.retcode = self.retcode
                 if not silent:
                     self.logger.log(lp.DEBUG, "Done with command: " + self.printcmd)
                 self.logger.log(lp.DEBUG, "stdout: " + str(self.stdout))

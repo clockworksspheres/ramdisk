@@ -35,7 +35,8 @@ def getLibc( ):
 
     #####
     # For Linux
-    possible_paths = ["/lib/x86_64-linux-gnu/libc.so.6",
+    possible_paths = ["/usr/lib/x86_64-linux-gnu/libc.so.6",
+                      "/lib/x86_64-linux-gnu/libc.so.6",
                       "/lib/i386-linux-gnu/libc.so.6",
                       "/usr/lib64/libc.so.6",
                       "/usr/lib/libc.so.6",
@@ -43,7 +44,7 @@ def getLibc( ):
                       "/lib/libc.so.6"]
     for path in possible_paths:
         if os.path.exists(path):
-            libc = ctypes.CDLL("/usr/lib/libc.dylib")
+            libc = ctypes.CDLL(path)
             break
 
     try:

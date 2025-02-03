@@ -78,11 +78,22 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
         Set up a ramdisk and use that random location as a root to test the
         filesystem functionality of what is being tested.
         """
-        #Calculate size of ramdisk to make for this unit test.
-        size_in_mb = 512 * 8 * 1024 * 1024
-        ramdisk_size = size = size_in_mb
-        self.mnt_pnt_requested = "testmntpnt"
-
+        
+        if sys.platform.startswith("darwin"):
+			#Calculate size of ramdisk to make for this unit test.
+            size_in_mb = 512 * 8 * 1024 * 1024
+            ramdisk_size = size = size_in_mb
+            self.mnt_pnt_requested = "testmntpnt"
+        elif sys.platform.startswith("linux"):
+            #Calculate size of ramdisk to make for this unit test.
+            size_in_mb = 1024 * 1024 * 100
+            ramdisk_size = size = size_in_mb
+            self.mnt_pnt_requested = size_in_mb
+        elif size.platform.startswith("win32"):
+            #Calculate size of ramdisk to make for this unit test.
+            ramdisk_size = size = size_in_mb
+            self.mnt_pnt_requested = "testmntpnt"
+			
         self.success = False
         self.mountPoint = ""
         self.ramdiskDev = False

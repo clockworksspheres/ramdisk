@@ -48,13 +48,14 @@ def getLibc( ):
 
     #####
     # For Mac
-    try:
+    if sys.platform.startswith("darwin"):
         libc = ctypes.CDLL("/usr/lib/libc.dylib")
         # libc = ctypes.CDLL("libc.dylib")
-    except OSError:
+    elif sys.platform.startswith(linux):
         #####
         # For Linux
-        possible_paths = ["/lib/x86_64-linux-gnu/libc.so.6",
+        possible_paths = ["/usr/lib/x86_64-linux-gnu/libc.so",
+                          "/lib/x86_64-linux-gnu/libc.so.6",
                           "/lib/i386-linux-gnu/libc.so.6",
                           "/usr/lib64/libc.so.6",
                           "/usr/lib/libc.so.6",
