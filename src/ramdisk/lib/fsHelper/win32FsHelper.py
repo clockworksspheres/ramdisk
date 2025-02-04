@@ -45,6 +45,11 @@ class FsHelpers(object):
         self.runner.communicate()
         retval, reterr, retcode = self.runner.getNlogReturns()
 
+        # look for bytes per sector - for bytes per sector then for
+        # bits per sector, multiply by 8
+        
+        # for bytes per block - bytes per cluster - before parens
+
         print(retval)
 
         return success, blockSize
