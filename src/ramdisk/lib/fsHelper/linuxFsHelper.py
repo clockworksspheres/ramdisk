@@ -43,8 +43,25 @@ class FsHelper(object):
 
     def getFsBlockSize(self, size="default"):
         """
+        blockdev --getsize /dev/sda
+        
+        returns: block size in bits
+        
         """
-        self.getFsSectorSize(size)
+        runcmd = ["/usr/sbin/blockdev", "--getsize", "/dev/sda"]
+
+        blockSize = 0
+
+        try:
+            self.rw.setCommand(runcmd)
+            # def waitNpassThruStdout(self, chk_string=None, respawn=False, silent=True)
+            (myout, myerr, myretcode) = self.rw.waitNpassThruStdout(chk_string=None, respawn=False, silent=True)
+            blockSize = myout
+        except SubprocessError as Err:
+            self.logger.log(lp.WARNING, traceback.format_exc())
+            self.logger.log(lp.WARNING, "Exception thrown trying to find free space on device: " + dev + " assumed fstype: " + fstype)
+
+        return blockSize
 
     def getFsSectorSize(self, size="default"):
         """
@@ -58,6 +75,8 @@ class FsHelper(object):
 
         Same across debian based and redhat based systems
         
+        returns: sector size in bits
+
         """
         runcmd = ["/usr/sbin/fdisk", "-l"]
 
@@ -87,7 +106,7 @@ class FsHelper(object):
             self.logger.log(lp.WARNING, traceback.format_exc())
             self.logger.log(lp.WARNING, "Exception thrown trying to find free space on device: " + dev + " assumed fstype: " + fstype)
 
-        return sectorSize
+        return str(int(sectorSize) * 8)
 
     def getDiskSizeInMb(self, size="0"):
         """
@@ -105,9 +124,13 @@ class FsHelper(object):
 
 if __name__=="__main__":
     fshelper = FsHelper()
-    sectorSize = fshelper.getFsBlockSize()
+    sectorSize = fshelper.getFsSectorSize()
     print("Sector Size = " +  str(sectorSize))
 
+    # fshelper = FsHelper()
+    blockSize  = fshelper.getFsBlockSize()
+    print("Block Size = " +  str(blockSize))
+        
     #success, diskSizeInMb = fshelper.getDiskSizeInMb("1gb")
 
     #print("success = " + str(success) + " , " + "diskSizeInMb = " +  str(diskSizeInMb))

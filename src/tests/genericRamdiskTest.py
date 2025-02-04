@@ -33,6 +33,7 @@ if sys.platform.startswith("darwin"):
     from ramdisk.macRamdisk import RamDisk
     from ramdisk.macRamdisk import detach
     from ramdisk.macRamdisk import umount
+    from ramdisk.lib.fsHelper.macosHelper import FsHelper
 elif sys.platform.startswith("linux"):
     #####
     # For Linux
@@ -40,6 +41,7 @@ elif sys.platform.startswith("linux"):
     from tests.genericTestUtilities import GenericTestUtilities
     from ramdisk.linuxTmpfsRamdisk import RamDisk
     from ramdisk.linuxTmpfsRamdisk import umount
+    from ramdisk.lib.fsHelper.linuxFsHelper import FsHelper
 elif sys.platform.startswith("win32"):
     #####
     # For ImDisk for Windows
@@ -47,6 +49,7 @@ elif sys.platform.startswith("win32"):
     from tests.genericTestUtilities import GenericTestUtilities
     from ramdisk.winImDiskRamdisk import RamDisk
     from ramdisk.winImDiskRamdisk import umount
+    from ramdisk.lib.fsHelper.win32FsHelper import FsHelper
 else:
     raise Exception("Damn it Jim!!! What OS is this???")
 
@@ -71,7 +74,7 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
         self.logger = CyLogger()
         self.logger.initializeLogs()
         self.logger.log(lp.CRITICAL, "Logger initialized............................")
-
+        self.fsHelper = FsHelper()
         self.setUpInstanceSpecifics()
         
         """
@@ -86,7 +89,9 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
             self.mnt_pnt_requested = "testmntpnt"
         elif sys.platform.startswith("linux"):
             #Calculate size of ramdisk to make for this unit test.
-            size_in_mb = 1024 * 1024 * 100
+            # linux ramdisks are made in terms of 1 mb at a time... not
+            # bits or bytes...
+            size_in_mb = 512
             ramdisk_size = size = size_in_mb
             self.mnt_pnt_requested = size_in_mb
         elif size.platform.startswith("win32"):
