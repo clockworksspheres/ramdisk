@@ -98,6 +98,9 @@ class FsHelper(object):
                 #####
                 # Make the disk size in terms of Mb
                 diskSizeInMb = 1024 * int(diskSizeTmp)
+                #####
+                #  sector size  = 512 bytes ie: 512 * 8  = 4096  and that * 256 = 1Mb...
+                diskSizeInMb = 512 * 8  * 256 * int(diskSizeTmp)
         except AttributeError as err:
             try:
                 match = re.match(r"^(\d+)$", str(size))
