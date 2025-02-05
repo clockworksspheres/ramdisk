@@ -5,6 +5,9 @@ Template for the ramdisk classes
 """
 #--- Native python libraries
 from tempfile import mkdtemp
+import sys
+
+sys.path.append("..")
 
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import LogPriority as lp

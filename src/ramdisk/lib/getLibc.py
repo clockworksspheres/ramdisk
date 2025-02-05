@@ -6,8 +6,10 @@
 import os
 import sys
 
+sys.path.append("../..")
+
 # --- non-native python libraries in this source tree
-from . PlatformFoundErrors import Win32PlatformFoundError
+from ramdisk.lib.PlatformFoundErrors import Win32PlatformFoundError
 
 class LibcNotAvailableError(BaseException):
     """

@@ -3,15 +3,23 @@ Template for the ramdisk classes
 
 @author: Roy Nielsen
 """
+import os
+import sys
 #--- Native python libraries
 from tempfile import mkdtemp
 
+#####
+# Include the parent project directory in the PYTHONPATH
+# appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
+# sys.path.append(appendDir)
+sys.path.append("../")
+
 #--- non-native python libraries in this source tree
-from lib.loggers import LogPriority as lp
-from lib.loggers import CyLogger
-from lib.environment import Environment
-from lib.CheckApplicable import CheckApplicable
-from commonRamdiskTemplate import RamDiskTemplate, BadRamdiskArguments, NotValidForThisOS
+from ramdisk.lib.loggers import LogPriority as lp
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.environment import Environment
+from ramdisk.lib.CheckApplicable import CheckApplicable
+from ramdisk.commonRamdiskTemplate import RamDiskTemplate, BadRamdiskArguments, NotValidForThisOS
 
 ###############################################################################
 

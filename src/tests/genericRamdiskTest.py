@@ -20,8 +20,8 @@ appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
 sys.path.append(appendDir)
 
 #--- non-native python libraries in this source tree
-from ramdisk.lib.loggers import CyLogger
-from ramdisk.lib.loggers import LogPriority as lp
+from ramdisk.libs.loggers import CyLogger
+from ramdisk.libs.loggers import LogPriority as lp
 from tests.genericTestUtilities import GenericTestUtilities
 #####
 # Load OS specific Ramdisks
@@ -33,7 +33,7 @@ if sys.platform.startswith("darwin"):
     from ramdisk.macRamdisk import RamDisk
     from ramdisk.macRamdisk import detach
     from ramdisk.macRamdisk import umount
-    from ramdisk.lib.fsHelper.macosHelper import FsHelper
+    from ramdisk.libs.fsHelper.macosFsHelper import FsHelper
 elif sys.platform.startswith("linux"):
     #####
     # For Linux

@@ -41,7 +41,8 @@ import pwd
 import time
 import traceback
 
-sys.path.append("../../..")
+sys.path.append("../..")
+
 from ramdisk.config import DEFAULT_LOG_LEVEL, LogPriority 
 
 try:
@@ -65,8 +66,6 @@ if os.geteuid() == 0:
         DMI = False
 else:
     DMI = False
-
-sys.path.append("../..")
 
 # third party libraries
 from ramdisk.lib.run_commands import RunWith as RunWith

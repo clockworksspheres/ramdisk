@@ -17,10 +17,14 @@ Created on Aug 24, 2010
 
 #--- Native python libraries
 import re
+import sys
 import traceback
 from distutils.version import LooseVersion
+
+sys.path.append("../../")
+
 #--- non-native python libraries in this source tree
-from . loggers import LogPriority
+from ramdisk.lib.loggers import LogPriority
 
 
 class CheckApplicable(object):

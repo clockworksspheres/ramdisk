@@ -1,3 +1,4 @@
+#!/usr/bin/env -S python -u
 """
 Mac ramdisk + unionfs implementation
 
@@ -27,26 +28,31 @@ Maybe function, method  or other module
 #--- Native python libraries
 import os
 import re
+import sys
 import shutil
 import traceback
 from subprocess import Popen, PIPE
 
+#####
+# Include the parent project directory in the PYTHONPATH
+# appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
+# sys.path.append(appendDir)
+sys.path.append("../")
+
 #--- non-native python libraries in this source tree
-from ramdisk.commonRamdiskTemplate import RamDiskTemplate
 from ramdisk.lib.run_commands import RunWith
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.environment import Environment
 from ramdisk.lib.libHelperExceptions import NotValidForThisOS
 from ramdisk.lib.fsHelper.macosFsHelper import FsHelper
+from ramdisk.commonRamdiskTemplate import RamDiskTemplate
 
 ###############################################################################
 
-class RamDisk(RamDiskTemplate) :
+class RamDisk(RamDiskTemplate):
     """
     Class to manage a ramdisk
-
-    utilizes commands I've used to manage ramdisks
 
     Size passed in must be passed in as 1Mb chunks
 
@@ -54,7 +60,7 @@ class RamDisk(RamDiskTemplate) :
                    or the creation will fail.
 
                   when getting input for the size of the ramdisk, use 
-                  \d+[GgMm][Bb] for size regex
+                  r"d+[GgMm][Bb]" for size regex
 
 
     @param: mountpoint - where to mount the disk, if left empty, will mount
@@ -69,13 +75,13 @@ class RamDisk(RamDiskTemplate) :
         """
         super(RamDisk, self).__init__(size, mountpoint, logger)
 
-#####
-# Provided by commonRamdiskTemplate....
-#        if not isinstance(logger, CyLogger):
-#            self.logger = CyLogger()
-#            self.logger.initializeLogs()   
-#        else:
-#            self.logger = logger
+        #####
+        # Provided by commonRamdiskTemplate....
+        #        if not isinstance(logger, CyLogger):
+        #            self.logger = CyLogger()
+        #            self.logger.initializeLogs()   
+        #        else:
+        #            self.logger = logger
 
         self.environ = Environment()
         self.fsHelper = FsHelper()
@@ -131,6 +137,7 @@ class RamDisk(RamDiskTemplate) :
         # Passed in disk size must have a non-default value
         if not self.diskSize == 0 :
             success  = True
+        print("########### IS THERE AVAILABLE MEMORY???? ##############")
         #####
         # Checking to see if memory is availalbe...
         if not self.__isMemoryAvailable() :
@@ -138,14 +145,15 @@ class RamDisk(RamDiskTemplate) :
             success = False
         else:
             success = True
-
+        self.logger.log(lp.DEBUG, "got passed checking for available memory")
         if success :
 
             #####
             # If a mountpoint is passed in, use that, otherwise, set up for a
             # random mountpoint.
+            self.logger.log(lp.DEBUG, "attempting mountpoint...")
             if mountpoint:
-                self.logger.log(lp.INFO, "\n\n\n\tMOUNTPOINT: " + str(mountpoint) + "\n\n\n")
+                self.logger.log(lp.INFO, "\tMOUNTPOINT: " + str(mountpoint))
                 self.mntPoint = mountpoint
                 #####
                 # eventually have checking to make sure that directory
@@ -158,13 +166,17 @@ class RamDisk(RamDiskTemplate) :
                            "point. . .")
                 if not self.getRandomizedMountpoint() :
                     success = False
-
+            print("##### <<<< GOT MOUNT POINT <<<< ######")
+            self.logger.log(lp.DEBUG, "acquired mount point...")
             #####
             # The Mac has a more complicated method of managing ramdisks...
             if success:
+                print("########## ATTEMPTING TO CREATE>>>>>> ##########")
                 #####
                 # Attempt to create the ramdisk
-                if not self.__create():
+                try:
+                    self.__create()
+                except:
                     success = False
                     self.logger.log(lp.WARNING, "Create appears to have failed..")
                 else:
@@ -184,6 +196,8 @@ class RamDisk(RamDiskTemplate) :
                             self.logger.log(lp.WARNING, "Remove journal " + \
                                             "appears to have failed..")
 
+
+        self.getNlogData()
         self.success = success
         if success:
             self.logger.log(lp.INFO, "Mount point: " + str(self.mntPoint))
@@ -204,11 +218,19 @@ class RamDisk(RamDiskTemplate) :
         success = False
         #####
         # Create the ramdisk and attach it to a device.
+        print("Creating the ramdrive...")
         cmd = [self.hdiutil, "attach", "-nomount", "ram://" + self.diskSize]
         self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
         self.runWith.setCommand(cmd)
         self.runWith.communicate()
         retval, reterr, retcode = self.runWith.getNlogReturns()
+
+        self.logger.log(lp.DEBUG, "######################################")
+        self.logger.log(lp.DEBUG, "Printing attaching process...")
+        self.logger.log(lp.DEBUG, "return code: " + str(retcode))
+        self.logger.log(lp.DEBUG, "return error: " + str(reterr))
+        self.logger.log(lp.DEBUG, "return value: " + str(retval))
+        self.logger.log(lp.DEBUG, "######################################")
 
         if retcode == '':
             success = False
@@ -290,7 +312,7 @@ class RamDisk(RamDiskTemplate) :
             if self.mntPoint:
                 #####
                 # "Mac" unmount (not eject)
-                cmd = [self.diskutil, "unmount", self.myRamdiskDev + "s1"]
+                cmd = [self.diskutil, "unmount", self.myRamdiskDev]
                 self.runWith.setCommand(cmd)
                 self.runWith.communicate()
                 retval, reterr, retcode = self.runWith.getNlogReturns()
@@ -477,6 +499,12 @@ class RamDisk(RamDiskTemplate) :
         self.runWith.setCommand(cmd)
         self.runWith.communicate()
         retval, reterr, retcode = self.runWith.getNlogReturns()
+        print("######################################")
+        print("Printing mounting process...")
+        print("return code: " + str(retcode))
+        print("return error: " + str(reterr))
+        print("return value: " + str(retval))
+        print("######################################")
         if not reterr:
             success = True
         return success
@@ -550,6 +578,12 @@ class RamDisk(RamDiskTemplate) :
         retval, reterr, retcode = self.runWith.getNlogReturns()
         if not reterr:
             success = True
+        print("######################################")
+        print("Printing partitioning process...")
+        print("return code: " + str(retcode))
+        print("return error: " + str(reterr))
+        print("return value: " + str(retval))
+        print("######################################")
         if success:
             #####
             # Need to get the partition device out of the output to assign to
@@ -573,7 +607,7 @@ class RamDisk(RamDiskTemplate) :
         before creating the ramdisk
 
         Best method to do this on the Mac is to get the output of "top -l 1"
-        and re.search("unused\.$", line)
+        and # re.search("unused" line), as below
 
         @author: Roy Nielsen
         """
@@ -621,7 +655,7 @@ class RamDisk(RamDiskTemplate) :
         #####
         # Find the numerical value and magnitute of the ramdisk
         if size:
-            sizeCompile = re.compile("(\d+)(\w+)")
+            sizeCompile = re.compile(r"(\d+)(\w+)")
 
             split_size = sizeCompile.search(size)
             freeNumber = split_size.group(1)
@@ -731,3 +765,5 @@ def detach(device=" ", logger=False):
     else:
         raise Exception("Cannot eject a device with an empty name..")
     return success
+
+

@@ -14,10 +14,12 @@ import termios
 import traceback
 from subprocess import Popen, STDOUT, PIPE
 
+sys.path.append("../..")
+
 #--- non-native python libraries in this source tree
-from .loggers import CyLogger
-from .loggers import LogPriority as lp
-from .run_commands import RunWith
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority as lp
+from ramdisk.lib.run_commands import RunWith
 
 logger = CyLogger()
 run = RunWith(logger)

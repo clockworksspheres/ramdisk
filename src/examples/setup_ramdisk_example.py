@@ -66,8 +66,8 @@ ramdisk = RamDisk(str(size), str(mntpnt), logger)
 ramdisk.getNlogData()
 ramdisk.getNprintData()
 
-if not ramdisk.success:
-    raise Exception("Ramdisk setup failed..")
+#if not ramdisk.success:
+#    raise Exception("Ramdisk setup failed..")
 
 print(ramdisk.getDevice())
 time.sleep(9000)

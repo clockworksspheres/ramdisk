@@ -7,13 +7,16 @@ Factory for creating ramdisks.
 """
 #--- Native python libraries
 import re
+import sys
 from tempfile import mkdtemp
 from subprocess import Popen, PIPE, STDOUT
 
+sys.path.append("..")
+
 #--- non-native python libraries in this source tree
-from .lib.loggers import CyLogger
-from .lib.loggers import LogPriority as lp
-from .lib.run_commands import RunWith
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority as lp
+from ramdisk.lib.run_commands import RunWith
 
 
 def BadRamdiskTypeException(Exception):
@@ -127,13 +130,6 @@ class RamDiskFactory(object):
             # Look for the ramdisk with "mountpoint" and return that instance.
             for ramdisk in self.ramdisks:
                 if re.match("^%s$"%mountpoint, ramdisk.getMountPoint()):
-                    self.activeRamdisk = ramdisk
-                    break
-
-        return self.activeRamdisk
-
-    ############################################################################
-
     def getModuleVersion(self):
         """
         Getter for the version of this  module.
