@@ -20,8 +20,8 @@ appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
 sys.path.append(appendDir)
 
 #--- non-native python libraries in this source tree
-from ramdisk.libs.loggers import CyLogger
-from ramdisk.libs.loggers import LogPriority as lp
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority as lp
 from tests.genericTestUtilities import GenericTestUtilities
 #####
 # Load OS specific Ramdisks
@@ -33,7 +33,7 @@ if sys.platform.startswith("darwin"):
     from ramdisk.macRamdisk import RamDisk
     from ramdisk.macRamdisk import detach
     from ramdisk.macRamdisk import umount
-    from ramdisk.libs.fsHelper.macosFsHelper import FsHelper
+    from ramdisk.lib.fsHelper.macosFsHelper import FsHelper
 elif sys.platform.startswith("linux"):
     #####
     # For Linux
@@ -84,7 +84,8 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
         
         if sys.platform.startswith("darwin"):
 			#Calculate size of ramdisk to make for this unit test.
-            size_in_mb = 512 * 8 * 1024 * 1024
+            # size_in_mb = int((1024 * 1024 * 512) / 512)
+            size_in_mb = 512
             ramdisk_size = size = size_in_mb
             self.mnt_pnt_requested = "testmntpnt"
         elif sys.platform.startswith("linux"):
