@@ -44,7 +44,7 @@ from ramdisk.lib.run_commands import RunWith
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.environment import Environment
-from ramdisk.lib.libHelperExceptions import NotValidForThisOS
+from ramdisk.lib.libHelperExceptions import NotValidForThisOS, MemoryNotAvailableError
 from ramdisk.lib.fsHelper.macosFsHelper import FsHelper
 from ramdisk.commonRamdiskTemplate import RamDiskTemplate
 
@@ -678,6 +678,9 @@ class RamDisk(RamDiskTemplate):
         self.logger.log(lp.DEBUG, "Size requested: " + str(self.diskSize))
         if int(self.free) > int(float(self.diskSize)/(2*1024)):
             success = True
+        else:
+            raise MemoryNotAvailableError("Memory Not Available for Creating the Ramdisk, Free up Memory to Create a Ramdisk...")
+
         print(str(self.free))
         print(str(success))
         return success
