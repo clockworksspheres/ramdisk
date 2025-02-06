@@ -52,6 +52,11 @@ class test_linuxTmpfsRamdisk(GenericRamdiskTest):
         """
         Initializer
         """
+        #####
+        # If we don't have a supported platform, skip this test.
+        if not sys.platform.startswith("linux"):
+            raise unittest.SkipTest("This is not valid on this OS")
+
         # Start timer in miliseconds
         self.test_start_time = datetime.now()
 
@@ -61,18 +66,29 @@ class test_linuxTmpfsRamdisk(GenericRamdiskTest):
         # Initialize the helper class
         self.initializeHelper = False
 
-        #####
-        # If we don't have a supported platform, skip this test.
-        if not sys.platform.startswith("linux"):
-            raise unittest.SkipTest("This is not valid on this OS")
-
+    @classmethod
     def setUp(self):
         """
         This method runs before each test run.
 
         @author: Roy Nielsen
         """
-        pass
+        #####
+        # If we don't have a supported platform, skip this test.
+        if not sys.platform.startswith("linux"):
+            raise unittest.SkipTest("This is not valid on this OS")
+
+    @classmethod
+    def setUpClass(self):
+        """
+        This method runs before each test run.
+
+        @author: Roy Nielsen
+        """
+        #####
+        # If we don't have a supported platform, skip this test.
+        if not sys.platform.startswith("linux"):
+            raise unittest.SkipTest("This is not valid on this OS")
 
 
 ###############################################################################
