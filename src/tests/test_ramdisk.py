@@ -1,3 +1,4 @@
+#!/usr/bin/env -S python -u
 """
 Generic ramdisk test, with helper functions. Inherited by other tests.
 
@@ -106,7 +107,7 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
         self.mnt_pnt_requested = False
 
         # get a ramdisk of appropriate size, with a secure random mountpoint
-        self.my_ramdisk = RamDisk(str(ramdisk_size), self.mnt_pnt_requested, logger=self.logger)
+        self.my_ramdisk = RamDisk(str(size_in_mb), self.mnt_pnt_requested, logger=self.logger)
         (self.success, self.mountPoint, self.ramdiskDev) = self.my_ramdisk.getData()
         self.logger.log(lp.WARNING, str(self.success) + " : " + str(self.mountPoint) + " : " + str(self.ramdiskDev))
         self.mount = self.mountPoint
@@ -294,3 +295,8 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
 
 
 ###############################################################################
+
+
+if __name__ == "__main__":
+    unittest.main()
+
