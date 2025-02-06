@@ -30,5 +30,5 @@ Test bug #5
 
 CI/CD
 
-Remote machine testing for automated testing.  VM's or machines should be set up for remote login to remote login to download and/or run the latest code and test Possibly cloud testing if one can get a cloud provider to donate VM's for automated testing, if I can't figure out local hardware.  Ansible, terraform should be involved.  Possibly containers with/for kubernetes, Go/Jenkins, graphana-loki-promtail, Redmine/Jira... as free as possible, as I have no money for anything....
+Someday, years down the road - Remote machine testing for automated testing.  VM's or machines should be set up for remote login to remote login to download and/or run the latest code and test Possibly cloud testing if one can get a cloud provider to donate VM's for automated testing, if I can't figure out local hardware.  Ansible, terraform should be involved.  Possibly containers with/for kubernetes, Go/Jenkins, graphana-loki-promtail, Redmine/Jira... as free as possible, as I have no money for anything....
 
