@@ -29,16 +29,13 @@ from ramdisk.lib.libHelperExceptions import NotValidForThisOS
 
 #####
 # Load OS specific Ramdisks
-if sys.platform.startswith("darwin"):
-    #####
-    # For Mac
-    from ramdisk.macRamdisk import RamDisk
-    from ramdisk.macRamdisk import detach
-elif sys.platform.startswith("linux"):
+if sys.platform.startswith("linux"):
     #####
     # For Linux
     from ramdisk.linuxTmpfsRamdisk import RamDisk
     from ramdisk.linuxTmpfsRamdisk import umount
+else:
+    raise unittest.SkipTest("Not Valid For This OS")
 
 class test_linuxTmpfsRamdisk(GenericRamdiskTest):
     """
@@ -123,15 +120,6 @@ class test_linuxTmpfsRamdisk(GenericRamdiskTest):
             self.assertRaises(UserMustBeRootError, "If UID is not 0, a UserMustBeRootError must be raised...")
 
         self.assertTrue(os.geteuid() == 0, "User is not root, cannot cannot create a ramdisk if user is not root.")
-
-###############################################################################
-##### unittest Tear down
-    @classmethod
-    def tearDownClass(self):
-        """
-        disconnect ramdisk
-        """
-        pass
 
 ###############################################################################
 
