@@ -12,6 +12,7 @@ import time
 import unittest
 import tempfile
 import ctypes as C
+import unittest 
 from datetime import datetime
 
 if __name__=="__main__":
@@ -23,18 +24,17 @@ from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.libHelperExceptions import NotValidForThisOS
 
-#####
-# Load OS specific Ramdisks
 if sys.platform.startswith("darwin"):
     #####
     # For Mac
+    from ramdisk.lib.getLibc.macGetLibc import getLibc
+    from tests.genericTestUtilities import GenericTestUtilities
     from ramdisk.macRamdisk import RamDisk
     from ramdisk.macRamdisk import detach
-elif sys.platform.startswith("linux"):
-    #####
-    # For Linux
-    from ramdisk.linuxTmpfsRamdisk import RamDisk
-    from ramdisk.linuxTmpfsRamdisk import umount
+    from ramdisk.macRamdisk import umount
+    from ramdisk.lib.fsHelper.macosFsHelper import FsHelper
+else:
+    raise unittest.SkipTest("Not Valid For This OS")
 
 
 class test_macRamdisk(GenericRamdiskTest):
