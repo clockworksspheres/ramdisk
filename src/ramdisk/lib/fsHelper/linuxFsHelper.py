@@ -116,7 +116,7 @@ class FsHelper(object):
                megabyte) could be changed to suit the user.
 
                when getting input for the size of the ramdisk, use 
-               regex \d+[GgMm][Bb] for size
+               regex d+[GgMm][Bb] for size
 
         """
         pass
