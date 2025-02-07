@@ -1,7 +1,5 @@
 '''
 '''
-
-
 # --- Native python libraries
 import os
 import sys
@@ -9,7 +7,6 @@ import sys
 sys.path.append("../..")
 
 # --- non-native python libraries in this source tree
-from ramdisk.lib.PlatformFoundErrors import Win32PlatformFoundError
 
 class LibcNotAvailableError(BaseException):
     """
@@ -17,16 +14,6 @@ class LibcNotAvailableError(BaseException):
     """
     def __init__(self, *args, **kwargs):
         BaseException.__init__(self, *args, **kwargs)
-
-try:
-    if sys.platform.strip() == "win32":
-        raise Win32PlatformFoundError("Libc not available - You are on a Windows Platform")
-    else:
-        import ctypes
-
-except Win32PlatformFoundError as err:
-    raise err
-
 
 ##############################################################################
 
@@ -40,39 +27,17 @@ def getLibc( ):
 
     @author: Roy Nielsen
     """
-    # libc = True
 
-    if sys.platform is "win32":
-        return(0)
+    if sys.platform.startswith("win32"):
+        from ramdisk.lib.getLibc.linuxGetLibc import getLibc
+        return getLibc()
+    elif sys.platform.startswith("linux"):
+        from ramdisk.lib.getLibc.linuxGetLibc import getLibc
+        return getLibc()
+    elif sys.platform.startswith("darwin"):
+        from ramdisk.lib.getLibc.macGetLibc import getLibc
+        return getLibc()
     else:
-        import ctypes
-
-
-    #####
-    # For Mac
-    if sys.platform.startswith("darwin"):
-        libc = ctypes.CDLL("/usr/lib/libc.dylib")
-        # libc = ctypes.CDLL("libc.dylib")
-    elif sys.platform.startswith(linux):
-        #####
-        # For Linux
-        possible_paths = ["/usr/lib/x86_64-linux-gnu/libc.so",
-                          "/lib/x86_64-linux-gnu/libc.so.6",
-                          "/lib/i386-linux-gnu/libc.so.6",
-                          "/usr/lib64/libc.so.6",
-                          "/usr/lib/libc.so.6",
-                          "/lib64/libc.so.6",
-                          "/lib/libc.so.6"]
-        for path in possible_paths:
-
-                break
-
-    try:
-        if libc:
-            libc.sync()
-    except AttributeError:
-        raise LibcNotAvailableError("............................Cannot Sync.")
-
-    return libc
+        raise LibcNotAvailableError("Libc is Not Avaiable via this Software for this OS")
 
 ##############################################################################
