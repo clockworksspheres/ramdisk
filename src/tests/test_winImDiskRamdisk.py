@@ -17,7 +17,7 @@ from datetime import datetime
 sys.path.append("..")
 
 #--- non-native python libraries in this source tree
-from tests.genericRamdiskTest import GenericRamdiskTest
+from tests.genericTestUtilities.genericRamdiskTest import GenericRamdiskTest
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.libHelperExceptions import NotValidForThisOS

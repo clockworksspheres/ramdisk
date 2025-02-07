@@ -19,7 +19,7 @@ if __name__=="__main__":
     sys.path.append("..")
 
 #--- non-native python libraries in this source tree
-from tests.genericRamdiskTest import GenericRamdiskTest
+from tests.genericTestUtilities.genericRamdiskTest import GenericRamdiskTest
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.libHelperExceptions import NotValidForThisOS
@@ -28,7 +28,7 @@ if sys.platform.startswith("darwin"):
     #####
     # For Mac
     from ramdisk.lib.getLibc.macGetLibc import getLibc
-    from tests.genericTestUtilities import GenericTestUtilities
+    from tests.genericTestUtilities.genericTestUtilities import GenericTestUtilities
     from ramdisk.macRamdisk import RamDisk
     from ramdisk.macRamdisk import detach
     from ramdisk.macRamdisk import umount

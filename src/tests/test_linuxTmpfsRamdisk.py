@@ -22,7 +22,7 @@ appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
 sys.path.append(appendDir)
 
 #--- non-native python libraries in this source tree
-from tests.genericRamdiskTest import GenericRamdiskTest
+from tests.genericTestUtilities.genericRamdiskTest import GenericRamdiskTest
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.libHelperExceptions import NotValidForThisOS
