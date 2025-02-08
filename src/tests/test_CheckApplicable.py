@@ -22,6 +22,7 @@ from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.run_commands import RunWith
 from ramdisk.lib.environment import Environment
 from ramdisk.lib.CheckApplicable import CheckApplicable
+from ramdisk import config
 
 LOGGER = CyLogger()
 #LOGGER.setInitialLoggingLevel(30)

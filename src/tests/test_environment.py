@@ -23,7 +23,7 @@ sys.path.append(appendDir)
 
 # --- Non-native python libraries in this source tree
 import ramdisk.lib.environment as environment
-
+from ramdisk import config
 
 class test_environment(unittest.TestCase):
 

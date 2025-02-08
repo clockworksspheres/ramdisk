@@ -42,7 +42,7 @@ import time
 import traceback
 
 sys.path.append("../../..")
-from config import DEFAULT_LOG_LEVEL, LogPriority 
+from ramdisk.config import DEFAULT_LOG_LEVEL, LogPriority 
 
 try:
     from ramdisk.lib.localize import VERSION
