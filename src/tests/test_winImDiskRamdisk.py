@@ -28,7 +28,8 @@ if sys.platform.startswith("win32"):
     from ramdisk.winImDiskRamdisk import RamDisk
     from ramdisk.winImDiskRamdisk import umount
 else:
-    sys.exit(0)
+    raise NotValidForThisOS("Not Valid For This OS...")
+    #sys.exit(0)
 
 
 class test_winImDiskRamdisk(GenericRamdiskTest):
