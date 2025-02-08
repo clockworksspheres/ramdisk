@@ -22,23 +22,20 @@ appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
 sys.path.append(appendDir)
 
 #--- non-native python libraries in this source tree
-from tests.genericRamdiskTest import GenericRamdiskTest
+from tests.genericTestUtilities.genericRamdiskTest import GenericRamdiskTest
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.libHelperExceptions import NotValidForThisOS
 
 #####
 # Load OS specific Ramdisks
-if sys.platform.startswith("darwin"):
-    #####
-    # For Mac
-    from ramdisk.macRamdisk import RamDisk
-    from ramdisk.macRamdisk import detach
-elif sys.platform.startswith("linux"):
+if sys.platform.startswith("linux"):
     #####
     # For Linux
     from ramdisk.linuxTmpfsRamdisk import RamDisk
     from ramdisk.linuxTmpfsRamdisk import umount
+else:
+    raise unittest.SkipTest("Not Valid For This OS")
 
 class test_linuxTmpfsRamdisk(GenericRamdiskTest):
     """
@@ -52,6 +49,11 @@ class test_linuxTmpfsRamdisk(GenericRamdiskTest):
         """
         Initializer
         """
+        #####
+        # If we don't have a supported platform, skip this test.
+        if not sys.platform.startswith("linux"):
+            raise unittest.SkipTest("This is not valid on this OS")
+
         # Start timer in miliseconds
         self.test_start_time = datetime.now()
 
@@ -61,18 +63,29 @@ class test_linuxTmpfsRamdisk(GenericRamdiskTest):
         # Initialize the helper class
         self.initializeHelper = False
 
-        #####
-        # If we don't have a supported platform, skip this test.
-        if not sys.platform.startswith("linux"):
-            raise unittest.SkipTest("This is not valid on this OS")
-
+    @classmethod
     def setUp(self):
         """
         This method runs before each test run.
 
         @author: Roy Nielsen
         """
-        pass
+        #####
+        # If we don't have a supported platform, skip this test.
+        if not sys.platform.startswith("linux"):
+            raise unittest.SkipTest("This is not valid on this OS")
+
+    @classmethod
+    def setUpClass(self):
+        """
+        This method runs before each test run.
+
+        @author: Roy Nielsen
+        """
+        #####
+        # If we don't have a supported platform, skip this test.
+        if not sys.platform.startswith("linux"):
+            raise unittest.SkipTest("This is not valid on this OS")
 
 
 ###############################################################################
@@ -107,15 +120,6 @@ class test_linuxTmpfsRamdisk(GenericRamdiskTest):
             self.assertRaises(UserMustBeRootError, "If UID is not 0, a UserMustBeRootError must be raised...")
 
         self.assertTrue(os.geteuid() == 0, "User is not root, cannot cannot create a ramdisk if user is not root.")
-
-###############################################################################
-##### unittest Tear down
-    @classmethod
-    def tearDownClass(self):
-        """
-        disconnect ramdisk
-        """
-        pass
 
 ###############################################################################
 

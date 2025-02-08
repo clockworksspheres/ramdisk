@@ -112,7 +112,7 @@ class GenericTestUtilities(object):
 
         @author: Roy Nielsen
         """
-        if re.match("^\s*$", str(fname)):
+        if re.match(r"^\s*$", str(fname)):
             self.logger.log(lp.WARNING, "Cannot touch a file without a filename....")
         else:
             try:
@@ -278,7 +278,7 @@ class GenericTestUtilities(object):
                 try:
                     # Filesystem   512-blocks      Used Available Capacity iused     ifree %iused  Mounted on
                     # /dev/disk3s1  478724992 219018232 195722792    53% 1167141 978613960    0%   /System/Volumes/Data
-                    look_for_freespace = re.match("\S+\s+\d+\s+\d+\s+\(d+)\s+\(d+)\S\s+\(d+)\s+(\d+)\s+\d+\S\s+\S+.*")
+                    look_for_freespace = re.match(r"\S+\s+\d+\s+\d+\s+\(d+)\s+\(d+)\S\s+\(d+)\s+(\d+)\s+\d+\S\s+\S+.*")
                     available = look_for_freespace.group(0)
                     capacityInPercent = look_for_freespace.group(1)
                     inodesUsed = look_for_freespace.group(2)

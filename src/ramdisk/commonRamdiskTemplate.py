@@ -5,6 +5,9 @@ Template for the ramdisk classes
 """
 #--- Native python libraries
 from tempfile import mkdtemp
+import sys
+
+sys.path.append("..")
 
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import LogPriority as lp
@@ -39,7 +42,7 @@ class BadRamdiskArguments(Exception):
 class RamDiskTemplate(object):
     """
     """
-    def __init__(self, size=0, mountpoint=False, logger=False):
+    def __init__(self, size=0, mountpoint=False, logger=False, **kwargs):
         """
         """
         #####

@@ -66,8 +66,6 @@ if os.geteuid() == 0:
 else:
     DMI = False
 
-sys.path.append("../..")
-
 # third party libraries
 from ramdisk.lib.run_commands import RunWith as RunWith
 

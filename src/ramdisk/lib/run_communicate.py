@@ -11,6 +11,7 @@ Inspiration for some of the below found on the internet.
 
 import os
 import re
+import sys
 import time
 import types
 import select
@@ -19,6 +20,8 @@ import traceback
 # import tracemalloc
 from subprocess import Popen, PIPE
 from subprocess import SubprocessError as SubprocessError
+
+sys.path.append("../..")
 
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp

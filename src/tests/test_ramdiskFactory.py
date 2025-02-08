@@ -22,7 +22,7 @@ sys.path.append("..")
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.libHelperExceptions import NotValidForThisOS
-from tests.genericTestUtilities import GenericTestUtilities
+from tests.genericTestUtilities.genericTestUtilities import GenericTestUtilities
 
 #####
 # Load OS specific Ramdisks

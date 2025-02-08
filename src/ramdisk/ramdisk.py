@@ -3,22 +3,30 @@ Template for the ramdisk classes
 
 @author: Roy Nielsen
 """
+import os
+import sys
 #--- Native python libraries
 from tempfile import mkdtemp
 
+#####
+# Include the parent project directory in the PYTHONPATH
+# appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
+# sys.path.append(appendDir)
+sys.path.append("../")
+
 #--- non-native python libraries in this source tree
-from lib.loggers import LogPriority as lp
-from lib.loggers import CyLogger
-from lib.environment import Environment
-from lib.CheckApplicable import CheckApplicable
-from commonRamdiskTemplate import RamDiskTemplate, BadRamdiskArguments, NotValidForThisOS
+from ramdisk.lib.loggers import LogPriority as lp
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.environment import Environment
+from ramdisk.lib.CheckApplicable import CheckApplicable
+from ramdisk.commonRamdiskTemplate import RamDiskTemplate, BadRamdiskArguments, NotValidForThisOS
 
 ###############################################################################
 
-class RamDisk(object):
+class RamDisk(RamDiskTemplate):
     """
     """
-    def __init__(self, size=0, mountpoint=False, logger=False, environ=False):
+    def __init__(self, size=0, mountpoint=False, logger=False, environ=False, **kwargs):
         """
         """
         #####
@@ -35,34 +43,47 @@ class RamDisk(object):
         else:
             self.environ = environ
         self.chkApp = CheckApplicable(self.environ, self.logger)
-
-    ###########################################################################
-
-    def createRamdisk(self, *args, **kwargs):
-        """
-        when getting input for the size of the ramdisk, use \d+[GgMm][Bb] for size
-        regex
-        """
+        
         #####
         # Check applicability to the current OS
         macApplicable = {'type': 'white',
-                         'family': ['darwin'],
-                         'os': {'macOS': ['12.1', '+']}}
+                         'family': ['darwin']}
         macApplicableHere = self.chkApp.isApplicable(macApplicable)
 
         linuxApplicable = {'type': 'white',
                            'family': ['linux']}
-        linuxApplicableHere = self.chkApp.isApplicable(linuxApplicable)        
 
-        if linuxApplicableHere:
+        windowsApplicableHere = self.chkApp.isApplicable(linuxApplicable)        
+        windowsApplicable = {'type': 'white',
+                           'family': ['win32']}
+
+        if sys.platform.startswith("linux"):
             from .linuxTmpfsRamdisk import RamDisk
-            self.ramdisk = RamDisk(*args, **kwargs)
-        elif macApplicableHere:
+            self.ramdisk = RamDisk(size, mountpoint, logger)
+        elif sys.platform.startswith("darwin"):
             from .macRamdisk import RamDisk
+            self.ramdisk = RamDisk(size, mountpoint, logger)
+        elif sys.platform.startswith("win32"):
+            from .winImDiskRamdisk import RamDisk
             self.ramdisk = RamDisk(*args, **kwargs)
         else:
             raise NotValidForThisOS("Ramdisk not available here...")
 
+    ###########################################################################
+
+    def getNlogData(self):
+        """
+        """
+        
+        return self.ramdisk.getNlogData()
+    
+    ###########################################################################
+
+    def getNprintData(self):
+        """
+        """
+        return self.ramdisk.getNprintData()
+    
     ###########################################################################
 
     def getRamdisk(self):

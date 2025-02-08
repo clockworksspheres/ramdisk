@@ -16,20 +16,22 @@ from ramdisk.lib.loggers import LogPriority as lp
 
 #####
 # Load OS specific Ramdisks
-if sys.platform.startswith("darwin"):
+#if sys.platform.startswith("darwin"):
     #####
     # For Mac
-    from ramdisk.macRamdisk import RamDisk
-elif sys.platform.startswith("linux"):
+#    from ramdisk.macRamdisk import RamDisk
+#elif sys.platform.startswith("linux"):
     #####
     # For Linux
-    from ramdisk.linuxTmpfsRamdisk import RamDisk
-elif sys.platform.startswith("win32"):
+#    from ramdisk.linuxTmpfsRamdisk import RamDisk
+#elif sys.platform.startswith("win32"):
     #####
     # For Linux
-    from ramdisk.winImDiskRamdisk import RamDisk
-else:
-    print("'" + str(sys.platform) + "' platform not supported...")
+#    from ramdisk.winImDiskRamdisk import RamDisk
+#else:
+#    print("'" + str(sys.platform) + "' platform not supported...")
+from ramdisk.ramdisk import RamDisk
+
 
 parser = OptionParser(usage="\n\n%prog [options]\n\n", version="0.8.6")
 
@@ -66,8 +68,8 @@ ramdisk = RamDisk(str(size), str(mntpnt), logger)
 ramdisk.getNlogData()
 ramdisk.getNprintData()
 
-if not ramdisk.success:
-    raise Exception("Ramdisk setup failed..")
+#if not ramdisk.success:
+#    raise Exception("Ramdisk setup failed..")
 
-print(ramdisk.getDevice())
-time.sleep(9000)
+#print(ramdisk.getDevice())
+#time.sleep(9000)

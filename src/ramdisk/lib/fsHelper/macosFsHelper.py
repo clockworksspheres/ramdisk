@@ -97,7 +97,9 @@ class FsHelper(object):
             if re.match(r"^[Gg][Bb]", diskSizePostfix):
                 #####
                 # Make the disk size in terms of Mb
-                diskSizeInMb = 1024 * int(diskSizeTmp)
+                numerator = 1024 * 1024 * int(diskSizeTmp)
+                denominator = 512 # sector size
+                diskSizeInMb = numerator / denominator # for hdiutil command
         except AttributeError as err:
             try:
                 match = re.match(r"^(\d+)$", str(size))
