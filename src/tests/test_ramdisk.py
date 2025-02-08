@@ -52,7 +52,7 @@ else:
     raise Exception("Damn it Jim!!! What OS is this???")
 
 
-class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
+class test_ramdisk(unittest.TestCase, GenericTestUtilities):
     """
     Holds helper methods.  DO NOT create an init
 

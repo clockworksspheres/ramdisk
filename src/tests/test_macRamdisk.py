@@ -34,8 +34,7 @@ if sys.platform.startswith("darwin"):
     from ramdisk.macRamdisk import umount
     from ramdisk.lib.fsHelper.macosFsHelper import FsHelper
 else:
-    #raise unittest.SkipTest("Not Valid For This OS")a
-    sys.exit()
+    unittest.SkipTest("Not Valid For This OS")
 
 
 class test_macRamdisk(GenericRamdiskTest):
