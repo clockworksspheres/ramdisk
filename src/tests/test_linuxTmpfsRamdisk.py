@@ -22,7 +22,6 @@ appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
 sys.path.append(appendDir)
 
 #--- non-native python libraries in this source tree
-from tests.genericTestUtilities.genericRamdiskTest import GenericRamdiskTest
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.libHelperExceptions import NotValidForThisOS
@@ -32,11 +31,12 @@ from ramdisk.lib.libHelperExceptions import NotValidForThisOS
 if sys.platform.startswith("linux"):
     #####
     # For Linux
+    from tests.genericTestUtilities.genericRamdiskTest import GenericRamdiskTest
     from ramdisk.linuxTmpfsRamdisk import RamDisk
     from ramdisk.linuxTmpfsRamdisk import umount
 else:
     # raise unittest.SkipTest("Not Valid For This OS")
-    sys.exit()
+    sys.exit(0)
 
 class test_linuxTmpfsRamdisk(GenericRamdiskTest):
     """

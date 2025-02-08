@@ -17,18 +17,18 @@ from datetime import datetime
 sys.path.append("..")
 
 #--- non-native python libraries in this source tree
-from tests.genericTestUtilities.genericRamdiskTest import GenericRamdiskTest
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.libHelperExceptions import NotValidForThisOS
 
 if sys.platform.startswith("win32"):
     #####
-    # For Linux
+    # for Windows
+    from tests.genericTestUtilities.genericRamdiskTest import GenericRamdiskTest
     from ramdisk.winImDiskRamdisk import RamDisk
     from ramdisk.winImDiskRamdisk import umount
 else:
-    unittest.SkipTest("Not Valid For This OS")
+    sys.exit(0)
 
 
 class test_winImDiskRamdisk(GenericRamdiskTest):
