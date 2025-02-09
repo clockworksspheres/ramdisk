@@ -163,7 +163,8 @@ class GenericTestUtilities(object):
         """
         """
         total_time = 0
-        time.sleep(.08)
+        # time.sleep(.08)
+        time.sleep(.02)
         if file_path and file_size:
             self.libc.sync()
             file_size = file_size * 1024 * 1024
@@ -234,14 +235,14 @@ class GenericTestUtilities(object):
                     tmp_buffer = os.urandom(block_size)
                     os.write(tmpfile, tmp_buffer)
                     os.fsync(tmpfile)
-                time.sleep(.02)
+                time.sleep(.01)
                 self.libc.sync()
                 os.close(tmpfile)
-                time.sleep(.02)
+                time.sleep(.01)
                 self.libc.sync()
-                time.sleep(.02)
+                time.sleep(.01)
                 os.unlink(tmpfile_path)
-                time.sleep(.02)
+                time.sleep(.01)
                 self.libc.sync()
 
                 # capture end time
