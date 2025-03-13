@@ -16,8 +16,8 @@ from time import time
 from .lib.run_commands import RunWith
 from .lib.loggers import CyLogger
 from .lib.loggers import LogPriority as lp
-from .commonRamdiskTemplate import RamDiskTemplate, NotValidForThisOS, BadRamdiskArguments
-from .lib.libHelperExceptions import SystemToolNotAvailable, UserMustBeRootError
+from .commonRamdiskTemplate import RamDiskTemplate, BadRamdiskArguments
+from .lib.libHelperExceptions import NotValidForThisOS, SystemToolNotAvailable, UserMustBeRootError
 
 ###############################################################################
 
