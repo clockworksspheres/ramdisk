@@ -1,3 +1,4 @@
+#!/usr/bin/env -S python -u
 
 import datetime
 import logging
@@ -20,7 +21,8 @@ from PySide6.QtGui import QIntValidator
 from ui_main import Ui_MainWindow
 from ui_not_yet_implemented import Ui_Dialog
 
-
+from validate import validateMntPntString
+from getValues import getMaxMemSize
 
 class CustomDialog(QDialog):
     def __init__(self):
@@ -76,7 +78,8 @@ class _CreateRamdisk(QMainWindow):
         # connect line edit to slider
         
         # CEnsure the inputs within the slider's range
-        self.ui.sizeLineEdit.setValidator(QIntValidator(0, 100))
+        maxValue = getMaxMemSize()
+        self.ui.sizeLineEdit.setValidator(QIntValidator(0, maxValue))
         self.ui.sizeLineEdit.textChanged.connect(self.update_slider)
 
         print("exiting init...")
