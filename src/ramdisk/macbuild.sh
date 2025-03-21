@@ -28,10 +28,12 @@ export PATH=".":$PATH
 pushd ui; python3 compile_uifiles.py; popd
 
 pyinstaller --clean -y macos.spec
-pyinstaller -y eisenbuild.macos.spec
+pyinstaller -y macos.spec
 ### DOES NOT WORK... need to figure out why...
-cp -a resources dist/eisenban.app/Contents/Resources
-cp -a resources dist/eisenban.app/Contents
-cp -a dist/eisenban.app ~/Desktop
-open ~/Desktop/eisenban.app
+cp -a resources dist/ramdisk.app/Contents/Resources
+cp -a resources dist/ramdisk.app/Contents
+./dist/ramdisk.app/Contents/MacOS/ramdisk
+
+#cp -a dist/eisenban.app ~/Desktop
+#open ~/Desktop/eisenban.app
 
