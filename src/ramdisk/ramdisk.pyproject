@@ -1,0 +1,7 @@
+{
+    "files": [
+        "ui/create_ramdisk.ui",
+        "ui/main.ui",
+        "ui/not_yet_implemented.ui",
+    ]
+}
