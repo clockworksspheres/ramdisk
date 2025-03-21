@@ -1,0 +1,8 @@
+{
+    "files": [
+        "create_ramdisk.ui",
+        "main.ui",
+        "not_yet_implemented.ui",
+        "r_widget.py"
+    ]
+}

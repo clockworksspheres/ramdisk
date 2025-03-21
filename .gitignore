@@ -4,3 +4,5 @@ testlink
 *.icloud
 .idea
 __pycache__
+.DS_Store
+.qtcreator
