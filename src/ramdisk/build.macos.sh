@@ -27,8 +27,8 @@ export PATH=".":$PATH
 
 pushd ui; python3 compile_uifiles.py; popd
 
-pyinstaller --clean -y macos.spec
-pyinstaller -y macos.spec
+pyinstaller --clean -y build.macos.spec
+pyinstaller -y build.macos.spec
 ### DOES NOT WORK... need to figure out why...
 cp -a resources dist/ramdisk.app/Contents/Resources
 cp -a resources dist/ramdisk.app/Contents
