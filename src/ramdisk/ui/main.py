@@ -24,6 +24,12 @@ from ui_not_yet_implemented import Ui_Dialog
 from validate import validateMntPntString
 from getValues import getMaxMemSize
 
+sys.path.append("../..")
+
+#--- non-native python libraries in this source tree
+from ramdisk.lib.dev.getMemStatus import GetMemStatus
+
+
 class CustomDialog(QDialog):
     def __init__(self):
         super().__init__()
@@ -76,10 +82,14 @@ class _CreateRamdisk(QMainWindow):
 
         #####
         # connect line edit to slider
+
+        #####
+        # getMacosMemStatus.getAvailableMem
+        getMemStatus = GetMemStatus()
+        availableMem = getMemStatus.getAvailableMem()
         
         # CEnsure the inputs within the slider's range
-        maxValue = getMaxMemSize()
-        self.ui.sizeLineEdit.setValidator(QIntValidator(0, maxValue))
+        self.ui.sizeLineEdit.setValidator(QIntValidator(0, availableMem))
         self.ui.sizeLineEdit.textChanged.connect(self.update_slider)
 
         print("exiting init...")
