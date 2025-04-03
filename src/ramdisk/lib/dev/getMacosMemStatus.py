@@ -8,10 +8,10 @@ import sys
 sys.path.append("../../..")
 
 #--- non-native python libraries in this source tree
-from ramdisk.lib.dev.getMemStatus import GetMemStatus
+from ramdisk.lib.dev.getMemStatusTemplate import GetMemStatusTemplate
 
 
-class GetMacosMemStatus(GetMemStatus):
+class GetMacosMemStatus(GetMemStatusTemplate):
     def __init__(self):
         # super if necessary
         pass
