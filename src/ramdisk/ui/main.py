@@ -85,9 +85,10 @@ class _CreateRamdisk(QMainWindow):
 
         #####
         # getMacosMemStatus.getAvailableMem
-        getMemStatus = GetMemStatus()
-        availableMem = getMemStatus.getAvailableMem()
-        
+        self.getMemStatus = GetMemStatus()
+        availableMem = self.getMemStatus.getAvailableMem()
+        self.ui.sizeHorizontalSlider.setRange(0, availableMem)
+
         # CEnsure the inputs within the slider's range
         self.ui.sizeLineEdit.setValidator(QIntValidator(0, availableMem))
         self.ui.sizeLineEdit.textChanged.connect(self.update_slider)
@@ -96,12 +97,16 @@ class _CreateRamdisk(QMainWindow):
 
     def update_slider(self, text):
         try:
+            availableMem = self.getMemStatus.getAvailableMem()
+            self.ui.sizeHorizontalSlider.setRange(0, availableMem)
             value = int(text)
             self.ui.sizeHorizontalSlider.setValue(value)
         except ValueError:
             pass   
 
     def update_line_edit(self, value):
+        availableMem = self.getMemStatus.getAvailableMem()
+        self.ui.sizeHorizontalSlider.setRange(0, availableMem)
         self.ui.sizeLineEdit.setText(str(value) + "M")
 
     def quit_application(self):
