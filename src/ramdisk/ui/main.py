@@ -28,6 +28,9 @@ sys.path.append("../..")
 
 #--- non-native python libraries in this source tree
 from ramdisk.lib.dev.getMemStatus import GetMemStatus
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority
+from ramdisk.ramdisk import RamDisk
 
 
 class CustomDialog(QDialog):
@@ -58,10 +61,14 @@ class _CreateRamdisk(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+
+        self.logger = CyLogger()
+        self.logger.initializeLogs()
+
         #####
         # Connect Button click signals to slots 
         self.ui.createPushButton.clicked.connect(
-               lambda: self.notYetImplemented())
+               lambda: self.createRamdisk())
         self.ui.debugPushButton.clicked.connect(
                lambda: self.notYetImplemented())
         self.ui.quitPushButton.clicked.connect(
@@ -71,7 +78,7 @@ class _CreateRamdisk(QMainWindow):
     
         #####
         # Connect Button click signals to slots 
-        self.ui.createPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.notYetImplemented()) 
+        self.ui.createPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.createRamdisk()) 
         self.ui.debugPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.notYetImplemented())
         self.ui.quitPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.quit_application())
         self.ui.rListPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.notYetImplemented())
@@ -137,6 +144,44 @@ class _CreateRamdisk(QMainWindow):
         if dlg.exec():
             print("User clicked OK")
 
+
+    def createRamdisk(self):
+        """
+        Grab the values from the interface to create the ramdisk.
+        """
+
+        #####
+        # Grab the size
+        try:
+            memSize = self.ui.sizeHorizontalSlider.value()
+        except ValueError as err:
+            pass
+
+        #####
+        # Grab the mount point
+        try:
+            mountPoint = self.ui.mountLineEdit.text()
+        except ValueError as err:
+            pass
+
+        if not memSize:
+            #####
+            # pop up a dialog saying can't create a ramdisk that small....
+            pass
+        else:
+            print("we have a size for memory..")
+            if not mountPoint:
+                #####
+                # create ramdisk with randomized mountpoint
+                ramdisk = RamDisk(str(memSize), "", self.logger)
+                ramdisk.getNlogData()
+                ramdisk.getNprintData()
+            else:
+                #####
+                # create ramdisk with specific mountpoint 
+                ramdisk = RamDisk(str(memSize), str(mountPoint), self.logger)
+                ramdisk.getNlogData()
+                ramdisk.getNprintData()
 
 '''
 def init_event_logger(path: str, fmt: str, debug: bool = False,
