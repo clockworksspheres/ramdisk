@@ -7,7 +7,7 @@ sys.path.append("../../..")
 # from ramdisk.lib.dev.getMemStatusTemplate import GetMemStatusTemplate
 
 if sys.platform.startswith("linux"):
-    pass
+    from ramdisk.lib.dev.getLinuxMemStatus import GetLinuxMemStatus
 elif sys.platform.startswith("darwin"):
     from ramdisk.lib.dev.getMacosMemStatus import GetMacosMemStatus
 elif sys.platform.startswith("win32"):
@@ -21,7 +21,7 @@ class GetMemStatus(object):
         """
         """
         if sys.platform.startswith("linux"):
-            #self.getMemStatus = GetLinuxMemStatus()
+            self.getMemStatus = GetLinuxMemStatus()
             pass
         elif sys.platform.startswith("darwin"):
             self.getMemStatus = GetMacosMemStatus()
@@ -47,5 +47,7 @@ class GetMemStatus(object):
 
 if __name__=="__main__":
     getMemStatus = GetMemStatus()
-    
-
+    freeMem = getMemStatus.getAvailableMem()
+    totalMem = getMemStatus.getTotalMemSize()
+    print("Free Memory: " + str(freeMem))
+    print("Total Memory: " + str(totalMem))

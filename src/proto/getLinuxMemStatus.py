@@ -5,16 +5,16 @@ import subprocess
 import re
 import sys
 
-sys.path.append("../../..")
+sys.path.append("../")
 
 #--- non-native python libraries in this source tree
-from ramdisk.lib.dev.getMemStatusTemplate import GetMemStatusTemplate
+from ramdisk.lib.dev.getMemStatus import GetMemStatus
 
 
-class GetMacosMemStatus(GetMemStatusTemplate):
+class GetMacosMemStatus(GetMemStatus):
     def __init__(self):
         # super if necessary
-        print("macos initialization complete...")
+        pass
 
 
     def getTotalMemSize(self):
