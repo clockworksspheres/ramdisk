@@ -20,18 +20,13 @@ class InvalidInitParameterError(BaseException):
 class _LocalAuth(QMainWindow):
     def __init__(self, runWith):
         super().__init__()
+
         self.rw = runWith
         if isinstance(self.rw, RunWith):
             print("We are good to go Huston...")
         else:
             raise InvalidInitParameterError("Please pass in valid parameters...")
-        '''   
-    def __init__(self, parent: QMainWindow) -> None:
-        QMainWindow.__init__(self)
-        
-    def __init__(self):
-        super().__init__()
-        '''
+
         self.ui = Ui_LocalAuth()
         self.ui.setupUi(self)
 
@@ -48,9 +43,10 @@ class _LocalAuth(QMainWindow):
     def accept(self):
         print("Command accepted...")
 
-    def reject(self):
+    '''def reject(self):
         print("Command rejected...")
-
+        self
+    '''
 
 if __name__=="__main__":
     app = QApplication(sys.argv)
