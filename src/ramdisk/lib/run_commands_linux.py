@@ -11,8 +11,16 @@ Inspiration for some of the below found on the internet.
 
 import os
 import re
-import pty
 import sys
+
+sys.path.append("../..")
+
+from ramdisk.lib.libHelperExceptions import NotValidForThisOS
+
+if not sys.platform.startswith("linux"):
+    raise NotValidForThisOS("Not Valid For This OS...")
+
+import pty
 import time
 import types
 import select

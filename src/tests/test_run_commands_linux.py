@@ -16,7 +16,15 @@ sys.path.append(appendDir)
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
-from ramdisk.lib.run_commands_linux import RunWith, SetCommandTypeError
+from ramdisk.lib.libHelperExceptions import NotValidForThisOS
+
+if sys.platform.startswith("darwin"):
+    #####
+    # for Linux
+    from ramdisk.lib.run_commands_linux import RunWith, SetCommandTypeError
+else:
+    raise NotValidForThisOS("Not Valid For This OS...")
+    # sys.exit(0)
 
 
 class test_run_commands(unittest.TestCase):
