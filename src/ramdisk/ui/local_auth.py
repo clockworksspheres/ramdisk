@@ -7,12 +7,24 @@ sys.path.append("../..")
 from ramdisk.ui.ui_local_auth import Ui_LocalAuth
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority
+from ramdisk.lib.run_commands_linux import RunWith
+
+class InvalidInitParameterError(BaseException):
+    """
+    Custom Exception
+    """
+    def __init__(self, *args, **kwargs):
+        BaseException.__init__(self, *args, **kwargs)
 
 
 class _LocalAuth(QMainWindow):
-    def __init__(self):
+    def __init__(self, runWith):
         super().__init__()
-
+        self.rw = runWith
+        if isinstance(self.rw, RunWith):
+            print("We are good to go Huston...")
+        else:
+            raise InvalidInitParameterError("Please pass in valid parameters...")
         '''   
     def __init__(self, parent: QMainWindow) -> None:
         QMainWindow.__init__(self)
@@ -28,23 +40,25 @@ class _LocalAuth(QMainWindow):
 
         #####
         # Connect Button click signals to slots 
-        self.ui.buttonbox.accepted.connect(
-               lambda: self.authenticateCommand())
-        self.ui.buttonbox.rejected.connect(
-               lambda: self.rejectCommand())
+        self.ui.buttonBox.accepted.connect(
+               lambda: self.accept())
+        self.ui.buttonBox.rejected.connect(
+               lambda: self.reject())
 
-    def authenticateCommand(self):
+    def accept(self):
         print("Command accepted...")
 
-    def rejectCommand(self):
+    def reject(self):
         print("Command rejected...")
 
 
 if __name__=="__main__":
     app = QApplication(sys.argv)
     print("started app...")
-    
-    window = _LocalAuth()
+
+    rw = RunWith()
+
+    window = _LocalAuth(rw)
 
     print("initiated window")
     window.show()
