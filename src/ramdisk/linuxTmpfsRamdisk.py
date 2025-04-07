@@ -87,7 +87,7 @@ class RamDisk(RamDiskTemplate):
     """
     def __init__(self, size, mountpoint,  logger,
                  mode=700, uid=None, gid=None,
-                 fstype="tmpfs", nr_inodes=None, nr_blocks=None, creds=False, pass=pass):
+                 fstype="tmpfs", nr_inodes=None, nr_blocks=None, creds=False, passwd=passwd):
         """
         """
         super(RamDisk, self).__init__(size, mountpoint, logger)
@@ -278,7 +278,7 @@ class RamDisk(RamDiskTemplate):
         if not self.creds:
             output, error, returncode = self.runWith.communicate()
         if self.creds:
-            output, error, returncode = self.runWith.runWithSudo(pass)
+            output, error, returncode = self.runWith.runWithSudo(passwd)
         self.logger.log(lp.DEBUG, "output    : " + str(output))
         self.logger.log(lp.DEBUG, "error     : " + str(error))
         self.logger.log(lp.DEBUG, "returncode: " + str(returncode))

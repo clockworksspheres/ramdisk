@@ -36,10 +36,8 @@ class _LocalAuth(QDialog):
 
         #####
         # Connect Button click signals to slots
-        self.ui.buttonBox.accepted.connect(
-               lambda: self.acceptSignal())
-        self.ui.buttonBox.rejected.connect(
-               lambda: self.reject())
+        self.ui.buttonBox.accepted.connect(self.acceptSignal)
+        self.ui.buttonBox.rejected.connect(self.reject)
 
     def acceptSignal(self):
         print("Command accepted...")
@@ -63,6 +61,7 @@ class _LocalAuth(QDialog):
             user = self.ui.userLineEdit.text()
             passwd = self.ui.passLineEdit.text()
             retout, reterr, retval = self.rw.runWithSudo(passwd.strip())
+            print("command run...")
         except Exception as err:
             print("DamnItJim!!!")
             traceback.format_exc(err)
