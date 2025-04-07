@@ -1006,7 +1006,7 @@ class RunWith(object):
 
     ###########################################################################
 
-    def runWithSudo(self, password="", silent=True) :
+    def runWithSudo(self, password="", silent=True, timeout_sec=5) :
         """
         Use pty method to run "sudo" to run a command with elevated privilege.
 
@@ -1034,6 +1034,7 @@ class RunWith(object):
             elif isinstance(self.command, str):
                 cmd = cmd + [self.command]
 
+
             try:
                 (master, slave) = pty.openpty()
             except SubprocessError as err:
@@ -1047,6 +1048,10 @@ class RunWith(object):
                     proc = Popen(cmd, stdin=slave, stdout=slave, stderr=slave,
                                  close_fds=True,
                                  text=self.text)
+                    timeout = {"value": False}
+                    timer = threading.Timer(timeout_sec, self.killProc,
+                                            [proc, timeout])
+                    timer.start()
                 except SubprocessError as err:
                     self.logger.log(lp.WARNING,
                                     "Error opening process to pty: " +
@@ -1092,6 +1097,7 @@ class RunWith(object):
                     self.libc.sync()
                     proc.wait()
                     self.libc.sync()
+                    timer.cancel()
                     self.stdout = output.decode()
                     self.stderr = proc.stderr
                     self.retcode = proc.returncode

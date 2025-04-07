@@ -62,6 +62,8 @@ class _LocalAuth(QDialog):
             passwd = self.ui.passLineEdit.text()
             retout, reterr, retval = self.rw.runWithSudo(passwd.strip())
             print("command run...")
+            self.accept()
+            self.password.emit(passwd)
         except Exception as err:
             print("DamnItJim!!!")
             traceback.format_exc(err)
