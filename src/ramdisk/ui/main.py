@@ -148,7 +148,7 @@ class _CreateRamdisk(QMainWindow):
     @Slot(str)
     def getPass(self, passwd):
         self.passwd = passwd
-        print(passwd)
+        #  print(passwd)
 
     def createRamdisk(self):
         """
