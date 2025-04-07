@@ -31,6 +31,7 @@ from ramdisk.lib.dev.getMemStatus import GetMemStatus
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority
 from ramdisk.ramdisk import RamDisk
+from ramdisk.ui.ui_local_auth_widget import Ui_LocalAuth
 
 
 class CustomDialog(QDialog):
@@ -144,12 +145,27 @@ class _CreateRamdisk(QMainWindow):
         if dlg.exec():
             print("User clicked OK")
 
+    def getPass(self, passwd):
+        self.passwd = passwd
+        print(passwd)
 
     def createRamdisk(self):
         """
         Grab the values from the interface to create the ramdisk.
         """
-
+        creds = False
+        if sys.platform.startswith('darwin'):
+            creds = True
+        if sys.platform.startswith('linux'):
+            window = _LocalAuth()
+            window.password.connect(self.getPass())
+            # Check the result of the dialog
+            if result == QDialog.Accepted:
+                print("Dialog accepted")
+            else:
+                print("Dialog rejected")
+        if sys.platform.startswith('win32'):
+            pass
         #####
         # Grab the size
         try:
@@ -173,7 +189,11 @@ class _CreateRamdisk(QMainWindow):
             if not mountPoint:
                 #####
                 # create ramdisk with randomized mountpoint
-                ramdisk = RamDisk(str(memSize), "", self.logger)
+                if sys.platform.startswith('linux'):
+                    ramdisk = RamDisk(str(memSize), "", self.logger, mode=700, uid=None, gid=None,
+                 fstype="tmpfs", nr_inodes=None, nr_blocks=None, creds=False, pass=pass))
+                else:
+                    ramdisk = RamDisk(str(memSize), "", self.logger, )
                 ramdisk.getNlogData()
                 ramdisk.getNprintData()
             else:

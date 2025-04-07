@@ -1,6 +1,7 @@
 import sys
 import traceback
 from PySide6.QtWidgets import QApplication, QDialog, QMainWindow, QPushButton, QVBoxLayout, QLabel, QDialogButtonBox
+from PySide6.QtCore import Signal, QThread
 
 sys.path.append("../..")
 
@@ -19,6 +20,9 @@ class InvalidInitParameterError(BaseException):
 
 
 class _LocalAuth(QDialog):
+
+    password = Signal(str)
+
     def __init__(self):
         super().__init__()
 
@@ -65,12 +69,13 @@ class _LocalAuth(QDialog):
         print("recode: " + str(retval))
         if not int(retval):
             # if recode == 0 - ie: command succeeded
+
             self.accept()
+            self.password.emit(passwd)
             print("Command run....")
         else:
             self.reject()
 
-        self.accept()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -84,7 +89,7 @@ if __name__ == "__main__":
 
     # Check the result of the dialog
     if result == QDialog.Accepted:
-        print("Dialog accepted")
+        print("Dialog accepted: ")
     else:
         print("Dialog rejected")
     sys.exit()

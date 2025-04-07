@@ -12,6 +12,7 @@ import traceback
 from tempfile import mkdtemp
 from time import time
 
+from .lib.manage_user.examples.create_macos_user import password
 #--- non-native python libraries in this source tree
 from .lib.run_commands import RunWith
 from .lib.loggers import CyLogger
@@ -86,7 +87,7 @@ class RamDisk(RamDiskTemplate):
     """
     def __init__(self, size, mountpoint,  logger,
                  mode=700, uid=None, gid=None,
-                 fstype="tmpfs", nr_inodes=None, nr_blocks=None):
+                 fstype="tmpfs", nr_inodes=None, nr_blocks=None, creds=False, pass=pass):
         """
         """
         super(RamDisk, self).__init__(size, mountpoint, logger)
@@ -132,6 +133,16 @@ class RamDisk(RamDiskTemplate):
             self.nr_blocks = nr_blocks
         else:
             self.nr_blocks = None
+
+        if isinstance(creds, bool):
+            self.creds = creds
+        else:
+            self.creds = False
+
+        if isinstance(pass, str):
+            self.pass = pass
+        else:
+            self.pass = ""
 
         #####
         # Initialize the mount and umount command paths...
@@ -264,7 +275,10 @@ class RamDisk(RamDiskTemplate):
         command = self.buildCommand()
         self.logger.log(lp.WARNING, "Command: " + str(command))
         self.runWith.setCommand(command)
-        output, error, returncode = self.runWith.communicate()
+        if not self.creds:
+            output, error, returncode = self.runWith.communicate()
+        if self.creds:
+            output, error, returncode = self.runWith.runWithSudo(pass)
         self.logger.log(lp.DEBUG, "output    : " + str(output))
         self.logger.log(lp.DEBUG, "error     : " + str(error))
         self.logger.log(lp.DEBUG, "returncode: " + str(returncode))
