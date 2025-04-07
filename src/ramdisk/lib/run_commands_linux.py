@@ -36,7 +36,7 @@ sys.path.append("../..")
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.loggers import MockLogger
-# from ramdisk.lib.getLibc import getLibc
+from ramdisk.lib.getLibc.linuxGetLibc import getLibc
 
 
 class OSNotValidForRunWith(BaseException):
@@ -115,6 +115,7 @@ class RunWith(object):
         #####
         # setting up to call ctypes to do a filesystem sync
         # self.libc = getLibc()
+        self.libc = getLibc()
 
         #####
         # Extra stuff to assist in debugging
@@ -900,7 +901,7 @@ class RunWith(object):
                 cmd = []
                 for i in range(len(self.command)):
                     try:
-                        cmd.append(str(self.command[i]('utf-8')))
+                        cmd.append(str(self.command[i]))
                     except UnicodeDecodeError:
                         cmd.append(str(self.command[i]))
 
@@ -910,8 +911,8 @@ class RunWith(object):
                 try:
                     internal_command.append(str("/usr/bin/sudo -E -S -s " +
                                                 "'" +
-                                                str(self.command('utf-8')) +
-                                                "'"))
+                                                str(self.command) +
+                                                "'").encode())
                 except UnicodeDecodeError:
                     internal_command.append(str("/usr/bin/sudo -E -S -s " +
                                                 "'" +
@@ -947,7 +948,8 @@ class RunWith(object):
 
                     #####
                     # pass in the password
-                    os.write(master, password.strip() + "\n")
+                    #os.write(master, password.strip() + "\n")
+                    os.write(master, password + "\n".encode())
 
                     #####
                     # catch the password
@@ -1023,7 +1025,7 @@ class RunWith(object):
                 self.logger.log(lp.WARNING, "command: " + str(self.command))
             return(255)
         else:
-            output = ""
+            output = "".encode()
             cmd = ["/usr/bin/sudo", "-S", "-s"]
 
             if isinstance(self.command, list):
@@ -1061,7 +1063,7 @@ class RunWith(object):
 
                     #####
                     # Enter the sudo password
-                    os.write(master, password + "\n")
+                    os.write(master, str(password + "\n").encode())
 
                     #####
                     # Catch the password
@@ -1090,7 +1092,7 @@ class RunWith(object):
                     self.libc.sync()
                     proc.wait()
                     self.libc.sync()
-                    self.stdout = output
+                    self.stdout = output.decode()
                     self.stderr = proc.stderr
                     self.retcode = proc.returncode
                     #print output.strip()
@@ -1101,7 +1103,7 @@ class RunWith(object):
                 # REVEAL MORE THAN YOU WANT TO IN THE LOGS!!!
                 self.logger.log(lp.DEBUG, "\n\nLeaving runAs with Sudo: \"" + \
                                 str(output) + "\"\n" + str(self.stdout) + "\n")
-            return output
+            return self.stdout, self.stderr, self.retcode
 
 ##############################################################################
 
