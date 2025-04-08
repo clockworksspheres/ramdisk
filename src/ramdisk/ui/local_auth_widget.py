@@ -21,7 +21,7 @@ class InvalidInitParameterError(BaseException):
 
 class _LocalAuth(QDialog):
 
-    password = Signal(str)
+    credsSig = Signal(str, str)
 
     def __init__(self):
         super().__init__()
@@ -63,7 +63,7 @@ class _LocalAuth(QDialog):
             retout, reterr, retval = self.rw.runWithSudo(passwd.strip())
             print("command run...")
             self.accept()
-            self.password.emit(passwd)
+            self.credsSig.emit(user, passwd)
         except Exception as err:
             print("DamnItJim!!!")
             traceback.format_exc(err)

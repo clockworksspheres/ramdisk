@@ -277,7 +277,7 @@ class RamDisk(RamDiskTemplate):
         if not self.creds:
             output, error, returncode = self.runWith.communicate()
         if self.creds:
-            output, error, returncode = self.runWith.runWithSudo(self.passwd)
+            output, error, returncode = self.runWith.runAsWithSudo(self.user, self.passwd)
         self.logger.log(lp.DEBUG, "output    : " + str(output))
         self.logger.log(lp.DEBUG, "error     : " + str(error))
         self.logger.log(lp.DEBUG, "returncode: " + str(returncode))

@@ -1006,7 +1006,7 @@ class RunWith(object):
 
     ###########################################################################
 
-    def runWithSudo(self, password="", silent=True, timeout_sec=5) :
+    def runWithSudo(self, password="", silent=True, timeout_sec=15) :
         """
         Use pty method to run "sudo" to run a command with elevated privilege.
 
