@@ -104,10 +104,10 @@ class RamDisk(RamDiskTemplate):
         else:
             raise BadRamdiskArguments("Not a valid argument for " + \
                                            "'fstype'...")
-
+        """
         if not os.geteuid() == 0:
             raise UserMustBeRootError("You must be root, or have elevated with sudo to use this software...")
-
+        """
         if isinstance(mode, int):
             self.mode = mode
         else:

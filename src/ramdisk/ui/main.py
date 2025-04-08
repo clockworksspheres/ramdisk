@@ -68,14 +68,10 @@ class _CreateRamdisk(QMainWindow):
 
         #####
         # Connect Button click signals to slots 
-        self.ui.createPushButton.clicked.connect(
-               lambda: self.createRamdisk())
-        self.ui.debugPushButton.clicked.connect(
-               lambda: self.notYetImplemented())
-        self.ui.quitPushButton.clicked.connect(
-               lambda: self.quit_application())
-        self.ui.rListPushButton.clicked.connect(
-               lambda: self.notYetImplemented())
+        self.ui.createPushButton.clicked.connect(self.createRamdisk)
+        self.ui.debugPushButton.clicked.connect(self.notYetImplemented)
+        self.ui.quitPushButton.clicked.connect(self.quit_application)
+        self.ui.rListPushButton.clicked.connect(self.notYetImplemented)
     
         #####
         # Connect Button click signals to slots 
