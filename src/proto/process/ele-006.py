@@ -26,6 +26,11 @@ class RootCommandApp(QWidget):
 
         self.setLayout(layout)
 
+        self.process = QProcess(self)
+        self.process.readyReadStandardOutput.connect(self.handle_stdout)
+        self.process.readyReadStandardError.connect(self.handle_stderr)
+        self.process.finished.connect(self.command_finished)
+
     def execute_root_command(self):
         command = self.command_field.text().strip()
         password = self.password_field.text().strip()
@@ -45,15 +50,26 @@ class RootCommandApp(QWidget):
         # single quotes around password to account for special characters
         # in password..
         sudo_cmd = r'echo  ' + "'" + password + "'" + ' | sudo -S ' + command
-        process = QProcess(self)
-        process.finished.connect(self.command_finished)
-        process.start('sh', ['-c', sudo_cmd])
+        
+        self.process.start('sh', ['-c', sudo_cmd])
 
     def command_finished(self, exitCode, exitStatus):
         if exitStatus == QProcess.NormalExit and exitCode == 0:
             QMessageBox.information(self, 'Success', 'Command executed successfully.')
         else:
             QMessageBox.critical(self, 'Error', 'Command failed to execute.')
+
+    def handle_stdout(self):
+        data = self.process.readAllStandardOutput()
+        stdout = bytes(data).decode("utf8")
+        #self.text.appendPlainText(stdout)
+        print(stdout)
+
+    def handle_stderr(self):
+        data = self.process.readAllStandardError()
+        stderr = bytes(data).decode("utf8")
+        #self.text.appendPlainText(stderr)
+        print(stderr)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
