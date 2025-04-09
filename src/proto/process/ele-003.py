@@ -38,13 +38,14 @@ class MainWindow(QMainWindow):
 
     def start_process(self):
         command = self.command_input.text().strip()
+        command = command.split()
         if not command:
             self.text.appendPlainText("Please enter a command.")
             return
         mycommand = ["-E", "-c"].append(command)
         print(str(command))
         self.text.appendPlainText(f"Executing command: {command}")
-        self.process.start("sudo", [command])
+        self.process.start("sudo", command)
 
     def handle_stdout(self):
         data = self.process.readAllStandardOutput()
