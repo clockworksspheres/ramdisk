@@ -260,4 +260,127 @@ Input Validation: Validate the user input to ensure it is safe and appropriate f
 This example provides a flexible and user-friendly way to run commands with root privileges in a PySide6 application. You can further customize it based on your specific requirements.
 AI-generated answer. Please verify critical facts.
 
+with text input
+
+Certainly! To create a PySide6 application that prompts the user for a password and a command, and then executes the command with root privileges using sudo, you can use a QLineEdit for the password and another QLineEdit for the command. Here's a complete example:
+
+    Install PySide6:
+
+    pip install PySide6
+     
+
+Create the PySide6 application:
+
+import sys
+from PySide6.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget, QLabel, QLineEdit, QMessageBox, QFormLayout
+from PySide6.QtCore import QProcess
+
+class RootCommandApp(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle('Execute Command with Root')
+        self.setGeometry(100, 100, 400, 200)
+
+        layout = QFormLayout()
+
+        self.command_field = QLineEdit(self)
+        layout.addRow("Command:", self.command_field)
+
+        self.password_field = QLineEdit(self)
+        self.password_field.setEchoMode(QLineEdit.Password)
+        layout.addRow("Password:", self.password_field)
+
+        self.button = QPushButton('Execute Command', self)
+        self.button.clicked.connect(self.execute_root_command)
+        layout.addRow(self.button)
+
+        self.setLayout(layout)
+
+    def execute_root_command(self):
+        command = self.command_field.text().strip()
+        password = self.password_field.text().strip()
+
+        if not command:
+            QMessageBox.critical(self, 'Error', 'Please enter a command.')
+            return
+
+        if not password:
+            QMessageBox.critical(self, 'Error', 'Please enter your password.')
+            return
+
+        self.run_sudo_command(command, password)
+
+    def run_sudo_command(self, command, password):
+        sudo_cmd = f"echo {password} | sudo -S {command}"
+        process = QProcess(self)
+        process.finished.connect(self.command_finished)
+        process.start('sh', ['-c', sudo_cmd])
+
+    def command_finished(self, exitCode, exitStatus):
+        if exitStatus == QProcess.NormalExit and exitCode == 0:
+            QMessageBox.information(self, 'Success', 'Command executed successfully.')
+        else:
+            QMessageBox.critical(self, 'Error', 'Command failed to execute.')
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = RootCommandApp()
+    ex.show()
+    sys.exit(app.exec())
+ 
+
+Explanation:
+
+    Main Application Window:
+
+        RootCommandApp class inherits from QWidget.
+
+        initUI method sets up the layout with two QLineEdit fields for the command and password, and a QPushButton to execute the command.
+
+    Form Layout:
+
+        QFormLayout is used to create a form-like layout.
+
+        command_field is a QLineEdit for the user to input the command.
+
+        password_field is a QLineEdit with setEchoMode(QLineEdit.Password) to securely input the password.
+
+    Button Click Event:
+
+        execute_root_command method is connected to the button's clicked signal.
+
+        It retrieves the command and password from the QLineEdit fields.
+
+        It checks if both the command and password are provided and displays an error message if either is missing.
+
+        If both are provided, it calls run_sudo_command with the command and password.
+
+    Running the Command with Root Privileges:
+
+        run_sudo_command method constructs the sudo command using the provided password.
+
+        A QProcess is used to run the command.
+
+        The finished signal of the QProcess is connected to command_finished to handle the result.
+
+    Handling the Command Result:
+
+        command_finished method displays a message box indicating whether the command was successful or not.
+
+Running the Application:
+
+    Save the script to a file, for example, root_command_with_text_input.py.
+
+    Run the script:
+
+    python root_command_with_text_input.py
+     
+
+When you run the application, you will see a window with fields to input a command and a password. After entering the command and password, clicking the "Execute Command" button will execute the command with root privileges using sudo. The result will be displayed in a message box.
+AI-generated answer. Please verify critical facts.
+
+
 
