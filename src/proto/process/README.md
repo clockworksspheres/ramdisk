@@ -514,3 +514,32 @@ subprocess.run(f'echo {password} | sudo -S {command}', shell=True, check=True)
 However, using `shell=True` can introduce security risks, especially if the password or command is derived from user input. The first method is generally safer and more secure.
 
 AI-generated answer. Please verify critical facts.
+
+
+
+"""
+#ele-009.py
+
+import subprocess
+import getpass
+
+passwd = getpass.getpass('Password: ')
+# print('Password entered:', passwd)
+
+
+# Define the password and the command
+command = 'ps -ef'.split()
+
+sudocmd = ["sudo", "-s"] + command
+
+# Create the subprocess
+proc = subprocess.Popen(sudocmd, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+
+# Communicate the password to the subprocess
+output, error = proc.communicate((passwd + '\n').encode())
+
+# Print the output and error
+print("Output:", output)
+# print("Error:", error)
+
+"""
