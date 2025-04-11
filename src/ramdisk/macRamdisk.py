@@ -158,6 +158,8 @@ class RamDisk(RamDiskTemplate):
                 #####
                 # eventually have checking to make sure that directory
                 # doesn't already exist, and have data in it.
+                if not os.path.exists(self.mntPoint):
+                    os.makedirs(self.mntPoint)
             else :
                 #####
                 # If a mountpoint is not passed in, create a randomized
@@ -182,21 +184,9 @@ class RamDisk(RamDiskTemplate):
                 else:
                     #####
                     # Ramdisk created, try mounting it.
-                    if not self.__mount():
-                        success = False
-                        self.logger.log(lp.WARNING, "Mount appears to have failed..")
-                    else:
-                        #####
-                        # Filessystem journal will only slow the ramdisk down...
-                        # No need to keep it as when the journal is unmounted
-                        # all memory is de-allocated making it impossible to do
-                        # forensics on the volume.
-                        if not self.__remove_journal():
-                            success = False
-                            self.logger.log(lp.WARNING, "Remove journal " + \
-                                            "appears to have failed..")
-
-
+                    self.__mount()
+                    self.__remove_journal()
+                    
         self.getNlogData()
         self.success = success
         if success:
@@ -211,6 +201,17 @@ class RamDisk(RamDiskTemplate):
         """
         Create a ramdisk device
 
+        Create the RAM disk:
+            disk=$(hdiutil attach -nomount ram://<size>)
+        Format the RAM disk with APFS and name it:
+            diskutil erasevolume APFS "MyRAMDiskName" /dev/$disk
+        Disable journaling on the RAM disk:
+            diskutil apfs disableJournal /dev/$disk
+        Rename the RAM disk using diskutil:
+            diskutil rename /dev/$disk "RAMDiskNameReplacement"
+                ....Replace RAMDiskNameReplacement with the desired 
+                    name for your RAM disk.
+
         @author: Roy Nielsen
         """
         retval = None
@@ -218,6 +219,7 @@ class RamDisk(RamDiskTemplate):
         success = False
         #####
         # Create the ramdisk and attach it to a device.
+        # diskutil erasevolume HFS+ "RAMDiskName" `hdiutil attach -nomount ram://XXXXX`
         print("Creating the ramdrive...")
         cmd = [self.hdiutil, "attach", "-nomount", "ram://" + self.diskSize]
         self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))

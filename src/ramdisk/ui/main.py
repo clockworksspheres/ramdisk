@@ -178,13 +178,14 @@ class _CreateRamdisk(QMainWindow):
         # Grab the mount point
         try:
             mountPoint = self.ui.mountLineEdit.text()
-        except ValueError as err:
-            pass
+        except Exception as err:
+            traceback.format_exc()
+            print(str(err))
 
         if not memSize:
             #####
             # pop up a dialog saying can't create a ramdisk that small....
-            pass
+            print("No dice... no size parameter, not creating a ramdisk!")
         else:
             print("we have a size for memory..")
             if not mountPoint:
