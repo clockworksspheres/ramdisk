@@ -219,9 +219,36 @@ class RamDisk(RamDiskTemplate):
         success = False
         #####
         # Create the ramdisk and attach it to a device.
-        # diskutil erasevolume HFS+ "RAMDiskName" `hdiutil attach -nomount ram://XXXXX`
+        # disk=$(hdiutil attach -nomount ram://<size>)
         print("Creating the ramdrive...")
         cmd = [self.hdiutil, "attach", "-nomount", "ram://" + self.diskSize]
+        self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
+        self.runWith.setCommand(cmd)
+        self.runWith.communicate()
+        retval, reterr, retcode = self.runWith.getNlogReturns()
+
+        if retcode == '':
+            success = False
+        else:
+            self.myRamdiskDev = retval.strip()
+            self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
+            success = True
+
+        #####
+        # Erase the ramdisk and Name the device.
+        # diskutil erasevolume APFS "MyRAMDiskName" /dev/$disk
+        print("Creating the ramdrive...")
+        cmd = [self.diskutil, "eraseVolume", "APFS", self.mntPoint, self.myRamdiskDev]
+        self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
+        self.runWith.setCommand(cmd)
+        self.runWith.communicate()
+        retval, reterr, retcode = self.runWith.getNlogReturns()
+
+        #####
+        # Disable Journaling on the device.
+        # diskutil apfs disableJournal /dev/$disk
+        print("Creating the ramdrive...")
+        cmd = [self.diskutil, "apfs", "disableJournal", self.myRamdiskDev]
         self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
         self.runWith.setCommand(cmd)
         self.runWith.communicate()
@@ -234,13 +261,6 @@ class RamDisk(RamDiskTemplate):
         self.logger.log(lp.DEBUG, "return value: " + str(retval))
         self.logger.log(lp.DEBUG, "######################################")
 
-        if retcode == '':
-            success = False
-            raise Exception("Error trying to create ramdisk(" + str(reterr).strip() + ")")
-        else:
-            self.myRamdiskDev = retval.strip()
-            self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
-            success = True
         self.logger.log(lp.DEBUG, "Success: " + str(success) + " in __create")
         return success
 
