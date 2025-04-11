@@ -19,6 +19,13 @@ from .lib.loggers import LogPriority as lp
 from .commonRamdiskTemplate import RamDiskTemplate, NotValidForThisOS, BadRamdiskArguments
 from .lib.libHelperExceptions import SystemToolNotAvailable, UserMustBeRootError
 
+def UserMustBeRootException(Exception):
+    """
+    Custom Exception
+    """
+    def __init__(self,*args,**kwargs):
+        Exception.__init__(self,*args,**kwargs)
+
 ###############################################################################
 
 class RamDisk(RamDiskTemplate):
@@ -274,10 +281,15 @@ class RamDisk(RamDiskTemplate):
         command = self.buildCommand()
         self.logger.log(lp.WARNING, "Command: " + str(command))
         self.runWith.setCommand(command)
-        if not self.creds:
-            output, error, returncode = self.runWith.communicate()
-        if self.creds:
-            output, error, returncode = self.runWith.runAsWithSudo(self.user, self.passwd)
+        if not self.passwd:
+            # output, error, returncode = self.runWith.communicate()
+            #####
+            # Need password, cannot create ramdisk as a user
+            raise UserMustBeRootException("User Must Be Root (use sudo) to Create a Ramdisk.")
+        elif self.passwd:
+            output, error, returncode = self.runWith.runWithSudo(self.passwd)
+            #####
+            # set user/group permissions??
         self.logger.log(lp.DEBUG, "output    : " + str(output))
         self.logger.log(lp.DEBUG, "error     : " + str(error))
         self.logger.log(lp.DEBUG, "returncode: " + str(returncode))
