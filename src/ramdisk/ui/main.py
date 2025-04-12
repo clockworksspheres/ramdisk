@@ -199,11 +199,18 @@ class _CreateRamdisk(QMainWindow):
                 ramdisk.getNlogData()
                 ramdisk.getNprintData()
             else:
-                #####
-                # create ramdisk with specific mountpoint 
-                ramdisk = RamDisk(str(memSize), str(mountPoint), self.logger)
-                ramdisk.getNlogData()
-                ramdisk.getNprintData()
+                if sys.platform.startswith('linux'):
+                    #####
+                    # create ramdisk with specific mountpoint
+                    ramdisk = RamDisk(str(memSize), str(mountPoint), self.logger, passwd=self.passwd)
+                    ramdisk.getNlogData()
+                    ramdisk.getNprintData()
+                else:
+                    #####
+                    # create ramdisk with specific mountpoint
+                    ramdisk = RamDisk(str(memSize), str(mountPoint), self.logger)
+                    ramdisk.getNlogData()
+                    ramdisk.getNprintData()
 
 '''
 def init_event_logger(path: str, fmt: str, debug: bool = False,
