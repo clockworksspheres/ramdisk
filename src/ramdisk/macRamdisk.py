@@ -69,7 +69,7 @@ class RamDisk(RamDiskTemplate):
 
     @author: Roy Nielsen
     """
-    def __init__(self, size=0, mountpoint="", logger=False) :
+    def __init__(self, size=0, mountpoint="", logger=False, disableJournal=False) :
         """
         Constructor
         """
@@ -90,6 +90,11 @@ class RamDisk(RamDiskTemplate):
             raise NotValidForThisOS("This ramdisk is only viable for a MacOS.")
 
         self.module_version = '20160225.125554.540679'
+
+        if isinstance(disableJournal, bool):
+            self.disableJournal = disableJournal
+        else:
+            self.disableJournal = False
 
         #####
         # Initialize the RunWith helper for executing shelled out commands.
@@ -216,7 +221,7 @@ class RamDisk(RamDiskTemplate):
         """
         retval = None
         reterr = None
-        success = False
+        # success = False
         #####
         # Create the ramdisk and attach it to a device.
         # disk=$(hdiutil attach -nomount ram://<size>)
@@ -226,13 +231,14 @@ class RamDisk(RamDiskTemplate):
         self.runWith.setCommand(cmd)
         self.runWith.communicate()
         retval, reterr, retcode = self.runWith.getNlogReturns()
-
+        
         if retcode == '':
             success = False
         else:
             self.myRamdiskDev = retval.strip()
-            self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
+            #self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
             success = True
+        
 
         #####
         # Erase the ramdisk and Name the device.
@@ -244,16 +250,33 @@ class RamDisk(RamDiskTemplate):
         self.runWith.communicate()
         retval, reterr, retcode = self.runWith.getNlogReturns()
 
-        #####
-        # Disable Journaling on the device.
-        # diskutil apfs disableJournal /dev/$disk
-        print("Creating the ramdrive...")
-        cmd = [self.diskutil, "apfs", "disableJournal", self.myRamdiskDev]
-        self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
-        self.runWith.setCommand(cmd)
-        self.runWith.communicate()
-        retval, reterr, retcode = self.runWith.getNlogReturns()
+        tmpNum = ""
+        tmpDev = ""
+        try:
+            tmpMatch = re.match(r"(\S+)(\d+)", self.myRamdiskDev.strip())
+            tmpDev = tmpMatch.group(1)
+            tmpNum = tmpMatch.group(2)
+        except ValueError:
+            pass
 
+        tmpNum = int(tmpNum) + 1
+        self.myRamdiskDev = str(tmpDev) + str(tmpNum)
+        self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
+
+        """
+        if self.disableJournal is True:
+            #####
+            # Disable Journaling on the device.
+            # diskutil apfs disableJournal /dev/$disk
+            print("Creating the ramdrive...")
+            cmd = [self.diskutil, "apfs", "disableJournal", self.myRamdiskDev]
+            self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
+            self.runWith.setCommand(cmd)
+            self.runWith.communicate()
+            retval, reterr, retcode = self.runWith.getNlogReturns()
+        else:
+            pass
+        """
         self.logger.log(lp.DEBUG, "######################################")
         self.logger.log(lp.DEBUG, "Printing attaching process...")
         self.logger.log(lp.DEBUG, "return code: " + str(retcode))
@@ -261,7 +284,7 @@ class RamDisk(RamDiskTemplate):
         self.logger.log(lp.DEBUG, "return value: " + str(retval))
         self.logger.log(lp.DEBUG, "######################################")
 
-        self.logger.log(lp.DEBUG, "Success: " + str(success) + " in __create")
+        # self.logger.log(lp.DEBUG, "Success: " + str(success) + " in __create")
         return success
 
     ###########################################################################
