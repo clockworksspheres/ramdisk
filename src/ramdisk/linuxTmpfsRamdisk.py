@@ -91,9 +91,7 @@ class RamDisk(RamDiskTemplate):
     gid, size?
 
     """
-    def __init__(self, size, mountpoint,  logger,
-                 mode=700, uid=None, gid=None,
-                 fstype="tmpfs", nr_inodes=None, nr_blocks=None, creds=False, passwd=""):
+    def __init__(self, size, mountpoint, logger, mode=700, uid=None, gid=None, fstype="tmpfs", nr_inodes=None, nr_blocks=None, creds=False, passwd=""):
         """
         """
         super(RamDisk, self).__init__(size, mountpoint, logger)
@@ -111,10 +109,10 @@ class RamDisk(RamDiskTemplate):
         else:
             raise BadRamdiskArguments("Not a valid argument for " + \
                                            "'fstype'...")
-        
+        """
         if not os.geteuid() == 0 or passwd:
             raise UserMustBeRootError("You must be root, or have elevated with sudo to use this software...")
-
+        """
         if isinstance(mode, int):
             self.mode = mode
         else:
@@ -148,7 +146,7 @@ class RamDisk(RamDiskTemplate):
         if isinstance(passwd, str):
             self.passwd = passwd
         else:
-            self.passwd = ""
+            passwd = ""
 
         #####
         # Initialize the mount and umount command paths...
@@ -281,15 +279,18 @@ class RamDisk(RamDiskTemplate):
         command = self.buildCommand()
         self.logger.log(lp.WARNING, "Command: " + str(command))
         self.runWith.setCommand(command)
+        """
         if not self.passwd:
             # output, error, returncode = self.runWith.communicate()
             #####
             # Need password, cannot create ramdisk as a user
             raise UserMustBeRootException("User Must Be Root (use sudo) to Create a Ramdisk.")
         elif self.passwd:
-            output, error, returncode = self.runWith.runWithSudo(self.passwd)
-            #####
-            # set user/group permissions??
+        """
+        self.logger.log(lp.WARNING, "p: " + self.passwd)
+        output, error, returncode = self.runWith.runWithSudo(self.passwd)
+        #####
+        # set user/group permissions??
         self.logger.log(lp.DEBUG, "output    : " + str(output))
         self.logger.log(lp.DEBUG, "error     : " + str(error))
         self.logger.log(lp.DEBUG, "returncode: " + str(returncode))
