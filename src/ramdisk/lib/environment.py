@@ -40,14 +40,17 @@ import platform
 import time
 import traceback
 
-if sys.platform.startswith('win32'):
-    import win32api
-else:
-    import pwd
 
 sys.path.append("../..")
 
-from ramdisk.config import DEFAULT_LOG_LEVEL, LogPriority 
+from ramdisk.config import DEFAULT_LOG_LEVEL, LogPriority
+
+if sys.platform.startswith('win32'):
+    import win32api
+    from ramdisk.lib.windows_utilities import is_windows_process_elevated
+
+else:
+    import pwd
 
 try:
     from ramdisk.lib.localize import VERSION
@@ -62,7 +65,15 @@ try:
 except ImportError or AssertionError:
     FISMACAT = 'low'
 
-if os.geteuid() == 0:
+
+process_is_elevated = False
+if sys.platform.startswith("win32"):
+    if is_windows_process_elevated():
+        process_is_elevated = True
+else:
+    if os.geteuid() == 0:
+        process_is_elevated = True
+if process_is_elevated:
     try:
         import dmidecode
         DMI = True
