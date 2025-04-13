@@ -108,11 +108,14 @@ Very greatful for any contributions/pull requests to help with the table!
 
 pyside6
 pyinstaller
+packaging
 
 
 PySide6 cross platform library for the Graphical User Interface
 
 Pyinstaller cross platform library to create the installer to bundle the GUI into a windows app package
+
+packaging.version.parse is to replace distutils.version.LooseVersion, for comparing versions of operating systems in CheckApplicable.  As of 4/13/25, CheckApplicable is entirely distutils, and needs to be refactored to packaging for python 3.10+.
 
 #### Macos Specific
 
