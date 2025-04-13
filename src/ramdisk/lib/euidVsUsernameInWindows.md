@@ -697,3 +697,124 @@ else:
 This script will print a message indicating whether the current process is running with administrative privileges. This method is a more Pythonic and straightforward way to check for elevated privileges on Windows without using `ctypes`.
 
 AI-generated answer. Please verify critical facts.
+
+
+-----
+
+# proper use of win32security.CheckTokenMembership
+
+Certainly! The `win32security.CheckTokenMembership` function is used to determine whether a security token is a member of a specified group. Here's a detailed and proper way to use `win32security.CheckTokenMembership` to check if a process is running with administrative privileges in Python.
+
+# Step-by-Step Guide
+
+1. **Install `pywin32`**: If you haven't already installed the `pywin32` library, you can do so using pip:
+    
+    ```
+    pip install pywin32
+    ```
+    
+2. **Check for Administrative Privileges**: Use the `win32security` module to open the process token and check for membership in the administrators group.
+    
+
+# Complete Code
+
+``` python
+import win32security
+import win32process
+import win32api
+
+def is_process_elevated():
+    # Open the process token
+    hProcess = win32process.GetCurrentProcess()
+    hToken = win32security.OpenProcessToken(hProcess, win32security.TOKEN_QUERY)
+
+    try:
+        # Get the administrators group SID
+        sid = win32security.LookupAccountName(None, "Administrators")[0]
+
+        # Check if the token is a member of the administrators group
+        is_admin = win32security.CheckTokenMembership(hToken, sid)
+
+        return is_admin
+    finally:
+        # Close the token handle
+        win32api.CloseHandle(hToken)
+
+# Check if the current process is running with administrative privileges
+if is_process_elevated():
+    print("The process is running with administrative privileges.")
+else:
+    print("The process is not running with administrative privileges.")
+```
+
+# Explanation
+
+1. **Open the Process Token**:
+    
+    - `win32process.GetCurrentProcess()`: Gets the handle to the current process.
+        
+    - `win32security.OpenProcessToken(hProcess, win32security.TOKEN_QUERY)`: Opens the access token associated with the current process with the `TOKEN_QUERY` flag.
+        
+2. **Get the Administrators Group SID**:
+    
+    - `win32security.LookupAccountName(None, "Administrators")`: Looks up the SID for the "Administrators" group. The `None` parameter indicates that the search is performed on the local machine.
+        
+    - The function returns a tuple, where the first element is the SID.
+        
+3. **Check Token Membership**:
+    
+    - `win32security.CheckTokenMembership(hToken, sid)`: Checks if the token is a member of the specified group (in this case, the administrators group). This function returns a boolean value indicating whether the token is a member of the group.
+        
+4. **Close the Token Handle**:
+    
+    - `win32api.CloseHandle(hToken)`: Closes the handle to the token to free up resources. This is done in a `finally` block to ensure it is always executed, even if an error occurs.
+        
+
+# Error Handling
+
+- The `try` and `finally` blocks ensure that the token handle is closed even if an error occurs during the process.
+    
+- If you need to handle specific errors, you can use a `try-except` block inside the `try` block to catch and handle exceptions.
+    
+
+# Example with Error Handling
+
+``` python
+import win32security
+import win32process
+import win32api
+
+def is_process_elevated():
+    try:
+        # Open the process token
+        hProcess = win32process.GetCurrentProcess()
+        hToken = win32security.OpenProcessToken(hProcess, win32security.TOKEN_QUERY)
+
+        try:
+            # Get the administrators group SID
+            sid = win32security.LookupAccountName(None, "Administrators")[0]
+
+            # Check if the token is a member of the administrators group
+            is_admin = win32security.CheckTokenMembership(hToken, sid)
+
+            return is_admin
+        except Exception as e:
+            print(f"Error checking token membership: {e}")
+            return False
+        finally:
+            # Close the token handle
+            win32api.CloseHandle(hToken)
+    except Exception as e:
+        print(f"Error opening process token: {e}")
+        return False
+
+# Check if the current process is running with administrative privileges
+if is_process_elevated():
+    print("The process is running with administrative privileges.")
+else:
+    print("The process is not running with administrative privileges.")
+```
+
+This code provides a robust and proper way to use `win32security.CheckTokenMembership` to check if a process is running with administrative privileges on Windows.
+
+AI-generated answer. Please verify critical facts.

@@ -171,6 +171,11 @@
   },
   "active": "c52fe03ac0d1d93f",
   "lastOpenFiles": [
+    "src/ramdisk/lib/windows_utilities.py",
+    "src/proto/check_if_process_is_priveleged_003.py",
+    "__init__.py",
+    "src/__init__.py",
+    "src/proto/process/check_if_process_is_priveleged_003.py",
     "src/proto/check_if_priveleged_002.py",
     "src/proto/check_if_priveleged_001.py",
     "src/ramdisk/lib/__pycache__/localize.cpython-312.pyc",
@@ -180,11 +185,6 @@
     "src/ramdisk/lib/euidVsUsernameInWindows.md",
     "pyenv-notes.md",
     "src/build/html/objects.inv",
-    "src/build/html/searchindex.js",
-    "src/build/html/search.html",
-    "src/build/html/genindex.html",
-    "src/build/html/_sources/index.rst.txt",
-    "src/build/html/_sources",
     "src/build/html/_static/plus.png",
     "src/build/html/_static/minus.png",
     "src/build/html/_static/file.png"
