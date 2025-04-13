@@ -37,9 +37,13 @@ import socket
 import subprocess
 # import types
 import platform
-import pwd
 import time
 import traceback
+
+if sys.platform.startswith('win32'):
+    import win32api
+else:
+    import pwd
 
 sys.path.append("../..")
 
@@ -92,8 +96,10 @@ class Environment(object):
         self.systemtype = ''
         self.numrules = 0
         self.version = VERSION
-        self.euid = os.geteuid()
-        currpwd = pwd.getpwuid(self.euid)
+        if sys.platform.startswith("win32"):
+            self.euid = win32api.GetUserName()
+        else:
+            currpwd = pwd.getpwuid(self.euid)
         self.test_mode = ""
         self.script_path = ""
         self.resources_path = ""

@@ -100,3 +100,38 @@ Table tracking supported combinations of:
 OS's, OS versions, their kernel versions (maybe), python versions, with tagged versions of ramdisk.
 
 Very greatful for any contributions/pull requests to help with the table!
+
+## Python Libraries to include, and how to include them for running the UI, the Environment.py, etc.
+
+
+### Cross Platform
+
+pyside6
+pyinstaller
+
+
+PySide6 cross platform library for the Graphical User Interface
+
+Pyinstaller cross platform library to create the installer to bundle the GUI into a windows app package
+
+#### Macos Specific
+
+##### None need currently
+
+##### How to install non-native python libraries on Macos
+
+### Linux Specific
+
+##### None need currently
+
+##### How to install non-native python libraries on Linux
+
+#### Windows Specific
+
+pywin32  
+
+pywin32 windows library to add windows functionality for the Environment.py to match the python functionality found natively in unix environments.
+
+##### How to to install non-native python libraries in windows
+
+

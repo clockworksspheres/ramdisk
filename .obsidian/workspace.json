@@ -13,10 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
-                "mode": "preview",
+                "file": "src/ramdisk/lib/euidVsUsernameInWindows.md",
+                "mode": "source",
                 "source": false
-              }
+              },
+              "icon": "lucide-file",
+              "title": "euidVsUsernameInWindows"
             }
           }
         ]
@@ -38,8 +40,11 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical"
-              }
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
             }
           },
           {
@@ -54,7 +59,9 @@
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical"
-              }
+              },
+              "icon": "lucide-search",
+              "title": "Search"
             }
           },
           {
@@ -62,7 +69,9 @@
             "type": "leaf",
             "state": {
               "type": "bookmarks",
-              "state": {}
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
             }
           }
         ]
@@ -85,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "README.md",
+                "file": "src/ramdisk/lib/euidVsUsernameInWindows.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -93,7 +102,9 @@
                 "searchQuery": "",
                 "backlinkCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for euidVsUsernameInWindows"
             }
           },
           {
@@ -102,10 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "README.md",
+                "file": "src/ramdisk/lib/euidVsUsernameInWindows.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from euidVsUsernameInWindows"
             }
           },
           {
@@ -115,8 +128,12 @@
               "type": "tag",
               "state": {
                 "sortOrder": "frequency",
-                "useHierarchy": true
-              }
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
             }
           },
           {
@@ -125,8 +142,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "README.md"
-              }
+                "file": "src/ramdisk/lib/euidVsUsernameInWindows.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of euidVsUsernameInWindows"
             }
           }
         ]
@@ -138,28 +160,31 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "vscode-editor:Create Code File": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
-      "command-palette:Open command palette": false
+      "command-palette:Open command palette": false,
+      "vscode-editor:Create Code File": false
     }
   },
   "active": "c52fe03ac0d1d93f",
   "lastOpenFiles": [
+    "src/proto/check_if_priveleged_002.py",
+    "src/proto/check_if_priveleged_001.py",
+    "src/ramdisk/lib/__pycache__/localize.cpython-312.pyc",
+    "src/proto/get_user_sid_001.py",
+    "src/proto/psutil_getuser_uid_001.py",
+    "README.md",
+    "src/ramdisk/lib/euidVsUsernameInWindows.md",
+    "pyenv-notes.md",
     "src/build/html/objects.inv",
     "src/build/html/searchindex.js",
     "src/build/html/search.html",
     "src/build/html/genindex.html",
     "src/build/html/_sources/index.rst.txt",
     "src/build/html/_sources",
-    "src/build/html/index.html",
-    "src/build/doctrees/index.doctree",
-    "src/build/doctrees/environment.pickle",
-    "src/build/doctrees",
-    "src/build/html/_static/sphinx_highlight.js",
     "src/build/html/_static/plus.png",
     "src/build/html/_static/minus.png",
     "src/build/html/_static/file.png"
