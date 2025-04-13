@@ -40,7 +40,7 @@ class RamDisk(RamDiskTemplate):
             self.logger = logger
 
         self.environ = Environment()
-
+        """
         self.chkApp = CheckApplicable(self.environ, self.logger)
         
         #####
@@ -55,7 +55,7 @@ class RamDisk(RamDiskTemplate):
         windowsApplicableHere = self.chkApp.isApplicable(linuxApplicable)        
         windowsApplicable = {'type': 'white',
                            'family': ['win32']}
-
+        """
         if sys.platform.startswith("linux"):
             from .linuxTmpfsRamdisk import RamDisk
             self.ramdisk = RamDisk(size, mountpoint, logger, **kwargs)

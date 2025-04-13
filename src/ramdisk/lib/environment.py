@@ -65,12 +65,13 @@ try:
 except ImportError or AssertionError:
     FISMACAT = 'low'
 
-
+euid = 90000000
 process_is_elevated = False
 if sys.platform.startswith("win32"):
     if is_windows_process_elevated():
         process_is_elevated = True
 else:
+    euid = os.geteuid()
     if os.geteuid() == 0:
         process_is_elevated = True
 if process_is_elevated:
@@ -110,7 +111,7 @@ class Environment(object):
         if sys.platform.startswith("win32"):
             self.euid = win32api.GetUserName()
         else:
-            currpwd = pwd.getpwuid(self.euid)
+            currpwd = pwd.getpwuid(euid)
         self.test_mode = ""
         self.script_path = ""
         self.resources_path = ""
@@ -340,7 +341,7 @@ class Environment(object):
         @return int :
         @author D. Kennel
         """
-        return self.euid
+        return euid
 
     def geteuidhome(self):
         """
