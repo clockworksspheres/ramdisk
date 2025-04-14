@@ -123,11 +123,47 @@ packaging.version.parse is to replace distutils.version.LooseVersion, for compar
 
 ##### How to install non-native python libraries on Macos
 
+``` bash
+
+directory="./packenv"
+actfile="./packenv/bin/activate"
+
+if [ ! -d "$directory" ] || [ ! -f "$actfile" ] ; then
+  python3 -m venv packenv
+  source packenv/bin/activate
+  pip3 install --upgrade pip
+
+  pip3 install PySide6 PyInstaller
+  pip3 install --upgrade PyInstaller pyinstaller-hooks-contrib
+  pip3 install packaging
+else
+  source packenv/bin/activate
+fi
+```
+
 ### Linux Specific
 
 ##### None need currently
 
 ##### How to install non-native python libraries on Linux
+
+``` bash
+
+directory="./packenv"
+actfile="./packenv/bin/activate"
+
+if [ ! -d "$directory" ] || [ ! -f "$actfile" ] ; then
+  python3 -m venv packenv
+  source packenv/bin/activate
+  pip3 install --upgrade pip
+
+  pip3 install PySide6 PyInstaller
+  pip3 install --upgrade PyInstaller pyinstaller-hooks-contrib
+  pip3 install packaging
+else
+  source packenv/bin/activate
+fi
+```
 
 #### Windows Specific
 
