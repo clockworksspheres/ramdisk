@@ -18,7 +18,7 @@ sys.path.append("../")
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.environment import Environment
-#from ramdisk.lib.CheckApplicable import CheckApplicable
+from ramdisk.lib.CheckApplicable import CheckApplicable
 from ramdisk.commonRamdiskTemplate import RamDiskTemplate, BadRamdiskArguments, NotValidForThisOS
 
 ###############################################################################
