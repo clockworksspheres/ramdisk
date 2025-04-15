@@ -92,3 +92,24 @@ print(parsed_version1 > parsed_version2)  # Output: False
 Using `packaging.version` is the recommended and future-proof way to handle version comparisons in Python 3.10 and later, including Python 3.12. This approach ensures compatibility and reliability in your code.
 
 AI-generated answer. Please verify critical facts.
+
+-----
+
+# what is the difference between distutils.version.LooseVersion and packaging.version.parse?
+
+# 
+
+Difference Between LooseVersion and parse
+
+The `distutils.version.LooseVersion` class from the `distutils` package is quite lax in its version string parsing, allowing for a wide variety of version formats but not providing special handling for pre-release or post-release tags, development versions, or other semantic versioning features.
+
+On the other hand, `packaging.version.parse` from the `packaging` library is designed to handle version strings according to PEP 440, which includes support for pre-release and post-release tags, development versions, and other semantic versioning elements.
+
+`LooseVersion` makes any version string valid and sorts them numerically and lexically, but it may not always give the results you expect for complex versioning schemes.
+
+In contrast, `packaging.version.parse` provides a more structured and predictable way to parse and compare version strings, adhering to the standards set by PEP 440.
+
+Since `distutils` is deprecated and slated for removal in Python 3.12, it is recommended to use `packaging.version.parse` for version comparison in new projects.
+
+AI-generated answer. Please verify critical facts.
+
