@@ -19,7 +19,10 @@ Created on Aug 24, 2010
 import re
 import sys
 import traceback
-from distutils.version import LooseVersion
+try:
+    from distutils.version import LooseVersion
+except ModuleNotFoundError as err:
+    from packaging.version import parse as LooseVersion
 
 sys.path.append("../../")
 
