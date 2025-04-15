@@ -40,7 +40,7 @@ class RamDisk(RamDiskTemplate):
             self.logger = logger
 
         self.environ = Environment()
-        
+
         self.chkApp = CheckApplicable(self.environ, self.logger)
         
         #####
