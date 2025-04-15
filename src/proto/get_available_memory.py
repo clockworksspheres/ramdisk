@@ -14,29 +14,17 @@ class MEMORYSTATUSEX(ctypes.Structure):
     ]
 
 def get_available_memory():
+    """ get win32 memory in terms of megabytes """
     memory_status = MEMORYSTATUSEX()
     memory_status.dwLength = ctypes.sizeof(MEMORYSTATUSEX)
     ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(memory_status))
-    return memory_status.ullAvailPhys
+    mbmem = int(memory_status.ullAvailPhys/(1024*1024))
+    return mbmem
 
-print(f"Available Physical Memory: {get_available_memory()} bytes")
 
-"""
-import subprocess
-import re
+if __name__ == "__main__":
 
-def get_available_win32_memory():
-    """Retrieves available memory size in MB on win32."""
-    pass
+    available_mem = get_available_memory()
 
-def getMaxWin32MemSize():
-    pass
-"""
-#available_memory = get_available_memory()
-"""
-#if available_memory is not None:
-    print(f"Available memory: {available_memory:.2f} MB")
-else:
-    print("Could not retrieve available memory.")
-"""
+    print(f"Available Physical Memory: {available_mem} megabytes")
 
