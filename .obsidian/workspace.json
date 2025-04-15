@@ -171,6 +171,7 @@
   },
   "active": "c52fe03ac0d1d93f",
   "lastOpenFiles": [
+    "src/ramdisk/ramdisk.py~",
     "src/ramdisk/lib/CheckApplicable.py~",
     "README.md",
     "src/ramdisk/packenv/lib/python3.12/site-packages/pip/_vendor/urllib3/packages/backports/__pycache__/weakref_finalize.cpython-312.pyc",
@@ -182,7 +183,6 @@
     "src/ramdisk/packenv/lib/python3.12/site-packages/pip/_vendor/urllib3/contrib/__pycache__/ntlmpool.cpython-312.pyc",
     "src/ramdisk/packenv/lib/python3.12/site-packages/pip/_vendor/urllib3/contrib/__pycache__/appengine.cpython-312.pyc",
     "src/ramdisk/packenv/lib/python3.12/site-packages/pip/_vendor/urllib3/contrib/_securetransport/__pycache__/low_level.cpython-312.pyc",
-    "src/ramdisk/packenv/lib/python3.12/site-packages/pip/_vendor/urllib3/contrib/_securetransport/__pycache__/bindings.cpython-312.pyc",
     "src/ramdisk/lib/CheckApplicableRelated.md",
     "src/ramdisk/lib/euidVsUsernameInWindows.md",
     "pyenv-notes.md",
