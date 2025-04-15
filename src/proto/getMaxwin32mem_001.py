@@ -39,4 +39,3 @@ if __name__ == "__main__":
     total_mem = get_total_memory()
 
     print(f"Total Physical Memory: {total_mem} megabytes")
-
