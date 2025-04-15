@@ -11,7 +11,7 @@ if sys.platform.startswith("linux"):
 elif sys.platform.startswith("darwin"):
     from ramdisk.lib.dev.getMacosMemStatus import GetMacosMemStatus
 elif sys.platform.startswith("win32"):
-    pass
+    from ramdisk.lib.dev.getWin32MemStatus import GetWin32MemStatus
 else:
     pass
 
@@ -22,12 +22,10 @@ class GetMemStatus(object):
         """
         if sys.platform.startswith("linux"):
             self.getMemStatus = GetLinuxMemStatus()
-            pass
         elif sys.platform.startswith("darwin"):
             self.getMemStatus = GetMacosMemStatus()
         elif sys.platform.startswith("win32"):
-            #self.getMemStatus = GetWin32MemStatus()
-            pass
+            self.getMemStatus = GetWin32MemStatus()
         else:
             self.getMemStatus = None
  
