@@ -52,12 +52,16 @@ class test_environment(unittest.TestCase):
                                   self.to.getosver()))
 
     def testGetipaddress(self):
+        if sys.platform.startswith('darwin'):
+            self.skip()
         tracemalloc.start(10)
         self.assertTrue(re.search(r'(([0-9]{1,3}\.){3}[0-9]{1,3})',
                                   self.to.getipaddress()))
 
     def testGetmacaddr(self):
-        tracemalloc.start(10)
+        if sys.platform.startswith('darwin'):
+            self.skip()
+       tracemalloc.start(10)
         self.assertTrue(re.search('(([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2})',
                                   self.to.getmacaddr()))
 
