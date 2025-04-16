@@ -95,6 +95,7 @@ class Environment(object):
     """
 
     def __init__(self):
+        self.rw = RunWith()
         self.operatingsystem = ''
         self.osreportstring = ''
         self.osfamily = ''
@@ -130,7 +131,6 @@ class Environment(object):
         self.systemfismacat = 'low'
         self.determinefismacat()
         self.collectinfo()
-        self.rw = RunWith()
 
     def setsystemtype(self):
         '''
@@ -160,13 +160,17 @@ class Environment(object):
 
             if cmd:
                 # run the command
-                cmdoutput = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, close_fds=True, text=True)
-                outputlines = cmdoutput.stdout.readlines()
+                self.rw.setCommand(cmd)
+                output, _, _ = self.rw.communicate()
+                #cmdoutput = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, close_fds=True, text=True)
+                #outputlines = cmdoutput.stdout.readlines()
+                outputlines = output
                 for line in outputlines:
                     line = str(line)
                     for vt in validtypes:
                         if re.search(vt, line, re.IGNORECASE):
                             self.systemtype = vt
+                            print("type: " + str(vt))
 
             else:
                 print(str(__name__) + ":Unable to determine systemtype. Required utility 'ps' does not exist on this system")
@@ -458,24 +462,22 @@ class Environment(object):
                 self.osreportstring = self.operatingsystem +  ' ' + self.osversion
 
         elif os.path.exists('/usr/bin/sw_vers'):
-            proc1 = subprocess.Popen('/usr/bin/sw_vers -productName',
-                                     shell=True, stdout=subprocess.PIPE,
-                                     close_fds=True, text=True)
-            description = proc1.stdout.readline()
+            self.rw.setCommand(["/usr/bin/sw_vers", "-productName"])
+            output, _, _ = self.rw.communicate()
+            print("Product Name: " + str(output))
+            description = output
             description = description.strip()
-            proc2 = subprocess.Popen('/usr/bin/sw_vers -productVersion',
-                                     shell=True, stdout=subprocess.PIPE,
-                                     close_fds=True, text=True)
-            release = proc2.stdout.readline()
-            release = release.strip()
+
+            self.rw.setCommand(["/usr/bin/sw_vers", "-productVersion"])
+            output, _, _ = self.rw.communicate()
+            release = output.strip()
             self.operatingsystem = description
             self.osversion = release
 
-            proc3 = subprocess.Popen('/usr/bin/sw_vers -buildVersion',
-                                     shell=True, stdout=subprocess.PIPE,
-                                     close_fds=True, text=True)
-            build = proc3.stdout.readline()
-            build = build.strip()
+            self.rw.setCommand("/usr/bin/sw_vers", "-buildVersion")
+            output, _, _ = self.rw.communicate()
+            build = output.strip()
+
             opsys = str(description) + ' ' + str(release) + ' ' + str(build)
             self.osreportstring = opsys
 
@@ -574,9 +576,9 @@ class Environment(object):
 
         hostname = socket.getfqdn()
         try:
-            ipdata = socket.gethostbyname_ex(hostname)
-            iplist = ipdata[2]
             try:
+                ipdata = socket.gethostbyname_ex(hostname)
+                iplist = ipdata[2]
                 iplist.remove('127.0.0.1')
             except ValueError:
                 # tried to remove loopback when it's not present, continue
@@ -598,9 +600,12 @@ class Environment(object):
             cmd = '/usr/sbin/ifconfig -a'
         else:
             cmd = '/sbin/ifconfig -a'
-        proc = subprocess.Popen(cmd, shell=True,
-                                stdout=subprocess.PIPE, close_fds=True, text=True)
-        netdata = proc.stdout.readlines()
+        self.rw.setCommand(cmd)
+        output, _, _ = self.rw.communicate()
+        netdata = output
+        #proc = subprocess.Popen(cmd, shell=True,
+        #                        stdout=subprocess.PIPE, close_fds=True, text=True)
+        #netdata = proc.stdout.readlines()
 
         for line in netdata:
             line = str(line)
@@ -650,6 +655,10 @@ class Environment(object):
                     cmd = '/usr/sbin/route -n get default'
                 else:
                     cmd = '/sbin/route -n get default'
+                #self.rw.setCommand(cmd)
+                #output, _, _ = self.rw.communicate()
+                #print(str(output))
+                #routdata = output.strip()
                 routecmd = subprocess.Popen(cmd, shell=True,
                                             stdout=subprocess.PIPE,
                                             close_fds=True, text=True)
@@ -723,10 +732,13 @@ class Environment(object):
         elif os.path.exists('/sbin/ifconfig'):
             cmd = '/sbin/ifconfig -a'
         try:
+            #self.rw.setCommand(cmd)
             ifcmd = subprocess.Popen(cmd, shell=True,
                                      stdout=subprocess.PIPE,
                                      close_fds=True, text=True)
             ifdata = ifcmd.stdout.readlines()
+            #output, _, _ = self.rw.communicate()
+            #ifdata = output.strip()
         except(OSError):
             # self.logdispatch, self.logger are not used in this file, as this code is intended to be run before
             # a logger is loaded

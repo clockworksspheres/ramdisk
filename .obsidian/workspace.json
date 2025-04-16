@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/ramdisk/lib/CheckApplicableRelated.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "CheckApplicableRelated"
+              "title": "README"
             }
           }
         ]
@@ -160,30 +160,30 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "vscode-editor:Create Code File": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
-      "command-palette:Open command palette": false
+      "command-palette:Open command palette": false,
+      "vscode-editor:Create Code File": false
     }
   },
   "active": "c52fe03ac0d1d93f",
   "lastOpenFiles": [
-    "src/ramdisk/__pycache__/ramdisk.cpython-312.pyc.137359029195984",
-    "src/ramdisk/ramdisk.py~",
     "src/ramdisk/lib/dev/getWin32MemStatus.py",
-    "src/proto/getMaxwin32mem_001.py",
-    "src/proto/get_available_memory.py~",
-    "src/proto/getwin32freemem_001.py~",
     "src/proto/getwin32freemem_001.py",
-    "src/ramdisk/lib/CheckApplicable.py~",
-    "README.md",
+    "src/proto/getMaxwin32mem_001.py",
     "src/ramdisk/packenv/lib/python3.12/site-packages/pip/_vendor/urllib3/packages/backports/__pycache__/weakref_finalize.cpython-312.pyc",
     "src/ramdisk/packenv/lib/python3.12/site-packages/pip/_vendor/urllib3/packages/backports/__pycache__/makefile.cpython-312.pyc",
     "src/ramdisk/packenv/lib/python3.12/site-packages/pip/_vendor/urllib3/packages/backports/__pycache__/__init__.cpython-312.pyc",
+    "src/ramdisk/packenv/lib/python3.12/site-packages/pip/_vendor/urllib3/packages/backports/__pycache__",
+    "src/ramdisk/packenv/lib/python3.12/site-packages/pip/_vendor/urllib3/contrib/__pycache__/securetransport.cpython-312.pyc",
+    "src/ramdisk/packenv/lib/python3.12/site-packages/pip/_vendor/urllib3/contrib/__pycache__/pyopenssl.cpython-312.pyc",
+    "src/ramdisk/packenv/lib/python3.12/site-packages/pip/_vendor/urllib3/contrib/__pycache__/ntlmpool.cpython-312.pyc",
+    "src/ramdisk/packenv/lib/python3.12/site-packages/pip/_vendor/urllib3/contrib/__pycache__/appengine.cpython-312.pyc",
     "src/ramdisk/lib/CheckApplicableRelated.md",
+    "README.md",
     "src/ramdisk/lib/euidVsUsernameInWindows.md",
     "pyenv-notes.md",
     "src/build/html/_static/plus.png",
