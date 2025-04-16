@@ -568,6 +568,11 @@ class Environment(object):
         make an educated guess as to the correct network data. self.ipaddress
         and self.macaddress will be updated by this method.
         """
+        if sys.platform.startswith('darwin'):
+            self.hostname = ''
+            self.ipaddress = ''
+            self.macaddress = ''
+            return
         # regex to match mac addresses
         macre = '(([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2})'
 
@@ -632,6 +637,10 @@ class Environment(object):
         @change: 2017/9/20 - bgonz12 - Changed implementation to not branch
                     conditionally by OS, but to branch by file system searches.
         """
+        if sys.platform.startswith('darwin'):
+            ipaddr = ''
+            gateway = ''
+            return ipaddr
         ipaddr = '127.0.0.1'
         gateway = ''
         if os.path.exists('/usr/bin/lsb_release'):
@@ -680,6 +689,9 @@ class Environment(object):
                 if len(matched) == 1:
                     ipaddr = matched[0]
                     break
+        if sys.platform.startswith('darwin'):
+            ipaddr = ''
+            gateway = ''
         return ipaddr
 
     def matchip(self, target, iplist, level=1):
