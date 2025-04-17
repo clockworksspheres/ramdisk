@@ -67,19 +67,19 @@ class CheckApplicable(object):
                 else:
                     keysSuccess.append(False)
                     continue
-                if key is 'type' and value in ['black', 'white']:
+                if key == 'type' and value in ['black', 'white']:
                     valueSuccess.append(True)
                     continue
-                if key is 'family' and isinstance(value, list):
+                if key == 'family' and isinstance(value, list):
                     valueSuccess.append(True)
                     continue
-                if key is 'os' and isinstance(value, dict):
+                if key == 'os' and isinstance(value, dict):
                     valueSuccess.append(True)
                     continue
-                if key is 'noroot' and isinstance(value, bool):
+                if key == 'noroot' and isinstance(value, bool):
                     valueSuccess.append(True)
                     continue
-                if key is 'fisma' and value in ['low', 'medium', 'high']:
+                if key == 'fisma' and value in ['low', 'medium', 'high']:
                     valueSuccess.append(True)
                     continue
                 valueSuccess.append(False)
@@ -244,7 +244,7 @@ class CheckApplicable(object):
             myversion = self.myosversion
         # Process version and up
         if '+' in rangeList:
-            assert len(rangeList) is 2, "Wrong number of entries for a +"
+            assert len(rangeList) == 2, "Wrong number of entries for a +"
             if rangeList[1] == '+':
                 baseversion = rangeList[0]
             else:
@@ -255,7 +255,7 @@ class CheckApplicable(object):
                 return False
         # Process version and lower
         elif '-' in rangeList:
-            assert len(rangeList) is 2, "Wrong number of entries for a -"
+            assert len(rangeList) == 2, "Wrong number of entries for a -"
             if rangeList[1] == '-':
                 baseversion = rangeList[0]
             else:
@@ -266,7 +266,7 @@ class CheckApplicable(object):
                 return False
         # Process inclusive range
         elif 'r' in rangeList:
-            assert len(rangeList) is 3, "Wrong number of entries for a range"
+            assert len(rangeList) == 3, "Wrong number of entries for a range"
             vertmp = rangeList
             vertmp.remove('r')
             if LooseVersion(vertmp[0]) > LooseVersion(vertmp[1]):
