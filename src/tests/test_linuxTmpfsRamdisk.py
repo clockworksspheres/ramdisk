@@ -35,7 +35,8 @@ if sys.platform.startswith("linux"):
     from ramdisk.linuxTmpfsRamdisk import RamDisk
     from ramdisk.linuxTmpfsRamdisk import umount
 else:
-    raise NotValidForThisOS("Not Valid For This OS...")
+    pass
+    # raise NotValidForThisOS("Not Valid For This OS...")
     # raise unittest.SkipTest("Not Valid For This OS")
     # sys.exit(0)
 
@@ -51,6 +52,8 @@ class test_linuxTmpfsRamdisk(GenericRamdiskTest):
         """
         Initializer
         """
+        if not sys.platform.startswith('linux'):
+            raise unittest.SkipTest("Not valid for this patform: " + sys.platfor
         #####
         # If we don't have a supported platform, skip this test.
         if not sys.platform.startswith("linux"):

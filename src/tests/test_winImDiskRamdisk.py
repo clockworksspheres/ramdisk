@@ -40,7 +40,8 @@ class test_winImDiskRamdisk(GenericRamdiskTest):
     def setUp(self):
         """
         """
-        #####
+        if not sys.platform.startswith('win32'):
+            raise unittest.SkipTest("Not valid for this patform: " + sys.platfor        #####
         # If we don't have a supported platform, skip this test.
         if not sys.platform.startswith("win32"):
             raise unittest.SkipTest("This is not valid on this OS")
