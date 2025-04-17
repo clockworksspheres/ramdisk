@@ -806,11 +806,15 @@ class Environment(object):
                 pass
         elif os.path.exists('/usr/sbin/system_profiler'):
             profilerfetch = '/usr/sbin/system_profiler SPHardwareDataType'
+            self.rw.setCommand(profilerfetch)
+            output, _, _ = self.rw.communicate()
+            '''
             cmd3 = subprocess.Popen(profilerfetch, shell=True,
                                     stdout=subprocess.PIPE,
                                     close_fds=True, text=True)
             cmd3output = cmd3.stdout.readlines()
-            for line in cmd3output:
+            '''
+            for line in output.splitlines():
                 line = line.strip()
                 if re.search('Serial Number (system):', line):
                     line = line.split(':')
@@ -927,11 +931,15 @@ class Environment(object):
                         pass
         elif os.path.exists('/usr/sbin/system_profiler'):
             profilerfetch = '/usr/sbin/system_profiler SPHardwareDataType'
+            self.rw.setCommand(profilerfetch)
+            output, _, _ = self.rw.communicate()
+            '''
             cmd3 = subprocess.Popen(profilerfetch, shell=True,
                                     stdout=subprocess.PIPE,
                                     close_fds=True, text=True)
             cmd3output = cmd3.stdout.readlines()
-            for line in cmd3output:
+            '''
+            for line in output.splitlines():
                 line = line.strip()
                 if re.search('UUID:', line):
                     line = line.split()
