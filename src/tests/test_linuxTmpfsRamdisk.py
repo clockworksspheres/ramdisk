@@ -52,6 +52,8 @@ class test_linuxTmpfsRamdisk(GenericRamdiskTest):
         """
         Initializer
         """
+        if not sys.platform.startswith('linux'):
+            raise unittest.SkipTest("Not valid for this patform: " + sys.platfor
         #####
         # If we don't have a supported platform, skip this test.
         if not sys.platform.startswith("linux"):

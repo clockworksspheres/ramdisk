@@ -29,8 +29,8 @@ LOGGER = CyLogger()
 
 #####
 # If we don't have a supported platform, skip this test.
-if re.match(r'^darwin$', sys.platform):
-    SkipTest("This is not valid on this OS")
+#if re.match(r'^darwin$', sys.platform):
+#    SkipTest("This is not valid on this OS")
         
 
 
@@ -41,10 +41,15 @@ class test_ntfsFsHelper(unittest.TestCase):
     ##################################
 
     @classmethod
+    def setUp(self):
+        # If we don't have a supported platform, skip this test.
+        if not sys.platform.startswith("win32"):
+            raise unittest.SkipTest("This is not valid on this OS")
+
+    @classmethod
     def setUpClass(self):
         """
         """
-        #####
         # If we don't have a supported platform, skip this test.
         if not sys.platform.startswith("win32"):
             raise unittest.SkipTest("This is not valid on this OS")

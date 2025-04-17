@@ -12,10 +12,10 @@ import sys
 import platform
 import unittest
 from datetime import datetime
-
-if not sys.platform.startswith('darwin')
+'''
+if not sys.platform.startswith('darwin'):
     raise unittest.SkipTest("Not valid for this patform: " + sys.platform)
-
+'''
 #####
 # Include the parent project directory in the PYTHONPATH
 appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
@@ -42,7 +42,7 @@ class test_macosFsHelper(unittest.TestCase):
     def setUpClass(self):
         """
         """
-        if not sys.platform.startswith('darwin')
+        if not sys.platform.startswith('darwin'):
             raise unittest.SkipTest("Not valid for this patform: " + sys.platform)
 
         #####
