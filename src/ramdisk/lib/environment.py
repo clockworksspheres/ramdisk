@@ -905,10 +905,12 @@ class Environment(object):
                 pass
         elif os.path.exists('/usr/sbin/dmidecode') and self.euid == 0:
             uuidfetch = '/usr/sbin/dmidecode -s system-uuid'
-            cmd1 = subprocess.Popen(uuidfetch, shell=True,
-                                    stdout=subprocess.PIPE,
-                                    close_fds=True, text=True)
-            uuid = cmd1.stdout.readline()
+            self.rw.setCommand(uuidfetch)
+            uuid, _, _ = self.rw.communicate()
+            #cmd1 = subprocess.Popen(uuidfetch, shell=True,
+            #                        stdout=subprocess.PIPE,
+            #                        close_fds=True, text=True)
+            #uuid = cmd1.stdout.readline()
         elif os.path.exists('/usr/sbin/smbios'):
             smbiosfetch = '/usr/sbin/smbios -t SMB_TYPE_SYSTEM 2>/dev/null'
             cmd2 = subprocess.Popen(smbiosfetch, shell=True,
