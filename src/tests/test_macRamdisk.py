@@ -51,6 +51,8 @@ class test_macRamdisk(GenericRamdiskTest):
         if not sys.platform.startswith("darwin"):
             raise unittest.SkipTest("This is not valid on this OS")
 
+        self.target = 'darwin'
+
         #####
         # capture end time
         self.start_test_time = datetime.now()

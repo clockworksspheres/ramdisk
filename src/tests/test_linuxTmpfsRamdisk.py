@@ -25,17 +25,18 @@ sys.path.append(appendDir)
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.libHelperExceptions import NotValidForThisOS
+from tests.genericTestUtilities.genericRamdiskTest import GenericRamdiskTest
 
 #####
 # Load OS specific Ramdisks
 if sys.platform.startswith("linux"):
     #####
     # For Linux
-    from tests.genericTestUtilities.genericRamdiskTest import GenericRamdiskTest
     from ramdisk.linuxTmpfsRamdisk import RamDisk
     from ramdisk.linuxTmpfsRamdisk import umount
 else:
-    raise NotValidForThisOS("Not Valid For This OS...")
+    pass
+    # raise NotValidForThisOS("Not Valid For This OS...")
     # raise unittest.SkipTest("Not Valid For This OS")
     # sys.exit(0)
 
@@ -56,6 +57,7 @@ class test_linuxTmpfsRamdisk(GenericRamdiskTest):
         if not sys.platform.startswith("linux"):
             raise unittest.SkipTest("This is not valid on this OS")
 
+        self.target = 'linux'
         # Start timer in miliseconds
         self.test_start_time = datetime.now()
 

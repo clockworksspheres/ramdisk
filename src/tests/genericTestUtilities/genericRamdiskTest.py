@@ -70,6 +70,7 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
         self.logger.initializeLogs()
         self.logger.log(lp.CRITICAL, "Logger initialized............................")
         self.fsHelper = FsHelper()
+        self.target = ""
         self.setUpInstanceSpecifics()
         
         """
@@ -77,24 +78,26 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
         filesystem functionality of what is being tested.
         """
         
-        if sys.platform.startswith("darwin"):
+        if sys.platform.startswith("darwin") and self.target == 'darwin':
 			#Calculate size of ramdisk to make for this unit test.
             # size_in_mb = int((1024 * 1024 * 512) / 512)
             size_in_mb = 512
             ramdisk_size = size = size_in_mb
             self.mnt_pnt_requested = "testmntpnt"
-        elif sys.platform.startswith("linux"):
+        elif sys.platform.startswith("linux") and self.target == 'linux':
             #Calculate size of ramdisk to make for this unit test.
             # linux ramdisks are made in terms of 1 mb at a time... not
             # bits or bytes...
             size_in_mb = 512
             ramdisk_size = size = size_in_mb
             self.mnt_pnt_requested = size_in_mb
-        elif size.platform.startswith("win32"):
+        elif sys.platform.startswith("win32") and self.target == 'win32':
             #Calculate size of ramdisk to make for this unit test.
             ramdisk_size = size = size_in_mb
             self.mnt_pnt_requested = "testmntpnt"
-			
+        else:
+            raise unittest.SkipTest("Not applicable here...")
+
         self.success = False
         self.mountPoint = ""
         self.ramdiskDev = False

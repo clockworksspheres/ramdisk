@@ -20,26 +20,27 @@ sys.path.append("..")
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.libHelperExceptions import NotValidForThisOS
+from tests.genericTestUtilities.genericRamdiskTest import GenericRamdiskTest
 
 if sys.platform.startswith("win32"):
     #####
     # for Windows
-    from tests.genericTestUtilities.genericRamdiskTest import GenericRamdiskTest
     from ramdisk.winImDiskRamdisk import RamDisk
     from ramdisk.winImDiskRamdisk import umount
 else:
-    raise NotValidForThisOS("Not Valid For This OS...")
+    pass
+    #raise NotValidForThisOS("Not Valid For This OS...")
     #sys.exit(0)
 
 
 class test_winImDiskRamdisk(GenericRamdiskTest):
     """
-    """
+    
 
     @classmethod
     def setUp(self):
-        """
-        """
+        ""
+        ""
         #####
         # If we don't have a supported platform, skip this test.
         if not sys.platform.startswith("win32"):
@@ -47,18 +48,20 @@ class test_winImDiskRamdisk(GenericRamdiskTest):
 
     @classmethod
     def setUpClass(self):
-        """
-        """
+        ""
+        ""
         #####
         # If we don't have a supported platform, skip this test.
         if not sys.platform.startswith("win32"):
             raise unittest.SkipTest("This is not valid on this OS")
-     
+     """
+
     @classmethod
     def setUpInstanceSpecifics(self):
         """
         Initializer
         """
+        self.target = 'win32'
         #####
         # If we don't have a supported platform, skip this test.
         if not sys.platform.startswith("win32"):
