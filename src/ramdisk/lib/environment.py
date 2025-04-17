@@ -112,7 +112,8 @@ class Environment(object):
         if sys.platform.startswith("win32"):
             self.euid = win32api.GetUserName()
         else:
-            currpwd = pwd.getpwuid(euid)
+             self.euid = os.geteuid()
+             currpwd = pwd.getpwuid(self.euid)
         self.test_mode = ""
         self.script_path = ""
         self.resources_path = ""
@@ -390,11 +391,15 @@ class Environment(object):
         """
         # Alternative (better) implementation for Linux
         if os.path.exists('/usr/bin/lsb_release'):
-            proc = subprocess.Popen('/usr/bin/lsb_release -dr',
-                                    shell=True, stdout=subprocess.PIPE,
-                                    close_fds=True, text=True)
-            description = proc.stdout.readline()
-            release = proc.stdout.readline()
+            self.rw.setCommand(["/usr/bin/lsb_release", "-dr"])
+            output, _, _ = self.rw.communicate()
+            #proc = subprocess.Popen('/usr/bin/lsb_release -dr',
+            #                        shell=True, stdout=subprocess.PIPE,
+            #                        close_fds=True, text=True)
+            #description = proc.stdout.readline()
+            output = output.splitlines()
+            description = output[0]
+            release = output[1]
             description = description.split()
             # print description
             del description[0]

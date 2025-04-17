@@ -61,7 +61,7 @@ class test_environment(unittest.TestCase):
     def testGetmacaddr(self):
         if sys.platform.startswith('darwin'):
             self.skip()
-       tracemalloc.start(10)
+        tracemalloc.start(10)
         self.assertTrue(re.search('(([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2})',
                                   self.to.getmacaddr()))
 
