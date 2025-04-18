@@ -34,27 +34,6 @@ else:
 
 
 class test_winImDiskRamdisk(GenericRamdiskTest):
-    """
-    
-
-    @classmethod
-    def setUp(self):
-        """
-        """
-        #####
-        # If we don't have a supported platform, skip this test.
-        if not sys.platform.startswith("win32"):
-            raise unittest.SkipTest("Not valid for this patform: " + sys.platform
-
-    @classmethod
-    def setUpClass(self):
-        ""
-        ""
-        #####
-        # If we don't have a supported platform, skip this test.
-        if not sys.platform.startswith("win32"):
-            raise unittest.SkipTest("This is not valid on this OS")
-     """
 
     @classmethod
     def setUpInstanceSpecifics(self):
@@ -66,6 +45,27 @@ class test_winImDiskRamdisk(GenericRamdiskTest):
         # If we don't have a supported platform, skip this test.
         if not sys.platform.startswith("win32"):
             raise unittest.SkipTest("This is not valid on this OS")
+
+        """
+        
+        @classmethod
+        def setUp(self):
+            ""
+            ""
+            #####
+            # If we don't have a supported platform, skip this test.
+            if not sys.platform.startswith("win32"):
+                raise unittest.SkipTest("Not valid for this patform: " + sys.platform
+
+        @classmethod
+        def setUpClass(self):
+            ""
+            ""
+            #####
+            # If we don't have a supported platform, skip this test.
+            if not sys.platform.startswith("win32"):
+                raise unittest.SkipTest("This is not valid on this OS")
+        """
 
 ###############################################################################
 ##### unittest Tear down
