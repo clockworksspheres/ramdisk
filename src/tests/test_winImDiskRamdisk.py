@@ -14,7 +14,7 @@ import tempfile
 import ctypes as C
 from datetime import datetime
 
-sys.path.append("..")
+sys.path.append("../")
 
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import CyLogger

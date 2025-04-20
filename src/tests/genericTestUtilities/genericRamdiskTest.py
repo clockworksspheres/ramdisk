@@ -16,7 +16,10 @@ from datetime import datetime
 
 #####
 # Include the parent project directory in the PYTHONPATH
-appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
+if sys.platform.startswith("win32"):
+    appendDir = "../"
+else:
+    appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
 sys.path.append(appendDir)
 
 #--- non-native python libraries in this source tree
@@ -46,7 +49,7 @@ elif sys.platform.startswith("win32"):
     from ramdisk.lib.getLibc.winGetLibc import getLibc
     from ramdisk.winImDiskRamdisk import RamDisk
     from ramdisk.winImDiskRamdisk import umount
-    from ramdisk.lib.fsHelper.win32FsHelper import FsHelper
+    from ramdisk.lib.fsHelper.ntfsFsHelper import FsHelper
 else:
     raise Exception("Damn it Jim!!! What OS is this???")
 
