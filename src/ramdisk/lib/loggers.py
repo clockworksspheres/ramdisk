@@ -306,9 +306,7 @@ class CyLogger(Singleton):
         else:
             #####
             # Set up the RotatingFileHandler
-            rotHandler = logging.handlers.RotatingFileHandler(self.filename,
-                                                              maxBytes=size,
-                                                              backupCount=logCount)
+            rotHandler = logging.handlers.RotatingFileHandler(self.filename, maxBytes=size, backupCount=logCount)
         if myconsole:
             #####
             # Set up StreamHandler to log to the console

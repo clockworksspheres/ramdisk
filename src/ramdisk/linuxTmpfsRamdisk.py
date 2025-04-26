@@ -109,10 +109,15 @@ class RamDisk(RamDiskTemplate):
         else:
             raise BadRamdiskArguments("Not a valid argument for " + \
                                            "'fstype'...")
-        """
+
         if not os.geteuid() == 0 or passwd:
             raise UserMustBeRootError("You must be root, or have elevated with sudo to use this software...")
-        """
+
+        if isinstance(mountpoint, str):
+            self.mntPoint = mountpoint
+        else:
+            self.mntPoint = ""
+
         if isinstance(mode, int):
             self.mode = mode
         else:
@@ -150,8 +155,8 @@ class RamDisk(RamDiskTemplate):
 
         #####
         # Initialize the mount and umount command paths...
-        self.mountPath = ""
-        self.umountPath = ""
+        #self.mntPoint = mountpoint
+        #self.umountPath = ""
         self.getCmds()
 
         #####
@@ -288,7 +293,10 @@ class RamDisk(RamDiskTemplate):
         elif self.passwd:
         """
         self.logger.log(lp.WARNING, "p: " + self.passwd)
-        output, error, returncode = self.runWith.runWithSudo(self.passwd)
+        if not os.geteuid() == 0:
+            output, error, returncode = self.runWith.runWithSudo(self.passwd)
+        else:
+            output, error, returncode = self.runWith.communicate()
         #####
         # set user/group permissions??
         self.logger.log(lp.DEBUG, "output    : " + str(output))

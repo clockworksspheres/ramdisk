@@ -43,35 +43,37 @@ else:
     # raise unittest.SkipTest("Not Valid For This OS")
     # sys.exit(0)
 
-class test_linuxTmpfsRamdisk(GenericRamdiskTest):
+class test_linuxTmpfsRamdisk(GenericRamdiskTest, unittest.TestCase):
     """
     Test for the Linux tmpfs Ramdisk interface
 
     @author: Roy Nielsen
     """
 
-    @classmethod
-    def setUpInstanceSpecifics(self):
+    #@classmethod
+    def setUpClass(self):
         """
         Initializer
         """
-        if not sys.platform.startswith('linux'):
-            raise unittest.SkipTest("Not valid for this patform: " + sys.platform)
+
         #####
         # If we don't have a supported platform, skip this test.
-        if not sys.platform.startswith("linux"):
-            raise unittest.SkipTest("This is not valid on this OS")
+        if not sys.platform.startswith('linux'):
+            raise unittest.SkipTest("Not valid for this platform: " + sys.platform)
 
         self.target = 'linux'
+        super().intermediateSetUp()
+
         # Start timer in miliseconds
         self.test_start_time = datetime.now()
+
 
         self.logger = CyLogger()
 
         #####
         # Initialize the helper class
         self.initializeHelper = False
-
+        '''
     @classmethod
     def setUp(self):
         """
@@ -83,19 +85,22 @@ class test_linuxTmpfsRamdisk(GenericRamdiskTest):
         # If we don't have a supported platform, skip this test.
         if not sys.platform.startswith("linux"):
             raise unittest.SkipTest("This is not valid on this OS")
+        S
+        @classmethod
+        def setUpClass(self):
+            """
+            This method runs before each test run.
 
-    @classmethod
-    def setUpClass(self):
-        """
-        This method runs before each test run.
+            @author: Roy Nielsen
+            """
+            #####
+            # If we don't have a supported platform, skip this test.
+            if not sys.platform.startswith("linux"):
+                raise unittest.SkipTest("This is not valid on this OS")
+        '''
 
-        @author: Roy Nielsen
-        """
-        #####
-        # If we don't have a supported platform, skip this test.
-        if not sys.platform.startswith("linux"):
-            raise unittest.SkipTest("This is not valid on this OS")
-
+    def tearDownInstanceSpecifics(self):
+        pass
 
 ###############################################################################
 ##### Helper Classes
