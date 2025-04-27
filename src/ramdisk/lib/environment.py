@@ -6,29 +6,6 @@
 #                                                                             #
 ###############################################################################
 
-# ============================================================================#
-#               Filename          $RCSfile: stonix/environment.py,v $
-#               Description       Security Configuration Script
-#               OS                Linux, OS X, Solaris, BSD
-#               Author            Dave Kennel
-#               Last updated by   $Author: $
-#               Notes             Based on CIS Benchmarks, NSA RHEL
-#                                 Guidelines, NIST and DISA STIG/Checklist
-#               Release           $Revision: 2.0 $
-#               Modified Date     $Date: 2024/01/16 17:00:00 $
-# ============================================================================#
-'''
-Created on Aug 24, 2010
-
-@author: dkennel
-@change: 2014/05/29 - ekkehard j. koch - pep8 and comment updates
-@change: 2017/03/07 - dkennel - added fisma risk level support
-@change: 2017/09/01 - rsn - taking out stonix specifics
-@change: 2021/09/16 - rsn - adding traceback.format_exc calls before raising exceptions
-@change: 2021/09/26 - rsn - changing file open statements to "with open" methodology, for better python 3 compatibility
-@change: 2021/09/26 - rsn - changing subprocess usage to calling run_commands.RunWith
-'''
-
 #--- Native python libraries
 import os
 import re
@@ -346,7 +323,7 @@ class Environment(object):
         @return int :
         @author D. Kennel
         """
-        return euid
+        return self.euid
 
     def geteuidhome(self):
         """
