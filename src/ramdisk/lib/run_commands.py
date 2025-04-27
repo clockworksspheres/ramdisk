@@ -3,7 +3,6 @@ Library for running executables from the command line in different ways
 
 Inspiration for some of the below found on the internet.
 
-@author: Roy Nielsen
 """
 
 # TODO: BUG - Class needs to return either byte streams or strings.  Check return, error and retcode values to see if they are strings, byte streams or int and treat accordingly
@@ -27,7 +26,6 @@ sys.path.append("../..")
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.loggers import MockLogger
-# from ramdisk.lib.getLibc import getLibc
 
 
 class OSNotValidForRunWith(BaseException):
