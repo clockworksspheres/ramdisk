@@ -34,7 +34,8 @@ if sys.platform.startswith("darwin"):
     from ramdisk.macRamdisk import umount
     from ramdisk.lib.fsHelper.macosFsHelper import FsHelper
 else:
-    raise NotValidForThisOS("Not Valid For This OS...")
+    print("Not valid for this OS.."
+    # raise NotValidForThisOS("Not Valid For This OS...")
     # sys.exit(0)
 
 
