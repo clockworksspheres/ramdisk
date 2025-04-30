@@ -22,19 +22,19 @@ if __name__=="__main__":
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.libHelperExceptions import NotValidForThisOS
+from tests.genericTestUtilities.genericRamdiskTest import GenericRamdiskTest
+from tests.genericTestUtilities.genericTestUtilities import GenericTestUtilities
 
 if sys.platform.startswith("darwin"):
     #####
     # for Mac
     from ramdisk.lib.getLibc.macGetLibc import getLibc
-    from tests.genericTestUtilities.genericRamdiskTest import GenericRamdiskTest
-    from tests.genericTestUtilities.genericTestUtilities import GenericTestUtilities
     from ramdisk.macRamdisk import RamDisk
     from ramdisk.macRamdisk import detach
     from ramdisk.macRamdisk import umount
     from ramdisk.lib.fsHelper.macosFsHelper import FsHelper
 else:
-    print("Not valid for this OS.."
+    print("Not valid for this OS..")
     # raise NotValidForThisOS("Not Valid For This OS...")
     # sys.exit(0)
 

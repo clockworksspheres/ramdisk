@@ -535,9 +535,9 @@ class Environment(object):
         fuzzy classification of the OS.
         """
         uname = sys.platform
-        if uname.startswith("linux"):
+        if uname.lower().startswith("linux"):
             self.osfamily = 'linux'
-        elif uname == 'darwin':
+        elif uname.lower() == 'darwin':
             self.osfamily = 'darwin'
         elif uname == 'sunos5':
             self.osfamily = 'solaris'
