@@ -17,7 +17,6 @@ import platform
 import time
 import traceback
 
-
 sys.path.append("../..")
 
 from ramdisk.config import DEFAULT_LOG_LEVEL, LogPriority
@@ -62,6 +61,7 @@ else:
 
 # third party libraries
 from ramdisk.lib.run_commands import RunWith as RunWith
+
 
 class Environment(object):
     """
@@ -126,6 +126,7 @@ class Environment(object):
         cmdlocs = ["/usr/bin/ps", "/bin/ps"]
         cmdbase = ""
         cmd = ""
+        self.systemtype = ""
 
         # buld the command
         for cl in cmdlocs:
@@ -142,13 +143,14 @@ class Environment(object):
                 output, _, _ = self.rw.communicate()
                 #cmdoutput = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, close_fds=True, text=True)
                 #outputlines = cmdoutput.stdout.readlines()
-                outputlines = output
+                outputlines = output.split("\n")
                 for line in outputlines:
                     line = str(line)
+                    # print("        line: " + str(line))
                     for vt in validtypes:
                         if re.search(vt, line, re.IGNORECASE):
                             self.systemtype = vt
-                            print("type: " + str(vt))
+                            # print("type: " + str(vt))
 
             else:
                 print(str(__name__) + ":Unable to determine systemtype. Required utility 'ps' does not exist on this system")
@@ -535,9 +537,9 @@ class Environment(object):
         fuzzy classification of the OS.
         """
         uname = sys.platform
-        if uname.startswith("linux"):
+        if uname.lower().startswith("linux"):
             self.osfamily = 'linux'
-        elif uname == 'darwin':
+        elif uname.lower() == 'darwin':
             self.osfamily = 'darwin'
         elif uname == 'sunos5':
             self.osfamily = 'solaris'
@@ -581,7 +583,7 @@ class Environment(object):
 
         # In ifconfig output macaddresses are always one line before the ip
         # address.
-        if sys.platform == 'linux2':
+        if sys.platform.startswith("linux"):
             cmd = '/sbin/ifconfig'
         elif os.path.exists('/usr/sbin/ifconfig'):
             cmd = '/usr/sbin/ifconfig -a'
