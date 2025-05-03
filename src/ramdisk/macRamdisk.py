@@ -217,6 +217,13 @@ class RamDisk(RamDiskTemplate):
                 ....Replace RAMDiskNameReplacement with the desired 
                     name for your RAM disk.
 
+        RENAME DOESN'T WORK!!! TO RENAME/REMOUNT:
+        diskutil umount self.myRamdiskDev
+        mkdir -p (if necessary) /<where to mount>
+        mount -t apfs self.myRamdiskDev /<where to mount>
+
+
+
         @author: Roy Nielsen
         """
         retval = None
@@ -262,6 +269,13 @@ class RamDisk(RamDiskTemplate):
         tmpNum = int(tmpNum) + 1
         self.myRamdiskDev = str(tmpDev) + str(tmpNum)
         self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
+
+        """
+        diskutil umount self.myRamdiskDev
+        mkdir -p (if necessary) /<where to mount>
+        mount -t apfs self.myRamdiskDev /<where to mount>
+
+        """
 
         """
         if self.disableJournal is True:
