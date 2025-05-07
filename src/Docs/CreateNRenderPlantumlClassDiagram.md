@@ -262,6 +262,8 @@ The second command creates the file: classes_ramdisk.puml
 
 Depending on the support software that is installed, other file formats that pyreverse can create are:   dot, mmd and HTML.  Other file formats that may be able to be created are png, svg and jpg - whatever the 'dot' command line tool might be able to generate.
 
+---
+
 # generate uml from source code with doxygen
 
 Found 9 relevant pages for: "Doxygen generate UML from source code"
