@@ -945,7 +945,7 @@ class RunWith(object):
         """
         Use pty method to run "sudo-rs" to run a command with elevated privilege.
 
-        sudo-rs is the rust version of sudo being integrated onto the Ubuntu platform.
+        sudo-rs is the rust version of sudo being integrated into the Ubuntu platform.
 
         Required parameters: user, password, command
 
