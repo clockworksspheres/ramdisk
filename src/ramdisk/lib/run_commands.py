@@ -816,7 +816,7 @@ class RunWith(object):
 
         ###########################################################################
 
-        def runWithSudo(self, password="", silent=True, timeout_sec=15):
+    def runWithSudo(self, password="", silent=True, timeout_sec=15):
             '''
             Use pty method to run "sudo" to run a command with elevated privilege.
 
@@ -940,7 +940,7 @@ class RunWith(object):
                 return self.stdout, self.stderr, self.retcode
 
     #    ###########################################################################
-
+    '''
     def runWithSudoRs(self, password="", silent=True, timeout_sec=15) :
         """
         Use pty method to run "sudo-rs" to run a command with elevated privilege.
@@ -1065,7 +1065,7 @@ class RunWith(object):
                 self.logger.log(lp.DEBUG, "\n\nLeaving runAs with Sudo: \"" + \
                                 str(output) + "\"\n" + str(self.stdout) + "\n")
             return self.stdout, self.stderr, self.retcode
-
+'''
 #############################################################################
 
 class RunThread(threading.Thread):
