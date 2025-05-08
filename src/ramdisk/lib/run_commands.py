@@ -820,7 +820,7 @@ class RunWith(object):
             '''
             Use pty method to run "sudo" to run a command with elevated privilege.
 
-            Required parameters: user, password, command
+            Required parameters: password
 
             @author: Roy Nielsen
             '''
@@ -947,7 +947,7 @@ class RunWith(object):
 
         sudo-rs is the rust version of sudo being integrated into the Ubuntu platform.
 
-        Required parameters: user, password, command
+        Required parameters: password
 
         @author: Roy Nielsen
         """
