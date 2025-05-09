@@ -109,10 +109,10 @@ class RamDisk(RamDiskTemplate):
         else:
             raise BadRamdiskArguments("Not a valid argument for " + \
                                            "'fstype'...")
-
+        '''
         if not os.geteuid() == 0 or passwd:
             raise UserMustBeRootError("You must be root, or have elevated with sudo to use this software...")
-
+        '''
         if isinstance(mountpoint, str):
             self.mntPoint = mountpoint
         else:
@@ -292,10 +292,12 @@ class RamDisk(RamDiskTemplate):
             raise UserMustBeRootException("User Must Be Root (use sudo) to Create a Ramdisk.")
         elif self.passwd:
         """
-        self.logger.log(lp.WARNING, "p: " + self.passwd)
+        # self.logger.log(lp.WARNING, "p: " + self.passwd)
         if not os.geteuid() == 0:
             output, error, returncode = self.runWith.runWithSudo(self.passwd)
         else:
+            if not os.geteuid() == 0 or passwd:
+                raise UserMustBeRootError("You must be root, or have elevated with sudo to use this software...")
             output, error, returncode = self.runWith.communicate()
         #####
         # set user/group permissions??
