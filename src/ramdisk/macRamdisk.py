@@ -267,17 +267,50 @@ class RamDisk(RamDiskTemplate):
             pass
 
         tmpNum = int(tmpNum) + 1
-        self.myRamdiskDev = str(tmpDev) + str(tmpNum)
+        self.myRamdiskDev = str(tmpDev) + str(tmpNum) + "s1"
         self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
+
+        #####
+        # unmounting the disk
+        cmd = [self.diskutil, "unmount", self.myRamdiskDev]
+        self.logger.log(lp.WARNING, "Running command to unmount ramdisk: >> " + str(cmd))
+        self.runWith.setCommand(cmd)
+        self.runWith.communicate()
+        retval, reterr, retcode = self.runWith.getNlogReturns()
+
+        self.logger.log(lp.WARNING, "  MYRAMDISKDEV: " + self.myRamdiskDev)
+        self.logger.log(lp.WARNING, "  MNTPOINT: " + self.mntPoint)
+
+        #####
+        # mount the drive to the correct mount point
+        cmd = "/sbin/mount -t apfs " + self.myRamdiskDev + " " + self.mntPoint
+        self.logger.log(lp.WARNING, "Running command to MOUNT ramdisk: >>>>> " + str(cmd))
+        self.runWith.setCommand(cmd)
+        self.runWith.communicate()
+        retval, reterr, retcode = self.runWith.getNlogReturns()
 
         """
         diskutil umount self.myRamdiskDev
         mkdir -p (if necessary) /<where to mount>
         mount -t apfs self.myRamdiskDev /<where to mount>
 
-        """
+        
 
-        """
+        tmpNum = ""
+        tmpDev = ""
+        try:
+            tmpMatch = re.match(r"(\S+)(\d+)", self.myRamdiskDev.strip())
+            tmpDev = tmpMatch.group(1)
+            tmpNum = tmpMatch.group(2)
+        except ValueError:
+            pass
+
+        tmpNum = int(tmpNum) + 1
+        self.myRamdiskDev = str(tmpDev) + str(tmpNum) + "s1"
+        self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
+
+
+        
         if self.disableJournal is True:
             #####
             # Disable Journaling on the device.
