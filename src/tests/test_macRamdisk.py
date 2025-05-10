@@ -41,9 +41,10 @@ else:
 
 class test_macRamdisk(GenericRamdiskTest):
     """
-    """
     @classmethod
     def setUpInstanceSpecifics(self):
+    """
+    def intermediateSetUpClass(self):
         """
         Initializer
         """
@@ -53,6 +54,7 @@ class test_macRamdisk(GenericRamdiskTest):
             raise unittest.SkipTest("This is not valid on this OS")
 
         self.target = 'darwin'
+        #self.intermediateSetUp()
 
         #####
         # capture end time
@@ -63,12 +65,13 @@ class test_macRamdisk(GenericRamdiskTest):
 ###############################################################################
 ##### unittest Tear down
     @classmethod
-    def tearDownInstanceSpecifics(self):
+    def tearDownClass(self):
         """
         """
         #####
         # capture end time
         test_end_time = datetime.now()
+        self.intermediateTearDownClass()
 
         #####
         # Calculate and log how long it took...

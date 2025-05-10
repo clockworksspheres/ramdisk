@@ -64,10 +64,10 @@ class GenericRamdiskTest(GenericTestUtilities, unittest.TestCase):
     @author: Roy Nielsen
     """
     @classmethod
-    def intermediateSetUp(self):
+    def setUpClass(self):
         """
         """
-        self.commonSetUp()
+        # self.commonSetUp()
         self.libc = getLibc()
         self.subdirs = ["two", "three" "one/four"]
         self.logger = CyLogger()
@@ -76,6 +76,7 @@ class GenericRamdiskTest(GenericTestUtilities, unittest.TestCase):
         self.fsHelper = FsHelper()
         self.target = ""
 
+        self.intermediateSetUpClass(self)
         """
         Set up a ramdisk and use that random location as a root to test the
         filesystem functionality of what is being tested.
@@ -130,18 +131,18 @@ class GenericRamdiskTest(GenericTestUtilities, unittest.TestCase):
         # Start timer in miliseconds
         self.test_start_time = datetime.now()
 
-
+    '''
     @classmethod
     def setUpInstanceSpecifics(self):
-        """
+        ""
         Call the child class setUpClass initializer, if possible..
 
         Here to be over-ridden by a child class.
 
         @author: Roy Nielsen
-        """
+        ""
         pass
-
+    '''
     ################################################
     ##### Helper Methods
 
@@ -296,12 +297,12 @@ class GenericRamdiskTest(GenericTestUtilities, unittest.TestCase):
         pass
 
     @classmethod
-    def tearDownClass(self):
+    def intermediateTearDownClass(self):
         """
         """
         pass
 
-        self.tearDownInstanceSpecifics(self)
+        # self.tearDownInstanceSpecifics(self)
 
         try:
             self.my_ramdisk.umount()
