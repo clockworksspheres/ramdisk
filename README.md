@@ -57,6 +57,8 @@ Ramdisk class that can use either current method for creating a ramdisk on Linux
 
 ### linuxTmpfsRamdisk
 
+tested on Rocky 9 and Ubuntu 24.04
+
 ## Only developed for macOS and Linux
 
 ### ramdisk
