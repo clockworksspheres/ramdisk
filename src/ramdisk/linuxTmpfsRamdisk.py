@@ -296,7 +296,7 @@ class RamDisk(RamDiskTemplate):
         if not os.geteuid() == 0:
             output, error, returncode = self.runWith.runWithSudo(self.passwd)
         else:
-            if not os.geteuid() == 0 or passwd:
+            if not os.geteuid() == 0 or self.passwd:
                 raise UserMustBeRootError("You must be root, or have elevated with sudo to use this software...")
             output, error, returncode = self.runWith.communicate()
         #####
