@@ -62,7 +62,11 @@ class RamDiskTemplate(object):
         else:
             self.logger = logger
         self.logger.log(lp.INFO, "Logger: " + str(self.logger))
-        self.diskSize = size
+
+        if size:
+            self.diskSize = size
+        else:
+            self.diskSize = 512
         self.success = False
         self.myRamdiskDev = None
         if not mountpoint:
