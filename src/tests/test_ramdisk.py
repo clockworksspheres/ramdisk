@@ -55,7 +55,7 @@ else:
     raise Exception("Damn it Jim!!! What OS is this???")
 
 
-class test_ramdisk(GenericTestUtilities, unittest.TestCase):
+class test_ramdisk(unittest.TestCase, RamDisk, GenericTestUtilities):
     """
     Holds helper methods.  DO NOT create an init
 
@@ -68,6 +68,8 @@ class test_ramdisk(GenericTestUtilities, unittest.TestCase):
     def setUpClass(self):
         """
         """
+        unittest.TestCase.setUpClass()
+        GenericTestUtilities.commonSetUp(self)
         # self.commonSetUp()
         self.libc = getLibc()
         self.subdirs = ["two", "three" "one/four"]
@@ -112,7 +114,7 @@ class test_ramdisk(GenericTestUtilities, unittest.TestCase):
             raise unittest.SkipTest("Not applicable here...")
 
         # get a ramdisk of appropriate size, with a secure random mountpoint
-        self.my_ramdisk = RamDisk(str(self.ramdisk_size), self.mnt_pnt_requested, logger=self.logger)
+        self.my_ramdisk = super(RamDisk, self).__init__(self.ramdisk_size, self.mnt_pnt_requested, logger=self.logger)
         self.logger.log(lp.WARNING, "::::: ramdisk: " + str(self.my_ramdisk) + " :::::")
         self.success, self.mountPoint, self.ramdiskDev = self.my_ramdisk.getData()
         self.logger.log(lp.WARNING, str(self.success) + " : " + str(self.mountPoint) + " : " + str(self.ramdiskDev))

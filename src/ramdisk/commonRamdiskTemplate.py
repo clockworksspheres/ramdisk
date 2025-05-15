@@ -42,17 +42,23 @@ class BadRamdiskArguments(Exception):
 class RamDiskTemplate(object):
     """
     """
-    def __init__(self, size=0, mountpoint=False, logger=False, **kwargs):
+    def __init__(self, **kwargs):
         """
+        was: def __init__(self, size=0, mountpoint=False, logger=False, **kwargs):
+
         """
         #####
         # Version/timestamp is
         # <YYYY><MM><DD>.<HH><MM><SS>.<microseconds>
         # in UTC time
         self.module_version = '20160224.032043.009191'
+
+        mytime = '%Y-%m--%d-%H-%S--%f'
+        logname = sys.argv[0].split("/")[-1] + mytime
+
         if not isinstance(logger, CyLogger):
             self.logger = CyLogger()
-            self.logger.initializeLogs()
+            self.logger.initializeLogs("/tmp", logname)
         else:
             self.logger = logger
         self.logger.log(lp.INFO, "Logger: " + str(self.logger))
