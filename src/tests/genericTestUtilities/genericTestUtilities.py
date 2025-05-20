@@ -47,6 +47,12 @@ class GenericTestUtilities(object):
     
     @author: Roy Nielsen
     """
+    def __init__(self):
+        """
+
+        """
+        pass
+
     def commonSetUp(self):
         """
         Initialization Method...

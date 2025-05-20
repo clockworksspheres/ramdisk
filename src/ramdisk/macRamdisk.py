@@ -69,11 +69,11 @@ class RamDisk(RamDiskTemplate):
 
     @author: Roy Nielsen
     """
-    def __init__(self, size=0, mountpoint="", logger=False, disableJournal=False) :
+    def __init__(self, size=0, mountpoint="", logger=False, disableJournal=False, **kwargs) :
         """
         Constructor
         """
-        super().__init__(self, size, mountpoint, logger)
+        super(RamDiskTemplate, self).__init__(size, mountpoint, logger, **kwargs)
 
         #####
         # Provided by commonRamdiskTemplate....
@@ -145,7 +145,7 @@ class RamDisk(RamDiskTemplate):
         print("########### IS THERE AVAILABLE MEMORY???? ##############")
         #####
         # Checking to see if memory is availalbe...
-        if not self.__isMemoryAvailable(self):
+        if not self.__isMemoryAvailable():
             self.logger.log(lp.DEBUG, "Physical memory not available to create ramdisk.")
             success = False
         else:

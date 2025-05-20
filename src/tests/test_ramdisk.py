@@ -68,8 +68,9 @@ class test_ramdisk(unittest.TestCase, RamDisk, GenericTestUtilities):
     def setUpClass(self):
         """
         """
-        unittest.TestCase.setUpClass()
-        GenericTestUtilities.commonSetUp(self)
+        #unittest.TestCase.setUpClass()
+        super(GenericTestUtilities, self).__init__(self)
+        # super(GenericTestUtilities, self).commonSetUp()
         # self.commonSetUp()
         self.libc = getLibc()
         self.subdirs = ["two", "three" "one/four"]
@@ -93,12 +94,16 @@ class test_ramdisk(unittest.TestCase, RamDisk, GenericTestUtilities):
 
         # self.setUpInstanceSpecifics()
 
+        size_in_mb = 0
+        mntpnt = ""
+        mylogger = self.logger
         if sys.platform.startswith("darwin"):
 			#Calculate size of ramdisk to make for this unit test.
             # size_in_mb = int((1024 * 1024 * 512) / 512)
             size_in_mb = 512
             self.ramdisk_size = size = size_in_mb
             self.mnt_pnt_requested = "testmntpnt"
+            mntpnt = self.mnt_pnt_requested
         elif sys.platform.startswith("linux") and self.target == 'linux':
             #Calculate size of ramdisk to make for this unit test.
             # linux ramdisks are made in terms of 1 mb at a time... not
@@ -114,17 +119,18 @@ class test_ramdisk(unittest.TestCase, RamDisk, GenericTestUtilities):
             raise unittest.SkipTest("Not applicable here...")
 
         # get a ramdisk of appropriate size, with a secure random mountpoint
-        self.my_ramdisk = super(RamDisk, self).__init__(self.ramdisk_size, self.mnt_pnt_requested, logger=self.logger)
-        self.logger.log(lp.WARNING, "::::: ramdisk: " + str(self.my_ramdisk) + " :::::")
-        self.success, self.mountPoint, self.ramdiskDev = self.my_ramdisk.getData()
+        # self.my_ramdisk = super(RamDisk, self).__init__(self, size_in_mb, mntpnt, mylogger)
+        super(RamDisk, self).__init__(self, size_in_mb, mntpnt, mylogger)
+        self.logger.log(lp.WARNING, "::::: ramdisk: " + str(super(RamDisk, self)) + " :::::")
+        self.success, self.mountPoint, self.ramdiskDev = super(RamDisk, self).getData(self)
         self.logger.log(lp.WARNING, str(self.success) + " : " + str(self.mountPoint) + " : " + str(self.ramdiskDev))
         self.mount = self.mountPoint
 
         self.logger.log(lp.INFO, "::::::::Ramdisk Mount Point: " + str(self.mountPoint))
         self.logger.log(lp.INFO, "::::::::Ramdisk Device     : " + str(self.ramdiskDev))
 
-        if not self.my_ramdisk.success:
-            raise IOError("Cannot get a ramdisk in setupClass for some reason. . .")
+        #if not self.my_ramdisk.success:
+        #    raise IOError("Cannot get a ramdisk in setupClass for some reason. . .")
 
 
         #####

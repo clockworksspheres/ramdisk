@@ -49,7 +49,7 @@ pip install statesman
 
 Now, let's create a simple state machine for a traffic light system:
 
-```
+``` python
 import statesman
 
 # Define the states
@@ -119,7 +119,7 @@ Certainly! Here's a simple implementation of a state machine in Python without u
 
 ## Traffic Light State Machine
 
-```
+``` python
 class TrafficLight:
     def __init__(self):
         self.state = self.Red(self)
@@ -207,7 +207,7 @@ Certainly! Below is a generic state machine implementation in Python. This imple
 
 ## Generic State Machine Implementation
 
-```
+``` python
 class State:
     def __init__(self):
         self.name = self.__class__.__name__
@@ -308,7 +308,7 @@ Certainly! Let's create a more concrete example of a state machine in Python. We
 
 ## Concrete Traffic Light State Machine
 
-```
+``` python
 class State:
     def __init__(self, name):
         self.name = name
@@ -412,7 +412,7 @@ Certainly! Below is a PlantUML diagram that represents the structure of the traf
 
 ## PlantUML Diagram
 
-```
+``` plantuml
 @startuml
 
 state TrafficLight {
@@ -521,7 +521,7 @@ Certainly! Below is a PlantUML class diagram that represents the structure of th
 
 ## PlantUML Class Diagram
 
-```
+``` plantuml
 @startuml
 
 class State {
@@ -634,3 +634,8 @@ This PlantUML class diagram provides a clear and concise visualization of the cl
 
 AI-generated answer. Please verify critical facts.
 
+-----
+
+``` bash
+pip install python-statemachine\[diagrams\]
+```
