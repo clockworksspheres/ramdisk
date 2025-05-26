@@ -26,7 +26,10 @@ sys.path.append(appendDir)
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
+from ramdisk.lib.environment import Environment
 from tests.genericTestUtilities.genericTestUtilities import GenericTestUtilities
+
+
 #####
 # Load OS specific Ramdisks
 if sys.platform.startswith("darwin"):
@@ -73,6 +76,7 @@ class test_ramdisk(unittest.TestCase, RamDisk, GenericTestUtilities):
         # super(GenericTestUtilities, self).commonSetUp()
         # self.commonSetUp()
         self.libc = getLibc()
+        self.environ = Environment()
         self.subdirs = ["two", "three" "one/four"]
         self.logger = CyLogger()
         self.logger.initializeLogs()
@@ -171,6 +175,24 @@ class test_ramdisk(unittest.TestCase, RamDisk, GenericTestUtilities):
 
 ###############################################################################
 ##### Functional Tests
+
+    ##################################
+
+    def test_user_state(self):
+        """
+        Should work when files exist in ramdisk.
+        """
+        thisOSfamily = self.environ.getosfamily()
+        if thisOSfamily == "linux":
+            if os.geteuid() != 0:
+                self.assertRaises(UserMustBeRootError, "If UID is not 0, a UserMustBeRootError must be raised...")
+            self.assertTrue(os.geteuid() == 0, "User is not root, cannot create a ramdisk if user is not root")
+        elif thisOSfamily == "darwin":
+            self.assertTrue(false, "This is not a darwin system...")
+
+        elif thisOSfamily == "win32":
+            self.assertTrue(false, "This is not a win32 system...")
+
 
     ##################################
 

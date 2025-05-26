@@ -171,9 +171,6 @@
   },
   "active": "c52fe03ac0d1d93f",
   "lastOpenFiles": [
-    "src/Docs/genericStateMachine.md",
-    "src/Docs/startingPlantumlForRenderingLocallyInObsidian.md",
-    "src/Docs/argsNkwargs.md",
     "src/tests/testmntpnt/testfile999",
     "src/tests/testmntpnt/testfile998",
     "src/tests/testmntpnt/testfile997",
@@ -184,6 +181,10 @@
     "src/tests/testmntpnt/testfile992",
     "src/tests/testmntpnt/testfile991",
     "src/tests/testmntpnt/testfile990",
+    "src/tests/testmntpnt/testfile989",
+    "src/Docs/genericStateMachine.md",
+    "src/Docs/startingPlantumlForRenderingLocallyInObsidian.md",
+    "src/Docs/argsNkwargs.md",
     "pythonDatetimeForTimestamp.md",
     "src/Docs/pythonMultipleInteritanceInitializingParents.md",
     "src/Docs/CreateNRenderPlantumlClassDiagram.md",
@@ -207,7 +208,6 @@
     "src/ramdisk/lib/getLibc/README.md",
     "src/ramdisk/lib/fsHelper/README.md",
     "src/ramdisk/lib/dev/README.md",
-    "src/ramdisk/lib/fsHelper/Untitled.md",
     "src/build/html/_static/plus.png",
     "src/build/html/_static/minus.png",
     "src/build/html/_static/file.png"

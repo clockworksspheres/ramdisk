@@ -691,6 +691,34 @@ class RamDisk(RamDiskTemplate):
 
         return success
 
+
+
+    ###########################################################################
+
+    def __isMemAvailable(self) :
+        """
+        """
+        success = False
+        line = ""
+        self.free = 0
+        freeNumber = 0
+        freeMagnitute = ""
+
+        #####
+        # Set up and run the command
+        cmd = ["/usr/bin/top", "-l", "1"]
+
+        output, _, _ = self.rw.waitNpassThruStdout("Networks")
+
+        for line in output.split("\n"):
+            tmpData = line.split()
+            lastWord = tmpData[-1]
+            nextWord = tmpData[-2]
+
+            print("words: {}, {}", lastWord, nextWord)
+            
+
+
     ###########################################################################
 
     def __isMemoryAvailable(self) :
