@@ -18,8 +18,8 @@ def isMemAvailable() :
 
     #####
     # Set up and run the command
-    if sys.platform == "darwin":
-        cmd = ["/usr/bin/top", "-l", "1"]
+    if sys.platform == "linux":
+        cmd = ["/usr/bin/top", "-n", "1"]
         lookingFor = "unused"
 
     rw.setCommand(cmd)

@@ -47,6 +47,7 @@ elif sys.platform.startswith("linux"):
     from ramdisk.linuxTmpfsRamdisk import RamDisk
     from ramdisk.linuxTmpfsRamdisk import umount
     from ramdisk.lib.fsHelper.linuxFsHelper import FsHelper
+    from ramdisk.lib.libHelperExceptions import UserMustBeRootError
 elif sys.platform.startswith("win32"):
     #####
     # For ImDisk for Windows
@@ -109,6 +110,9 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
             self.mnt_pnt_requested = "testmntpnt"
             mntpnt = self.mnt_pnt_requested
         elif sys.platform.startswith("linux") and self.target == 'linux':
+            # if not root, raise an error
+            if not os.geteuid():
+                raise UserMustBeRootError("Please run this with sudo...")
             #Calculate size of ramdisk to make for this unit test.
             # linux ramdisks are made in terms of 1 mb at a time... not
             # bits or bytes...
