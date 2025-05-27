@@ -109,6 +109,8 @@ class RamDisk(RamDiskTemplate):
         # for size regex in fsHelper to determine size in megabytes
         success, size = self.fsHelper.getDiskSizeInMb(size)
 
+        self.free = ""
+
         #####
         # Calculating the size of ramdisk in 1Mb chunks
         numerator = int(size) * 1024 * 1024  # 1024 * 1024 = 1 megabyte
@@ -145,7 +147,8 @@ class RamDisk(RamDiskTemplate):
         print("########### IS THERE AVAILABLE MEMORY???? ##############")
         #####
         # Checking to see if memory is availalbe...
-        if not self.__isMemoryAvailable():
+        # if not self.__isMemoryAvailable():
+        if not self.__isMemAvailable():
             self.logger.log(lp.DEBUG, "Physical memory not available to create ramdisk.")
             success = False
         else:
@@ -692,7 +695,6 @@ class RamDisk(RamDiskTemplate):
         return success
 
 
-
     ###########################################################################
 
     def __isMemAvailable(self) :
@@ -703,21 +705,48 @@ class RamDisk(RamDiskTemplate):
         self.free = 0
         freeNumber = 0
         freeMagnitute = ""
+        tmpFree = ""
 
         #####
         # Set up and run the command
         cmd = ["/usr/bin/top", "-l", "1"]
 
-        output, _, _ = self.rw.waitNpassThruStdout("Networks")
+        self.runWith.setCommand(cmd)
+        output, _, _ = self.runWith.communicate()
+        # output, _, _ = self.runWith.waitNpassThruStdout("Networks")
 
         for line in output.split("\n"):
             tmpData = line.split()
             lastWord = tmpData[-1]
             nextWord = tmpData[-2]
 
-            print("words: {}, {}", lastWord, nextWord)
-            
+            # print("words: {}, {}", lastWord, nextWord)
+            if re.search("unused", line):
+                tmpFree = nextWord
+        if tmpFree:
+            sizeCompile = re.compile(r"(\d+)(\w+)")
 
+            split_size = sizeCompile.search(tmpFree)
+            freeNumber = split_size.group(1)
+            freeMagnitude = split_size.group(2)
+
+            freeNumber = str(freeNumber).strip()
+            freeMagnitude = str(freeMagnitude).strip()
+
+            if re.match(r"^\d+$", freeNumber.strip()):
+                if re.match(r"^\w$", freeMagnitude.strip()):
+                    if freeMagnitute:
+                        #####
+                        # Calculate the size of the free memory in Megabytes
+                        if re.search("G", freeMagnitude.strip()):
+                            freeMem = 1024 * int(freeNumber)
+                            freeNumber = str(freeMem)
+                            self.free = freeNumber
+                            freeMagnitude = "M"
+                        elif re.search("M", freeMagnitude.strip()):
+                            self.free = freeNumber.strip() 
+
+        return freeNumber, freeMagnitude
 
     ###########################################################################
 
