@@ -73,7 +73,7 @@ class RamDisk(RamDiskTemplate):
         """
         Constructor
         """
-        super(RamDiskTemplate, self).__init__(size, mountpoint, logger, **kwargs)
+        super().__init__(size, mountpoint, logger, **kwargs)
 
         #####
         # Provided by commonRamdiskTemplate....
@@ -142,6 +142,8 @@ class RamDisk(RamDiskTemplate):
 
         #####
         # Passed in disk size must have a non-default value
+        print("diskSize: " + str(self.diskSize))
+        self.logger.log(lp.DEBUG, "diskSize: " + str(self.diskSize))
         if not self.diskSize == 0 :
             success  = True
         print("########### IS THERE AVAILABLE MEMORY???? ##############")
@@ -150,6 +152,7 @@ class RamDisk(RamDiskTemplate):
         # if not self.__isMemoryAvailable():
         if not self.__isMemAvailable():
             self.logger.log(lp.DEBUG, "Physical memory not available to create ramdisk.")
+            # self.logger
             success = False
         else:
             success = True
@@ -716,13 +719,22 @@ class RamDisk(RamDiskTemplate):
         # output, _, _ = self.runWith.waitNpassThruStdout("Networks")
 
         for line in output.split("\n"):
+            self.logger.log(lp.DEBUG, "line: " + str(line))
             tmpData = line.split()
-            lastWord = tmpData[-1]
-            nextWord = tmpData[-2]
+            try:
+                lastWord = tmpData[-1]
+                nextWord = tmpData[-2]
+            except IndexError as err:
+                pass # self.logger.log(self.lp.DEBUG, )
+                continue
 
-            # print("words: {}, {}", lastWord, nextWord)
+            print("words: {}, {}", lastWord, nextWord)
+            self.logger.log(lp.DEBUG, "words: " + lastWord + " : " + nextWord)
             if re.search("unused", line):
+                # self.logger.log
                 tmpFree = nextWord
+                break
+        self.logger.log(lp.DEBUG, "free: " + str(tmpFree))
         if tmpFree:
             sizeCompile = re.compile(r"(\d+)(\w+)")
 
@@ -735,18 +747,27 @@ class RamDisk(RamDiskTemplate):
 
             if re.match(r"^\d+$", freeNumber.strip()):
                 if re.match(r"^\w$", freeMagnitude.strip()):
-                    if freeMagnitute:
-                        #####
-                        # Calculate the size of the free memory in Megabytes
-                        if re.search("G", freeMagnitude.strip()):
-                            freeMem = 1024 * int(freeNumber)
-                            freeNumber = str(freeMem)
-                            self.free = freeNumber
-                            freeMagnitude = "M"
-                        elif re.search("M", freeMagnitude.strip()):
-                            self.free = freeNumber.strip() 
+                    #####
+                    # Calculate the size of the free memory in Megabytes
+                    if re.search("G", freeMagnitude.strip()):
+                        freeMem = 1024 * int(freeNumber)
+                        freeNumber = str(freeMem)
+                        self.free = freeNumber
+                        freeMagnitude = "M"
+                    elif re.search("M", freeMagnitude.strip()):
+                        self.free = freeNumber.strip() 
+        print("Free Memory: " + str(self.free))
+        print("disk size:   "  + str(self.diskSize))
+        self.logger.log(lp.DEBUG, "Free Memory: " + str(self.free))
+        self.logger.log(lp.DEBUG, "disk size:   "  + str(self.diskSize))
+        # if int(self.free) > int(float(self.diskSize)):
+        if int(self.free) > int(float(int(self.diskSize)/(2*1024))):
+            success = True
+        else:
+            raise MemoryNotAvailableError("Memory Not Available for Creating the Ramdisk, Free up Memory to Create a Ramdisk...")
 
-        return freeNumber, freeMagnitude
+        # return freeNumber, freeMagnitude
+        return success
 
     ###########################################################################
 
@@ -825,7 +846,7 @@ class RamDisk(RamDiskTemplate):
                             self.free = freeNumber
         self.logger.log(lp.DEBUG, "free: " + str(self.free))
         self.logger.log(lp.DEBUG, "Size requested: " + str(self.diskSize))
-        if int(self.free) > int(float(self.diskSize)/(2*1024)):
+        if int(self.free) > int(float(self.diskSize)):
             success = True
         else:
             raise MemoryNotAvailableError("Memory Not Available for Creating the Ramdisk, Free up Memory to Create a Ramdisk...")
