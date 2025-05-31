@@ -49,6 +49,8 @@ Ramdisk class that can use either current method for creating a ramdisk on Linux
 
 ### macRamdisk
 
+tested on macOS Sierra
+
 ## Only developed for Linux
 
 ## As a library
@@ -57,7 +59,7 @@ Ramdisk class that can use either current method for creating a ramdisk on Linux
 
 ### linuxTmpfsRamdisk
 
-tested on Rocky 9 and Ubuntu 24.04
+tested on Rocky 9, 10 and Ubuntu 24.04
 
 ## Only developed for macOS and Linux
 
@@ -71,7 +73,7 @@ Will correctly inherit either a macRamdisk on macOS or a linuxTmpfsRamdisk (by d
 
 ## Developed for macOS, Linux and Windows
 
-Nothing yet....
+Windows ramdisk is a prototype in flux, may or may not work.
 
 ## Example code
 
@@ -88,6 +90,8 @@ The menu code is cross platform, in an alpha state.
 ## Windows
 
 Will call a currently available ramdisk executable, like ImDisk, to create a ramdisk.
+
+Prototype in flux, may or may not work.
 
 ## Languages
 
