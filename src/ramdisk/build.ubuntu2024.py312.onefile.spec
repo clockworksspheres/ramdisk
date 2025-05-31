@@ -5,13 +5,10 @@
 # https://stackoverflow.com/questions/41870727/pyinstaller-adding-data-files
 
 a = Analysis(
-    ['eisenban.py'],
-    pathex=['.', './ui', './ui/bkp', './resources/font', './resources/img', './resources/icons', './packenv/bin', './packenv/include', './packenv/lib/python3.12/site-packages'],
+    ['setup_ramdisk.py'],
+    pathex=['.', './ui',  './lib', './packenv/bin', './packenv/include', './packenv/lib/python3.12/site-packages'],
     binaries=[],
-    datas=[("resources/font/*.ttf",   "./resources/font"), 
-           ("resources/font/*.txt",   "./resources/font"), 
-           ("resources/img/*.png",    "./resources/img"), 
-           ("resources/icons/*.icns",  "./resources/icns")], 
+    datas=[ ], 
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -28,7 +25,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='eisenban',
+    name='setup_ramdisk',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
