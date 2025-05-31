@@ -1,0 +1,6 @@
+{
+    "files": [
+        "ui/main.ui"
+        "ui/local_auth.ui"
+    ]
+}

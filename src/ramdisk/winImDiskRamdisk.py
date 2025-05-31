@@ -6,12 +6,16 @@ Windows Ramdisk class based on use of ImDisk windows program
 #--- Native python libraries
 from tempfile import mkdtemp
 import re
+import sys
+
+sys.path.append("../")
 
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.run_commands import RunWith
 from ramdisk.lib.fsHelper.ntfsFsHelper import FsHelper
+from ramdisk.commonRamdiskTemplate import RamDiskTemplate
 
 ###########################################################################
 

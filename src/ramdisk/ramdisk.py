@@ -26,7 +26,7 @@ from ramdisk.commonRamdiskTemplate import RamDiskTemplate, BadRamdiskArguments, 
 class RamDisk(RamDiskTemplate):
     """
     """
-    def __init__(self, size=0, mountpoint=False, logger=False, environ=False, **kwargs):
+    def __init__(self, size=0, mountpoint=False, logger=False, **kwargs):
         """
         """
         #####
@@ -38,10 +38,9 @@ class RamDisk(RamDiskTemplate):
             self.logger = CyLogger()
         else:
             self.logger = logger
-        if not environ:
-            self.environ = Environment()
-        else:
-            self.environ = environ
+
+        self.environ = Environment()
+
         self.chkApp = CheckApplicable(self.environ, self.logger)
         
         #####
@@ -59,13 +58,13 @@ class RamDisk(RamDiskTemplate):
 
         if sys.platform.startswith("linux"):
             from .linuxTmpfsRamdisk import RamDisk
-            self.ramdisk = RamDisk(size, mountpoint, logger)
+            self.ramdisk = RamDisk(size, mountpoint, logger, **kwargs)
         elif sys.platform.startswith("darwin"):
             from .macRamdisk import RamDisk
-            self.ramdisk = RamDisk(size, mountpoint, logger)
+            self.ramdisk = RamDisk(size, mountpoint, logger, **kwargs)
         elif sys.platform.startswith("win32"):
             from .winImDiskRamdisk import RamDisk
-            self.ramdisk = RamDisk(*args, **kwargs)
+            self.ramdisk = RamDisk(size, mountpoint, logger, **kwargs)
         else:
             raise NotValidForThisOS("Ramdisk not available here...")
 

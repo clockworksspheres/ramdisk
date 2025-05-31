@@ -13,10 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
-                "mode": "preview",
-                "source": false
-              }
+                "file": "src/Docs/startingPlantumlForRenderingLocallyInObsidian.md",
+                "mode": "source",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "startingPlantumlForRenderingLocallyInObsidian"
             }
           }
         ]
@@ -38,8 +40,11 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical"
-              }
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
             }
           },
           {
@@ -54,7 +59,9 @@
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical"
-              }
+              },
+              "icon": "lucide-search",
+              "title": "Search"
             }
           },
           {
@@ -62,14 +69,16 @@
             "type": "leaf",
             "state": {
               "type": "bookmarks",
-              "state": {}
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
             }
           }
         ]
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 422.5
   },
   "right": {
     "id": "085a5f030fb6d370",
@@ -85,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "README.md",
+                "file": "src/ramdisk/lib/CheckApplicableRelated.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -93,7 +102,9 @@
                 "searchQuery": "",
                 "backlinkCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for CheckApplicableRelated"
             }
           },
           {
@@ -102,10 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "README.md",
+                "file": "src/ramdisk/lib/CheckApplicableRelated.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from CheckApplicableRelated"
             }
           },
           {
@@ -115,8 +128,12 @@
               "type": "tag",
               "state": {
                 "sortOrder": "frequency",
-                "useHierarchy": true
-              }
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
             }
           },
           {
@@ -125,8 +142,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "README.md"
-              }
+                "file": "src/ramdisk/lib/CheckApplicableRelated.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of CheckApplicableRelated"
             }
           }
         ]
@@ -138,28 +160,54 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "vscode-editor:Create Code File": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
-      "command-palette:Open command palette": false
+      "command-palette:Open command palette": false,
+      "vscode-editor:Create Code File": false
     }
   },
   "active": "c52fe03ac0d1d93f",
   "lastOpenFiles": [
-    "src/build/html/objects.inv",
-    "src/build/html/searchindex.js",
-    "src/build/html/search.html",
-    "src/build/html/genindex.html",
-    "src/build/html/_sources/index.rst.txt",
-    "src/build/html/_sources",
-    "src/build/html/index.html",
-    "src/build/doctrees/index.doctree",
-    "src/build/doctrees/environment.pickle",
-    "src/build/doctrees",
-    "src/build/html/_static/sphinx_highlight.js",
+    "src/tests/testmntpnt/testfile999",
+    "src/tests/testmntpnt/testfile998",
+    "src/tests/testmntpnt/testfile997",
+    "src/tests/testmntpnt/testfile996",
+    "src/tests/testmntpnt/testfile995",
+    "src/tests/testmntpnt/testfile994",
+    "src/tests/testmntpnt/testfile993",
+    "src/tests/testmntpnt/testfile992",
+    "src/tests/testmntpnt/testfile991",
+    "src/tests/testmntpnt/testfile990",
+    "src/tests/testmntpnt/testfile989",
+    "src/Docs/genericStateMachine.md",
+    "src/Docs/startingPlantumlForRenderingLocallyInObsidian.md",
+    "src/Docs/argsNkwargs.md",
+    "pythonDatetimeForTimestamp.md",
+    "src/Docs/pythonMultipleInteritanceInitializingParents.md",
+    "src/Docs/CreateNRenderPlantumlClassDiagram.md",
+    "src/Docs/HowToAutoGenerateDocumentsFromCode.md",
+    "src/Docs/README.md",
+    "src/Docs/euidVsUsernameInWindows.md",
+    "src/Docs/macosRemount.md",
+    "src/Docs/classes_ramdisk.jpg",
+    "src/Docs/openSourceReverseEngineerToUML.md",
+    "src/Docs/CheckApplicableRelated.md",
+    "src/examples/README.md",
+    "pyenv-notes.md",
+    "src/examples/Untitled.md",
+    "README.md",
+    "src/tests/saved4later/README.md",
+    "src/tests/genericTestUtilities/README.md",
+    "src/tests/TestsReadme/README.md",
+    "src/ramdisk/ui/README.md",
+    "src/ramdisk/lib/manage_user/README.md",
+    "src/ramdisk/lib/manage_keychain/README.md",
+    "src/ramdisk/lib/getLibc/README.md",
+    "src/ramdisk/lib/fsHelper/README.md",
+    "src/ramdisk/lib/dev/README.md",
     "src/build/html/_static/plus.png",
     "src/build/html/_static/minus.png",
     "src/build/html/_static/file.png"

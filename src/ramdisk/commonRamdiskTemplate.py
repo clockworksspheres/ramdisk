@@ -44,23 +44,33 @@ class RamDiskTemplate(object):
     """
     def __init__(self, size=0, mountpoint=False, logger=False, **kwargs):
         """
+        was: def __init__(self, size=0, mountpoint=False, logger=False, **kwargs):
+
         """
         #####
         # Version/timestamp is
         # <YYYY><MM><DD>.<HH><MM><SS>.<microseconds>
         # in UTC time
         self.module_version = '20160224.032043.009191'
-        if not isinstance(logger, CyLogger):
+
+        mytime = '%Y-%m--%d-%H-%S--%f'
+        logname = sys.argv[0].split("/")[-1] + mytime
+
+        if not logger and not isinstance(logger, CyLogger):
             self.logger = CyLogger()
-            self.logger.initializeLogs()
+            self.logger.initializeLogs("/tmp", logname)
         else:
             self.logger = logger
         self.logger.log(lp.INFO, "Logger: " + str(self.logger))
-        self.diskSize = size
+
+        if size:
+            self.diskSize = size
+        else:
+            self.diskSize = 512
         self.success = False
         self.myRamdiskDev = None
         if not mountpoint:
-            self.getRandomizedMountpoint()
+            self.getRandomizedMountpoint(**kwargs)
         else:
             self.mntPoint = mountpoint
 
@@ -107,7 +117,7 @@ class RamDiskTemplate(object):
 
     ###########################################################################
 
-    def getRandomizedMountpoint(self, **kwargs):
+    def getRandomizedMountpoint(self):
         """
         Create a randomized (secure) mount point - per python's implementation
         of mkdtemp - a way to make an unguessable directory on the system

@@ -49,6 +49,8 @@ Ramdisk class that can use either current method for creating a ramdisk on Linux
 
 ### macRamdisk
 
+tested on macOS Sierra
+
 ## Only developed for Linux
 
 ## As a library
@@ -56,6 +58,8 @@ Ramdisk class that can use either current method for creating a ramdisk on Linux
 ### linuxLoopRamdisk
 
 ### linuxTmpfsRamdisk
+
+tested on Rocky 9, 10 and Ubuntu 24.04
 
 ## Only developed for macOS and Linux
 
@@ -69,7 +73,7 @@ Will correctly inherit either a macRamdisk on macOS or a linuxTmpfsRamdisk (by d
 
 ## Developed for macOS, Linux and Windows
 
-Nothing yet....
+Windows ramdisk is a prototype in flux, may or may not work.
 
 ## Example code
 
@@ -87,6 +91,8 @@ The menu code is cross platform, in an alpha state.
 
 Will call a currently available ramdisk executable, like ImDisk, to create a ramdisk.
 
+Prototype in flux, may or may not work.
+
 ## Languages
 
 Currently written/tested in only python v3.9+
@@ -100,3 +106,77 @@ Table tracking supported combinations of:
 OS's, OS versions, their kernel versions (maybe), python versions, with tagged versions of ramdisk.
 
 Very greatful for any contributions/pull requests to help with the table!
+
+## Python Libraries to include, and how to include them for running the UI, the Environment.py, etc.
+
+
+### Cross Platform
+
+pyside6
+pyinstaller
+packaging
+
+
+PySide6 cross platform library for the Graphical User Interface
+
+Pyinstaller cross platform library to create the installer to bundle the GUI into a windows app package
+
+packaging.version.parse is to replace distutils.version.LooseVersion, for comparing versions of operating systems in CheckApplicable.  As of 4/13/25, CheckApplicable is entirely distutils, and needs to be refactored to packaging for python 3.10+.
+
+#### Macos Specific
+
+##### None need currently
+
+##### How to install non-native python libraries on Macos
+
+``` bash
+
+directory="./packenv"
+actfile="./packenv/bin/activate"
+
+if [ ! -d "$directory" ] || [ ! -f "$actfile" ] ; then
+  python3 -m venv packenv
+  source packenv/bin/activate
+  pip3 install --upgrade pip
+
+  pip3 install PySide6 PyInstaller
+  pip3 install --upgrade PyInstaller pyinstaller-hooks-contrib
+  pip3 install packaging
+else
+  source packenv/bin/activate
+fi
+```
+
+### Linux Specific
+
+##### None need currently
+
+##### How to install non-native python libraries on Linux
+
+``` bash
+
+directory="./packenv"
+actfile="./packenv/bin/activate"
+
+if [ ! -d "$directory" ] || [ ! -f "$actfile" ] ; then
+  python3 -m venv packenv
+  source packenv/bin/activate
+  pip3 install --upgrade pip
+
+  pip3 install PySide6 PyInstaller
+  pip3 install --upgrade PyInstaller pyinstaller-hooks-contrib
+  pip3 install packaging
+else
+  source packenv/bin/activate
+fi
+```
+
+#### Windows Specific
+
+pywin32  
+
+pywin32 windows library to add windows functionality for the Environment.py to match the python functionality found natively in unix environments.
+
+##### How to to install non-native python libraries in windows
+
+

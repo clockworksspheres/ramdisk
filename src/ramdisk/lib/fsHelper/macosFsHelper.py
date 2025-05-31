@@ -82,7 +82,7 @@ class FsHelper(object):
                megabyte) could be changed to suit the user.
 
                when getting input for the size of the ramdisk, use 
-               regex \d+[GgMm][Bb] for size
+               regex d+[GgMm][Bb] for size
 
         """
         success = False
@@ -103,10 +103,10 @@ class FsHelper(object):
         except AttributeError as err:
             try:
                 match = re.match(r"^(\d+)$", str(size))
-                diskSizeInMb = match.group(1)
+                diskSizeInMb = match.group(0)
             except AttributeError as err:
-                print("Unexpected input, size input when only numbers is only in calculated in megabytes...")
-                print("Or possibly, unexpected input, size input must be XXXXSS where XXXX is decimal value and SS is either Mb or Gb")
+                self.logger.log(lp.DEBUG, "Unexpected input, size input when only numbers is only in calculated in megabytes...")
+                self.logger.log(lp.DEBUG, "Or possibly, unexpected input, size input must be XXXXSS where XXXX is decimal value and SS is either Mb or Gb")
                 raise(err)
             except Exception as err:
                 print(traceback.format_exc())
