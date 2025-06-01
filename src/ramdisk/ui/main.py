@@ -13,20 +13,21 @@ from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea,
 
 
 import sys 
+
+sys.path.append("../..")
+
 # from PySide6.QtWidgets import QApplication, QDialog, QMainWindow, QPushButton, QVBoxLayout, QLabel, QDialogButtonBox
 # from PySide6.QtWidgets import QMessageBox
 from PySide6.QtGui import QIntValidator
 
 
-from ui_main import Ui_MainWindow
-from ui_not_yet_implemented import Ui_Dialog
-
-from validate import validateMntPntString
-from getValues import getMaxMemSize
-
-sys.path.append("../..")
-
 #--- non-native python libraries in this source tree
+from ramdisk.ui.ui_main import Ui_MainWindow
+from ramdisk.ui.ui_not_yet_implemented import Ui_Dialog
+
+from ramdisk.ui.validate import validateMntPntString
+from ramdisk.ui.getValues import getMaxMemSize
+
 from ramdisk.lib.dev.getMemStatus import GetMemStatus
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority

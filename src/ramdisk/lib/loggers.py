@@ -29,15 +29,15 @@ import logging.handlers
 
 #####
 # Include the parent project directory in the PYTHONPATH
-# appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-2])
-# sys.path.append(appendDir)
+appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-2])
+sys.path.append(appendDir)
 
-#sys.path.append("../..")
+# sys.path.append("../..")
 
 # from ramdisk.lib.singleton import Singleton
 # from ramdisk.config import DEFAULT_LOG_LEVEL
-from . singleton import Singleton
-from .. config import DEFAULT_LOG_LEVEL
+from ramdisk.config import DEFAULT_LOG_LEVEL
+from ramdisk.lib.singleton import Singleton
 
 #from logging.handlers import RotatingFileHandler
 ###############################################################################

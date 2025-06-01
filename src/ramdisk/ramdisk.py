@@ -10,9 +10,9 @@ from tempfile import mkdtemp
 
 #####
 # Include the parent project directory in the PYTHONPATH
-# appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
-# sys.path.append(appendDir)
-sys.path.append("../")
+appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
+sys.path.append(appendDir)
+#sys.path.append("../")
 
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import LogPriority as lp

@@ -11,7 +11,6 @@ from optparse import OptionParser
 
 from PySide6.QtWidgets import QApplication
 
-sys.path.append("../")
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
@@ -54,6 +53,10 @@ parser.add_option("-v", "--verbose", action="store_true",
                   help="Print status messages")
 
 (opts, args) = parser.parse_args()
+
+if len(sys.argv) == 1:
+    parser.print_help()
+    parser.exit()
 
 if opts.verbose != 0:
     level = lp.INFO

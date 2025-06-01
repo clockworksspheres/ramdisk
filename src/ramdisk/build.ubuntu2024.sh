@@ -12,11 +12,10 @@ actfile="./packenv/bin/activate"
 if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
    python3 -m venv packenv
 
+   pip3 install PySide6 PyInstaller
+   pip3 install --upgrade PyInstaller pyinstaller-hooks-contrib
 fi
-source ./packenv/bin/activate
-
-pip3 install PySide6 PyInstaller
-pip3 install --upgrade PyInstaller pyinstaller-hooks-contrib
+source packenv/bin/activate
 
 
 pyinstaller --clean -y build.ubuntu2024.py312.onefile.spec
