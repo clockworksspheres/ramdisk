@@ -1,4 +1,4 @@
-#!python -u
+#!/usr/bin/env -S python -u
 """
 @author: Roy Nielsen
 
