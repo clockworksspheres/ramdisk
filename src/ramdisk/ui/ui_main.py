@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.2
+## Created by: Qt User Interface Compiler version 6.9.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -24,6 +24,7 @@ class Ui_MainWindow(object):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(478, 308)
+        MainWindow.setAutoFillBackground(True)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.createPushButton = QPushButton(self.centralwidget)
@@ -47,7 +48,7 @@ class Ui_MainWindow(object):
         self.sizeHorizontalSlider = QSlider(self.centralwidget)
         self.sizeHorizontalSlider.setObjectName(u"sizeHorizontalSlider")
         self.sizeHorizontalSlider.setGeometry(QRect(10, 70, 160, 25))
-        self.sizeHorizontalSlider.setOrientation(Qt.Horizontal)
+        self.sizeHorizontalSlider.setOrientation(Qt.Orientation.Horizontal)
         self.sizeLabel = QLabel(self.centralwidget)
         self.sizeLabel.setObjectName(u"sizeLabel")
         self.sizeLabel.setGeometry(QRect(20, 50, 161, 16))
@@ -60,7 +61,9 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 478, 24))
+        self.menubar.setGeometry(QRect(0, 0, 478, 43))
+        self.menubar.setAutoFillBackground(True)
+        self.menubar.setNativeMenuBar(True)
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -72,7 +75,7 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Create Ramdisk", None))
         self.createPushButton.setText(QCoreApplication.translate("MainWindow", u"Create Ramdisk", None))
         self.rListPushButton.setText(QCoreApplication.translate("MainWindow", u"Ramdisk List", None))
         self.debugPushButton.setText(QCoreApplication.translate("MainWindow", u"Debug", None))
