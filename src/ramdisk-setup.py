@@ -55,8 +55,7 @@ parser.add_option("-v", "--verbose", action="store_true",
 (opts, args) = parser.parse_args()
 
 if len(sys.argv) == 1:
-    parser.print_help()
-    parser.exit()
+    opts.gui = True
 
 if opts.verbose != 0:
     level = lp.INFO
