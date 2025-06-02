@@ -11,7 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Create Ramdisk</string>
+  </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="createPushButton">
@@ -99,7 +102,7 @@
      </rect>
     </property>
     <property name="orientation">
-     <enum>Qt::Horizontal</enum>
+     <enum>Qt::Orientation::Horizontal</enum>
     </property>
    </widget>
    <widget class="QLabel" name="sizeLabel">
@@ -145,8 +148,14 @@
      <x>0</x>
      <y>0</y>
      <width>478</width>
-     <height>24</height>
+     <height>43</height>
     </rect>
+   </property>
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
+   <property name="nativeMenuBar">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
