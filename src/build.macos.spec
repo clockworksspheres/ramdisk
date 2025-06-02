@@ -12,7 +12,7 @@ a = Analysis(
     pathex=['.', './ramdisk', './ramdisk/ui', './packenv/bin', './packenv/include', './packenv/lib/python3.13/site-packages'],
     binaries=[],
     datas=[("ramdisk/resources/img/*.png",    "./ramdisk/resources/img"), 
-           ("ramdisk/resources/icons/*.icns",  "./ramdisk/resources/icns")], 
+           ("ramdisk/resources/icns/*.icns",  "./ramdisk/resources/icns")], 
     hiddenimports=['python3','python*','PySide6.*'],
     hookspath=[],
     hooksconfig={},
@@ -52,7 +52,7 @@ coll = COLLECT(
 app = BUNDLE(
     coll,
     name='ramdisk-setup.app',
-    icon='ram.icns',
+    icon='./ramdisk/resources/icns/ram.icns',
     bundle_identifier='org.clockworksspheres.ramdisk',
 )
 

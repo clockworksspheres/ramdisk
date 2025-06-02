@@ -26,7 +26,7 @@ pyinstaller -y build.macos.spec
 ./clean.sh
 cp -a ramdisk dist/ramdisk-setup.app/Contents/Resources
 cp -a ramdisk dist/ramdisk-setup.app/Contents
-./dist/ramdisk.app/Contents/MacOS/ramdisk
+./dist/ramdisk-setup.app/Contents/MacOS/ramdisk-setup
 
 # cp -a dist/eisenban.app ~/Desktop
 # open ~/Desktop/eisenban.app
