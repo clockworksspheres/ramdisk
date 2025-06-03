@@ -1,3 +1,6 @@
+#!/usr/bin/env -S python -u
+"""
+"""
 import re
 import sys
 
@@ -14,7 +17,7 @@ def isMemAvailable() :
     line = ""
     free = 0 
     freeNumber = 0 
-    freeMagnitute = ""
+    freeMagnitude = ""
 
     #####
     # Set up and run the command
