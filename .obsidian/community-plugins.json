@@ -2,5 +2,6 @@
   "python-scripter",
   "vscode-editor",
   "obsidian-open-in-other-editor",
-  "obsidian-plantuml"
+  "obsidian-plantuml",
+  "code-emitter"
 ]
