@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+import os
+
 class FsHelper(object):
     """
     """
@@ -34,6 +36,13 @@ class FsHelper(object):
         # Run logic or command to get disk size in megabytes       
 
         return success, diskSizeInMb
+    
+    def chown(path, user, group=None, withRoot=False, permissions=None, recursive=True):
+        """
+
+        """
+        success = False
+        return success
 
         
 if __name__=="__main__":

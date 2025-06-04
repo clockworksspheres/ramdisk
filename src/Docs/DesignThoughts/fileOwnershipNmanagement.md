@@ -34,5 +34,5 @@ A Spawining Controller should control only one worker type.
 
 A meta Spawning Controller can spawn other Spawning Controllers.
 
-All workers must implement the work their interface requires, or it is not considered production ready and does not go into production.  The workers may have protected or private methods that do not conform to specific interface methods, but only to support of the interface. 
+All workers must implement the work their interface requires, or it is not considered production ready and does not go into production.  The workers may have protected or private methods that do not conform to specific interface methods, but only to support the purpose of the interface. 
 

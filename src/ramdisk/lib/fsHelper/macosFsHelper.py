@@ -129,6 +129,69 @@ class FsHelper(object):
         return success, diskSizeInMb
 
 
+    def chown(path, user, group=None, withRoot=False, permissions=None, recursive=True):
+        """
+        """
+        success = False
+
+        # Handling str based path validation
+        if not path:
+            return success
+
+        elif isinstance(path, str):
+            # Check if the path is a valid path on the system.
+            if os.path.exists(path):
+                self.logger.log(lp.DEBUG, "path is valid, proceeding.")
+            else:
+                return success, "Path non-existent, or you don't have permission to it."
+        else:
+            return success, "Path parameter needs to be a valid type"
+        
+
+        # Handling User ID validation
+        if not user:
+            return success
+        elif isinstance(user, str):
+            # perform a 're' check to see if it's a decimal string
+            if re.match("\d+"):
+                # Check to see if it's a valid uid on the system
+            else:
+                return success, "Not valid input for the user parameter"
+        elif isinstance(user, int):
+            
+        else:
+            return success, "not valid input for a UID"
+
+        
+        # Handling Group ID validation
+        if isinstance(gid, str):
+            # 
+
+
+        elif isinstance(gid, int):
+            return False
+        
+
+
+
+
+        try:
+            # Change the owner and group id of the current path
+            os.chown(path, uid, gid)
+            
+            # If the path is a directory, iterate over its contents
+            if os.path.isdir(path):
+                for item in os.listdir(path):
+                    item_path = os.path.join(path, item)
+                    chown_recursive(item_path, uid, gid)
+        except Exception as e:
+            print(f"Error changing ownership of {path}: {e}")
+
+
+
+
+
+
 if __name__=="__main__":
     fshelper = FsHelper()
     success, blocksize = fshelper.getFsBlockSize()
