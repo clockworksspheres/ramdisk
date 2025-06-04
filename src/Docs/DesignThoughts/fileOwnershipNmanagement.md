@@ -33,3 +33,7 @@ All workers based on a specific target should have the same methods.
 A Spawining Controller should control only one worker type.
 
 A meta Spawning Controller can spawn other Spawning Controllers.
+
+Workers can do more or do less than the current interface, but all workers must implement the work their interface requires, or it is not considered production ready and does not go into production.
+
+
