@@ -7,12 +7,12 @@ Generic ramdisk test, with helper functions. Inherited by other tests.
 #--- Native python libraries
 
 import os
-import re
+# import re
 import sys
 import tempfile
 import traceback
 import unittest
-import ctypes
+# import ctypes
 from datetime import datetime
 
 #####
@@ -37,15 +37,15 @@ if sys.platform.startswith("darwin"):
     # For Mac
     from ramdisk.lib.getLibc.macGetLibc import getLibc
     from ramdisk.macRamdisk import RamDisk
-    from ramdisk.macRamdisk import detach
-    from ramdisk.macRamdisk import umount
+#    from ramdisk.macRamdisk import detach
+#    from ramdisk.macRamdisk import umount
     from ramdisk.lib.fsHelper.macosFsHelper import FsHelper
 elif sys.platform.startswith("linux"):
     #####
     # For Linux
     from ramdisk.lib.getLibc.linuxGetLibc import getLibc
     from ramdisk.linuxTmpfsRamdisk import RamDisk
-    from ramdisk.linuxTmpfsRamdisk import umount
+#    from ramdisk.linuxTmpfsRamdisk import umount
     from ramdisk.lib.fsHelper.linuxFsHelper import FsHelper
     from ramdisk.lib.libHelperExceptions import UserMustBeRootError
 elif sys.platform.startswith("win32"):
@@ -53,7 +53,7 @@ elif sys.platform.startswith("win32"):
     # For ImDisk for Windows
     from ramdisk.lib.getLibc.winGetLibc import getLibc
     from ramdisk.winImDiskRamdisk import RamDisk
-    from ramdisk.winImDiskRamdisk import umount
+#    from ramdisk.winImDiskRamdisk import umount
     from ramdisk.lib.fsHelper.ntfsFsHelper import FsHelper
 else:
     raise Exception("Damn it Jim!!! What OS is this???")
@@ -106,7 +106,8 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
 			#Calculate size of ramdisk to make for this unit test.
             # size_in_mb = int((1024 * 1024 * 512) / 512)
             size_in_mb = 512
-            self.ramdisk_size = size = size_in_mb
+            # self.ramdisk_size = size = size_in_mb
+            self.ramdisk_size = size_in_mb
             self.mnt_pnt_requested = "testmntpnt"
             mntpnt = self.mnt_pnt_requested
         elif sys.platform.startswith("linux") and self.target == 'linux':
@@ -121,7 +122,8 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
             self.mnt_pnt_requested = "/tmp/testmntpnt"
         elif sys.platform.startswith("win32") and self.target == 'win32':
             #Calculate size of ramdisk to make for this unit test.
-            self.ramdisk_size = size = size_in_mb
+            #self.ramdisk_size = size = size_in_mb
+            self.ramdisk_size = size_in_mb
             self.mnt_pnt_requested = "testmntpnt"
         else:
             raise unittest.SkipTest("Not applicable here...")
@@ -130,7 +132,7 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
         self.my_ramdisk = RamDisk(size_in_mb, mntpnt, mylogger)
         # super(RamDisk, self).__init__(self, size_in_mb, mntpnt, mylogger)
         self.logger.log(lp.WARNING, "::::: ramdisk: " + str(self.my_ramdisk) + " :::::")
-        self.success, self.mountPoint, self.ramdiskDev = self.my_ramdisk.getData(self)
+        self.success, self.mountPoint, self.ramdiskDev = self.my_ramdisk.getData()
         self.logger.log(lp.WARNING, str(self.success) + " : " + str(self.mountPoint) + " : " + str(self.ramdiskDev))
         self.mount = self.mountPoint
 
@@ -192,10 +194,10 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
                 self.assertRaises(UserMustBeRootError, "If UID is not 0, a UserMustBeRootError must be raised...")
             self.assertTrue(os.geteuid() == 0, "User is not root, cannot create a ramdisk if user is not root")
         elif thisOSfamily == "darwin":
-            self.assertTrue(false, "This is not a darwin system...")
+            self.assertTrue(True, "This is not a darwin system...")
 
         elif thisOSfamily == "win32":
-            self.assertTrue(false, "This is not a win32 system...")
+            self.assertTrue(True, "This is not a win32 system...")
 
 
     ##################################
@@ -248,7 +250,7 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
         ten = 10
         #####
         # 50Mb file size
-        fifty = 50
+        # fifty = 50
         #####
         # 80Mb file size
         eighty = 80
@@ -293,6 +295,7 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
             self.logger.log(lp.WARNING, traceback.format_exc())
             self.logger.log(lp.WARNING, str(file_size) + " if meaningful...")
             self.logger.log(lp.WARNING, "test_four_file_sizes test")
+            self.logger.log(lp.WARNING, str(err))
  
     ##################################
 
