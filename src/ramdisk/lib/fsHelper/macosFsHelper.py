@@ -36,6 +36,8 @@ class FsHelper(object):
         self.environ = Environment()
         self.chkApp = CheckApplicable(self.environ, self.logger)
 
+        self.rw = RunWith(self.logger)
+
         #####
         # Check applicability to the current OS
         macApplicable = {'type': 'white',
@@ -129,52 +131,122 @@ class FsHelper(object):
         return success, diskSizeInMb
 
 
-    def chown(path, user, group=None, withRoot=False, permissions=None, recursive=True):
+    def validateUser(self, user=""):
+        """
+        """
+        success = False
+        message = ""
+
+        # Handling User ID validation
+        if not user:
+            message = "Value not passed in for User validation"
+        elif isinstance(user, str):
+            # perform a 're' check to see if it's a decimal string
+            if re.match("\d+", user):
+                # Check to see if it's a valid uid on the system
+                user = int(user.strip())
+            elif re.match("\w+", user):
+                # look for username in list of valid users on the system
+                cmd = ["/usr/bin/dscl", ".", "-list", "/Users"]
+                self.rw.setCommand(cmd)
+                output, _, _ = self.rw.communicate()
+
+                for item in output.split("\n"):
+                    if re.match("^_\w.+"):
+                        continue
+                    not_allowed = ["daemon", "root", "nobody"]
+                    if item in not_allowed:
+                        continue
+
+                    if item.strip() == user.strip():
+                        success = True
+                        break
+        # Take into account that the user string above could be converted cleanly to an int
+        if isinstance(user, int):
+            cmd = ["/usr/bin/dscl", ".", "-list", "/Users"]
+            self.rw.setCommand(cmd)
+            output, _, _ = self.rw.communicate()
+            for account in output.split("\n"):
+                if re.match("^_\w.+"):
+                    continue
+                elif re.match("\w.+"):
+                    cmd = ["/usr/bin/dscl", ".", "-read", "/Users/" + account, "uid"]
+                    self.rw.setCommand(cmd)
+                    output, _, _ = self.rw.communicate()
+                    if re.search("ERROR", output, re.IGNORECASE):
+                        success = False
+                        message = "Not a valid user on this system"
+                    else:
+                        uid = output.split()[-1]
+                        message("User uid" + str(uid) + " found")
+                        break
+                else:
+                    message = "Valid user not found"
+                    success = False
+            else:
+                message = "Not valid input for the user parameter"
+                success = False
+        else:
+            message = "Not valid input for the user parameter"
+            success = False
+        return success, message
+
+        
+
+    def validateGroup(self, user, group):
+        """
+        """
+        success = False
+        message = ""
+
+        success, message = self.validateUser(user)
+
+        if success:
+            cmd = ["/usr/bin/id", "-Gn", user]
+            self.rw.setCommand(cmd)
+            output, _, _ = self.rw.communicate()
+
+            for accountGroup in output.split():
+                if re.match("^_\w.+"):
+                    message = "Not a valid Group"
+                    success = False
+                elif re.search("ERROR", accountGroup, re.IGNORECASE):
+                    message = "Not a valid Group"
+                    success = False
+                elif accountGroup.strip() == group.strip():
+                    message = "Found a valid group for this user."
+                    success = False
+                else:
+                    message = "Not a valid group for this user"
+                    success = False
+
+        return success, message
+
+    def validatePath(self, path):
         """
         """
         success = False
 
         # Handling str based path validation
         if not path:
-            return success
-
+            message = "Path passed in is not valid"
         elif isinstance(path, str):
             # Check if the path is a valid path on the system.
             if os.path.exists(path):
-                self.logger.log(lp.DEBUG, "path is valid, proceeding.")
+                message = "Path is valid, proceeding."
+                success = True
             else:
-                return success, "Path non-existent, or you don't have permission to it."
+                message = "Path non-existent, or you don't have permission to it."
         else:
-            return success, "Path parameter needs to be a valid type"
-        
+            message = "Path parameter needs to be a valid type"
 
-        # Handling User ID validation
-        if not user:
-            return success
-        elif isinstance(user, str):
-            # perform a 're' check to see if it's a decimal string
-            if re.match("\d+"):
-                # Check to see if it's a valid uid on the system
-            else:
-                return success, "Not valid input for the user parameter"
-        elif isinstance(user, int):
-            
-        else:
-            return success, "not valid input for a UID"
-
-        
-        # Handling Group ID validation
-        if isinstance(gid, str):
-            # 
+        return success, message
 
 
-        elif isinstance(gid, int):
-            return False
-        
-
-
-
-
+    def chown_recursive(path, uid, gid):
+        """
+        Recursively change the owner and group id of a directory and its contents.
+        """
         try:
             # Change the owner and group id of the current path
             os.chown(path, uid, gid)
@@ -183,13 +255,40 @@ class FsHelper(object):
             if os.path.isdir(path):
                 for item in os.listdir(path):
                     item_path = os.path.join(path, item)
-                    chown_recursive(item_path, uid, gid)
+                    self.chown_recursive(item_path, uid, gid)
         except Exception as e:
             print(f"Error changing ownership of {path}: {e}")
 
+    def chown(path, user, group=None, withRoot=False, permissions=None, recursive=True):
+        """
+        """
+        success = False
+        worked = False
+        message = ""
+        uid = ""
+        gid = ""
 
 
+        worked, message = self.validatePath(path)
+        self.logger.log(lp.DEBUG, message)
+        if not worked:
+            return success, message
 
+
+        # handling 'user' input value
+        worked, message = self.validateUser(user)
+        self.logger.log(lp.DEBUG, message)
+        if not worked:
+            return success, message
+
+
+        # Handling Group ID validation
+        worked, message = self.validateGroup(user)
+        self.logger.log(lp.DEBUG, message)
+        if not worked:
+            return success, message
+        
+        self.chown_recursive(path, uid, gid)
 
 
 if __name__=="__main__":
