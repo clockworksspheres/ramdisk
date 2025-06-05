@@ -21,16 +21,17 @@ SpawningController : workerBasedOnUser()
 SpawningController : workerBasedOnCloud()
 SpawningController : spawnSpawningController()
 
-SpawningController --|> WorkerInterface
+WorkerInterface  --|> Worker
 SpawningController --|> Worker
 SpawningController --|> SpawningController
+SpawningController <|--|> WorkerInterface
 
 @enduml
 ```
 
 All workers based on a specific target should have the same methods.  
 
-A Spawining Controller should control only one worker type.
+A Spawining Controller should control only one worker type, based on a worker template.
 
 A meta Spawning Controller can spawn other Spawning Controllers.
 
