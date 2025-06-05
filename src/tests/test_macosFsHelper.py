@@ -136,11 +136,24 @@ class test_macosFsHelper(unittest.TestCase):
 
     ##################################
 
-    def testGetDiskSizeInMb(self):
+    def testValidataPath(self):
+        """
+        """
+        success, message = self.fshelper.validatePath("/private/etc")
+        #self.logger.log(lp.DEBUG, "success: " + str(success))
+        #self.logger.log(lp.DEBUG, "message: " + str(message))
+        #self.logger.log(lp.DEBUG, "uid: " + str(uid))
+        self.assertTrue(success, "Failed attempting to validate path.")
+        success, message = self.fshelper.validatePath("/Users/root")
+        self.assertFalse(success, "Validated bad path attempting to validate path: " + message)
+
+    ##################################
+
+    def testChownRecursive(self):
         """
         """
         pass
-
+        
     ##################################
 
     def testGetDiskSizeInMb(self):

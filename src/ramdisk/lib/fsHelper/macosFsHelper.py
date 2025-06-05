@@ -264,6 +264,7 @@ class FsHelper(object):
         """
         Recursively change the owner and group id of a directory and its contents.
         """
+        success = False
         try:
             # Change the owner and group id of the current path
             os.chown(path, uid, gid)
@@ -273,8 +274,11 @@ class FsHelper(object):
                 for item in os.listdir(path):
                     item_path = os.path.join(path, item)
                     self.chown_recursive(item_path, uid, gid)
+                    success = True
         except Exception as e:
             print(f"Error changing ownership of {path}: {e}")
+            success = False
+        return success
 
     def chown(path, user, group="staff", withRoot=False, permissions=None, recursive=True):
         """
