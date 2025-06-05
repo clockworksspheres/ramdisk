@@ -2,9 +2,10 @@
 import subprocess
 import re
 import traceback
-from subprocess import Popen
+# from subprocess import Popen
 import os
 import sys
+import getpass
 
 if __name__ == "__main__":
     sys.path.append("../../..")
@@ -280,7 +281,7 @@ class FsHelper(object):
             success = False
         return success
 
-    def chown(path, user, group="staff", withRoot=False, permissions=None, recursive=True):
+    def chown(path, user="", group="staff", withRoot=False, permissions=None, recursive=True):
         """
         """
         success = False
@@ -295,6 +296,8 @@ class FsHelper(object):
             return success, message
 
         # handling 'user' input value
+        if not user:
+            user = getpass.getuser() 
         worked, message = self.validateUser(user)
         self.logger.log(lp.DEBUG, message)
         if not worked:
@@ -310,7 +313,8 @@ class FsHelper(object):
         else:
             gid = 20  # staff on macOS
 
-        self.chown_recursive(path, uid, gid)
+        success = self.chown_recursive(path, uid, gid)
+        return success
 
 
 if __name__=="__main__":

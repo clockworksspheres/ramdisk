@@ -257,7 +257,9 @@ class RamDisk(RamDiskTemplate):
         # Erase the ramdisk and Name the device.
         # diskutil erasevolume APFS "MyRAMDiskName" /dev/$disk
         print("Creating the ramdrive...")
-        cmd = [self.diskutil, "eraseVolume", "APFS", self.mntPoint, self.myRamdiskDev]
+        # cmd = [self.diskutil, "eraseVolume", "APFS", self.mntPoint, self.myRamdiskDev]
+        # to format with user owning the disk, instead of root
+        cmd = ["/sbin/newfs", self.mntPoint, self.myRamdiskDev]
         self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
         self.runWith.setCommand(cmd)
         self.runWith.communicate()
@@ -289,7 +291,7 @@ class RamDisk(RamDiskTemplate):
 
         #####
         # mount the drive to the correct mount point
-        cmd = "/sbin/mount -t apfs " + self.myRamdiskDev + " " + self.mntPoint
+        cmd = "/sbin/mount -t apfs -o noauto,nobrowse " + self.myRamdiskDev + " " + self.mntPoint
         self.logger.log(lp.WARNING, "Running command to MOUNT ramdisk: >>>>> " + str(cmd))
         self.runWith.setCommand(cmd)
         self.runWith.communicate()
@@ -330,6 +332,8 @@ class RamDisk(RamDiskTemplate):
         else:
             pass
         """
+        success = self.fsHelper.chown(self.mntPoint)
+
         self.logger.log(lp.DEBUG, "######################################")
         self.logger.log(lp.DEBUG, "Printing attaching process...")
         self.logger.log(lp.DEBUG, "return code: " + str(retcode))
