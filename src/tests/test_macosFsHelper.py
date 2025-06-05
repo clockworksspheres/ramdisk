@@ -101,7 +101,47 @@ class test_macosFsHelper(unittest.TestCase):
         self.assertFalse(success, "This getFsBlockSize run was successful - SHOULDN'T BE!!!")
 
 
-   ##################################
+    ##################################
+
+    def testGetGid(self):
+        """
+        """
+        success, message, gid = self.fshelper.getGid("staff")
+
+        self.assertTrue(success, "Failed attempting to get group id.")
+        self.assertEqual(gid, 20, "Reported GID doesn't match staff.")
+
+    ##################################
+
+    def testValidateGroup4user(self):
+        """
+        """
+        success, message = self.fshelper.validateGroup4user("root", "wheel")
+        # print("...Success: " + str(success) + " " + message)
+        self.assertTrue(success, "Failed attempting to get group id.")
+
+
+
+    ##################################
+
+    def testValidateUser(self):
+        """
+        """
+        success, message, uid = self.fshelper.validateUser("root")
+        #self.logger.log(lp.DEBUG, "success: " + str(success))
+        #self.logger.log(lp.DEBUG, "message: " + str(message))
+        #self.logger.log(lp.DEBUG, "uid: " + str(uid))
+        self.assertTrue(success, "Failed attempting to validate a user.")
+        self.assertEqual(uid, 0, "User not matching UID...")
+
+    ##################################
+
+    def testGetDiskSizeInMb(self):
+        """
+        """
+        pass
+
+    ##################################
 
     def testGetDiskSizeInMb(self):
         """

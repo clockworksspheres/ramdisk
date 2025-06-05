@@ -33,6 +33,7 @@ class FsHelper(object):
         # in UTC time
         self.module_version = '20241204.1408'
         self.logger = CyLogger()
+        self.logger.initializeLogs()
         self.environ = Environment()
         self.chkApp = CheckApplicable(self.environ, self.logger)
 
@@ -136,7 +137,9 @@ class FsHelper(object):
         """
         success = False
         message = ""
-
+        uid = 999999999
+        self.logger.log(lp.DEBUG, "User: " + user)
+        # print("User: " + user)
         # Handling User ID validation
         if not user:
             message = "Value not passed in for User validation"
@@ -144,62 +147,75 @@ class FsHelper(object):
             # perform a 're' check to see if it's a decimal string
             if re.match("\d+", user):
                 # Check to see if it's a valid uid on the system
-                user = int(user.strip())
-            elif re.match("\w+", user):
+                uid = int(user.strip())
+            elif re.match("^\w.+", user.strip()):
                 # look for username in list of valid users on the system
                 cmd = ["/usr/bin/dscl", ".", "-list", "/Users"]
                 self.rw.setCommand(cmd)
                 output, _, _ = self.rw.communicate()
 
                 for item in output.split("\n"):
-                    if re.match("^_\w.+"):
+                    #print(item)
+                    if re.match("^_\w.+", item):
                         continue
-                    not_allowed = ["daemon", "root", "nobody"]
+                    not_allowed = ["daemon", "nobody"]
                     if item in not_allowed:
                         continue
-
+                    #print("...ITEM: " + item.strip() + " user: " + user.strip())
                     if item.strip() == user.strip():
-                        success = True
-                        break
-        # Take into account that the user string above could be converted cleanly to an int
-        if isinstance(user, int):
-            cmd = ["/usr/bin/dscl", ".", "-list", "/Users"]
-            self.rw.setCommand(cmd)
-            output, _, _ = self.rw.communicate()
-            for account in output.split("\n"):
-                if re.match("^_\w.+"):
-                    continue
-                elif re.match("\w.+"):
-                    cmd = ["/usr/bin/dscl", ".", "-read", "/Users/" + account, "uid"]
-                    self.rw.setCommand(cmd)
-                    output, _, _ = self.rw.communicate()
-                    if re.search("ERROR", output, re.IGNORECASE):
-                        success = False
-                        message = "Not a valid user on this system"
-                    else:
-                        uid = output.split()[-1]
-                        message("User uid" + str(uid) + " found")
-                        break
-                else:
-                    message = "Valid user not found"
-                    success = False
-            else:
-                message = "Not valid input for the user parameter"
-                success = False
+                        #print("........FOUND USER.......")
+                        cmd = ["/usr/bin/dscl", ".", "-read", "/Users/" + item.strip(), "uid"]
+                        self.rw.setCommand(cmd)
+                        output, _, _ = self.rw.communicate()
+                        self.logger.log(lp.DEBUG, "output: " + output)
+                        if re.search("ERROR", output, re.IGNORECASE):
+                            success = False
+                            message = "Not a valid user on this system"
+                        else:
+                            tmpuid = output.split()[-1]
+                            uid = int(tmpuid)
+                            message = ".........User uid " + str(uid) + " found"
+                            self.logger.log(lp.DEBUG, message)
+                            # print(message)
+                            success = True
+                            break
         else:
             message = "Not valid input for the user parameter"
             success = False
-        return success, message
+        # print("...UID: " + str(uid) + " message: " + message + " success: " + str(success))
+        return success, message, uid
+    
+    def getGid(self, group):
+        """
+        """
+        success = False
+        gid = 99999999
+        message = ""
 
-        
+        cmd = ["/usr/bin/dscl", ".", "-read", "/Groups/" + str(group), "PrimaryGroupID"]
+        self.rw.setCommand(cmd)
+        output, _, _  = self.rw.communicate()
 
-    def validateGroup(self, user, group):
+        try:
+            gid = output.split()[-1]
+            gid = int(gid)
+            message = "Found gid: " + str(gid)
+            success = True
+        except IndexError:
+            message = "Error attempting to get GID"
+            success = False
+            gid = 20
+
+        return success, message, gid
+
+    def validateGroup4user(self, user, group):
         """
         """
         success = False
         message = ""
+        gid = 99999999
 
-        success, message = self.validateUser(user)
+        success, message, _ = self.validateUser(user)
 
         if success:
             cmd = ["/usr/bin/id", "-Gn", user]
@@ -207,7 +223,8 @@ class FsHelper(object):
             output, _, _ = self.rw.communicate()
 
             for accountGroup in output.split():
-                if re.match("^_\w.+"):
+                # print(".. .. .. AccountGroup: " + accountGroup.strip() + " Group: " + group.strip())
+                if re.match("^_\w.+", accountGroup):
                     message = "Not a valid Group"
                     success = False
                 elif re.search("ERROR", accountGroup, re.IGNORECASE):
@@ -215,7 +232,8 @@ class FsHelper(object):
                     success = False
                 elif accountGroup.strip() == group.strip():
                     message = "Found a valid group for this user."
-                    success = False
+                    success = True
+                    break
                 else:
                     message = "Not a valid group for this user"
                     success = False
@@ -242,7 +260,6 @@ class FsHelper(object):
 
         return success, message
 
-
     def chown_recursive(path, uid, gid):
         """
         Recursively change the owner and group id of a directory and its contents.
@@ -259,7 +276,7 @@ class FsHelper(object):
         except Exception as e:
             print(f"Error changing ownership of {path}: {e}")
 
-    def chown(path, user, group=None, withRoot=False, permissions=None, recursive=True):
+    def chown(path, user, group="staff", withRoot=False, permissions=None, recursive=True):
         """
         """
         success = False
@@ -268,12 +285,10 @@ class FsHelper(object):
         uid = ""
         gid = ""
 
-
         worked, message = self.validatePath(path)
         self.logger.log(lp.DEBUG, message)
         if not worked:
             return success, message
-
 
         # handling 'user' input value
         worked, message = self.validateUser(user)
@@ -281,13 +296,16 @@ class FsHelper(object):
         if not worked:
             return success, message
 
+        if group:
+            # Handling Group ID validation
+            worked, message = self.validateGroup4user(user)
+            self.logger.log(lp.DEBUG, message)
+            if not worked:
+                return success, message
+            success, message, gid = self.getGid(group)    
+        else:
+            gid = 20  # staff on macOS
 
-        # Handling Group ID validation
-        worked, message = self.validateGroup(user)
-        self.logger.log(lp.DEBUG, message)
-        if not worked:
-            return success, message
-        
         self.chown_recursive(path, uid, gid)
 
 

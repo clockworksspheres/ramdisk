@@ -448,7 +448,7 @@ class Environment(object):
         elif os.path.exists('/usr/bin/sw_vers'):
             self.rw.setCommand(["/usr/bin/sw_vers", "-productName"])
             output, _, _ = self.rw.communicate()
-            print("Product Name: " + str(output))
+            # print("Product Name: " + str(output))
             description = output
             description = description.strip()
 
