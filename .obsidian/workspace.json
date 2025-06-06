@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
+                "file": "pyenv-notes.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "fileOwnershipNmanagement"
+              "title": "pyenv-notes"
             }
           }
         ]
@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 409.5
   },
   "right": {
     "id": "085a5f030fb6d370",
@@ -171,6 +171,8 @@
   },
   "active": "c52fe03ac0d1d93f",
   "lastOpenFiles": [
+    "src/proto/setup_union_example.py",
+    "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
     "src/Docs/pythonDatetimeForTimestamp.md",
     "src/tests/testmntpnt/testfile999",
     "src/tests/testmntpnt/testfile998",
@@ -201,7 +203,6 @@
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/dev/README.md",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/README.md",
     "src/Docs/Users/PythonChownWindows.md",
-    "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
     "src/Docs/startingPlantumlForRenderingLocallyInObsidian.md",
     "src/Docs/genericStateMachine.md",
     "src/Docs/argsNkwargs.md",
@@ -215,7 +216,6 @@
     "src/Docs/openSourceReverseEngineerToUML.md",
     "src/Docs/CheckApplicableRelated.md",
     "src/examples/README.md",
-    "pyenv-notes.md",
-    "src/examples/Untitled.md"
+    "pyenv-notes.md"
   ]
 }
