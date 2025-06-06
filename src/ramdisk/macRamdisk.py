@@ -255,8 +255,10 @@ class RamDisk(RamDiskTemplate):
 
         #####
         # Erase the ramdisk and Name the device.
+        # this command makes the mountpoint owned by root. Need it owned by the user
         # diskutil erasevolume APFS "MyRAMDiskName" /dev/$disk
         print("Creating the ramdrive...")
+        # this command makes the mountpoint owned by root. Need it owned by the user
         # cmd = [self.diskutil, "eraseVolume", "APFS", self.mntPoint, self.myRamdiskDev]
         # to format with user owning the disk, instead of root
         cmd = ["/sbin/newfs", self.mntPoint, self.myRamdiskDev]
