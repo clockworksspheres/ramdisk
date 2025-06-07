@@ -25,6 +25,7 @@ WorkerInterface  --|> Worker
 SpawningController --|> Worker
 SpawningController --|> SpawningController
 SpawningController <|--|> WorkerInterface
+Worker --|> Worker
 
 @enduml
 ```

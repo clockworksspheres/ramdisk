@@ -293,11 +293,15 @@ class RamDisk(RamDiskTemplate):
         elif self.passwd:
         """
         # self.logger.log(lp.WARNING, "p: " + self.passwd)
-        if not os.geteuid() == 0:
+        if not os.geteuid() == 0 and self.passwd:
+            
             output, error, returncode = self.runWith.runWithSudo(self.passwd)
         else:
-            if not os.geteuid() == 0 or self.passwd:
-                raise UserMustBeRootError("You must be root, or have elevated with sudo to use this software...")
+            if not os.geteuid() == 0 and not self.passwd:
+
+                self.passwd = getpass.getpass("Password:")
+                output, error, returncode = self.runWith.runWithSudo(self.passwd)
+                # raise UserMustBeRootError("You must be root, or have elevated with sudo to use this software...")
             output, error, returncode = self.runWith.communicate()
         #####
         # set user/group permissions??

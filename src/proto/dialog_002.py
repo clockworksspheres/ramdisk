@@ -5,6 +5,11 @@ import os
 import sys
 from PySide6.QtWidgets import QApplication, QDialog, QMainWindow, QPushButton, QVBoxLayout, QLabel, QDialogButtonBox
 
+sys.path.append("../")
+
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority as lp
+
 class CustomDialog(QDialog):
     def __init__(self):
         super().__init__()
@@ -28,6 +33,9 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("My App")
 
+        self.logger = CyLogger(level=10)
+        self.logger.initializeLogs()
+
         button = QPushButton("Press me for a dialog!")
         button.clicked.connect(self.button_clicked)
         self.setCentralWidget(button)
@@ -40,9 +48,9 @@ class MainWindow(QMainWindow):
         #mytest = os.isatty()
 
         if mytest:
-            print("We're running in the terminal people...")
+            self.logger.log(10, "We're running in the terminal people...")
         else:
-            print("we're running in GUI mode...")
+            self.logger.log(10, "we're running in GUI mode...")
 
         dlg = CustomDialog()
         if dlg.exec():
