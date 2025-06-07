@@ -171,6 +171,8 @@
   },
   "active": "c52fe03ac0d1d93f",
   "lastOpenFiles": [
+    "src/build.ubuntu2024.sh",
+    "src/build.ubuntu2024.py312.onefile.spec",
     "src/packenv/lib/python3.10/site-packages/setuptools/_distutils/__pycache__/version.cpython-310.pyc",
     "src/packenv/lib/python3.10/site-packages/setuptools/__pycache__/msvc.cpython-310.pyc",
     "src/packenv/lib/python3.10/site-packages/setuptools/__pycache__/logging.cpython-310.pyc",
@@ -180,8 +182,6 @@
     "src/packenv/lib/python3.10/site-packages/setuptools/__pycache__/_itertools.cpython-310.pyc",
     "src/packenv/lib/python3.10/site-packages/setuptools/__pycache__/_entry_points.cpython-310.pyc",
     "src/packenv/lib/python3.10/site-packages/setuptools/_vendor/jaraco/text/__pycache__/__init__.cpython-310.pyc",
-    "src/packenv/lib/python3.10/site-packages/setuptools/_vendor/jaraco/text/__pycache__",
-    "src/packenv/lib/python3.10/site-packages/setuptools/_vendor/jaraco/__pycache__/functools.cpython-310.pyc",
     "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
     "src/Docs/pythonDatetimeForTimestamp.md",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/packenv/lib/python3.10/site-packages/PySide6/Qt/qml/QtQuick/Controls/FluentWinUI3/light/images/textfield-background@3x.png",

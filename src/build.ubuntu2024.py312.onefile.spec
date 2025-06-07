@@ -5,7 +5,7 @@
 # https://stackoverflow.com/questions/41870727/pyinstaller-adding-data-files
 
 a = Analysis(
-    ['setup_ramdisk.py'],
+    ['ramdisk-setup.py'],
     pathex=['.', './ui',  './lib', './packenv/bin', './packenv/include', './packenv/lib/python3.12/site-packages'],
     binaries=[],
     datas=[ ], 
@@ -25,7 +25,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='setup_ramdisk',
+    name='ramdisk-setup',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
