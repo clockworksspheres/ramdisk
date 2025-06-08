@@ -192,11 +192,13 @@ class RamDisk(RamDiskTemplate):
                 except:
                     success = False
                     self.logger.log(lp.WARNING, "Create appears to have failed..")
+                    raise
                 else:
                     #####
                     # Ramdisk created, try mounting it.
-                    self.__mount()
-                    self.__remove_journal()
+                    #self.__mount()
+                    pass #raise
+                    # self.__remove_journal()
                     
         self.getNlogData()
         self.success = success
@@ -222,13 +224,15 @@ class RamDisk(RamDiskTemplate):
             diskutil rename /dev/$disk "RAMDiskNameReplacement"
                 ....Replace RAMDiskNameReplacement with the desired 
                     name for your RAM disk.
-
-        RENAME DOESN'T WORK!!! TO RENAME/REMOUNT:
-        diskutil umount self.myRamdiskDev
-        mkdir -p (if necessary) /<where to mount>
-        mount -t apfs self.myRamdiskDev /<where to mount>
-
-
+        #####
+        # THIS should be the process:
+        hdiutil attach -nomount ram://1048576
+        # the above command returns the <ramdisk device> - /dev/diskXs1
+        diskutil partitionDisk $(/dev/diskXs1) 1 GPTFormat APFS 'RAMDisk' '100%'
+        diskutil umount /dev/diskXs1
+        # mkdir -P <mountpoint>
+        mount -t apfs /dev/diskXs1 /<mountpoint>
+        #####
 
         @author: Roy Nielsen
         """
@@ -242,30 +246,65 @@ class RamDisk(RamDiskTemplate):
         cmd = [self.hdiutil, "attach", "-nomount", "ram://" + self.diskSize]
         self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
         self.runWith.setCommand(cmd)
-        self.runWith.communicate()
-        retval, reterr, retcode = self.runWith.getNlogReturns()
+        retval, reterr, retcode = self.runWith.communicate()
+        # retval, reterr, retcode = self.runWith.getNlogReturns()
         
         if retcode == '':
             success = False
         else:
             self.myRamdiskDev = retval.strip()
-            #self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
+            # self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
             success = True
         
-
+        self.myRamdiskDev = retval.strip()
+        self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
         #####
         # Erase the ramdisk and Name the device.
         # this command makes the mountpoint owned by root. Need it owned by the user
         # diskutil erasevolume APFS "MyRAMDiskName" /dev/$disk
-        print("Creating the ramdrive...")
         # this command makes the mountpoint owned by root. Need it owned by the user
         # cmd = [self.diskutil, "eraseVolume", "APFS", self.mntPoint, self.myRamdiskDev]
+        ###
         # to format with user owning the disk, instead of root
-        cmd = ["/sbin/newfs", self.mntPoint, self.myRamdiskDev]
-        self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
-        self.runWith.setCommand(cmd)
-        self.runWith.communicate()
-        retval, reterr, retcode = self.runWith.getNlogReturns()
+        #cmd = ["/sbin/newfs", self.mntPoint, self.myRamdiskDev]
+        self.logger.log(lp.WARNING, "Creating the ramdrive at: " + self.myRamdiskDev)
+        print("Creating the ramdrive at: " + self.myRamdiskDev)
+        #####
+        # This command works better than either of the two above....
+        # diskutil partitionDisk self.myRamdiskDev 1 GPTFormat APFS 'RAMDisk' '100%'
+        tmpmntpnt = self.mntPoint.split('/')[-1]
+        print("testmntpnt: " + tmpmntpnt)
+        hundred = f"'100%'"
+        try:
+            cmd = ["/usr/sbin/diskutil", "partitionDisk", self.myRamdiskDev, "1", "GPTFormat", "APFS", "'RAMDisk'", f"{hundred}"]
+            self.logger.log(lp.WARNING, "Running command to create ramdisk: " + str(cmd))
+            print("Running command to create ramdisk: " + str(cmd))
+            self.runWith.setCommand(cmd)
+            self.runWith.communicate()
+        except:
+            raise
+        # retval, reterr, retcode = self.runWith.getNlogReturns()
+        #####
+        # unmounting the disk, because it is automatically mounted to /Volumes,
+        # so we can mount it where the user wishes
+        try:
+            cmd = [self.diskutil, "unmount", self.myRamdiskDev]
+            self.logger.log(lp.WARNING, "Running command to unmount ramdisk: >> " + str(cmd))
+            self.runWith.setCommand(cmd)
+            self.runWith.communicate()
+        except:
+            raise
+        # retval, reterr, retcode = self.runWith.getNlogReturns()
+
+        try:
+            cmd = ["/sbin/newfs_apfs", "-v", "RAMDISK", self.myRamdiskDev]
+            self.logger.log(lp.WARNING, "Running command to create ramdisk: " + str(cmd))
+            print("Running command to create ramdisk: " + str(cmd))
+            self.runWith.setCommand(cmd)
+            self.runWith.communicate()
+        except:
+            raise
+
 
         tmpNum = ""
         tmpDev = ""
@@ -273,54 +312,36 @@ class RamDisk(RamDiskTemplate):
             tmpMatch = re.match(r"(\S+)(\d+)", self.myRamdiskDev.strip())
             tmpDev = tmpMatch.group(1)
             tmpNum = tmpMatch.group(2)
+            
         except ValueError:
-            pass
+            raise
 
         tmpNum = int(tmpNum) + 1
         self.myRamdiskDev = str(tmpDev) + str(tmpNum) + "s1"
         self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
-
-        #####
-        # unmounting the disk
-        cmd = [self.diskutil, "unmount", self.myRamdiskDev]
-        self.logger.log(lp.WARNING, "Running command to unmount ramdisk: >> " + str(cmd))
-        self.runWith.setCommand(cmd)
-        self.runWith.communicate()
-        retval, reterr, retcode = self.runWith.getNlogReturns()
 
         self.logger.log(lp.WARNING, "  MYRAMDISKDEV: " + self.myRamdiskDev)
         self.logger.log(lp.WARNING, "  MNTPOINT: " + self.mntPoint)
 
+        # Create the mountpoint, if it exists, skip
+        self.fsHelper.mkdirs(self.mntPoint)
+        self.logger.log(lp.WARNING, " ... Making mountpoint: " + self.mntPoint)
+
         #####
         # mount the drive to the correct mount point
-        cmd = "/sbin/mount -t apfs -o noauto,nobrowse " + self.myRamdiskDev + " " + self.mntPoint
-        self.logger.log(lp.WARNING, "Running command to MOUNT ramdisk: >>>>> " + str(cmd))
-        self.runWith.setCommand(cmd)
-        self.runWith.communicate()
-        retval, reterr, retcode = self.runWith.getNlogReturns()
+        try:
+            cmd = "/sbin/mount_apfs " + self.myRamdiskDev + " " + self.mntPoint
+            self.logger.log(lp.WARNING, "Running command to MOUNT ramdisk: >>>>> " + str(cmd))
+            self.runWith.setCommand(cmd)
+            self.runWith.communicate()
+        except:
+            raise
+        # retval, reterr, retcode = self.runWith.getNlogReturns()
 
         """
-        diskutil umount self.myRamdiskDev
-        mkdir -p (if necessary) /<where to mount>
-        mount -t apfs self.myRamdiskDev /<where to mount>
-
-        
-
-        tmpNum = ""
-        tmpDev = ""
-        try:
-            tmpMatch = re.match(r"(\S+)(\d+)", self.myRamdiskDev.strip())
-            tmpDev = tmpMatch.group(1)
-            tmpNum = tmpMatch.group(2)
-        except ValueError:
-            pass
-
-        tmpNum = int(tmpNum) + 1
-        self.myRamdiskDev = str(tmpDev) + str(tmpNum) + "s1"
-        self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
-
-
-        
+        # MAY make the ramdisk go faster...  
+        # *** WARNING *** Test thouroughly if you uncomment this section,
+        # it may not go here in the workflow . . .
         if self.disableJournal is True:
             #####
             # Disable Journaling on the device.
@@ -334,7 +355,7 @@ class RamDisk(RamDiskTemplate):
         else:
             pass
         """
-        success = self.fsHelper.chown(self.mntPoint)
+        self.fsHelper.chown(self.mntPoint)
 
         self.logger.log(lp.DEBUG, "######################################")
         self.logger.log(lp.DEBUG, "Printing attaching process...")
@@ -344,7 +365,7 @@ class RamDisk(RamDiskTemplate):
         self.logger.log(lp.DEBUG, "######################################")
 
         # self.logger.log(lp.DEBUG, "Success: " + str(success) + " in __create")
-        return success
+        # return success
 
     ###########################################################################
 

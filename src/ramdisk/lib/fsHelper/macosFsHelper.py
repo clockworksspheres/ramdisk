@@ -20,10 +20,11 @@ from ramdisk.lib.run_commands import RunWith
 from ramdisk.lib.environment import Environment
 from ramdisk.lib.CheckApplicable import CheckApplicable
 from ramdisk.commonRamdiskTemplate import NotValidForThisOS
+from ramdisk.lib.fsHelper.fsHelper import FsHelperTemplate
 
-
-class FsHelper(object):
+class FsHelper(FsHelperTemplate):
     """
+    Inherits methods validatePath and mkdirs
     """
     def __init__(self):
         """
@@ -240,10 +241,10 @@ class FsHelper(object):
                     success = False
 
         return success, message
-
+        """
+        A better version of this method is inherited by FsHelperTemplate
     def validatePath(self, path):
-        """
-        """
+
         success = False
 
         # Handling str based path validation
@@ -260,8 +261,9 @@ class FsHelper(object):
             message = "Path parameter needs to be a valid type"
 
         return success, message
-
-    def chown_recursive(path, uid, gid):
+        """
+        
+    def chown_recursive(self, path, uid, gid):
         """
         Recursively change the owner and group id of a directory and its contents.
         """
@@ -281,7 +283,7 @@ class FsHelper(object):
             success = False
         return success
 
-    def chown(path, user="", group="staff", withRoot=False, permissions=None, recursive=True):
+    def chown(self, path, user="", group="staff", withRoot=False, permissions=None, recursive=True):
         """
         """
         success = False
@@ -298,14 +300,14 @@ class FsHelper(object):
         # handling 'user' input value
         if not user:
             user = getpass.getuser() 
-        worked, message = self.validateUser(user)
+        worked, message, uid = self.validateUser(user)
         self.logger.log(lp.DEBUG, message)
         if not worked:
             return success, message
 
         if group:
             # Handling Group ID validation
-            worked, message = self.validateGroup4user(user)
+            worked, message = self.validateGroup4user(user, group)
             self.logger.log(lp.DEBUG, message)
             if not worked:
                 return success, message

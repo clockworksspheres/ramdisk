@@ -65,9 +65,17 @@ class _CreateRamdisk(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-
         self.logger = CyLogger()
         self.logger.initializeLogs()
+
+        self.setStyleSheet("""
+            MainWindow {
+                border: 5px solid red;
+                background-color: rgb(0,255,255);
+                border-radius: 10px;
+                box-shadow: 4px 4px 8px rgba(224, 224, 224, 0.5);
+            }
+        """)
 
         #####
         # Connect Button click signals to slots 

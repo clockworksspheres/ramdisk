@@ -294,11 +294,11 @@ class RunWith(object):
             finally:
                 try:
                     proc.stdout.close()
-                except SubprocessError:
+                except:
                     pass
                 try:
                     proc.stderr.close()
-                except SubprocessError:
+                except:
                     pass
                 #####
                 # Lines below could reveal a password if it is passed as an
