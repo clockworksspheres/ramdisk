@@ -29,6 +29,7 @@ Maybe function, method  or other module
 import os
 import re
 import sys
+import getpass
 import shutil
 import traceback
 from subprocess import Popen, PIPE
@@ -230,8 +231,11 @@ class RamDisk(RamDiskTemplate):
         # the above command returns the <ramdisk device> - /dev/diskXs1
         diskutil partitionDisk $(/dev/diskXs1) 1 GPTFormat APFS 'RAMDisk' '100%'
         diskutil umount /dev/diskXs1
-        # mkdir -P <mountpoint>
-        mount -t apfs /dev/diskXs1 /<mountpoint>
+        newfs_apfs -v RAMDisk /dev/diskXs1
+        mkdir -P <mountpoint>
+        mount_apfs /dev/diskXs1 /<mountpoint>
+        chown -R <user> /<mountpoint>
+
         #####
 
         cmd = [self.hdiutil, "attach", "-nomount", "ram://" + self.diskSize]
@@ -240,6 +244,7 @@ class RamDisk(RamDiskTemplate):
         cmd = ["/sbin/newfs_apfs", "-v", "RAMDISK", self.myRamdiskDev]
         self.fsHelper.mkdirs(self.mntPoint)
         cmd = "/sbin/mount_apfs " + self.myRamdiskDev + " " + self.mntPoint
+        self.fsHelper.chown(self.mntPoint, user)
 
         @author: Roy Nielsen
         """
@@ -362,17 +367,11 @@ class RamDisk(RamDiskTemplate):
         else:
             pass
         """
-        self.fsHelper.chown(self.mntPoint)
-
-        self.logger.log(lp.DEBUG, "######################################")
-        self.logger.log(lp.DEBUG, "Printing attaching process...")
-        self.logger.log(lp.DEBUG, "return code: " + str(retcode))
-        self.logger.log(lp.DEBUG, "return error: " + str(reterr))
-        self.logger.log(lp.DEBUG, "return value: " + str(retval))
-        self.logger.log(lp.DEBUG, "######################################")
-
-        # self.logger.log(lp.DEBUG, "Success: " + str(success) + " in __create")
-        # return success
+        #####
+        # Need to chown the mountpoint to the user, because the mount point is by 
+        # default not owned by the user on *nix systems
+        user = getpass.getuser()
+        self.fsHelper.chown(self.mntPoint, user)
 
     ###########################################################################
 
