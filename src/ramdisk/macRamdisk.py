@@ -234,6 +234,13 @@ class RamDisk(RamDiskTemplate):
         mount -t apfs /dev/diskXs1 /<mountpoint>
         #####
 
+        cmd = [self.hdiutil, "attach", "-nomount", "ram://" + self.diskSize]
+        cmd = ["/usr/sbin/diskutil", "partitionDisk", self.myRamdiskDev, "1", "GPTFormat", "APFS", "'RAMDisk'", f"{hundred}"]
+        cmd = [self.diskutil, "unmount", self.myRamdiskDev]
+        cmd = ["/sbin/newfs_apfs", "-v", "RAMDISK", self.myRamdiskDev]
+        self.fsHelper.mkdirs(self.mntPoint)
+        cmd = "/sbin/mount_apfs " + self.myRamdiskDev + " " + self.mntPoint
+
         @author: Roy Nielsen
         """
         retval = None
