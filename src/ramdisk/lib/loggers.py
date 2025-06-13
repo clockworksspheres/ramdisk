@@ -296,6 +296,7 @@ class CyLogger(Singleton):
         # Initialize the root logger
         self.logr = logging.getLogger("")
 
+        '''
         #####
         # Set logging level for the root logger
         if not self.rotate:
@@ -307,6 +308,7 @@ class CyLogger(Singleton):
             #####
             # Set up the RotatingFileHandler
             rotHandler = logging.handlers.RotatingFileHandler(self.filename, maxBytes=size, backupCount=logCount)
+        '''
         if myconsole:
             #####
             # Set up StreamHandler to log to the console
@@ -319,7 +321,7 @@ class CyLogger(Singleton):
             except socket.error:
                 print("Socket error, can't connect to syslog...")
                 self.syslog = False
-
+        '''
         #####
         # Add applicable handlers to the logger
         if not self.rotate and self.fileHandler:
@@ -329,7 +331,7 @@ class CyLogger(Singleton):
             self.logr.addHandler(rotHandler)
             self.logr.log(LogPriority.DEBUG,"Added RotatingFileHandler")
             #self.doRollover(rotHandler)
-
+        '''
         if myconsole:
             self.logr.addHandler(conHandler)
             self.logr.log(LogPriority.DEBUG,"Added StreamHandler")
