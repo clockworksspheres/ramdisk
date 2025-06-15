@@ -20,6 +20,9 @@ else
 fi
 export PATH=".":$PATH
 
+pushd ramdisk/ui; python3 compile_uifiles.py; popd
+
+
 pyinstaller --clean -y build.macos.spec
 pyinstaller -y build.macos.spec
 
