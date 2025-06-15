@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
+                "file": "src/Docs/uiRelated/WidgetShadow.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "fileOwnershipNmanagement"
+              "title": "WidgetShadow"
             }
           }
         ]
@@ -171,6 +171,9 @@
   },
   "active": "c52fe03ac0d1d93f",
   "lastOpenFiles": [
+    "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
+    "src/Docs/uiRelated/WidgetShadow.md",
+    "src/Docs/uiRelated",
     "src/tests/testmntpnt/testfile",
     "src/tests/testmntpnt/threeone/four/test",
     "src/tests/testmntpnt/threeone/four",
@@ -180,8 +183,6 @@
     "src/tests/testmntpnt",
     "src/ramdisk/lib/getLibc/__pycache__/macGetLibc.cpython-310.pyc",
     "src/ramdisk/lib/getLibc/__pycache__/__init__.cpython-310.pyc",
-    "src/ramdisk/lib/getLibc/__pycache__",
-    "src/tests/genericTestUtilities/__pycache__/genericTestUtilities.cpython-310.pyc",
     "src/Docs/userRelated/getCurrentUser.md",
     "src/Docs/umlRelated/classes_ramdisk.jpg",
     "src/Docs/umlRelated/CreateNRenderPlantumlClassDiagram.md",
@@ -214,7 +215,6 @@
     "src/packenv/lib/python3.10/site-packages/PySide6/Qt/qml/QtQuick3D/Particles3D/designer/images/wander-24px@2x.png",
     "src/packenv/lib/python3.10/site-packages/PySide6/Qt/qml/QtQuick3D/Particles3D/designer/images/wander-24px.png",
     "src/packenv/lib/python3.10/site-packages/PySide6/Qt/qml/QtQuick3D/Particles3D/designer/images/wander-16px.png",
-    "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
     "src/Docs/pythonDatetimeForTimestamp.md",
     "src/Docs/Users/PythonChownWindows.md"
   ]

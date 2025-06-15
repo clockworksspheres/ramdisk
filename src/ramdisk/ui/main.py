@@ -9,7 +9,8 @@ from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea,
                                QApplication, QFrame, QLabel, QListWidget,
                                QListWidgetItem, QMainWindow, QPushButton,
                                QSizePolicy, QSpacerItem, QVBoxLayout, QWidget,
-                               QMessageBox, QDialog, QDialogButtonBox)
+                               QMessageBox, QDialog, QDialogButtonBox,
+                               QGraphicsDropShadowEffect)
 
 
 import sys 
@@ -67,7 +68,15 @@ class _CreateRamdisk(QMainWindow):
 
         self.logger = CyLogger()
         self.logger.initializeLogs()
-
+        '''
+        doesn't work for a ui_mainwindow...
+        shadow = QGraphicsDropShadowEffect()
+        shadow.setBlurRadius(10)
+        shadow.setXOffset(5)
+        shadow.setYOffset(5)
+        shadow.setColor(Qt.gray)
+        self.ui.setGraphicsEffect(shadow)
+        '''
         self.setStyleSheet("""
             MainWindow {
                 border: 5px solid red;
@@ -162,11 +171,19 @@ class _CreateRamdisk(QMainWindow):
         """
         Grab the values from the interface to create the ramdisk.
         """
+        
         creds = False
         if sys.platform.startswith('darwin'):
             creds = True
         if sys.platform.startswith('linux'):
             window = _LocalAuth()
+            shadow = QGraphicsDropShadowEffect()
+            shadow.setBlurRadius(10)
+            shadow.setXOffset(5)
+            shadow.setYOffset(5)
+            shadow.setColor(Qt.gray)
+            window.setGraphicsEffect(shadow)
+
             window.credsSig.connect(self.getCreds)
             result = window.exec()
             # Check the result of the dialog
