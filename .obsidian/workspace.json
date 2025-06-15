@@ -171,6 +171,7 @@
   },
   "active": "c52fe03ac0d1d93f",
   "lastOpenFiles": [
+    "src/proto/windowBorder_002.py",
     "src/proto/windowShadow.py",
     "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
     "src/Docs/uiRelated/WidgetShadow.md",
@@ -183,7 +184,6 @@
     "src/tests/testmntpnt/two",
     "src/tests/testmntpnt",
     "src/ramdisk/lib/getLibc/__pycache__/macGetLibc.cpython-310.pyc",
-    "src/ramdisk/lib/getLibc/__pycache__/__init__.cpython-310.pyc",
     "src/Docs/userRelated/getCurrentUser.md",
     "src/Docs/umlRelated/classes_ramdisk.jpg",
     "src/Docs/umlRelated/CreateNRenderPlantumlClassDiagram.md",

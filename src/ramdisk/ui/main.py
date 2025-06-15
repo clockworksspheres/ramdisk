@@ -196,13 +196,13 @@ class _CreateRamdisk(QMainWindow):
             shadow.setColor(Qt.gray)
             window.setGraphicsEffect(shadow)
             '''
-                        # Create a drop shadow effect
+            window.setStyleSheet("background-color: white; border-radius: 10px;")
+        
+            # Add drop shadow effect
             shadow = QGraphicsDropShadowEffect()
-            shadow.setBlurRadius(20)  # Adjust the blur radius for more or less shadow
-            shadow.setColor(Qt.black)  # Set the color of the shadow
-            shadow.setOffset(5, 5)     # Set the offset of the shadow (x, y)
-
-            # Apply the shadow effect to the main window
+            shadow.setBlurRadius(20)
+            shadow.setColor(Qt.black)
+            shadow.setOffset(0, 0)
             window.setGraphicsEffect(shadow)
 
             window.credsSig.connect(self.getCreds)
