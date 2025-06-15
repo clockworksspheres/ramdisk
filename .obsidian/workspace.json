@@ -171,6 +171,7 @@
   },
   "active": "c52fe03ac0d1d93f",
   "lastOpenFiles": [
+    "src/proto/windowShadow.py",
     "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
     "src/Docs/uiRelated/WidgetShadow.md",
     "src/Docs/uiRelated",
@@ -215,7 +216,6 @@
     "src/packenv/lib/python3.10/site-packages/PySide6/Qt/qml/QtQuick3D/Particles3D/designer/images/wander-24px@2x.png",
     "src/packenv/lib/python3.10/site-packages/PySide6/Qt/qml/QtQuick3D/Particles3D/designer/images/wander-24px.png",
     "src/packenv/lib/python3.10/site-packages/PySide6/Qt/qml/QtQuick3D/Particles3D/designer/images/wander-16px.png",
-    "src/Docs/pythonDatetimeForTimestamp.md",
-    "src/Docs/Users/PythonChownWindows.md"
+    "src/Docs/pythonDatetimeForTimestamp.md"
   ]
 }
