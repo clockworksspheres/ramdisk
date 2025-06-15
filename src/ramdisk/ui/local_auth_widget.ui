@@ -13,6 +13,23 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="windowOpacity">
+   <double>20.000000000000000</double>
+  </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">userLineEdit {
+	background-color: #4CAF50;
+    color: white;
+    border: 2px solid #333333;
+    border-radius: 10px;   
+    padding: 10px;
+    border-radius: 5px;
+}
+</string>
+  </property>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
@@ -23,7 +40,7 @@
     </rect>
    </property>
    <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+    <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
    </property>
   </widget>
   <widget class="QLineEdit" name="userLineEdit">
@@ -35,6 +52,18 @@
      <height>21</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">userLineEdit {
+	background-color: #4CAF50;
+    color: white;
+    border: 2px solid #333333;
+    border-radius: 10px;   
+    padding: 10px;
+    border-radius: 5px;
+}
+
+    </string>
+   </property>
   </widget>
   <widget class="QLineEdit" name="passLineEdit">
    <property name="geometry">
@@ -45,8 +74,19 @@
      <height>21</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">userLineEdit {
+	background-color: #4CAF50;
+    color: white;
+    border: 2px solid #333333;
+    border-radius: 10px;   
+    padding: 10px;
+    border-radius: 5px;
+}
+</string>
+   </property>
    <property name="echoMode">
-    <enum>QLineEdit::PasswordEchoOnEdit</enum>
+    <enum>QLineEdit::EchoMode::PasswordEchoOnEdit</enum>
    </property>
   </widget>
   <widget class="QLabel" name="titleLabel">
