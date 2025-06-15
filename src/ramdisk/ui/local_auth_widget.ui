@@ -21,6 +21,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget {
+	background-color: #ADADAD;
     border: 2px solid #333333;
     border-radius: 10px;   
     padding: 10px;
@@ -31,10 +32,10 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>180</y>
-     <width>152</width>
-     <height>32</height>
+     <x>70</x>
+     <y>170</y>
+     <width>131</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="standardButtons">
@@ -52,9 +53,9 @@
    </property>
    <property name="styleSheet">
     <string notr="true">QLineEdit {
-	background-color: #ADADAD;
-    color: white;
-    border: 2px solid #333333;
+	background-color: white;
+    color: black;
+    border: 2px solid grey;
     border-radius: 10px;   
     padding: 10px;
     border-radius: 5px;
@@ -77,7 +78,7 @@
    </property>
    <property name="styleSheet">
     <string notr="true">QLineEdit {
-	background-color: #ADADAD;
+	background-color: white;
     color: white;
     border: 2px solid grey;
     border-radius: 10px;   
@@ -99,8 +100,16 @@
      <x>30</x>
      <y>10</y>
      <width>151</width>
-     <height>16</height>
+     <height>21</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {
+	background-color: #e6e6e6;
+    font-size: 12px;
+    font-weight: bold;
+    color: black;
+}</string>
    </property>
    <property name="text">
     <string>Local Authentication</string>
@@ -110,15 +119,15 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>50</y>
-     <width>81</width>
-     <height>16</height>
+     <y>46</y>
+     <width>91</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">QLabel {
-    font-size: 14px;
-    font-weight: bold;
+	background-color: #e6e6e6;
+    font-size: 12px;
     color: black;
 }</string>
    </property>
@@ -130,15 +139,15 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>110</y>
-     <width>81</width>
-     <height>16</height>
+     <y>106</y>
+     <width>91</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">QLabel {
-    font-size: 14px;
-    font-weight: bold;
+	background-color: #e6e6e6;
+    font-size: 12px;
     color: black;
 }</string>
    </property>
