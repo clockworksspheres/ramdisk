@@ -26,6 +26,7 @@ class Ui_LocalAuth(object):
         LocalAuth.setWindowOpacity(20.000000000000000)
         LocalAuth.setAutoFillBackground(False)
         LocalAuth.setStyleSheet(u"QWidget {\n"
+"	background-color: #ADADAD;\n"
 "    border: 2px solid #333333;\n"
 "    border-radius: 10px;   \n"
 "    padding: 10px;\n"
@@ -34,15 +35,15 @@ class Ui_LocalAuth(object):
 "")
         self.buttonBox = QDialogButtonBox(LocalAuth)
         self.buttonBox.setObjectName(u"buttonBox")
-        self.buttonBox.setGeometry(QRect(40, 180, 152, 32))
+        self.buttonBox.setGeometry(QRect(70, 170, 131, 41))
         self.buttonBox.setStandardButtons(QDialogButtonBox.StandardButton.Cancel|QDialogButtonBox.StandardButton.Ok)
         self.userLineEdit = QLineEdit(LocalAuth)
         self.userLineEdit.setObjectName(u"userLineEdit")
         self.userLineEdit.setGeometry(QRect(30, 70, 161, 21))
         self.userLineEdit.setStyleSheet(u"QLineEdit {\n"
-"	background-color: #ADADAD;\n"
-"    color: white;\n"
-"    border: 2px solid #333333;\n"
+"	background-color: white;\n"
+"    color: black;\n"
+"    border: 2px solid grey;\n"
 "    border-radius: 10px;   \n"
 "    padding: 10px;\n"
 "    border-radius: 5px;\n"
@@ -53,7 +54,7 @@ class Ui_LocalAuth(object):
         self.passLineEdit.setObjectName(u"passLineEdit")
         self.passLineEdit.setGeometry(QRect(30, 130, 161, 21))
         self.passLineEdit.setStyleSheet(u"QLineEdit {\n"
-"	background-color: #ADADAD;\n"
+"	background-color: white;\n"
 "    color: white;\n"
 "    border: 2px solid grey;\n"
 "    border-radius: 10px;   \n"
@@ -64,21 +65,27 @@ class Ui_LocalAuth(object):
         self.passLineEdit.setEchoMode(QLineEdit.EchoMode.PasswordEchoOnEdit)
         self.titleLabel = QLabel(LocalAuth)
         self.titleLabel.setObjectName(u"titleLabel")
-        self.titleLabel.setGeometry(QRect(30, 10, 151, 16))
+        self.titleLabel.setGeometry(QRect(30, 10, 151, 21))
+        self.titleLabel.setStyleSheet(u"QLabel {\n"
+"	background-color: #e6e6e6;\n"
+"    font-size: 12px;\n"
+"    font-weight: bold;\n"
+"    color: black;\n"
+"}")
         self.userLabel = QLabel(LocalAuth)
         self.userLabel.setObjectName(u"userLabel")
-        self.userLabel.setGeometry(QRect(30, 50, 81, 16))
+        self.userLabel.setGeometry(QRect(30, 46, 91, 20))
         self.userLabel.setStyleSheet(u"QLabel {\n"
-"    font-size: 14px;\n"
-"    font-weight: bold;\n"
+"	background-color: #e6e6e6;\n"
+"    font-size: 12px;\n"
 "    color: black;\n"
 "}")
         self.passLabel = QLabel(LocalAuth)
         self.passLabel.setObjectName(u"passLabel")
-        self.passLabel.setGeometry(QRect(30, 110, 81, 16))
+        self.passLabel.setGeometry(QRect(30, 106, 91, 20))
         self.passLabel.setStyleSheet(u"QLabel {\n"
-"    font-size: 14px;\n"
-"    font-weight: bold;\n"
+"	background-color: #e6e6e6;\n"
+"    font-size: 12px;\n"
 "    color: black;\n"
 "}")
 
