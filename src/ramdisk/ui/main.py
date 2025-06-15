@@ -186,11 +186,23 @@ class _CreateRamdisk(QMainWindow):
             creds = True
         if sys.platform.startswith('linux'):
             window = _LocalAuth()
+            '''
+            makes all widgets inside the window shadowed - 
+            what a MESS!!
             shadow = QGraphicsDropShadowEffect()
             shadow.setBlurRadius(10)
             shadow.setXOffset(5)
             shadow.setYOffset(5)
             shadow.setColor(Qt.gray)
+            window.setGraphicsEffect(shadow)
+            '''
+                        # Create a drop shadow effect
+            shadow = QGraphicsDropShadowEffect()
+            shadow.setBlurRadius(20)  # Adjust the blur radius for more or less shadow
+            shadow.setColor(Qt.black)  # Set the color of the shadow
+            shadow.setOffset(5, 5)     # Set the offset of the shadow (x, y)
+
+            # Apply the shadow effect to the main window
             window.setGraphicsEffect(shadow)
 
             window.credsSig.connect(self.getCreds)
