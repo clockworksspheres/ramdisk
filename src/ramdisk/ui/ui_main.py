@@ -23,8 +23,11 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(478, 308)
-        MainWindow.setAutoFillBackground(True)
+        MainWindow.resize(497, 347)
+        MainWindow.setAutoFillBackground(False)
+        MainWindow.setStyleSheet(u"QWidget {\n"
+"	background-color: #ADADAD;\n"
+"}")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.createPushButton = QPushButton(self.centralwidget)
@@ -51,7 +54,7 @@ class Ui_MainWindow(object):
         self.sizeHorizontalSlider.setOrientation(Qt.Orientation.Horizontal)
         self.sizeLabel = QLabel(self.centralwidget)
         self.sizeLabel.setObjectName(u"sizeLabel")
-        self.sizeLabel.setGeometry(QRect(20, 50, 161, 16))
+        self.sizeLabel.setGeometry(QRect(10, 35, 161, 21))
         self.mountLabel = QLabel(self.centralwidget)
         self.mountLabel.setObjectName(u"mountLabel")
         self.mountLabel.setGeometry(QRect(20, 110, 211, 16))
@@ -61,8 +64,8 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 478, 43))
-        self.menubar.setAutoFillBackground(True)
+        self.menubar.setGeometry(QRect(0, 0, 497, 43))
+        self.menubar.setAutoFillBackground(False)
         self.menubar.setNativeMenuBar(True)
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)

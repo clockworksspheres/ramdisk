@@ -22,17 +22,12 @@ class Ui_LocalAuth(object):
     def setupUi(self, LocalAuth):
         if not LocalAuth.objectName():
             LocalAuth.setObjectName(u"LocalAuth")
-        LocalAuth.resize(228, 242)
+        LocalAuth.resize(247, 243)
         LocalAuth.setWindowOpacity(20.000000000000000)
         LocalAuth.setAutoFillBackground(False)
         LocalAuth.setStyleSheet(u"QWidget {\n"
 "	background-color: #ADADAD;\n"
-"    border: 2px solid #333333;\n"
-"    border-radius: 10px;   \n"
-"    padding: 10px;\n"
-"    border-radius: 5px;\n"
-"}\n"
-"")
+"}")
         self.buttonBox = QDialogButtonBox(LocalAuth)
         self.buttonBox.setObjectName(u"buttonBox")
         self.buttonBox.setGeometry(QRect(70, 170, 131, 41))
@@ -40,22 +35,11 @@ class Ui_LocalAuth(object):
         self.userLineEdit = QLineEdit(LocalAuth)
         self.userLineEdit.setObjectName(u"userLineEdit")
         self.userLineEdit.setGeometry(QRect(30, 70, 161, 21))
-        self.userLineEdit.setStyleSheet(u"QLineEdit {\n"
-"    border-style: outset;\n"
-"	background-color: white;\n"
-"    color: black;\n"
-"    font: 12px;\n"
-"    border: 2px solid grey;\n"
-"}")
+        self.userLineEdit.setStyleSheet(u"")
         self.passLineEdit = QLineEdit(LocalAuth)
         self.passLineEdit.setObjectName(u"passLineEdit")
         self.passLineEdit.setGeometry(QRect(30, 130, 161, 21))
-        self.passLineEdit.setStyleSheet(u"QLineEdit {\n"
-"    border-style: outset;\n"
-"	background-color: white;\n"
-"    color: white;\n"
-"    border: 2px solid grey;\n"
-"}")
+        self.passLineEdit.setStyleSheet(u"")
         self.passLineEdit.setEchoMode(QLineEdit.EchoMode.PasswordEchoOnEdit)
         self.titleLabel = QLabel(LocalAuth)
         self.titleLabel.setObjectName(u"titleLabel")
@@ -91,8 +75,8 @@ class Ui_LocalAuth(object):
 
     def retranslateUi(self, LocalAuth):
         LocalAuth.setWindowTitle(QCoreApplication.translate("LocalAuth", u"Form", None))
-        self.userLineEdit.setText(QCoreApplication.translate("LocalAuth", u"Username", None))
-        self.passLineEdit.setText(QCoreApplication.translate("LocalAuth", u"Password", None))
+        self.userLineEdit.setText("")
+        self.passLineEdit.setText("")
         self.titleLabel.setText(QCoreApplication.translate("LocalAuth", u"Local Authentication", None))
         self.userLabel.setText(QCoreApplication.translate("LocalAuth", u"Username", None))
         self.passLabel.setText(QCoreApplication.translate("LocalAuth", u"Password", None))
