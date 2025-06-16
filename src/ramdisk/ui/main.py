@@ -68,25 +68,7 @@ class _CreateRamdisk(QMainWindow):
 
         self.logger = CyLogger()
         self.logger.initializeLogs()
-        '''
-        doesn't work for a ui_mainwindow...
-        shadow = QGraphicsDropShadowEffect()
-        shadow.setBlurRadius(10)
-        shadow.setXOffset(5)
-        shadow.setYOffset(5)
-        shadow.setColor(Qt.gray)
-        self.ui.setGraphicsEffect(shadow)
-        '''
-        '''
-        self.setStyleSheet("""
-            MainWindow {
-                border: 5px solid red;
-                background-color: rgb(0,255,255);
-                border-radius: 10px;
-                box-shadow: 4px 4px 8px rgba(224, 224, 224, 0.5);
-            }
-        """)
-        '''
+
         #####
         # Connect Button click signals to slots 
         self.ui.createPushButton.clicked.connect(self.createRamdisk)
