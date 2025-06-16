@@ -6,15 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>478</width>
-    <height>308</height>
+    <width>497</width>
+    <height>347</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Create Ramdisk</string>
   </property>
   <property name="autoFillBackground">
-   <bool>true</bool>
+   <bool>false</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget {
+	background-color: #ADADAD;
+}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="createPushButton">
@@ -108,10 +113,10 @@
    <widget class="QLabel" name="sizeLabel">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>50</y>
+      <x>10</x>
+      <y>35</y>
       <width>161</width>
-      <height>16</height>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
@@ -147,12 +152,12 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>478</width>
+     <width>497</width>
      <height>43</height>
     </rect>
    </property>
    <property name="autoFillBackground">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="nativeMenuBar">
     <bool>true</bool>

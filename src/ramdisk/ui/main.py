@@ -77,15 +77,7 @@ class _CreateRamdisk(QMainWindow):
         shadow.setColor(Qt.gray)
         self.ui.setGraphicsEffect(shadow)
         '''
-        # Create a drop shadow effect
-        shadow = QGraphicsDropShadowEffect()
-        shadow.setBlurRadius(20)  # Adjust the blur radius for more or less shadow
-        shadow.setColor(Qt.black)  # Set the color of the shadow
-        shadow.setOffset(5, 5)     # Set the offset of the shadow (x, y)
-
-        # Apply the shadow effect to the main window
-        self.setGraphicsEffect(shadow)
-
+        '''
         self.setStyleSheet("""
             MainWindow {
                 border: 5px solid red;
@@ -94,7 +86,7 @@ class _CreateRamdisk(QMainWindow):
                 box-shadow: 4px 4px 8px rgba(224, 224, 224, 0.5);
             }
         """)
-
+        '''
         #####
         # Connect Button click signals to slots 
         self.ui.createPushButton.clicked.connect(self.createRamdisk)
