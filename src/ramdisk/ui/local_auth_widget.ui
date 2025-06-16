@@ -47,7 +47,11 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true"/>
+    <string notr="true">QLineEdit {
+    border-style: outset;
+	background-color: #e6e6e6;
+    font: 12px black;
+}</string>
    </property>
    <property name="text">
     <string/>
@@ -63,13 +67,17 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true"/>
+    <string notr="true">QLineEdit {
+    border-style: outset;
+	background-color: #e6e6e6;
+    font: 12px black;
+}</string>
    </property>
    <property name="text">
     <string/>
    </property>
    <property name="echoMode">
-    <enum>QLineEdit::EchoMode::PasswordEchoOnEdit</enum>
+    <enum>QLineEdit::EchoMode::Password</enum>
    </property>
   </widget>
   <widget class="QLabel" name="titleLabel">
@@ -83,8 +91,6 @@
    </property>
    <property name="styleSheet">
     <string notr="true">QLabel {
-    border-style: outset;
-	background-color: #e6e6e6;
     font-weight: bold;
     color: black;
 }</string>
@@ -103,11 +109,7 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">QLabel {
-    border-style: outset;
-	background-color: #e6e6e6;
-    font: 12px black;
-}</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string>Username</string>
@@ -126,11 +128,7 @@
     <bool>false</bool>
    </property>
    <property name="styleSheet">
-    <string notr="true">QLabel {
-    border-style: outset;
-	background-color: #e6e6e6;
-    color: black;
-}</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string>Password</string>

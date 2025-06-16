@@ -25,8 +25,8 @@
    <widget class="QPushButton" name="createPushButton">
     <property name="geometry">
      <rect>
-      <x>339</x>
-      <y>80</y>
+      <x>340</x>
+      <y>70</y>
       <width>121</width>
       <height>32</height>
      </rect>
@@ -96,6 +96,13 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QLineEdit {
+    border-style: outset;
+	background-color: #e6e6e6;
+    font: 12px black;
+}</string>
+    </property>
    </widget>
    <widget class="QSlider" name="sizeHorizontalSlider">
     <property name="geometry">
@@ -145,6 +152,13 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QLineEdit {
+    border-style: outset;
+	background-color: #e6e6e6;
+    font: 12px black;
+}</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -162,8 +176,62 @@
    <property name="nativeMenuBar">
     <bool>true</bool>
    </property>
+   <widget class="QMenu" name="menuRamDisk">
+    <property name="title">
+     <string>RamDisk</string>
+    </property>
+    <addaction name="actionConfigure"/>
+   </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen_Specfile"/>
+    <addaction name="actionSave_Specfile"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionStyle"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuRamDisk"/>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionConfigure">
+   <property name="text">
+    <string>Configure</string>
+   </property>
+  </action>
+  <action name="actionOpen_Specfile">
+   <property name="text">
+    <string>Open Specfile</string>
+   </property>
+  </action>
+  <action name="actionSave_Specfile">
+   <property name="text">
+    <string>Save Specfile</string>
+   </property>
+  </action>
+  <action name="actionStyle">
+   <property name="text">
+    <string>Style</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
