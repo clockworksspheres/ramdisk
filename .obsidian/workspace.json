@@ -171,6 +171,7 @@
   },
   "active": "c52fe03ac0d1d93f",
   "lastOpenFiles": [
+    "src/ramdisk/ui/local_auth_widget.ui.autosave",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/ramdisk.py",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/ramdisk.pyproject.user",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_user/tests/test_validateuserUid.py",
@@ -181,7 +182,6 @@
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_user/tests/test_validateUserComment.py",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_user/tests/test_validateUser.py",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_user/tests/test_uidTaken.py",
-    "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_user/tests/test_setUserUid.py",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_user/README.md",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_keychain/README.md",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/getLibc/README.md",
