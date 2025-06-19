@@ -117,3 +117,7 @@ AI-generated answer. Please verify critical facts.
 
 -----
 
+# Ended up with something much different - put stylesheet inside the QtCreator generated code
+
+Load the UI into QtCreator, and see the Stylesheets that were placed in/on a few of the components.
+
