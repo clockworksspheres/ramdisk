@@ -1,0 +1,3 @@
+([('dialog_002',
+   '/Users/victor/Documents/src/github/clockworksspheres/ramdisk/src/proto/dist/dialog_002',
+   'EXECUTABLE')],)
