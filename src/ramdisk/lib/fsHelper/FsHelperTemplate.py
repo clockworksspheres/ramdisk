@@ -12,7 +12,7 @@ from ramdisk.lib.loggers import LogPriority as lp
 class FsHelperTemplate(object):
     """
     """
-    def __init__(self, logger):
+    def __init__(self, logger, **kwargs):
         """
         """
         if not logger and isinstance(logger, CyLogger):

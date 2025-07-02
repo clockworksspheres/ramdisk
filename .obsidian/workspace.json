@@ -11,14 +11,12 @@
             "id": "c52fe03ac0d1d93f",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "plantuml",
               "state": {
-                "file": "src/Docs/uiRelated/WidgetShadow.md",
-                "mode": "source",
-                "source": true
+                "file": "ramdisk_diagram.puml"
               },
-              "icon": "lucide-file",
-              "title": "WidgetShadow"
+              "icon": "document-plantuml",
+              "title": "ramdisk_diagram"
             }
           }
         ]
@@ -171,6 +169,9 @@
   },
   "active": "c52fe03ac0d1d93f",
   "lastOpenFiles": [
+    "src/ramdisk_diagram.puml",
+    "src/ramdisk/ramdisk_diagram.puml",
+    "src/Docs/uiRelated/WidgetShadow.md",
     "src/ramdisk/lib/fsHelper/__pycache__/apfsfsHelper.cpython-310.pyc",
     "src/ramdisk/lib/fsHelper/__pycache__/__init__.cpython-310.pyc",
     "src/ramdisk/lib/fsHelper/__pycache__",
@@ -180,8 +181,6 @@
     "src/ramdisk/lib/__pycache__/composite_menu.cpython-310.pyc",
     "src/ramdisk/lib/__pycache__/PlatformFoundErrors.cpython-310.pyc",
     "src/ramdisk/__pycache__/config.cpython-310.pyc",
-    "src/ramdisk/lib/manage_keychain/__pycache__/__init__.cpython-310.pyc",
-    "src/ramdisk/lib/manage_keychain/__pycache__",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_user/README.md",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_keychain/README.md",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/getLibc/README.md",
@@ -205,7 +204,6 @@
     "src/dist/org.clockworksspheres.ramdisk/_internal/ramdisk/resources/img/ram_96.png",
     "src/dist/org.clockworksspheres.ramdisk/_internal/ramdisk/resources/img/ram_64.png",
     "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
-    "src/Docs/uiRelated/WidgetShadow.md",
     "src/Docs/userRelated/getCurrentUser.md",
     "src/Docs/umlRelated/classes_ramdisk.jpg",
     "src/Docs/umlRelated/CreateNRenderPlantumlClassDiagram.md",

@@ -957,7 +957,7 @@ class RunWith(object):
 
         self.logger.log(lp.DEBUG, "Starting runWithSudo: ")
         self.logger.log(lp.DEBUG, "\tcmd : " + str(self.command))
-        if re.match(r"^\s+$", password) or \
+        if re.match(r'^\s+$', password) or \
            not password or \
            not self.command:
             self.logger.log(lp.WARNING, "Cannot pass in empty parameters...")

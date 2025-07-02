@@ -4,7 +4,7 @@ import sys
 
 sys.path.append("../../..")
 
-from ramdisk.lib.fsHelper import FsHelperTemplate
+from ramdisk.lib.fsHelper.FsHelperTemplate import FsHelperTemplate
 
 class FsHelper(FsHelperTemplate):
     """
@@ -12,4 +12,6 @@ class FsHelper(FsHelperTemplate):
     Will inherit the above class as is and be able to 
         use parent methods as is.
     """
-    pass
+    def __init__(self):
+        pass
+

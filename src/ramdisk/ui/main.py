@@ -32,7 +32,7 @@ from ramdisk.ui.getValues import getMaxMemSize
 from ramdisk.lib.dev.getMemStatus import GetMemStatus
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority
-from ramdisk.ramdisk import RamDisk
+from ramdisk.RamDisk import RamDisk
 
 if sys.platform.startswith('linux'):
     from ramdisk.ui.local_auth_widget import _LocalAuth
