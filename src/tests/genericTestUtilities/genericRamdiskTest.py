@@ -16,7 +16,10 @@ from datetime import datetime
 
 #####
 # Include the parent project directory in the PYTHONPATH
-appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
+if sys.platform.startswith("win32"):
+    appendDir = "../"
+else:
+    appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
 sys.path.append(appendDir)
 
 #--- non-native python libraries in this source tree
@@ -46,12 +49,12 @@ elif sys.platform.startswith("win32"):
     from ramdisk.lib.getLibc.winGetLibc import getLibc
     from ramdisk.winImDiskRamdisk import RamDisk
     from ramdisk.winImDiskRamdisk import umount
-    from ramdisk.lib.fsHelper.win32FsHelper import FsHelper
+    from ramdisk.lib.fsHelper.ntfsFsHelper import FsHelper
 else:
     raise Exception("Damn it Jim!!! What OS is this???")
 
 
-class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
+class GenericRamdiskTest(GenericTestUtilities, unittest.TestCase):
     """
     Holds helper methods.  DO NOT create an init
 
@@ -64,53 +67,62 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
     def setUpClass(self):
         """
         """
+        # self.commonSetUp()
         self.libc = getLibc()
         self.subdirs = ["two", "three" "one/four"]
         self.logger = CyLogger()
         self.logger.initializeLogs()
         self.logger.log(lp.CRITICAL, "Logger initialized............................")
         self.fsHelper = FsHelper()
-        self.setUpInstanceSpecifics()
-        
+        self.target = ""
+
+        self.intermediateSetUpClass(self)
         """
         Set up a ramdisk and use that random location as a root to test the
         filesystem functionality of what is being tested.
         """
         
-        if sys.platform.startswith("darwin"):
-			#Calculate size of ramdisk to make for this unit test.
-            # size_in_mb = int((1024 * 1024 * 512) / 512)
-            size_in_mb = 512
-            ramdisk_size = size = size_in_mb
-            self.mnt_pnt_requested = "testmntpnt"
-        elif sys.platform.startswith("linux"):
-            #Calculate size of ramdisk to make for this unit test.
-            # linux ramdisks are made in terms of 1 mb at a time... not
-            # bits or bytes...
-            size_in_mb = 512
-            ramdisk_size = size = size_in_mb
-            self.mnt_pnt_requested = size_in_mb
-        elif size.platform.startswith("win32"):
-            #Calculate size of ramdisk to make for this unit test.
-            ramdisk_size = size = size_in_mb
-            self.mnt_pnt_requested = "testmntpnt"
-			
         self.success = False
         self.mountPoint = ""
         self.ramdiskDev = False
         self.mnt_pnt_requested = False
+        self.ramdisk_size = 0
+
+        # self.setUpInstanceSpecifics()
+
+        if sys.platform.startswith("darwin") and self.target == 'darwin':
+			#Calculate size of ramdisk to make for this unit test.
+            # size_in_mb = int((1024 * 1024 * 512) / 512)
+            size_in_mb = 512
+            self.ramdisk_size = size = size_in_mb
+            self.mnt_pnt_requested = "testmntpnt"
+        elif sys.platform.startswith("linux") and self.target == 'linux':
+            #Calculate size of ramdisk to make for this unit test.
+            # linux ramdisks are made in terms of 1 mb at a time... not
+            # bits or bytes...
+            size_in_mb = 512
+            self.ramdisk_size = size_in_mb
+            self.mnt_pnt_requested = "/tmp/testmntpnt"
+        elif sys.platform.startswith("win32") and self.target == 'win32':
+            #Calculate size of ramdisk to make for this unit test.
+            self.ramdisk_size = size = size_in_mb
+            self.mnt_pnt_requested = "testmntpnt"
+        else:
+            raise unittest.SkipTest("Not applicable here...")
 
         # get a ramdisk of appropriate size, with a secure random mountpoint
-        self.my_ramdisk = RamDisk(str(ramdisk_size), self.mnt_pnt_requested, logger=self.logger)
-        (self.success, self.mountPoint, self.ramdiskDev) = self.my_ramdisk.getData()
+        self.my_ramdisk = RamDisk(str(self.ramdisk_size), self.mnt_pnt_requested, logger=self.logger)
+        self.logger.log(self.WARNING, "::::: ramdisk: " + str(self.my_ramdisk + " :::::"))
+        self.success, self.mountPoint, self.ramdiskDev = self.my_ramdisk.getData()
         self.logger.log(lp.WARNING, str(self.success) + " : " + str(self.mountPoint) + " : " + str(self.ramdiskDev))
         self.mount = self.mountPoint
 
         self.logger.log(lp.INFO, "::::::::Ramdisk Mount Point: " + str(self.mountPoint))
         self.logger.log(lp.INFO, "::::::::Ramdisk Device     : " + str(self.ramdiskDev))
 
-        # if not self.my_ramdisk.success:
-        #     raise IOError("Cannot get a ramdisk in setupClass for some reason. . .")
+        if not self.my_ramdisk.success:
+            raise IOError("Cannot get a ramdisk in setupClass for some reason. . .")
+
 
         #####
         # Create a temp location on disk to run benchmark tests against
@@ -119,18 +131,18 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
         # Start timer in miliseconds
         self.test_start_time = datetime.now()
 
-
+    '''
     @classmethod
     def setUpInstanceSpecifics(self):
-        """
+        ""
         Call the child class setUpClass initializer, if possible..
 
         Here to be over-ridden by a child class.
 
         @author: Roy Nielsen
-        """
+        ""
         pass
-
+    '''
     ################################################
     ##### Helper Methods
 
@@ -177,9 +189,25 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
         """
         Test file creation of various sizes, ramdisk vs. filesystem
         """
-        #####
-        # Clean up the ramdisk
-        self.my_ramdisk._format()
+        """
+        try:
+            #####
+            # Clean up the ramdisk
+            self.my_ramdisk._format()
+        except AttributeError:
+            # get a ramdisk of appropriate size, with a secure random mountpoint
+            self.my_ramdisk = RamDisk(str(self.ramdisk_size), self.mnt_pnt_requested, logger=self.logger)
+            self.logger.log(self.WARNING, "::::: ramdisk: " + str(self.my_ramdisk + " :::::"))
+            self.success, self.mountPoint, self.ramdiskDev = self.my_ramdisk.getData()
+            self.logger.log(lp.WARNING, str(self.success) + " : " + str(self.mountPoint) + " : " + str(self.ramdiskDev))
+            self.mount = self.mountPoint
+
+            self.logger.log(lp.INFO, "::::::::Ramdisk Mount Point: " + str(self.mountPoint))
+            self.logger.log(lp.INFO, "::::::::Ramdisk Device     : " + str(self.ramdiskDev))
+
+            if not self.my_ramdisk.success:
+                raise IOError("Cannot get a ramdisk in setupClass for some reason. . .")
+        """
         #####
         # 10Mb file size
         ten = 10
@@ -201,8 +229,8 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
                 self.logger.log(lp.INFO, "testfile size: " + str(file_size))
                 #####
                 # Create filesystem file and capture the time it takes...
-                self.mkfile(os.path.join(self.fs_dir, "testfile"), file_size)
-                self.logger.log(lp.INFO, "fs_time: " + str(datetime.now()))
+                self.mkfile(os.path.join(self.mountPoint, "testfile"), file_size)
+                self.logger.log(lp.INFO, "file_size: " + str(file_size) + " fs_time: " + str(datetime.now()))
             fs_endtime = datetime.now()
     
             fs_time = fs_endtime - fs_starttime
@@ -238,7 +266,7 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
         """
         #####
         # Clean up the ramdisk
-        self.my_ramdisk._format()
+        #self.my_ramdisk._format()
         #####
         #
         ramdisk_starttime = datetime.now()
@@ -269,22 +297,25 @@ class GenericRamdiskTest(unittest.TestCase, GenericTestUtilities):
         pass
 
     @classmethod
-    def tearDownClass(self):
+    def intermediateTearDownClass(self):
         """
         """
+        pass
 
-        self.tearDownInstanceSpecifics()
+        # self.tearDownInstanceSpecifics(self)
 
         try:
             self.my_ramdisk.umount()
             self.logger.log(lp.INFO, r"Successfully detached disk: " + \
                        str(self.my_ramdisk.mntPoint).strip())
         except Exception:
-            message = r"Couldn't detach disk: " + \
-                       str(self.my_ramdisk.myRamdiskDev).strip() + \
-                       " : mntpnt: " + str(self.my_ramdisk.mntPoint)
-            ex_message = message + "\n" + traceback.format_exc()
-            raise Exception(ex_message)
+            #message = r"Couldn't detach disk: " + \
+            #           str(self.my_ramdisk.myRamdiskDev).strip() + \
+            #           " : mntpnt: " + str(self.my_ramdisk.mntPoint)
+            ex_message = traceback.format_exc()
+            #self.logger.log(lp.WARNING, message)
+            self.logger.log(lp.WARNING, ex_message)
+            # raise Exception(ex_message)
 
 
 

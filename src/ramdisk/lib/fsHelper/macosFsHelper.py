@@ -2,9 +2,10 @@
 import subprocess
 import re
 import traceback
-from subprocess import Popen
+# from subprocess import Popen
 import os
 import sys
+import getpass
 
 if __name__ == "__main__":
     sys.path.append("../../..")
@@ -19,10 +20,11 @@ from ramdisk.lib.run_commands import RunWith
 from ramdisk.lib.environment import Environment
 from ramdisk.lib.CheckApplicable import CheckApplicable
 from ramdisk.commonRamdiskTemplate import NotValidForThisOS
+from ramdisk.lib.fsHelper.FsHelperTemplate import FsHelperTemplate
 
-
-class FsHelper(object):
+class FsHelper(FsHelperTemplate):
     """
+    Inherits methods validatePath and mkdirs
     """
     def __init__(self):
         """
@@ -33,8 +35,11 @@ class FsHelper(object):
         # in UTC time
         self.module_version = '20241204.1408'
         self.logger = CyLogger()
+        self.logger.initializeLogs()
         self.environ = Environment()
         self.chkApp = CheckApplicable(self.environ, self.logger)
+
+        self.rw = RunWith(self.logger)
 
         #####
         # Check applicability to the current OS
@@ -82,7 +87,7 @@ class FsHelper(object):
                megabyte) could be changed to suit the user.
 
                when getting input for the size of the ramdisk, use 
-               regex \d+[GgMm][Bb] for size
+               regex d+[GgMm][Bb] for size
 
         """
         success = False
@@ -103,10 +108,10 @@ class FsHelper(object):
         except AttributeError as err:
             try:
                 match = re.match(r"^(\d+)$", str(size))
-                diskSizeInMb = match.group(1)
+                diskSizeInMb = match.group(0)
             except AttributeError as err:
-                print("Unexpected input, size input when only numbers is only in calculated in megabytes...")
-                print("Or possibly, unexpected input, size input must be XXXXSS where XXXX is decimal value and SS is either Mb or Gb")
+                self.logger.log(lp.DEBUG, "Unexpected input, size input when only numbers is only in calculated in megabytes...")
+                self.logger.log(lp.DEBUG, "Or possibly, unexpected input, size input must be XXXXSS where XXXX is decimal value and SS is either Mb or Gb")
                 raise(err)
             except Exception as err:
                 print(traceback.format_exc())
@@ -127,6 +132,191 @@ class FsHelper(object):
         # print(diskSizePostfix)
 
         return success, diskSizeInMb
+
+
+    def validateUser(self, user=""):
+        """
+        """
+        success = False
+        message = ""
+        uid = 999999999
+        self.logger.log(lp.DEBUG, "User: " + user)
+        # print("User: " + user)
+        # Handling User ID validation
+        if not user:
+            message = "Value not passed in for User validation"
+        elif isinstance(user, str):
+            # perform a 're' check to see if it's a decimal string
+            if re.match(r"\d+", user):
+                # Check to see if it's a valid uid on the system
+                uid = int(user.strip())
+            elif re.match(r'^\w.+', user.strip()):
+                # look for username in list of valid users on the system
+                cmd = ["/usr/bin/dscl", ".", "-list", "/Users"]
+                self.rw.setCommand(cmd)
+                output, _, _ = self.rw.communicate()
+
+                for item in output.split("\n"):
+                    #print(item)
+                    if re.match(r'^_\w.+', item):
+                        continue
+                    not_allowed = ["daemon", "nobody"]
+                    if item in not_allowed:
+                        continue
+                    #print("...ITEM: " + item.strip() + " user: " + user.strip())
+                    if item.strip() == user.strip():
+                        #print("........FOUND USER.......")
+                        cmd = ["/usr/bin/dscl", ".", "-read", "/Users/" + item.strip(), "uid"]
+                        self.rw.setCommand(cmd)
+                        output, _, _ = self.rw.communicate()
+                        self.logger.log(lp.DEBUG, "output: " + output)
+                        if re.search("ERROR", output, re.IGNORECASE):
+                            success = False
+                            message = "Not a valid user on this system"
+                        else:
+                            tmpuid = output.split()[-1]
+                            uid = int(tmpuid)
+                            message = ".........User uid " + str(uid) + " found"
+                            self.logger.log(lp.DEBUG, message)
+                            # print(message)
+                            success = True
+                            break
+        else:
+            message = "Not valid input for the user parameter"
+            success = False
+        # print("...UID: " + str(uid) + " message: " + message + " success: " + str(success))
+        return success, message, uid
+    
+    def getGid(self, group):
+        """
+        """
+        success = False
+        gid = 99999999
+        message = ""
+
+        cmd = ["/usr/bin/dscl", ".", "-read", "/Groups/" + str(group), "PrimaryGroupID"]
+        self.rw.setCommand(cmd)
+        output, _, _  = self.rw.communicate()
+
+        try:
+            gid = output.split()[-1]
+            gid = int(gid)
+            message = "Found gid: " + str(gid)
+            success = True
+        except IndexError:
+            message = "Error attempting to get GID"
+            success = False
+            gid = 20
+
+        return success, message, gid
+
+    def validateGroup4user(self, user, group):
+        """
+        """
+        success = False
+        message = ""
+        gid = 99999999
+
+        success, message, _ = self.validateUser(user)
+
+        if success:
+            cmd = ["/usr/bin/id", "-Gn", user]
+            self.rw.setCommand(cmd)
+            output, _, _ = self.rw.communicate()
+
+            for accountGroup in output.split():
+                # print(".. .. .. AccountGroup: " + accountGroup.strip() + " Group: " + group.strip())
+                if re.match(r'^_\w.+', accountGroup):
+                    message = "Not a valid Group"
+                    success = False
+                elif re.search("ERROR", accountGroup, re.IGNORECASE):
+                    message = "Not a valid Group"
+                    success = False
+                elif accountGroup.strip() == group.strip():
+                    message = "Found a valid group for this user."
+                    success = True
+                    break
+                else:
+                    message = "Not a valid group for this user"
+                    success = False
+
+        return success, message
+        """
+        A better version of this method is inherited by FsHelperTemplate
+    def validatePath(self, path):
+
+        success = False
+
+        # Handling str based path validation
+        if not path:
+            message = "Path passed in is not valid"
+        elif isinstance(path, str):
+            # Check if the path is a valid path on the system.
+            if os.path.exists(path):
+                message = "Path is valid, proceeding."
+                success = True
+            else:
+                message = "Path non-existent, or you don't have permission to it."
+        else:
+            message = "Path parameter needs to be a valid type"
+
+        return success, message
+        """
+        
+    def chown_recursive(self, path, uid, gid):
+        """
+        Recursively change the owner and group id of a directory and its contents.
+        """
+        success = False
+        try:
+            # Change the owner and group id of the current path
+            os.chown(path, uid, gid)
+            
+            # If the path is a directory, iterate over its contents
+            if os.path.isdir(path):
+                for item in os.listdir(path):
+                    item_path = os.path.join(path, item)
+                    self.chown_recursive(item_path, uid, gid)
+                    success = True
+        except Exception as e:
+            print(f"Error changing ownership of {path}: {e}")
+            success = False
+        return success
+
+    def chown(self, path, user="", group="staff", withRoot=False, permissions=None, recursive=True):
+        """
+        """
+        success = False
+        worked = False
+        message = ""
+        uid = ""
+        gid = ""
+
+        worked, message = self.validatePath(path)
+        self.logger.log(lp.DEBUG, message)
+        if not worked:
+            return success, message
+
+        # handling 'user' input value
+        if not user:
+            user = getpass.getuser() 
+        worked, message, uid = self.validateUser(user)
+        self.logger.log(lp.DEBUG, message)
+        if not worked:
+            return success, message
+
+        if group:
+            # Handling Group ID validation
+            worked, message = self.validateGroup4user(user, group)
+            self.logger.log(lp.DEBUG, message)
+            if not worked:
+                return success, message
+            success, message, gid = self.getGid(group)    
+        else:
+            gid = 20  # staff on macOS
+
+        success = self.chown_recursive(path, uid, gid)
+        return success
 
 
 if __name__=="__main__":

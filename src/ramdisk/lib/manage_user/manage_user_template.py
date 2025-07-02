@@ -138,7 +138,7 @@ class ManageUserTemplate(object):
         """
         sane = False
         if isinstance(filepath, str):
-            if re.match("^[A-Za-z/\.][A-Za-z0-9/\.]*", filepath):
+            if re.match(r"^[A-Za-z/\.][A-Za-z0-9/\.]*", filepath):
                 sane = True
         return sane
 
@@ -153,7 +153,7 @@ class ManageUserTemplate(object):
         """
         sane = False
         if userName and isinstance(userName, str):
-            if re.match("^[A-Za-z][A-Za-z0-9]*", userName):
+            if re.match(r"^[A-Za-z][A-Za-z0-9]*", userName):
                 sane = True
         return sane
 
@@ -168,7 +168,7 @@ class ManageUserTemplate(object):
         """
         sane = False
         if groupName and isinstance(groupName, str):
-            if re.match("^[A-Za-z][A-Za-z0-9]*", groupName):
+            if re.match(r"^[A-Za-z][A-Za-z0-9]*", groupName):
                 sane = True
         return sane
 
@@ -195,7 +195,7 @@ class ManageUserTemplate(object):
         """
         sane = False
         if userComment and isinstance(userComment, str):
-            if re.match("^[A-Za-z][A-Za-z0-9]*", userComment):
+            if re.match(r"^[A-Za-z][A-Za-z0-9]*", userComment):
                 sane = True
         return sane
 
@@ -209,7 +209,7 @@ class ManageUserTemplate(object):
         """
         sane = False
         if userUid and isinstance(userUid, [str, int]):
-            if re.match("^\d+", str(userUid)):
+            if re.match(r"^\d+", str(userUid)):
                 sane = True
         return sane
 
@@ -223,7 +223,7 @@ class ManageUserTemplate(object):
         """
         sane = False
         if userPriGid and isinstance(userPriGid, [str, int]):
-            if re.match("^\d+", str(userPriGid)):
+            if re.match(r"^\d+", str(userPriGid)):
                 sane = True
         return sane
 
@@ -405,10 +405,10 @@ class ManageUserTemplate(object):
                         continue
                 #####
                 # Set up for a username match check
-                usr = re.compile("^([A-Za-z][A-Za-z0-9]+)\s+ALL=\(ALL\)\s+ALL.*")
+                usr = re.compile(r"^([A-Za-z][A-Za-z0-9]+)\s+ALL=\(ALL\)\s+ALL.*")
                 #####
                 # Set up for a groupname match check
-                grp = re.compile("^[\%]([A-Za-z][A-Za-z0-9]+)\s+ALL=\(ALL\)\s+ALL.*")
+                grp = re.compile(r"^[\%]([A-Za-z][A-Za-z0-9]+)\s+ALL=\(ALL\)\s+ALL.*")
                 #####
                 # Try to acquire a username and put it in the users list
                 try:

@@ -1,22 +1,24 @@
 {
   "main": {
-    "id": "bee2cd69510d6449",
+    "id": "3ef22ae764e7c113",
     "type": "split",
     "children": [
       {
-        "id": "997769b2ddd2b281",
+        "id": "187e644f5bfae3e5",
         "type": "tabs",
         "children": [
           {
-            "id": "c52fe03ac0d1d93f",
+            "id": "9468089d5e2a1d4a",
             "type": "leaf",
             "state": {
-              "type": "plantuml",
+              "type": "markdown",
               "state": {
-                "file": "ramdisk_diagram.puml"
+                "file": "src/Docs/uiRelated/WidgetShadow.md",
+                "mode": "source",
+                "source": true
               },
-              "icon": "document-plantuml",
-              "title": "ramdisk_diagram"
+              "icon": "lucide-file",
+              "title": "WidgetShadow"
             }
           }
         ]
@@ -25,15 +27,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "5e8c29d44dc38d96",
+    "id": "c025543d45b471b6",
     "type": "split",
     "children": [
       {
-        "id": "6404d1f75144d892",
+        "id": "2506d144b58a01c5",
         "type": "tabs",
         "children": [
           {
-            "id": "bbf6f525b9ee596d",
+            "id": "dd579139b9625eca",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -46,7 +48,7 @@
             }
           },
           {
-            "id": "28f7c04993a2caee",
+            "id": "0b75cafb047bf1f9",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -63,7 +65,7 @@
             }
           },
           {
-            "id": "d9a78b1512df0e42",
+            "id": "a1073b147d7153ec",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -76,23 +78,23 @@
       }
     ],
     "direction": "horizontal",
-    "width": 249.5
+    "width": 300
   },
   "right": {
-    "id": "085a5f030fb6d370",
+    "id": "b7d5736bab340197",
     "type": "split",
     "children": [
       {
-        "id": "42d2e628a0a41a83",
+        "id": "4b138171eeea08fa",
         "type": "tabs",
         "children": [
           {
-            "id": "102d73371c032b6e",
+            "id": "1ad22ffd4be50b84",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "src/ramdisk/lib/CheckApplicableRelated.md",
+                "file": "src/Docs/uiRelated/WidgetShadow.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,25 +104,25 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for CheckApplicableRelated"
+              "title": "Backlinks for WidgetShadow"
             }
           },
           {
-            "id": "0bd37e3972deeceb",
+            "id": "611e3e97b5e80022",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "src/ramdisk/lib/CheckApplicableRelated.md",
+                "file": "src/Docs/uiRelated/WidgetShadow.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from CheckApplicableRelated"
+              "title": "Outgoing links from WidgetShadow"
             }
           },
           {
-            "id": "8f070a2d1a0741bc",
+            "id": "e48e22fc978db8bf",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -135,18 +137,18 @@
             }
           },
           {
-            "id": "5bd2f687b0af2864",
+            "id": "433d6a28b114289d",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "src/ramdisk/lib/CheckApplicableRelated.md",
+                "file": "src/Docs/uiRelated/WidgetShadow.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of CheckApplicableRelated"
+              "title": "Outline of WidgetShadow"
             }
           }
         ]
@@ -167,53 +169,26 @@
       "vscode-editor:Create Code File": false
     }
   },
-  "active": "bbf6f525b9ee596d",
+  "active": "9468089d5e2a1d4a",
   "lastOpenFiles": [
-    "src/tests/__pycache__/test_winImDiskRamdisk.cpython-313-pytest-8.4.1.pyc",
-    "src/tests/genericTestUtilities/__pycache__/genericRamdiskTest.cpython-313.pyc",
-    "src/tests/__pycache__/test_macRamdisk.cpython-313-pytest-8.4.1.pyc",
-    "src/tests/__pycache__/test_linuxTmpfsRamdisk.cpython-313-pytest-8.4.1.pyc",
-    "src/tests/test_winImDiskRamdisk.py",
-    "src/tests/test_macRamdisk.py",
-    "src/tests/test_linuxTmpfsRamdisk.py",
-    "src/tests/README/README.md",
-    "src/tests/README",
-    "src/run_tests.py",
-    "src/ramdisk_widget/validate.py",
-    "src/ramdisk_widget/ui_not_yet_implemented.py",
-    "src/Docs/uiRelated/WidgetShadow.md",
-    "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_user/README.md",
-    "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_keychain/README.md",
-    "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/getLibc/README.md",
-    "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/fsHelper/README.md",
-    "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/dev/README.md",
-    "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/README.md",
-    "src/dist/ramdisk-setup.app/Contents/ramdisk/README.md",
-    "src/dist/ramdisk-setup.app/Contents/ramdisk/resources/img/ram_96.png",
-    "src/dist/ramdisk-setup.app/Contents/ramdisk/resources/img/ram_64.png",
-    "src/dist/ramdisk-setup.app/Contents/ramdisk/ui/README.md",
-    "src/dist/ramdisk-setup.app/Contents/Resources/ramdisk/lib/manage_user/README.md",
-    "src/dist/ramdisk-setup.app/Contents/Resources/ramdisk/lib/manage_keychain/README.md",
-    "src/dist/ramdisk-setup.app/Contents/Resources/ramdisk/lib/getLibc/README.md",
-    "src/dist/ramdisk-setup.app/Contents/Resources/ramdisk/lib/fsHelper/README.md",
-    "src/dist/ramdisk-setup.app/Contents/Resources/ramdisk/lib/dev/README.md",
-    "src/dist/ramdisk-setup.app/Contents/Resources/ramdisk/lib/README.md",
-    "src/dist/ramdisk-setup.app/Contents/Resources/ramdisk/README.md",
-    "src/dist/ramdisk-setup.app/Contents/Resources/ramdisk/ui/README.md",
-    "src/dist/ramdisk-setup.app/Contents/Resources/ramdisk/resources/img/ram_96.png",
-    "src/dist/ramdisk-setup.app/Contents/Resources/ramdisk/resources/img/ram_64.png",
-    "src/dist/org.clockworksspheres.ramdisk/_internal/ramdisk/resources/img/ram_96.png",
-    "src/dist/org.clockworksspheres.ramdisk/_internal/ramdisk/resources/img/ram_64.png",
-    "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
-    "src/Docs/userRelated/getCurrentUser.md",
+    "src/Docs/Users/PythonChownWindows.md",
+    "src/packenv/lib/python3.10/site-packages/setuptools/_distutils/__pycache__/version.cpython-310.pyc",
+    "src/packenv/lib/python3.10/site-packages/setuptools/__pycache__/msvc.cpython-310.pyc",
+    "src/packenv/lib/python3.10/site-packages/setuptools/__pycache__/logging.cpython-310.pyc",
+    "src/packenv/lib/python3.10/site-packages/setuptools/__pycache__/py34compat.cpython-310.pyc",
+    "src/packenv/lib/python3.10/site-packages/setuptools/__pycache__/_imp.cpython-310.pyc",
+    "src/packenv/lib/python3.10/site-packages/setuptools/__pycache__/depends.cpython-310.pyc",
+    "src/packenv/lib/python3.10/site-packages/setuptools/__pycache__/_itertools.cpython-310.pyc",
+    "src/packenv/lib/python3.10/site-packages/setuptools/__pycache__/_entry_points.cpython-310.pyc",
+    "src/packenv/lib/python3.10/site-packages/setuptools/_vendor/jaraco/text/__pycache__/__init__.cpython-310.pyc",
+    "src/packenv/lib/python3.10/site-packages/setuptools/_vendor/jaraco/text/__pycache__",
     "src/Docs/umlRelated/classes_ramdisk.jpg",
-    "src/Docs/umlRelated/CreateNRenderPlantumlClassDiagram.md",
-    "src/Docs/umlRelated/HowToAutoGenerateDocumentsFromCode.md",
     "src/Docs/umlRelated/startingPlantumlForRenderingLocallyInObsidian.md",
-    "src/Docs/userRelated/euidVsUsernameInWindows.md",
-    "pyenv-notes.md",
-    "src/packenv/lib/python3.10/site-packages/PySide6/Qt/qml/QtQuick3D/Particles3D/designer/images/wander-24px@2x.png",
-    "src/packenv/lib/python3.10/site-packages/PySide6/Qt/qml/QtQuick3D/Particles3D/designer/images/wander-24px.png",
-    "src/packenv/lib/python3.10/site-packages/PySide6/Qt/qml/QtQuick3D/Particles3D/designer/images/wander-16px.png"
+    "src/Docs/umlRelated/HowToAutoGenerateDocumentsFromCode.md",
+    "src/Docs/umlRelated/CreateNRenderPlantumlClassDiagram.md",
+    "src/Docs/uiRelated/WidgetShadow.md",
+    "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
+    "src/Docs/ci-cd/CreateLocalUTMmacosVMandVagrantUP/Welcome.md",
+    "src/Docs/ci-cd/CreateLocalUTMmacosVMandVagrantUP/create local UTM macos VM and vagrant up.md"
   ]
 }

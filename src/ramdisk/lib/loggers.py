@@ -29,15 +29,15 @@ import logging.handlers
 
 #####
 # Include the parent project directory in the PYTHONPATH
-# appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-2])
-# sys.path.append(appendDir)
+appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-2])
+sys.path.append(appendDir)
 
-#sys.path.append("../..")
+# sys.path.append("../..")
 
 # from ramdisk.lib.singleton import Singleton
 # from ramdisk.config import DEFAULT_LOG_LEVEL
-from . singleton import Singleton
-from .. config import DEFAULT_LOG_LEVEL
+from ramdisk.config import DEFAULT_LOG_LEVEL
+from ramdisk.lib.singleton import Singleton
 
 #from logging.handlers import RotatingFileHandler
 ###############################################################################
@@ -296,6 +296,7 @@ class CyLogger(Singleton):
         # Initialize the root logger
         self.logr = logging.getLogger("")
 
+        '''
         #####
         # Set logging level for the root logger
         if not self.rotate:
@@ -306,9 +307,8 @@ class CyLogger(Singleton):
         else:
             #####
             # Set up the RotatingFileHandler
-            rotHandler = logging.handlers.RotatingFileHandler(self.filename,
-                                                              maxBytes=size,
-                                                              backupCount=logCount)
+            rotHandler = logging.handlers.RotatingFileHandler(self.filename, maxBytes=size, backupCount=logCount)
+        '''
         if myconsole:
             #####
             # Set up StreamHandler to log to the console
@@ -321,7 +321,7 @@ class CyLogger(Singleton):
             except socket.error:
                 print("Socket error, can't connect to syslog...")
                 self.syslog = False
-
+        '''
         #####
         # Add applicable handlers to the logger
         if not self.rotate and self.fileHandler:
@@ -331,7 +331,7 @@ class CyLogger(Singleton):
             self.logr.addHandler(rotHandler)
             self.logr.log(LogPriority.DEBUG,"Added RotatingFileHandler")
             #self.doRollover(rotHandler)
-
+        '''
         if myconsole:
             self.logr.addHandler(conHandler)
             self.logr.log(LogPriority.DEBUG,"Added StreamHandler")

@@ -12,7 +12,10 @@ import sys
 import platform
 import unittest
 from datetime import datetime
-
+'''
+if not sys.platform.startswith('darwin'):
+    raise unittest.SkipTest("Not valid for this patform: " + sys.platform)
+'''
 #####
 # Include the parent project directory in the PYTHONPATH
 appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
@@ -39,6 +42,9 @@ class test_macosFsHelper(unittest.TestCase):
     def setUpClass(self):
         """
         """
+        if not sys.platform.startswith('darwin'):
+            raise unittest.SkipTest("Not valid for this patform: " + sys.platform)
+
         #####
         # Set up logging
         self.logger = CyLogger(debug_mode=True)
@@ -95,7 +101,60 @@ class test_macosFsHelper(unittest.TestCase):
         self.assertFalse(success, "This getFsBlockSize run was successful - SHOULDN'T BE!!!")
 
 
-   ##################################
+    ##################################
+
+    def testGetGid(self):
+        """
+        """
+        success, message, gid = self.fshelper.getGid("staff")
+
+        self.assertTrue(success, "Failed attempting to get group id.")
+        self.assertEqual(gid, 20, "Reported GID doesn't match staff.")
+
+    ##################################
+
+    def testValidateGroup4user(self):
+        """
+        """
+        success, message = self.fshelper.validateGroup4user("root", "wheel")
+        # print("...Success: " + str(success) + " " + message)
+        self.assertTrue(success, "Failed attempting to get group id.")
+
+
+
+    ##################################
+
+    def testValidateUser(self):
+        """
+        """
+        success, message, uid = self.fshelper.validateUser("root")
+        #self.logger.log(lp.DEBUG, "success: " + str(success))
+        #self.logger.log(lp.DEBUG, "message: " + str(message))
+        #self.logger.log(lp.DEBUG, "uid: " + str(uid))
+        self.assertTrue(success, "Failed attempting to validate a user.")
+        self.assertEqual(uid, 0, "User not matching UID...")
+
+    ##################################
+
+    def testValidataPath(self):
+        """
+        """
+        success, message = self.fshelper.validatePath("/private/etc")
+        #self.logger.log(lp.DEBUG, "success: " + str(success))
+        #self.logger.log(lp.DEBUG, "message: " + str(message))
+        #self.logger.log(lp.DEBUG, "uid: " + str(uid))
+        self.assertTrue(success, "Failed attempting to validate path.")
+        success, message = self.fshelper.validatePath("/Users/root")
+        self.assertFalse(success, "Validated bad path attempting to validate path: " + message)
+
+    ##################################
+
+    def testChownRecursive(self):
+        """
+        """
+        pass
+        
+    ##################################
 
     def testGetDiskSizeInMb(self):
         """

@@ -6,6 +6,7 @@ Linux tmpfs ramdisk implementation
 #--- Native python libraries
 import os
 import re
+import getpass
 import pwd
 import sys
 import traceback
@@ -18,6 +19,13 @@ from .lib.loggers import CyLogger
 from .lib.loggers import LogPriority as lp
 from .commonRamdiskTemplate import RamDiskTemplate, NotValidForThisOS, BadRamdiskArguments
 from .lib.libHelperExceptions import SystemToolNotAvailable, UserMustBeRootError
+
+def UserMustBeRootException(Exception):
+    """
+    Custom Exception
+    """
+    def __init__(self,*args,**kwargs):
+        Exception.__init__(self,*args,**kwargs)
 
 ###############################################################################
 
@@ -84,9 +92,7 @@ class RamDisk(RamDiskTemplate):
     gid, size?
 
     """
-    def __init__(self, size, mountpoint,  logger,
-                 mode=700, uid=None, gid=None,
-                 fstype="tmpfs", nr_inodes=None, nr_blocks=None):
+    def __init__(self, size, mountpoint, logger, mode=700, uid=None, gid=None, fstype="tmpfs", nr_inodes=None, nr_blocks=None, creds=False, passwd=""):
         """
         """
         super(RamDisk, self).__init__(size, mountpoint, logger)
@@ -104,9 +110,14 @@ class RamDisk(RamDiskTemplate):
         else:
             raise BadRamdiskArguments("Not a valid argument for " + \
                                            "'fstype'...")
-
-        if not os.geteuid() == 0:
+        '''
+        if not os.geteuid() == 0 or passwd:
             raise UserMustBeRootError("You must be root, or have elevated with sudo to use this software...")
+        '''
+        if isinstance(mountpoint, str):
+            self.mntPoint = mountpoint
+        else:
+            self.mntPoint = ""
 
         if isinstance(mode, int):
             self.mode = mode
@@ -133,10 +144,20 @@ class RamDisk(RamDiskTemplate):
         else:
             self.nr_blocks = None
 
+        if isinstance(creds, bool):
+            self.creds = creds
+        else:
+            self.creds = False
+
+        if isinstance(passwd, str):
+            self.passwd = passwd
+        else:
+            passwd = ""
+
         #####
         # Initialize the mount and umount command paths...
-        self.mountPath = ""
-        self.umountPath = ""
+        #self.mntPoint = mountpoint
+        #self.umountPath = ""
         self.getCmds()
 
         #####
@@ -264,7 +285,26 @@ class RamDisk(RamDiskTemplate):
         command = self.buildCommand()
         self.logger.log(lp.WARNING, "Command: " + str(command))
         self.runWith.setCommand(command)
-        output, error, returncode = self.runWith.communicate()
+        """
+        if not self.passwd:
+            # output, error, returncode = self.runWith.communicate()
+            #####
+            # Need password, cannot create ramdisk as a user
+            raise UserMustBeRootException("User Must Be Root (use sudo) to Create a Ramdisk.")
+        elif self.passwd:
+        """
+        # self.logger.log(lp.WARNING, "p: " + self.passwd)
+        if not os.geteuid() == 0 and self.passwd:
+            output, error, returncode = self.runWith.runWithSudo(self.passwd)
+        elif not os.geteuid() == 0 and not self.passwd:
+            self.passwd = getpass.getpass()
+            output, error, returncode = self.runWith.runWithSudo(self.passwd)
+        else:
+            if not os.geteuid() == 0 or self.passwd:
+                raise UserMustBeRootError("You must be root, or have elevated with sudo to use this software...")
+            output, error, returncode = self.runWith.communicate()
+        #####
+        # set user/group permissions??
         self.logger.log(lp.DEBUG, "output    : " + str(output))
         self.logger.log(lp.DEBUG, "error     : " + str(error))
         self.logger.log(lp.DEBUG, "returncode: " + str(returncode))

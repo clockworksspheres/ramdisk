@@ -29,5 +29,5 @@ print(str(userProperties))
 
 for key, value in userProperties.iteritems():
     if not re.search("JPEG", key):
-        print key + " : " + value
+        print(key + " : " + value)
 

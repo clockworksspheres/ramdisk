@@ -66,8 +66,9 @@ class FsHelper(object):
         size: no suffix indicates a size in megabytes, otherwize, regex like
         macos regex:
 
-        (\d+)([GgMm][Bb]) => (\d+)([GgMm])[Bb], although, 
-        (\d+)([GgMm]) 
+        (don't forget the backslash character where appropriate)
+        (d+)([GgMm][Bb]) => (d+)([GgMm])[Bb], although, 
+        (d+)([GgMm]) 
 
         will silently be acceptable as well, as those are some of the default 
         imdisk defaults.. 

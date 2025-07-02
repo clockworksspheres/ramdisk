@@ -10,9 +10,9 @@ from tempfile import mkdtemp
 
 #####
 # Include the parent project directory in the PYTHONPATH
-# appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
-# sys.path.append(appendDir)
-sys.path.append("../")
+appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
+sys.path.append(appendDir)
+#sys.path.append("../")
 
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import LogPriority as lp
@@ -20,13 +20,12 @@ from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.environment import Environment
 from ramdisk.lib.CheckApplicable import CheckApplicable
 from ramdisk.commonRamdiskTemplate import RamDiskTemplate, BadRamdiskArguments, NotValidForThisOS
-
 ###############################################################################
 
 class RamDisk(RamDiskTemplate):
     """
     """
-    def __init__(self, size=0, mountpoint=False, logger=False, environ=False, **kwargs):
+    def __init__(self, size=0, mountpoint=False, logger=False, **kwargs):
         """
         """
         #####
@@ -38,10 +37,9 @@ class RamDisk(RamDiskTemplate):
             self.logger = CyLogger()
         else:
             self.logger = logger
-        if not environ:
-            self.environ = Environment()
-        else:
-            self.environ = environ
+
+        self.environ = Environment()
+
         self.chkApp = CheckApplicable(self.environ, self.logger)
         
         #####
@@ -58,14 +56,14 @@ class RamDisk(RamDiskTemplate):
                            'family': ['win32']}
 
         if sys.platform.startswith("linux"):
-            from .linuxTmpfsRamdisk import RamDisk
-            self.ramdisk = RamDisk(size, mountpoint, logger)
+            from ramdisk.linuxTmpfsRamdisk import RamDisk
+            self.ramdisk = RamDisk(size, mountpoint, logger, **kwargs)
         elif sys.platform.startswith("darwin"):
-            from .macRamdisk import RamDisk
-            self.ramdisk = RamDisk(size, mountpoint, logger)
+            from ramdisk.macRamdisk import RamDisk
+            self.ramdisk = RamDisk(size, mountpoint, logger, **kwargs)
         elif sys.platform.startswith("win32"):
-            from .winImDiskRamdisk import RamDisk
-            self.ramdisk = RamDisk(*args, **kwargs)
+            from ramdisk.winImDiskRamdisk import RamDisk
+            self.ramdisk = RamDisk(size, mountpoint, logger, **kwargs)
         else:
             raise NotValidForThisOS("Ramdisk not available here...")
 
@@ -151,3 +149,36 @@ class RamDisk(RamDiskTemplate):
         @author: Roy Nielsen
         """
         self.ramdisk.setDevice(device)
+
+'''
+if __name__=="__main__":
+
+    app = QApplication(sys.argv)
+    """
+    # Set up event logger
+    init_event_logger(
+        os.path.join(get_current_directory(), "event.log"),
+        "%(asctime)s - %(levelname)s - %(message)s",
+        stdout=True,
+        debug=True if "--debug" in sys.argv else False,
+    )
+    """
+    print("started app...")
+    window = _CreateRamdisk()
+    print("initiated window")
+    window.show()
+    print("showing window...")
+    window.raise_()
+    print("raising_ window")
+    sys.exit(app.exec())
+else:
+    mntpnt = "foobar"
+
+    logger = CyLogger()
+    logger.initializeLogs()
+
+    ramdisk = RamDisk("512", "foobar", logger)
+    ramdisk.getNlogData()
+    ramdisk.getNprintData()
+
+'''

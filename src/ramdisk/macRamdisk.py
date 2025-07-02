@@ -29,6 +29,7 @@ Maybe function, method  or other module
 import os
 import re
 import sys
+import getpass
 import shutil
 import traceback
 from subprocess import Popen, PIPE
@@ -69,11 +70,11 @@ class RamDisk(RamDiskTemplate):
 
     @author: Roy Nielsen
     """
-    def __init__(self, size=0, mountpoint="", logger=False) :
+    def __init__(self, size=0, mountpoint="", logger=False, disableJournal=False, **kwargs) :
         """
         Constructor
         """
-        super(RamDisk, self).__init__(size, mountpoint, logger)
+        super().__init__(size, mountpoint, logger, **kwargs)
 
         #####
         # Provided by commonRamdiskTemplate....
@@ -91,6 +92,11 @@ class RamDisk(RamDiskTemplate):
 
         self.module_version = '20160225.125554.540679'
 
+        if isinstance(disableJournal, bool):
+            self.disableJournal = disableJournal
+        else:
+            self.disableJournal = False
+
         #####
         # Initialize the RunWith helper for executing shelled out commands.
         self.runWith = RunWith(self.logger)
@@ -103,6 +109,8 @@ class RamDisk(RamDiskTemplate):
         # Convert size to expected size in Mb - useing \d+[GgMm][Bb] 
         # for size regex in fsHelper to determine size in megabytes
         success, size = self.fsHelper.getDiskSizeInMb(size)
+
+        self.free = ""
 
         #####
         # Calculating the size of ramdisk in 1Mb chunks
@@ -135,13 +143,17 @@ class RamDisk(RamDiskTemplate):
 
         #####
         # Passed in disk size must have a non-default value
+        print("diskSize: " + str(self.diskSize))
+        self.logger.log(lp.DEBUG, "diskSize: " + str(self.diskSize))
         if not self.diskSize == 0 :
             success  = True
         print("########### IS THERE AVAILABLE MEMORY???? ##############")
         #####
         # Checking to see if memory is availalbe...
-        if not self.__isMemoryAvailable() :
+        # if not self.__isMemoryAvailable():
+        if not self.__isMemAvailable():
             self.logger.log(lp.DEBUG, "Physical memory not available to create ramdisk.")
+            # self.logger
             success = False
         else:
             success = True
@@ -158,6 +170,8 @@ class RamDisk(RamDiskTemplate):
                 #####
                 # eventually have checking to make sure that directory
                 # doesn't already exist, and have data in it.
+                if not os.path.exists(self.mntPoint):
+                    os.makedirs(self.mntPoint)
             else :
                 #####
                 # If a mountpoint is not passed in, create a randomized
@@ -179,24 +193,14 @@ class RamDisk(RamDiskTemplate):
                 except:
                     success = False
                     self.logger.log(lp.WARNING, "Create appears to have failed..")
+                    raise
                 else:
                     #####
                     # Ramdisk created, try mounting it.
-                    if not self.__mount():
-                        success = False
-                        self.logger.log(lp.WARNING, "Mount appears to have failed..")
-                    else:
-                        #####
-                        # Filessystem journal will only slow the ramdisk down...
-                        # No need to keep it as when the journal is unmounted
-                        # all memory is de-allocated making it impossible to do
-                        # forensics on the volume.
-                        if not self.__remove_journal():
-                            success = False
-                            self.logger.log(lp.WARNING, "Remove journal " + \
-                                            "appears to have failed..")
-
-
+                    #self.__mount()
+                    pass #raise
+                    # self.__remove_journal()
+                    
         self.getNlogData()
         self.success = success
         if success:
@@ -211,36 +215,163 @@ class RamDisk(RamDiskTemplate):
         """
         Create a ramdisk device
 
+        Create the RAM disk:
+            disk=$(hdiutil attach -nomount ram://<size>)
+        Format the RAM disk with APFS and name it:
+            diskutil erasevolume APFS "MyRAMDiskName" /dev/$disk
+        Disable journaling on the RAM disk:
+            diskutil apfs disableJournal /dev/$disk
+        Rename the RAM disk using diskutil:
+            diskutil rename /dev/$disk "RAMDiskNameReplacement"
+                ....Replace RAMDiskNameReplacement with the desired 
+                    name for your RAM disk.
+        #####
+        # THIS should be the process:
+        hdiutil attach -nomount ram://1048576
+        # the above command returns the <ramdisk device> - /dev/diskXs1
+        diskutil partitionDisk $(/dev/diskXs1) 1 GPTFormat APFS 'RAMDisk' '100%'
+        diskutil umount /dev/diskXs1
+        newfs_apfs -v RAMDisk /dev/diskXs1
+        mkdir -P <mountpoint>
+        mount_apfs /dev/diskXs1 /<mountpoint>
+        chown -R <user> /<mountpoint>
+
+        #####
+
+        cmd = [self.hdiutil, "attach", "-nomount", "ram://" + self.diskSize]
+        cmd = ["/usr/sbin/diskutil", "partitionDisk", self.myRamdiskDev, "1", "GPTFormat", "APFS", "'RAMDisk'", f"{hundred}"]
+        cmd = [self.diskutil, "unmount", self.myRamdiskDev]
+        cmd = ["/sbin/newfs_apfs", "-v", "RAMDISK", self.myRamdiskDev]
+        self.fsHelper.mkdirs(self.mntPoint)
+        cmd = "/sbin/mount_apfs " + self.myRamdiskDev + " " + self.mntPoint
+        self.fsHelper.chown(self.mntPoint, user)
+
         @author: Roy Nielsen
         """
         retval = None
         reterr = None
-        success = False
+        # success = False
         #####
         # Create the ramdisk and attach it to a device.
+        # disk=$(hdiutil attach -nomount ram://<size>)
         print("Creating the ramdrive...")
         cmd = [self.hdiutil, "attach", "-nomount", "ram://" + self.diskSize]
         self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
         self.runWith.setCommand(cmd)
-        self.runWith.communicate()
-        retval, reterr, retcode = self.runWith.getNlogReturns()
-
-        self.logger.log(lp.DEBUG, "######################################")
-        self.logger.log(lp.DEBUG, "Printing attaching process...")
-        self.logger.log(lp.DEBUG, "return code: " + str(retcode))
-        self.logger.log(lp.DEBUG, "return error: " + str(reterr))
-        self.logger.log(lp.DEBUG, "return value: " + str(retval))
-        self.logger.log(lp.DEBUG, "######################################")
-
+        retval, reterr, retcode = self.runWith.communicate()
+        # retval, reterr, retcode = self.runWith.getNlogReturns()
+        
         if retcode == '':
             success = False
-            raise Exception("Error trying to create ramdisk(" + str(reterr).strip() + ")")
         else:
             self.myRamdiskDev = retval.strip()
-            self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
+            # self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
             success = True
-        self.logger.log(lp.DEBUG, "Success: " + str(success) + " in __create")
-        return success
+        
+        self.myRamdiskDev = retval.strip()
+        self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
+        #####
+        # Erase the ramdisk and Name the device.
+        # this command makes the mountpoint owned by root. Need it owned by the user
+        # diskutil erasevolume APFS "MyRAMDiskName" /dev/$disk
+        # this command makes the mountpoint owned by root. Need it owned by the user
+        # cmd = [self.diskutil, "eraseVolume", "APFS", self.mntPoint, self.myRamdiskDev]
+        ###
+        # to format with user owning the disk, instead of root
+        #cmd = ["/sbin/newfs", self.mntPoint, self.myRamdiskDev]
+        self.logger.log(lp.WARNING, "Creating the ramdrive at: " + self.myRamdiskDev)
+        print("Creating the ramdrive at: " + self.myRamdiskDev)
+        #####
+        # This command works better than either of the two above....
+        # diskutil partitionDisk self.myRamdiskDev 1 GPTFormat APFS 'RAMDisk' '100%'
+        tmpmntpnt = self.mntPoint.split('/')[-1]
+        print("testmntpnt: " + tmpmntpnt)
+        hundred = f"'100%'"
+        try:
+            cmd = ["/usr/sbin/diskutil", "partitionDisk", self.myRamdiskDev, "1", "GPTFormat", "APFS", "'RAMDisk'", f"{hundred}"]
+            self.logger.log(lp.WARNING, "Running command to create ramdisk: " + str(cmd))
+            print("Running command to create ramdisk: " + str(cmd))
+            self.runWith.setCommand(cmd)
+            self.runWith.communicate()
+        except:
+            raise
+        # retval, reterr, retcode = self.runWith.getNlogReturns()
+        #####
+        # unmounting the disk, because it is automatically mounted to /Volumes,
+        # so we can mount it where the user wishes
+        try:
+            cmd = [self.diskutil, "unmount", self.myRamdiskDev]
+            self.logger.log(lp.WARNING, "Running command to unmount ramdisk: >> " + str(cmd))
+            self.runWith.setCommand(cmd)
+            self.runWith.communicate()
+        except:
+            raise
+        # retval, reterr, retcode = self.runWith.getNlogReturns()
+
+        try:
+            cmd = ["/sbin/newfs_apfs", "-v", "RAMDISK", self.myRamdiskDev]
+            self.logger.log(lp.WARNING, "Running command to create ramdisk: " + str(cmd))
+            print("Running command to create ramdisk: " + str(cmd))
+            self.runWith.setCommand(cmd)
+            self.runWith.communicate()
+        except:
+            raise
+
+
+        tmpNum = ""
+        tmpDev = ""
+        try:
+            tmpMatch = re.match(r"(\S+)(\d+)", self.myRamdiskDev.strip())
+            tmpDev = tmpMatch.group(1)
+            tmpNum = tmpMatch.group(2)
+            
+        except ValueError:
+            raise
+
+        tmpNum = int(tmpNum) + 1
+        self.myRamdiskDev = str(tmpDev) + str(tmpNum) + "s1"
+        self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
+
+        self.logger.log(lp.WARNING, "  MYRAMDISKDEV: " + self.myRamdiskDev)
+        self.logger.log(lp.WARNING, "  MNTPOINT: " + self.mntPoint)
+
+        # Create the mountpoint, if it exists, skip
+        self.fsHelper.mkdirs(self.mntPoint)
+        self.logger.log(lp.WARNING, " ... Making mountpoint: " + self.mntPoint)
+
+        #####
+        # mount the drive to the correct mount point
+        try:
+            cmd = "/sbin/mount_apfs " + self.myRamdiskDev + " " + self.mntPoint
+            self.logger.log(lp.WARNING, "Running command to MOUNT ramdisk: >>>>> " + str(cmd))
+            self.runWith.setCommand(cmd)
+            self.runWith.communicate()
+        except:
+            raise
+        # retval, reterr, retcode = self.runWith.getNlogReturns()
+
+        """
+        # MAY make the ramdisk go faster...  
+        # *** WARNING *** Test thouroughly if you uncomment this section,
+        # it may not go here in the workflow . . .
+        if self.disableJournal is True:
+            #####
+            # Disable Journaling on the device.
+            # diskutil apfs disableJournal /dev/$disk
+            print("Creating the ramdrive...")
+            cmd = [self.diskutil, "apfs", "disableJournal", self.myRamdiskDev]
+            self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
+            self.runWith.setCommand(cmd)
+            self.runWith.communicate()
+            retval, reterr, retcode = self.runWith.getNlogReturns()
+        else:
+            pass
+        """
+        #####
+        # Need to chown the mountpoint to the user, because the mount point is by 
+        # default not owned by the user on *nix systems
+        user = getpass.getuser()
+        self.fsHelper.chown(self.mntPoint, user)
 
     ###########################################################################
 
@@ -599,6 +730,78 @@ class RamDisk(RamDiskTemplate):
 
         return success
 
+
+    ###########################################################################
+
+    def __isMemAvailable(self) :
+        """
+        """
+        success = False
+        line = ""
+        self.free = 0
+        freeNumber = 0
+        freeMagnitute = ""
+        tmpFree = ""
+
+        #####
+        # Set up and run the command
+        cmd = ["/usr/bin/top", "-l", "1"]
+
+        self.runWith.setCommand(cmd)
+        output, _, _ = self.runWith.communicate()
+        # output, _, _ = self.runWith.waitNpassThruStdout("Networks")
+
+        for line in output.split("\n"):
+            self.logger.log(lp.DEBUG, "line: " + str(line))
+            tmpData = line.split()
+            try:
+                lastWord = tmpData[-1]
+                nextWord = tmpData[-2]
+            except IndexError as err:
+                pass # self.logger.log(self.lp.DEBUG, )
+                continue
+
+            print("words: {}, {}", lastWord, nextWord)
+            self.logger.log(lp.DEBUG, "words: " + lastWord + " : " + nextWord)
+            if re.search("unused", line):
+                # self.logger.log
+                tmpFree = nextWord
+                break
+        self.logger.log(lp.DEBUG, "free: " + str(tmpFree))
+        if tmpFree:
+            sizeCompile = re.compile(r"(\d+)(\w+)")
+
+            split_size = sizeCompile.search(tmpFree)
+            freeNumber = split_size.group(1)
+            freeMagnitude = split_size.group(2)
+
+            freeNumber = str(freeNumber).strip()
+            freeMagnitude = str(freeMagnitude).strip()
+
+            if re.match(r"^\d+$", freeNumber.strip()):
+                if re.match(r"^\w$", freeMagnitude.strip()):
+                    #####
+                    # Calculate the size of the free memory in Megabytes
+                    if re.search("G", freeMagnitude.strip()):
+                        freeMem = 1024 * int(freeNumber)
+                        freeNumber = str(freeMem)
+                        self.free = freeNumber
+                        freeMagnitude = "M"
+                    elif re.search("M", freeMagnitude.strip()):
+                        self.free = freeNumber.strip() 
+        print("Free Memory: " + str(self.free))
+        print("disk size:   "  + str(self.diskSize))
+        self.logger.log(lp.DEBUG, "Free Memory: " + str(self.free))
+        self.logger.log(lp.DEBUG, "disk size:   "  + str(self.diskSize))
+        # if int(self.free) > int(float(self.diskSize)):
+        if int(self.free) > int(float(int(self.diskSize)/(2*1024))):
+            success = True
+        else:
+            raise MemoryNotAvailableError("Memory Not Available for Creating the Ramdisk, Free up Memory to Create a Ramdisk...")
+
+        # return freeNumber, freeMagnitude
+        return success
+
     ###########################################################################
 
     def __isMemoryAvailable(self) :
@@ -676,7 +879,7 @@ class RamDisk(RamDiskTemplate):
                             self.free = freeNumber
         self.logger.log(lp.DEBUG, "free: " + str(self.free))
         self.logger.log(lp.DEBUG, "Size requested: " + str(self.diskSize))
-        if int(self.free) > int(float(self.diskSize)/(2*1024)):
+        if int(self.free) > int(float(self.diskSize)):
             success = True
         else:
             raise MemoryNotAvailableError("Memory Not Available for Creating the Ramdisk, Free up Memory to Create a Ramdisk...")

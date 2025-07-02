@@ -1,3 +1,7 @@
+# filesystem related.
+
+Contains an interface class that calls OS, or filesystem specific concrete classes.
+
 All the work I did for block and sector lookups
 in linux, macos and windows ended up not 
 being useful as all of the ramdisk creation 

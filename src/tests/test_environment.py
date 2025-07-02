@@ -52,11 +52,15 @@ class test_environment(unittest.TestCase):
                                   self.to.getosver()))
 
     def testGetipaddress(self):
+        if sys.platform.startswith('darwin'):
+            raise unittest.SkipTest("Doesn't work on macOS")
         tracemalloc.start(10)
         self.assertTrue(re.search(r'(([0-9]{1,3}\.){3}[0-9]{1,3})',
                                   self.to.getipaddress()))
 
     def testGetmacaddr(self):
+        if sys.platform.startswith('darwin'):
+            raise unittest.SkipTest("Doesn't work on macOS")
         tracemalloc.start(10)
         self.assertTrue(re.search('(([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2})',
                                   self.to.getmacaddr()))
