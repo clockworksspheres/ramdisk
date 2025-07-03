@@ -1,0 +1,3 @@
+([('check4gui',
+   '/Users/victor/Documents/src/github/clockworksspheres/ramdisk/src/proto/dist/check4gui',
+   'EXECUTABLE')],)
