@@ -939,8 +939,8 @@ class RunWith(object):
                                 str(output) + "\"\n" + str(self.stdout) + "\n")
         return self.stdout, self.stderr, self.retcode
 
-    #    ###########################################################################
-    '''
+    ############################################################################
+
     def runWithSudoRs(self, password="", silent=True, timeout_sec=15) :
         """
         Use pty method to run "sudo-rs" to run a command with elevated privilege.
@@ -957,7 +957,7 @@ class RunWith(object):
 
         self.logger.log(lp.DEBUG, "Starting runWithSudo: ")
         self.logger.log(lp.DEBUG, "\tcmd : " + str(self.command))
-        if re.match(r'^\s+$', password) or \
+        if re.match(r"^\s+$", password) or \
            not password or \
            not self.command:
             self.logger.log(lp.WARNING, "Cannot pass in empty parameters...")
@@ -1065,7 +1065,7 @@ class RunWith(object):
                 self.logger.log(lp.DEBUG, "\n\nLeaving runAs with Sudo: \"" + \
                                 str(output) + "\"\n" + str(self.stdout) + "\n")
             return self.stdout, self.stderr, self.retcode
-'''
+
 #############################################################################
 
 class RunThread(threading.Thread):
