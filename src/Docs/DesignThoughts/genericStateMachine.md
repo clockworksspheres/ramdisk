@@ -639,3 +639,113 @@ AI-generated answer. Please verify critical facts.
 ``` bash
 pip install python-statemachine\[diagrams\]
 ```
+
+-----
+
+# Grok
+
+## generic state machine pythond
+
+I'll provide a generic state machine implementation in Python that can be used as a foundation for various applications. This implementation includes a base StateMachine class and an example usage.
+
+```python
+class StateMachine:
+    def __init__(self):
+        self.states = {}  # Dictionary to store states
+        self.current_state = None
+        self.transitions = {}  # Dictionary to store valid transitions
+
+    def add_state(self, state_name, handler):
+        """Add a state with its handler function"""
+        self.states[state_name] = handler
+
+    def add_transition(self, from_state, to_state):
+        """Add a valid transition between states"""
+        if from_state not in self.transitions:
+            self.transitions[from_state] = []
+        self.transitions[from_state].append(to_state)
+
+    def set_state(self, state_name):
+        """Set the current state if transition is valid"""
+        if self.current_state is None or (
+            state_name in self.states and 
+            (self.current_state is None or state_name in self.transitions.get(self.current_state, []))
+        ):
+            self.current_state = state_name
+            return True
+        return False
+
+    def process(self, *args, **kwargs):
+        """Process the current state's handler"""
+        if self.current_state in self.states:
+            return self.states[self.current_state](*args, **kwargs)
+        return None
+
+# Example usage
+class TrafficLight:
+    def __init__(self):
+        self.machine = StateMachine()
+        
+        # Add states with their handlers
+        self.machine.add_state('red', self.red_state)
+        self.machine.add_state('green', self.green_state)
+        self.machine.add_state('yellow', self.yellow_state)
+        
+        # Define valid transitions
+        self.machine.add_transition('red', 'green')
+        self.machine.add_transition('green', 'yellow')
+        self.machine.add_transition('yellow', 'red')
+        
+        # Set initial state
+        self.machine.set_state('red')
+
+    def red_state(self):
+        return "Stop"
+
+    def green_state(self):
+        return "Go"
+
+    def yellow_state(self):
+        return "Caution"
+
+    def change(self):
+        # Example transition logic
+        if self.machine.current_state == 'red':
+            self.machine.set_state('green')
+        elif self.machine.current_state == 'green':
+            self.machine.set_state('yellow')
+        elif self.machine.current_state == 'yellow':
+            self.machine.set_state('red')
+
+    def process(self):
+        return self.machine.process()
+
+# Example execution
+if __name__ == "__main__":
+    traffic_light = TrafficLight()
+    
+    # Simulate traffic light cycles
+    for _ in range(5):
+        print(f"Current state: {traffic_light.machine.current_state}, Action: {traffic_light.process()}")
+        traffic_light.change()
+```
+
+This implementation provides:
+1. A generic `StateMachine` class that can be used for any state-based system
+2. Methods to add states and transitions
+3. State transition validation
+4. A simple traffic light example showing how to use the state machine
+5. Clean separation of state logic and transition rules
+
+The example traffic light demonstrates a practical application with three states (red, green, yellow) and defined transitions between them. You can extend this by:
+- Adding more states
+- Implementing more complex transition conditions
+- Adding state entry/exit actions
+- Including error handling
+- Adding state timeout mechanisms
+
+To use this for other applications, you would:
+1. Create a new class similar to `TrafficLight`
+2. Define your specific states and their handler functions
+3. Set up valid transitions
+4. Implement your processing logic
