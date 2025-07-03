@@ -15,7 +15,7 @@ from PySide6.QtWidgets import QApplication
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.ui.main import _CreateRamdisk
-from ramdisk.ramdisk import RamDisk
+from ramdisk.RamDisk import RamDisk
 
 
 parser = OptionParser(usage="\n\n%prog [options]\n\n", version="0.8.6")

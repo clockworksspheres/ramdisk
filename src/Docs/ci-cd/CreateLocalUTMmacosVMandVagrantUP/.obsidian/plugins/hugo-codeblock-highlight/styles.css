@@ -1,0 +1,10 @@
+.hugo-line-highlight,
+/* Override for "Code Styler" plugin */
+.code-styler .markdown-source-view .HyperMD-codeblock[class*=code-styler-line][class*=language-].hugo-line-highlight
+{
+  /*
+    A color chosen to fit the default theme nicely
+    If this doesn't work on your theme, please file an issue / PR
+  */
+  background-color: var(--background-modifier-hover) !important;
+}

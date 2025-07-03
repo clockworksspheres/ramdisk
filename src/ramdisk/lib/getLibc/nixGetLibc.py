@@ -30,7 +30,7 @@ def getLibc( ):
     """
     # libc = True
 
-    if sys.platform is "win32":
+    if sys.platform.startswith("win32"):
         return(0)
     else:
         import ctypes

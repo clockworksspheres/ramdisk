@@ -1,41 +1,56 @@
 {
   "main": {
-    "id": "3ef22ae764e7c113",
+    "id": "7e17d2415e7d0021",
     "type": "split",
     "children": [
       {
-        "id": "187e644f5bfae3e5",
+        "id": "20f55c118399df53",
         "type": "tabs",
         "children": [
           {
-            "id": "9468089d5e2a1d4a",
+            "id": "89f184ead9109e96",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/Docs/openSourceReverseEngineerToUML.md",
+                "file": "Welcome.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "openSourceReverseEngineerToUML"
+              "title": "Welcome"
+            }
+          },
+          {
+            "id": "e673b1c70dcc90c1",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "create local UTM macos VM and vagrant up.md",
+                "mode": "preview",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "create local UTM macos VM and vagrant up"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
   },
   "left": {
-    "id": "c025543d45b471b6",
+    "id": "adaef1c6cdbe3441",
     "type": "split",
     "children": [
       {
-        "id": "2506d144b58a01c5",
+        "id": "e63cbfc74807f193",
         "type": "tabs",
         "children": [
           {
-            "id": "dd579139b9625eca",
+            "id": "54d38cf7d5fb7968",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -48,7 +63,7 @@
             }
           },
           {
-            "id": "0b75cafb047bf1f9",
+            "id": "c4885d245d3a3415",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -65,7 +80,7 @@
             }
           },
           {
-            "id": "a1073b147d7153ec",
+            "id": "6e649ac84cd95dd0",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -81,20 +96,20 @@
     "width": 300
   },
   "right": {
-    "id": "b7d5736bab340197",
+    "id": "a6080728bc827762",
     "type": "split",
     "children": [
       {
-        "id": "4b138171eeea08fa",
+        "id": "9f6337dd4cc26870",
         "type": "tabs",
         "children": [
           {
-            "id": "1ad22ffd4be50b84",
+            "id": "511750b73df9cc32",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "src/Docs/uiRelated/WidgetShadow.md",
+                "file": "create local UTM macos VM and vagrant up.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,25 +119,25 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for WidgetShadow"
+              "title": "Backlinks for create local UTM macos VM and vagrant up"
             }
           },
           {
-            "id": "611e3e97b5e80022",
+            "id": "16a5344cc9fbd67b",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "src/Docs/uiRelated/WidgetShadow.md",
+                "file": "create local UTM macos VM and vagrant up.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from WidgetShadow"
+              "title": "Outgoing links from create local UTM macos VM and vagrant up"
             }
           },
           {
-            "id": "e48e22fc978db8bf",
+            "id": "21455ce9de790f4c",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -137,18 +152,18 @@
             }
           },
           {
-            "id": "433d6a28b114289d",
+            "id": "c3342ccfe6865bc6",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "src/Docs/uiRelated/WidgetShadow.md",
+                "file": "create local UTM macos VM and vagrant up.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of WidgetShadow"
+              "title": "Outline of create local UTM macos VM and vagrant up"
             }
           }
         ]
@@ -165,49 +180,12 @@
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
-      "command-palette:Open command palette": false,
-      "vscode-editor:Create Code File": false
+      "command-palette:Open command palette": false
     }
   },
-  "active": "9468089d5e2a1d4a",
+  "active": "e673b1c70dcc90c1",
   "lastOpenFiles": [
-    "src/Docs/pythonDatetimeForTimestamp.md",
-    "src/Docs/pythonMultipleInteritanceInitializingParents.md",
-    "src/Docs/README.md",
-    "src/Docs/unittestInheritingAUnittest.md",
-    "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
-    "src/Docs/DesignThoughts/pythonMultipleInteritanceInitializingParents.md",
-    "src/ramdisk/lib/fsHelper/FsHelperTemplate.py",
-    "src/__init__.py",
-    "src/Docs/ci-cd/CreateLocalUTMmacosVMandVagrantUP/Welcome.md",
-    "src/Docs/ci-cd/CreateLocalUTMmacosVMandVagrantUP/create local UTM macos VM and vagrant up.md",
-    "src/Docs/ci-cd/CreateLocalUTMmacosVMandVagrantUP",
-    "src/Docs/ci-cd/CI-CD-CS_ContainerVmBuildsStateMachine20kView.drawio",
-    "src/Docs/ci-cd",
-    "src/ramdisk/ramdisk.py",
-    "src/ramdisk/lib/fsHelper/hfsFsHelper.py",
-    "src/ramdisk/lib/fsHelper/fsHelper.py",
-    "src/Docs/userRelated/getCurrentUser.md",
-    "src/Docs/userRelated/euidVsUsernameInWindows.md",
-    "src/Docs/userRelated",
-    "src/Docs/umlRelated/startingPlantumlForRenderingLocallyInObsidian.md",
-    "src/Docs/umlRelated/classes_ramdisk.puml",
-    "src/Docs/umlRelated/classes_ramdisk.jpg",
-    "src/Docs/umlRelated/HowToAutoGenerateDocumentsFromCode.md",
-    "src/Docs/umlRelated/CreateNRenderPlantumlClassDiagram.md",
-    "src/Docs/uiRelated/WidgetShadow.md",
-    "src/Docs/openSourceReverseEngineerToUML.md",
-    "src/Docs/macosRemount.md",
-    "src/Docs/genericStateMachine.md",
-    "src/Docs/argsNkwargs.md",
-    "src/Docs/Users/PythonChownWindows.md",
-    "src/Docs/CheckApplicableRelated.md",
-    "src/Docs/DesignThoughts/pythonDatetimeForTimestamp.md",
-    "src/Docs/DesignThoughts/openSourceReverseEngineerToUML.md",
-    "src/Docs/DesignThoughts/uiRelated/WidgetShadow.md",
-    "src/Docs/DesignThoughts/Users/PythonChownWindows.md",
-    "src/Docs/DesignThoughts/umlRelated/classes_ramdisk.jpg",
-    "src/Docs/DesignThoughts/umlRelated/startingPlantumlForRenderingLocallyInObsidian.md",
-    "src/Docs/DesignThoughts/umlRelated/HowToAutoGenerateDocumentsFromCode.md"
+    "Welcome.md",
+    "create local UTM macos VM and vagrant up.md"
   ]
 }

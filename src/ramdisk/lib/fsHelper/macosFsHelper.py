@@ -20,7 +20,7 @@ from ramdisk.lib.run_commands import RunWith
 from ramdisk.lib.environment import Environment
 from ramdisk.lib.CheckApplicable import CheckApplicable
 from ramdisk.commonRamdiskTemplate import NotValidForThisOS
-from ramdisk.lib.fsHelper.fsHelper import FsHelperTemplate
+from ramdisk.lib.fsHelper.FsHelperTemplate import FsHelperTemplate
 
 class FsHelper(FsHelperTemplate):
     """
@@ -147,10 +147,10 @@ class FsHelper(FsHelperTemplate):
             message = "Value not passed in for User validation"
         elif isinstance(user, str):
             # perform a 're' check to see if it's a decimal string
-            if re.match("\d+", user):
+            if re.match(r"\d+", user):
                 # Check to see if it's a valid uid on the system
                 uid = int(user.strip())
-            elif re.match("^\w.+", user.strip()):
+            elif re.match(r'^\w.+', user.strip()):
                 # look for username in list of valid users on the system
                 cmd = ["/usr/bin/dscl", ".", "-list", "/Users"]
                 self.rw.setCommand(cmd)
@@ -158,7 +158,7 @@ class FsHelper(FsHelperTemplate):
 
                 for item in output.split("\n"):
                     #print(item)
-                    if re.match("^_\w.+", item):
+                    if re.match(r'^_\w.+', item):
                         continue
                     not_allowed = ["daemon", "nobody"]
                     if item in not_allowed:
@@ -226,7 +226,7 @@ class FsHelper(FsHelperTemplate):
 
             for accountGroup in output.split():
                 # print(".. .. .. AccountGroup: " + accountGroup.strip() + " Group: " + group.strip())
-                if re.match("^_\w.+", accountGroup):
+                if re.match(r'^_\w.+', accountGroup):
                     message = "Not a valid Group"
                     success = False
                 elif re.search("ERROR", accountGroup, re.IGNORECASE):
