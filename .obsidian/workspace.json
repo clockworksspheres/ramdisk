@@ -171,6 +171,8 @@
   },
   "active": "9468089d5e2a1d4a",
   "lastOpenFiles": [
+    "src/Docs/ramdiskBrainstorm.vym",
+    "src/Docs/ramdiskBrainstorm.vym.lock",
     "src/Docs/DesignThoughts/genericStateMachine.md",
     "src/Docs/DesignThoughts/uiRelated/QFileDialogs.md",
     "src/Docs/DesignThoughts/unittestInheritingAUnittest.md",
@@ -183,7 +185,6 @@
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_user/tests/test_validateUserShell.py",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_user/tests/test_validateUserName.py",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_user/tests/test_validateUserComment.py",
-    "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_user/tests/test_validateUser.py",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_user/README.md",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_keychain/README.md",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/getLibc/README.md",
@@ -212,7 +213,6 @@
     "src/Docs/openSourceReverseEngineerToUML.md",
     "src/Docs/DesignThoughts/userRelated/getCurrentUser.md",
     "src/Docs/DesignThoughts/userRelated/euidVsUsernameInWindows.md",
-    "src/Docs/DesignThoughts/umlRelated/startingPlantumlForRenderingLocallyInObsidian.md",
     "src/Docs/DesignThoughts/umlRelated/classes_ramdisk.jpg",
     "src/Docs/umlRelated/classes_ramdisk.jpg"
   ]
