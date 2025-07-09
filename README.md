@@ -31,7 +31,7 @@ Unmounting a ramdisk is much faster than removing or erasing a potentially large
 
 
 ## NOTE:
-The code has two branches, master (hopefully stable) and dev (not necessarily stable).  The goal is to only merge to develop when functionality is stable and tests have been written for that functionality.
+The code has two branches, ux (hopefully stable) and dev (not necessarily stable).  The goal is to only merge to develop when functionality is stable and tests have been written for that functionality.
 
 Initially developed for python 2.6, but code has since been migrated to 3.9+.  Not believed to work on the python 2 branch any longer.
 
@@ -49,7 +49,7 @@ Ramdisk class that can use either current method for creating a ramdisk on Linux
 
 ### macRamdisk
 
-tested on macOS Sierra
+tested on macOS Sierra, Ventura, Sonoma and Sequoia
 
 ## Only developed for Linux
 
@@ -59,7 +59,7 @@ tested on macOS Sierra
 
 ### linuxTmpfsRamdisk
 
-tested on Rocky 9, 10 and Ubuntu 24.04
+tested on Rocky 9, 10 and Ubuntu 24.04 & 25.04
 
 ## Only developed for macOS and Linux
 
@@ -77,7 +77,7 @@ Windows ramdisk is a prototype in flux, may or may not work.
 
 ## Example code
 
-This directory provides examples on how to use various libraries, even beyond the ramdisk libraries in this code base.  Some are used for testing the ramdisk code base.  Any user creation or manipulation example code is in an alpha state, and macOS only at this time.
+The exaamples directory provides examples on how to use various libraries, even beyond the ramdisk libraries in this code base.  Some are used for testing the ramdisk code base.  Any user creation or manipulation example code is in an alpha state, and some are macOS only at this time.
 
 Unionfs related code is in an alpha state and also macOS only.
 
@@ -101,11 +101,7 @@ Future plans to duplicate libraries, tests and examples in other languages as we
 
 ## Tracking
 
-Table tracking supported combinations of:
-
-OS's, OS versions, their kernel versions (maybe), python versions, with tagged versions of ramdisk.
-
-Very greatful for any contributions/pull requests to help with the table!
+Very greatful for any contributions/pull requests to help with the project!
 
 ## Python Libraries to include, and how to include them for running the UI, the Environment.py, etc.
 
