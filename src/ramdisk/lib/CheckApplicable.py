@@ -1,19 +1,4 @@
 #!/usr/bin/python
-###############################################################################
-#                                                                             #
-
-#                                                                             #
-###############################################################################
-'''
-Created on Aug 24, 2010
-
-@author: Eric Ball
-@change: eball 2016/07/12 Original implementation
-@change: rsn 2017/03/20 Adding methods for validation, fisma check and setting
-                        internal os variables per the environment.
-@change: rsn 2017/09/01 Port from stonix
-@change: 2017/11/13 ekkehard - make eligible for OS X El Capitan 10.11+
-'''
 
 #--- Native python libraries
 import re
@@ -54,7 +39,6 @@ class CheckApplicable(object):
         Validate that the applicable dictionary has valid keys and valid value
         types.
 
-        @author: Roy Nielsen
         """
         success = False
         if isinstance(applicable, dict):
@@ -159,11 +143,6 @@ class CheckApplicable(object):
         This method may be overridden if required.
 
         @return bool :
-        @author D. Kennel
-        @change: 2015/04/13 added this method to template class
-        @change: 2017/03/18 rsn adding fisma check as well as vaildating both
-                                self.applicable and passed in applicableDict.
-        @change: 2023/01/08 rsn adding changes to macOS version applicable specification
         """
         applies = False
 
@@ -238,7 +217,6 @@ class CheckApplicable(object):
         list are detailed in the isapplicable docs above.
 
         @return: bool
-        @author: David Kennel, Eric Ball
         """
         if not myversion:
             myversion = self.myosversion
@@ -293,7 +271,6 @@ class CheckApplicable(object):
         '''
         Check if the passed in level matches the class variable level.
 
-        @author: David Kennel, Roy Nielsen
         '''
         applies = False
 

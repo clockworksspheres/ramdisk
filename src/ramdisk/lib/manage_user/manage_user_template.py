@@ -4,7 +4,7 @@ Cross platform user creation and management
 Created for testing cross user testing for the ramdisk project, specifically
 unionfs functionality.
 
-@author: Roy Nielsen
+
 """
 
 import os
@@ -23,7 +23,7 @@ class BadUserInfoError(Exception):
     Meant for being thrown when an action/class being run/instanciated is not
     applicable for the running operating system.
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
@@ -34,7 +34,7 @@ class DsclError(Exception):
     Meant for being thrown when an action/class being run/instanciated is not
     applicable for the running operating system.
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
@@ -44,7 +44,7 @@ class RootAccessRequired(Exception):
     """
     Meant for being thrown when a uid is not zero.
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
@@ -54,7 +54,7 @@ class ManageUserTemplate(object):
     """
     Class to manage user properties.
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, **kwargs):
         """
@@ -134,7 +134,7 @@ class ManageUserTemplate(object):
         """
         Check for a good file path in the passed in string.
         
-        @author: Roy Nielsen
+        
         """
         sane = False
         if isinstance(filepath, str):
@@ -149,7 +149,7 @@ class ManageUserTemplate(object):
         Check to make sure the username fits this specific definition/specification
         for a username.
         
-        @author: Roy Nielsen
+        
         """
         sane = False
         if userName and isinstance(userName, str):
@@ -164,7 +164,7 @@ class ManageUserTemplate(object):
         Check to make sure the groupName fits this specific
         definition/specification for a username.
         
-        @author: Roy Nielsen
+        
         """
         sane = False
         if groupName and isinstance(groupName, str):
@@ -178,7 +178,7 @@ class ManageUserTemplate(object):
         """
         Check to make sure that the "userShell" variable is a valid file path
         
-        @author: Roy Nielsen
+        
         """
         sane = False
         if self.isSaneFilePath(userShell):
@@ -191,7 +191,7 @@ class ManageUserTemplate(object):
         """
         User Comment field, usually for a user's "Long" or full name.
         
-        @author: Roy Nielsen
+        
         """
         sane = False
         if userComment and isinstance(userComment, str):
@@ -205,7 +205,7 @@ class ManageUserTemplate(object):
         """
         Check to make sure the userUid is a string or a number.
         
-        @author: Roy Nielsen
+        
         """
         sane = False
         if userUid and isinstance(userUid, [str, int]):
@@ -219,7 +219,7 @@ class ManageUserTemplate(object):
         """
         Check to make sure the user's primary group ID is valid.
         
-        @author: Roy Nielsen
+        
         """
         sane = False
         if userPriGid and isinstance(userPriGid, [str, int]):
@@ -233,7 +233,7 @@ class ManageUserTemplate(object):
         """
         Check to make sure the user's home directory is a valid file path.
         
-        @author: Roy Nielsen
+        
         """
         sane = False
         if self.isSaneFilePath(userHomeDir):
@@ -246,7 +246,7 @@ class ManageUserTemplate(object):
         """
         Setter for the user's username.
         
-        @author: Roy Nielsen
+        
         """
         sane = False
         if self.isSaneUserName(userName):
@@ -277,7 +277,7 @@ class ManageUserTemplate(object):
                   14 characters long, and all characters be in the 0 compliance
                   set.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         validCompliance = [0, 1, 2]
@@ -301,7 +301,7 @@ class ManageUserTemplate(object):
         @returns: a list of which compliant types succeed.  The index of the
                   list is the compliance type.
 
-        @author: Roy Nielsen
+        
         """
         #####
         # From the ASCII character map:
@@ -375,7 +375,7 @@ class ManageUserTemplate(object):
         """
         Check if user can sudo.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         users = []
@@ -451,7 +451,7 @@ class ManageUserTemplate(object):
         
         A 'lift attendant' is an elevator operator in fancy hotels.
         
-        @author: Roy Nielsen
+        
         """
         success = False
 
@@ -574,7 +574,7 @@ class ManageUserTemplate(object):
         The userComment is left empty.  Primary use is managing a user
         during test automation, when requiring a "user" context.
 
-        @author: Roy Nielsen
+        
         """
         pass
 
@@ -587,7 +587,7 @@ class ManageUserTemplate(object):
 
         Only allow usernames with letters and numbers.
 
-        @author: Roy Nielsen
+        
         """
         pass
 
@@ -655,7 +655,7 @@ class ManageUserTemplate(object):
         ownership and group of the user's home directory to reflect
         what is in the local directory service.
 
-        @author: Roy Nielsen
+        
         """
         pass
 
@@ -676,6 +676,6 @@ class ManageUserTemplate(object):
         ownership and group of the user's home directory to reflect
         what is in the local directory service.
 
-        @author: Roy Nielsen
+        
         """
         pass

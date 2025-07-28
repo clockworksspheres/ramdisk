@@ -2,7 +2,7 @@
 """
 Test for basic functionality of CheckApplicable
 
-@author: Roy Nielsen
+
 """
 
 # --- Native python libraries

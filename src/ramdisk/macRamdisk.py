@@ -23,7 +23,7 @@ Maybe function, or other module
 Maybe function, method  or other module
 * rsync from spinning disk to ram disk
 
-@author: Roy Nielsen
+
 """
 #--- Native python libraries
 import os
@@ -68,7 +68,7 @@ class RamDisk(RamDiskTemplate):
                          on locaiton created by tempfile.mkdtemp.
     @param: message_level - level at which to log.
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, size=0, mountpoint="", logger=False, disableJournal=False, **kwargs) :
         """
@@ -246,7 +246,7 @@ class RamDisk(RamDiskTemplate):
         cmd = "/sbin/mount_apfs " + self.myRamdiskDev + " " + self.mntPoint
         self.fsHelper.chown(self.mntPoint, user)
 
-        @author: Roy Nielsen
+        
         """
         retval = None
         reterr = None
@@ -381,7 +381,7 @@ class RamDisk(RamDiskTemplate):
 
         Does not print or log the data.
 
-        @author: Roy Nielsen
+        
         """
         return (self.success, str(self.mntPoint), str(self.myRamdiskDev))
 
@@ -393,7 +393,7 @@ class RamDisk(RamDiskTemplate):
 
         Also logs the data.
 
-        @author: Roy Nielsen
+        
         """
         self.logger.log(lp.INFO, "Success: " + str(self.success))
         self.logger.log(lp.INFO, "Mount point: " + str(self.mntPoint))
@@ -417,7 +417,7 @@ class RamDisk(RamDiskTemplate):
         """
         Mount the disk - for the Mac, just run self.__attach
 
-        @author: Roy Nielsen
+        
         """
         success = False
         success = self.__attach()
@@ -431,7 +431,7 @@ class RamDisk(RamDiskTemplate):
         """
         Attach the device so it can be formatted
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -479,7 +479,7 @@ class RamDisk(RamDiskTemplate):
         using "force" doesn't work on a mounted filesystem, without it, the
         command will work on a mounted file system
 
-        @author: Roy Nielsen
+        
         """
         success = False
         cmd = [self.diskutil, "disableJournal", self.myRamdiskDev + "s1"]
@@ -526,7 +526,7 @@ class RamDisk(RamDiskTemplate):
                                the GUI (i.e., appear on the Desktop as a
                                separate volume).
 
-        @author: Roy Nielsen
+        
         """
         success = False
 
@@ -577,7 +577,7 @@ class RamDisk(RamDiskTemplate):
         """
         Unmount the disk - same functionality as __eject on the mac
 
-        @author: Roy Nielsen
+        
         """
         success = False
         if self.eject() :
@@ -591,7 +591,7 @@ class RamDisk(RamDiskTemplate):
         """
         Unmount the disk - same functionality as __eject on the mac
 
-        @author: Roy Nielsen
+        
         """
         success = False
         if self.eject() :
@@ -605,7 +605,7 @@ class RamDisk(RamDiskTemplate):
         """
         Unmount in the Mac sense - ie, the device is still accessible.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         cmd = [self.diskutil, "unmount", "force", self.devPartition]
@@ -623,7 +623,7 @@ class RamDisk(RamDiskTemplate):
         Mount in the Mac sense - ie, mount an already accessible device to
         a mount point.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         cmd = [self.diskutil, "mount", "-mountPoint", self.mntPoint, self.devPartition]
@@ -650,7 +650,7 @@ class RamDisk(RamDiskTemplate):
         separately.. Besides unmounting the disk, it also stops any processes
         related to the mntPoint
 
-        @author: Roy Nielsen
+        
         """
         success = False
         cmd = [self.hdiutil, "detach", self.myRamdiskDev]
@@ -669,7 +669,7 @@ class RamDisk(RamDiskTemplate):
         """
         Format the ramdisk
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -695,7 +695,7 @@ class RamDisk(RamDiskTemplate):
         """
         Partition the ramdisk (mac specific)
 
-        @author: Roy Nielsen
+        
         """
         success=False
         numerator = int(self.diskSize)
@@ -812,7 +812,7 @@ class RamDisk(RamDiskTemplate):
         Best method to do this on the Mac is to get the output of "top -l 1"
         and # re.search("unused" line), as below
 
-        @author: Roy Nielsen
+        
         """
         #mem_free = psutil.phymem_usage()[2]
 
@@ -894,7 +894,7 @@ class RamDisk(RamDiskTemplate):
         """
         Getter for the device name the ramdisk is using
 
-        @author: Roy Nielsen
+        
         """
         return self.myRamdiskDev
 
@@ -904,7 +904,7 @@ class RamDisk(RamDiskTemplate):
         """
         Setter for the device so it can be ejected.
 
-        @author: Roy Nielsen
+        
         """
         if device:
             self.myRamdiskDev = device
@@ -917,7 +917,7 @@ class RamDisk(RamDiskTemplate):
         """
         Getter for the version of the ramdisk
 
-        @author: Roy Nielsen
+        
         """
         return self.module_version
 
@@ -928,7 +928,7 @@ def unmount(device=" ", logger=False):
     """
     On the Mac, call detach.
 
-    @author: Roy Nielsen
+    
     """
     detach(device, logger)
 
@@ -938,7 +938,7 @@ def umount(device=" ", logger=False):
     """
     On the Mac, call detach.
 
-    @author: Roy Nielsen
+    
     """
     detach(device, logger)
 
@@ -951,7 +951,7 @@ def detach(device=" ", logger=False):
     separately.. Besides unmounting the disk, it also stops any processes
     related to the mntPoint
 
-    @author: Roy Nielsen
+    
     """
     success = False
     if not logger:

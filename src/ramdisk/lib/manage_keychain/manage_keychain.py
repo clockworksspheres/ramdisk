@@ -7,7 +7,7 @@ Factory object for acquiring the right keychain manager
 @note: If the generic interface doesn't have enough functionality, the
        factory has a method to return the specific keychain manager.
 
-@author: Roy Nielsen
+
 """
 
 import sys
@@ -32,7 +32,7 @@ class ManageKeychain(object):
            concrete implementation of the keychain manager for a specific
            OS or application.
 
-    @author: Roy Nielsen
+    
     """
 
     # ----------------------------------------------------------------------
@@ -74,7 +74,7 @@ class ManageKeychain(object):
         """
         Log the caller of the method that calls this method
 
-        @author: Roy Nielsen
+        
         """
         try:
             filename = inspect.stack()[2][1]
@@ -96,7 +96,7 @@ class ManageKeychain(object):
         """
         Setter for the user property of the concrete class.
 
-        @author: Roy Nielsen
+        
         """
         #####
         # Preprocess logging
@@ -119,7 +119,7 @@ class ManageKeychain(object):
         """
         Display or manipulate the keychain search list.
 
-        @author: Roy Nielsen
+        
         """
         #####
         # Preprocess logging
@@ -142,7 +142,7 @@ class ManageKeychain(object):
         """
         Display or set the default keychain.
 
-        @author: Roy Nielsen
+        
         """
         #####
         # Preprocess logging
@@ -165,7 +165,7 @@ class ManageKeychain(object):
         '''
         Display or set the login keychain.
 
-        @author: Roy Nielsen
+        
         '''
         #####
         # Preprocess logging
@@ -188,7 +188,7 @@ class ManageKeychain(object):
         """
         Create a keychain.
 
-        @author: Roy Nielsen
+        
         """
         #####
         # Preprocess logging
@@ -211,7 +211,7 @@ class ManageKeychain(object):
         """
         Delete keychain
 
-        @author: Roy Nielsen
+        
         """
         #####
         # Preprocess logging
@@ -230,7 +230,7 @@ class ManageKeychain(object):
         """
         Unlock the defined keychain
 
-        @author: Roy Nielsen
+        
         """
         #####
         # Preprocess logging
@@ -250,7 +250,7 @@ class ManageKeychain(object):
         """
         Unlock the defined keychain
 
-        @author: Roy Nielsen
+        
         """
         #####
         # Preprocess logging
@@ -271,7 +271,7 @@ class ManageKeychain(object):
         """
         Change a keychain password
 
-        @author: Roy Nielsen
+        
         """
         #####
         # Preprocess logging
@@ -292,7 +292,7 @@ class ManageKeychain(object):
         '''
         Show the settings for a keychain.
 
-        @author: Roy Nielsen
+        
         '''
         #####
         # Preprocess logging
@@ -313,7 +313,7 @@ class ManageKeychain(object):
         '''
         Dump the contents of one or more keychains.
 
-        @author: Roy Nielsen
+        
         '''
         #####
         # Preprocess logging
@@ -334,7 +334,7 @@ class ManageKeychain(object):
         '''
         Find a certificate item.
 
-        @author: Roy Nielsen
+        
         '''
         #####
         # Preprocess logging
@@ -355,7 +355,7 @@ class ManageKeychain(object):
         '''
         Find an identity (certificate + private key).
 
-        @author: Roy Nielsen
+        
         '''
         #####
         # Preprocess logging
@@ -376,7 +376,7 @@ class ManageKeychain(object):
         '''
         Display descriptive message for the given error code(s).
 
-        @author: Roy Nielsen
+        
         '''
         #####
         # Preprocess logging

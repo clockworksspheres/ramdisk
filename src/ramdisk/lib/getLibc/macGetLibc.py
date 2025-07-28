@@ -43,7 +43,7 @@ def getLibc( ):
     @returns: python reference to the C libc object, or False, if it can't
               find libc on the system.
 
-    @author: Roy Nielsen
+    
     """
     mylibc = libc()
     return mylibc

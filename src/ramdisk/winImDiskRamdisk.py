@@ -1,7 +1,7 @@
 """
 Windows Ramdisk class based on use of ImDisk windows program
 
-@author: Roy Nielsen
+
 """
 #--- Native python libraries
 from tempfile import mkdtemp
@@ -86,7 +86,7 @@ class RamDisk(RamDiskTemplate):
         """
         Create a ramdisk device
 
-        @author: Roy Nielsen
+        
         """
         retval = None
         reterr = None
@@ -124,7 +124,7 @@ class RamDisk(RamDiskTemplate):
 
         Does not print or log the data.
 
-        @author: Roy Nielsen
+        
         """
         return (self.success, str(self.mntPoint), str(self.myRamdiskDev))
 
@@ -136,7 +136,7 @@ class RamDisk(RamDiskTemplate):
 
         Also logs the data.
 
-        @author: Roy Nielsen
+        
         """
         self.logger.log(lp.INFO, "Success: " + str(self.success))
         self.logger.log(lp.INFO, "Mount point: " + str(self.mntPoint))
@@ -161,7 +161,7 @@ class RamDisk(RamDiskTemplate):
         Create a randomized (secure) mount point - per python's implementation
         of mkdtemp - a way to make an unguessable directory on the system
 
-        @author: Roy Nielsen
+        
         """
         success = False
         self.mntPoint = ""
@@ -226,7 +226,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         success = False
 
@@ -294,7 +294,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         success = False
         success = self.umount(detach, dForce, rForce, mountpoint, unit)
@@ -307,7 +307,7 @@ class RamDisk(RamDiskTemplate):
         Check to make sure there is plenty of memory of the size passed in
         before creating the ramdisk
 
-        @author: Roy Nielsen
+        
         """
         # Commands with pipes, better off as strings - and with quotes, done as below, with myshell=True in the cmd call
         cmd = 'systeminfo|find "Available Physical Memory"'
@@ -356,7 +356,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         success = False
         return success
@@ -369,7 +369,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         return self.myRamdiskDev
 
@@ -381,7 +381,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         return self.mntPoint
 
@@ -393,7 +393,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         self.myRamdiskDev = device
 
@@ -405,7 +405,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         return self.module_version
 
@@ -433,7 +433,7 @@ def umount(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
 
     Must be over-ridden to provide OS/Method specific functionality
 
-    @author: Roy Nielsen
+    
     """
     success = False
 

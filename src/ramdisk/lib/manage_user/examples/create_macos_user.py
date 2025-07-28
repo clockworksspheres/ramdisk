@@ -2,7 +2,7 @@
 
 
 """
-@author: Roy Nielsen
+
 
 This script must be run with sudo to work....
 

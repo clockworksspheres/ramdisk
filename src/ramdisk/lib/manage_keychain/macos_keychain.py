@@ -1,7 +1,7 @@
 """
 Implementation class for the individual ManageKeychain for MacOS
 
-@author: Roy Nielsen
+
 """
 
 
@@ -21,7 +21,7 @@ class UnsupportedSecuritySubcommand(Exception):
     Meant for being thrown when a command does not support a passed
     in subcommand.
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
@@ -34,7 +34,7 @@ class MacOSKeychain(MacOSUser, ManageKeychainTemplate):
         """
         Initialization Method
 
-        @author: Roy Nielsen
+        
         """
         if 'logDispatcher' not in kwargs:
             raise ValueError("Variable 'logDispatcher' a required parameter" +
@@ -63,7 +63,7 @@ class MacOSKeychain(MacOSUser, ManageKeychainTemplate):
 
         @returns: success - whether the command was successfull or not.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         subcmd = []
@@ -139,7 +139,7 @@ class MacOSKeychain(MacOSUser, ManageKeychainTemplate):
 
         @returns: success - whether the command was successfull or not.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         output = ""
@@ -208,7 +208,7 @@ class MacOSKeychain(MacOSUser, ManageKeychainTemplate):
         """
         Setter for the class user variable..
 
-        @author: Roy Nielsen
+        
         """
         success = False
         if self.isSaneUserName(user):
@@ -280,7 +280,7 @@ class MacOSKeychain(MacOSUser, ManageKeychainTemplate):
         @param: keychain - Keychain to list
         @param: prefDomain - user|system|common|dynamic
 
-        @author: Roy Nielsen
+        
         '''
         keychain = keychain.strip()
         prefDomain = prefDomain.strip()
@@ -300,7 +300,7 @@ class MacOSKeychain(MacOSUser, ManageKeychainTemplate):
         @param: keychain - Keychain to list
         @param: prefDomain - user|system|common|dynamic
 
-        @author: Roy Nielsen
+        
         '''
         keychain = keychain.strip()
         prefDomain = prefDomain.strip()
@@ -318,7 +318,7 @@ class MacOSKeychain(MacOSUser, ManageKeychainTemplate):
         @param: keychain - Keychain to list
         @param: prefDomain - user|system|common|dynamic
 
-        @author: Roy Nielsen
+        
         '''
         keychain = keychain.strip()
         prefDomain = prefDomain.strip()
@@ -334,7 +334,7 @@ class MacOSKeychain(MacOSUser, ManageKeychainTemplate):
         """
         Create a keychain.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         passwd = passwd.strip()
@@ -370,7 +370,7 @@ class MacOSKeychain(MacOSUser, ManageKeychainTemplate):
 
         The <file.keychain> must be the full path to the keychain.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         keychain = keychain.strip()
@@ -399,7 +399,7 @@ class MacOSKeychain(MacOSUser, ManageKeychainTemplate):
         @note:
         security unlock-keychain -p <passwd>
 
-        @author: Roy Nielsen
+        
         """
         success = False
         keychain = keychain.strip()
@@ -433,7 +433,7 @@ class MacOSKeychain(MacOSUser, ManageKeychainTemplate):
         @note:
         security unlock-keychain -p <passwd>
 
-        @author: Roy Nielsen
+        
         """
         success = False
         keychain = keychain.strip()
@@ -472,7 +472,7 @@ class MacOSKeychain(MacOSUser, ManageKeychainTemplate):
 
         Most used keychain is the login.keychain-db.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         stdout = ""
@@ -520,7 +520,7 @@ class MacOSKeychain(MacOSUser, ManageKeychainTemplate):
 
         @param: keychain - keychain to acquire information about
 
-        @author: Roy Nielsen
+        
         '''
         success = False
         stdout = False
@@ -548,7 +548,7 @@ class MacOSKeychain(MacOSUser, ManageKeychainTemplate):
 
         @Note: No parameters currently supported, will dump all information.
 
-        @author: Roy Nielsen
+        
         '''
         #####
         # Command setup - note that the keychain deliberately has quotes
@@ -573,7 +573,7 @@ class MacOSKeychain(MacOSUser, ManageKeychainTemplate):
         @param: name - search string
         @param: keychain - keychain to search, default = search list
 
-        @author: Roy Nielsen
+        
         '''
         success = False
         stdout = False
@@ -611,7 +611,7 @@ class MacOSKeychain(MacOSUser, ManageKeychainTemplate):
         @param: keychain - (optional) - keychain to search, otherwise the
                                         search list.
 
-        @author: Roy Nielsen
+        
         '''
         policy = policy.strip()
         keychain = keychain.strip()
@@ -669,7 +669,7 @@ class MacOSKeychain(MacOSUser, ManageKeychainTemplate):
         @param: options - Options to use for rights authorization.
         @param: right - What right to authorize
 
-        @author: Roy Nielsen
+        
         '''
         success = False
         stdout = False
@@ -701,7 +701,7 @@ class MacOSKeychain(MacOSUser, ManageKeychainTemplate):
 
         @param: Error code to acquire information about.
 
-        @author: Roy Nielsen
+        
         '''
         success = False
         stdout = False
@@ -765,7 +765,7 @@ class MacOSKeychain(MacOSUser, ManageKeychainTemplate):
         @param: keyType = type of key to find - must be one of:
                           ["symmetric", "public", "private"]
 
-        @author: Roy Nielsen
+        
         '''
         success = False
         stdout = False

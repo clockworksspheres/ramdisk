@@ -1,6 +1,6 @@
 #!/usr/bin/env -S python -u
 """
-@author: Roy Nielsen
+
 """
 #--- Native python libraries
 import sys
@@ -75,7 +75,7 @@ if __name__ == "__main__" :
     """
     Example usage of this library
     
-    @author: Roy Nielsen
+    
     """
     main_menu = MenuComposite("Main")
     basic_choice = MenuItem("Basic Choice", basic)

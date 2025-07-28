@@ -2,7 +2,7 @@
 '''
 Created on Jul 13, 2011 - stonix project
 
-@author: dkennel
+
 @change: 2015/10/23 eball Updated deprecated unit test methods, added dummy
                           PN file creation
 @change: 2016-02-10 roy  adding sys.path.append for both test framework and 

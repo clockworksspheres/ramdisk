@@ -2,7 +2,7 @@
 Factory object that will instanciate the appropriate user management class for
 the appropriate environment/OS.
 
-@author: Roy Nielsen
+
 """
 
 import os
@@ -55,7 +55,7 @@ class ManageUser(object):
         """
         Log the caller of the method that calls this method
 
-        @author: Roy Nielsen
+        
         """
         try:
             filename = inspect.stack()[2][1]
@@ -84,7 +84,7 @@ class ManageUser(object):
         Find an unused uid (unique ID) for the user, this method will list all
         the existing users, an unused number above 1000 is good.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -106,7 +106,7 @@ class ManageUser(object):
         """
         See if the UID requested has been taken.  Only approve uid's over 1k
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -268,7 +268,6 @@ class ManageUser(object):
         """
         Check if the user "user" is installed on the system.
 
-        @author Roy Nielsen
         """
         success = False
         #####
@@ -290,7 +289,7 @@ class ManageUser(object):
         """
         Check if this user is in this group
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -313,7 +312,7 @@ class ManageUser(object):
         Check if this user is in the sudoers file - requires root access to
         run.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -337,7 +336,6 @@ class ManageUser(object):
         Future functionality... validate that the passed in parameters to the
         class instanciation match.
 
-        @author:
         """
         success = False
         #####
@@ -362,7 +360,7 @@ class ManageUser(object):
         Check if this user is in the sudoers file - requires root access to
         run.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -392,7 +390,7 @@ class ManageUser(object):
         It does not set a login keychain password as that is created on first
         login to the GUI.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -417,7 +415,7 @@ class ManageUser(object):
         Only allow usernames with letters and numbers.
         (see ParentManageUser regex for allowable characters)
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -439,7 +437,7 @@ class ManageUser(object):
         """
         Setter for the class variable userName
 
-        @author: Roy Nielsen
+        
         """
         success = False
         if self.userMgr.isSaneUserName(user):
@@ -454,7 +452,7 @@ class ManageUser(object):
 
         (see ParentManageUser regex for allowable characters)
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -478,7 +476,7 @@ class ManageUser(object):
 
         (see ParentManageUser regex for allowable characters)
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -500,7 +498,7 @@ class ManageUser(object):
         """
         Set the user UID on the system.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -522,7 +520,7 @@ class ManageUser(object):
         """
         Set the user's primary group ID on the system.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -546,7 +544,7 @@ class ManageUser(object):
         home directory from the system's user template/skel for standard user
         settings.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -571,7 +569,7 @@ class ManageUser(object):
         This should use the system "User Template" or "/etc/skel" for standard
         system user settings.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -593,7 +591,7 @@ class ManageUser(object):
         """
         Add a user to a group, not their primary group.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -615,7 +613,7 @@ class ManageUser(object):
         """
         Set a user's password.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -637,7 +635,7 @@ class ManageUser(object):
         """
         Remove a user from the system.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -661,7 +659,7 @@ class ManageUser(object):
         look up the user home in the directory service and remove that
         specifically.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -683,7 +681,7 @@ class ManageUser(object):
         """
         Remove a user from a group, not their primary group.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -707,7 +705,7 @@ class ManageUser(object):
         ownership and group of the user's home directory to reflect
         what is in the local directory service.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####

@@ -1,32 +1,5 @@
 #!/usr/bin/env python
 
-###############################################################################
-#                                                                             #
-
-#                                                                             #
-###############################################################################
-# ============================================================================#
-#               Filename          $RCSfile: stonix/logdispatcher.py,v $
-#               Description       Security Configuration Script
-#               OS                Linux, Mac OS X, Solaris, BSD
-#               Author            Dave Kennel
-#               Last updated by   $Author: $
-#               Notes             Based on CIS Benchmarks, NSA RHEL
-#                                 Guidelines, NIST and DISA STIG/Checklist
-#               Release           $Revision: 1.0 $
-#               Modified Date     $Date: 2013/10/3 14:00:00 $
-# ============================================================================#
-'''
-Created on September 14, 2015, based on logdispatcher in the stonix_resources
-directory.  We need instrumentation for tests.  A mock will no longer suffice.
-
-Primary instruction for this class is to perform all logdispatcher functionality
-minus the xml related functionality.
-
-@author: dkennel - of logdispatcher in the stonix_resources directory.
-@note: rsn - started logdispatcher lite
-'''
-
 import os
 import re
 import time
@@ -74,7 +47,7 @@ class LogDispatcher ():
       verbose_mode: Whether or not to turn on verbose mode.  Bool
        
     :version: 1
-    :author: scmcleni
+    
     :note: rsn - 2015-09-19 Adding additional parameters and extensions to 
                             log files.  Also added log rotation.  Removed mail
                             and xml functionality.  
@@ -97,7 +70,7 @@ class LogDispatcher ():
         __initializeLogs method, this needs to be an optional method for
         logdispatcher_lite
         
-        @author: Roy Nielsen
+        
         """
         if self.environment:
             # start machine specific information
@@ -152,7 +125,7 @@ class LogDispatcher ():
         """
         Setter for debug mode
         
-        @author: Roy Nielsen
+        
         """
         self.debug = debug
 
@@ -162,7 +135,7 @@ class LogDispatcher ():
         """
         Setter for verbose mode
         
-        @author: Roy Nielsen
+        
         """
         self.verbose = verbose
 
@@ -187,8 +160,7 @@ class LogDispatcher ():
         @param: enum priority
         @param: string msg_data
         @return: void
-        @author scmcleni
-        @author: dkennel
+        
         """
 
         entry = self.formatMessageData(msg_data)
@@ -249,7 +221,7 @@ class LogDispatcher ():
         that there is no tag (defaults to 'None') and the passed data is set
         as the Detail of the MessageData object.
         @return MessageData
-        @author: scmcleni
+        
         """
         entry = MessageData()
         if isinstance(msg_data, list):
@@ -268,7 +240,7 @@ class LogDispatcher ():
         Returns the current message if called while in a dirty state.
 
         @return: MessageData
-        @author: scmcleni
+        
         """
         return self.last_message_received
 
@@ -279,7 +251,7 @@ class LogDispatcher ():
         Returns the message priority of the last message received.
 
         @return: LogPriority instance
-        @author: dkennel
+        
         """
         return self.last_prio
     
@@ -289,7 +261,7 @@ class LogDispatcher ():
         """
         Rotate the log if the log handler has been set up
         
-        @author: Roy Nielsen
+        
         """
         try:
             if self.rotHandler:
@@ -305,7 +277,7 @@ class LogDispatcher ():
         Mark the beginning of a log session.  Rely on if/when a programmer wants
         to use this functionality.
 
-        @author: Roy Nielsen
+        
         """        
         logging.warning("############### Starting Log... ##################")
 
@@ -316,7 +288,7 @@ class LogDispatcher ():
         Mark the end of a log session.  Rely on if/when a programmer wants
         to use this functionality.
 
-        @author: Roy Nielsen
+        
         """
         logging.warning("################## End Log... ####################")
 
@@ -326,7 +298,7 @@ class LogDispatcher ():
         """
         Mark a separator in the log.
         
-        @author: Roy Nielsen
+        
         """
         logging.warning("##################################################")
     
@@ -362,8 +334,8 @@ class LogDispatcher ():
         to stonix_last.log.
 
         @return: void
-        @author: scmcleni
-        @author: D. Kennel
+        
+        
         @note: R. Nielsen - Making console, rotate and syslog optional
         """
         rotate = False
@@ -467,7 +439,7 @@ class LogDispatcher ():
 class MessageData:
     """
     Simple object for handling Message Data in a concrete fashion.
-    @author: scmcleni
+    
     """
     Tag = "None"
     Detail = "None"
@@ -478,7 +450,7 @@ class LogPriority:
     """
     Enum (python way) of log levels.
 
-    @author: scmcleni
+    
     """
 
     # I'm not really happy about doing it this way, but it's the shortest

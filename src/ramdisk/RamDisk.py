@@ -1,7 +1,7 @@
 """
 Template for the ramdisk classes
 
-@author: Roy Nielsen
+
 """
 import os
 import sys
@@ -122,7 +122,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         return self.ramdisk.getDevice()
 
@@ -134,7 +134,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         return self.ramdisk.getMountPoint()
 
@@ -146,7 +146,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         self.ramdisk.setDevice(device)
 

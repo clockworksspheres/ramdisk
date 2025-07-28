@@ -2,7 +2,7 @@
 """
 Test the helper exceptions.
 
-@author: Roy Nielsen
+
 """
 
 #--- Native python libraries
@@ -60,7 +60,7 @@ class test_libHelperExceptions(unittest.TestCase):
         """
         This method runs before each test run.
 
-        @author: Roy Nielsen
+        
         """
         self.libcPath = None # initial initialization
         #####
@@ -90,7 +90,7 @@ class test_libHelperExceptions(unittest.TestCase):
         """
         Find Linux Libc library...
 
-        @author: Roy Nielsen
+        
         """
         possible_paths = ["/lib/x86_64-linux-gnu/libc.so.6",
                           "/lib/i386-linux-gnu/libc.so.6"]

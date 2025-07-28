@@ -3,7 +3,7 @@ Factory for creating ramdisks.
 
 @note: may be of more use in the tests/testFramework, or example directories
 
-@author: Roy Nielsen
+
 """
 #--- Native python libraries
 import re
@@ -54,7 +54,7 @@ class RamDiskFactory(object):
 
     @method unmountRamdisk: Unmounts the mountpoint that is passed in.
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, environ, logger=None):
         """
@@ -89,7 +89,7 @@ class RamDiskFactory(object):
         @var: ramdisks - a list of ramdisks this factory has created
         
         @param: size - size of the ramdisk to create. If zero, it looks for 
-        @author: Roy Nielsen
+        
         """
         if not ramdiskType in self.validRamdiskTypes:
             raise BadRamdiskTypeException("Not a valid ramdisk type")
@@ -134,7 +134,7 @@ class RamDiskFactory(object):
         """
         Getter for the version of this  module.
 
-        @author: Roy Nielsen
+        
         """
         return self.module_version
 
@@ -146,7 +146,7 @@ class RamDiskFactory(object):
 
         @return: success - successful = True, unsuccessful = False
 
-        @author: Roy Nielsen
+        
         """
         success = False
 
@@ -164,7 +164,7 @@ class RamDiskFactory(object):
 
         @return: True if successful, False if not successful
 
-        @author: Roy Nielsen
+        
         """
         success = False
         if mountpoint:

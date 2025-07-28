@@ -2,7 +2,7 @@
 """
 Generic ramdisk test, with helper functions. Inherited by other tests.
 
-@author: Roy Nielsen
+
 """
 #--- Native python libraries
 
@@ -67,7 +67,7 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
     Inspiration for using classmethod:
     http://simeonfranklin.com/testing2.pdf
 
-    @author: Roy Nielsen
+    
     """
     @classmethod
     def setUpClass(self):
@@ -164,7 +164,7 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
     
             Here to be over-ridden by a child class.
     
-            @author: Roy Nielsen
+            
             ""
             pass
         '''
@@ -337,7 +337,7 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
         """
         Skeleton method in case a child class wants/needs to override it.
 
-        @author: Roy Nielsen
+        
         """
         pass
 

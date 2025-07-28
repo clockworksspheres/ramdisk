@@ -1,7 +1,7 @@
 """
 Linux tmpfs ramdisk implementation
 
-@author: Roy Nielsen
+
 """
 #--- Native python libraries
 import os
@@ -174,7 +174,7 @@ class RamDisk(RamDiskTemplate):
         """
         Acquire the paths for mount and umount on the system...
 
-        @author: Roy Nielsen
+        
         """
         success = False
         paths = ["/bin", "/usr/bin", "/sbin", "/usr/sbin", "/usr/local/bin", "/user/local/sbin"]
@@ -218,7 +218,7 @@ class RamDisk(RamDiskTemplate):
 
         For more options on the tmpfs filesystem, check the mount manpage.
 
-        @author: Roy Nielsen
+        
         """
         command=None
         if self.fstype == "ramfs":
@@ -252,7 +252,7 @@ class RamDisk(RamDiskTemplate):
         One can't really format a tmpfs disk, so this will mimic a format 
         by unmounting an recreating the disk.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         successOne = self.umount()
@@ -267,7 +267,7 @@ class RamDisk(RamDiskTemplate):
         """
         Mount the disk
 
-        @author: Roy Nielsen
+        
         """
         success = False
         
@@ -324,7 +324,7 @@ class RamDisk(RamDiskTemplate):
 
         If bad input is given, the previous values will be used.
 
-        @author: Roy Nielsen
+        
         """
         #####
         # Input Validation:
@@ -364,7 +364,7 @@ class RamDisk(RamDiskTemplate):
         """
         Unmount the disk
 
-        @author: Roy Nielsen
+        
         """
         success = False
 
@@ -383,7 +383,7 @@ class RamDisk(RamDiskTemplate):
         """
         Unmount the disk
 
-        @author: Roy Nielsen
+        
         """
         success = False
 
@@ -396,7 +396,7 @@ class RamDisk(RamDiskTemplate):
         """
         Unmount the disk
 
-        @author: Roy Nielsen
+        
         """
         success = False
 
@@ -413,7 +413,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         #mem_free = psutil.phymem_usage()[2]
 
@@ -427,7 +427,7 @@ class RamDisk(RamDiskTemplate):
         """
         Getter for the version of the ramdisk
 
-        @author: Roy Nielsen
+        
         """
         return self.module_version
 
@@ -437,7 +437,7 @@ def detach(mnt_point="", logger=False):
     """
     Mirror for the unmount function...
 
-    @author: Roy Nielsen
+    
     """
     success = umount(mnt_point, logger)
     return success
@@ -448,7 +448,7 @@ def umount(mnt_point="", logger=False):
     """
     Unmount the ramdisk
 
-    @author: Roy Nielsen
+    
     """
     success = False
     if mnt_point:

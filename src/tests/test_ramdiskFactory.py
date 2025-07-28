@@ -3,7 +3,7 @@
 """
 Test for the RamdiskFactory
 
-@author: Roy Nielsen
+
 """
 
 #--- Native python libraries
@@ -66,7 +66,7 @@ class test_ramdiskFactory(unittest.TestCase, GenericTestUtilities):
         """
         This method runs before each test run.
 
-        @author: Roy Nielsen
+        
         """
         pass
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env -S python -u
 """
-@author: Roy Nielsen
+
 """
 
 #--- Native python libraries

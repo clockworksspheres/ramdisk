@@ -77,7 +77,7 @@ class RunWith(object):
 
     @WARNING - Known to work on Mac, may or may not work on other platforms
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, logger=None, use_logger=True):
         if use_logger == True:
@@ -113,7 +113,7 @@ class RunWith(object):
         """
         initialize a command to run
 
-        @author: Roy Nielsen
+        
         """
         #####
         # Handle Popen's shell, or "myshell"...
@@ -180,7 +180,7 @@ class RunWith(object):
         """
         Getter for the standard output of the last command.
 
-        @author: Roy Nielsen
+        
         """
         return self.stdout
 
@@ -190,7 +190,7 @@ class RunWith(object):
         """
         Getter for the standard error of the last command.
 
-        @author: Roy Nielsen
+        
         """
         return self.stderr
 
@@ -200,7 +200,7 @@ class RunWith(object):
         """
         Getter for the return code of the last command.
 
-        @author: Roy Nielsen
+        
         """
         return self.retcode
 
@@ -210,7 +210,7 @@ class RunWith(object):
         """
         Getter for the retval, reterr & retcode of the last command.
 
-        @author: Roy Nielsen
+        
         """
         return self.stdout, self.stderr, self.retcode
 
@@ -222,7 +222,7 @@ class RunWith(object):
 
         Will also log the values
 
-        @author: Roy Nielsen
+        
         """
         if nolog == False:
             self.logger.log(lp.INFO, "Output: " + str(self.stdout))
@@ -238,7 +238,7 @@ class RunWith(object):
 
         Will also print the values
 
-        @author: Roy Nielsen
+        
         """
         print("Output: " + str(self.stdout))
         print("Error: " + str(self.stderr))
@@ -257,7 +257,7 @@ class RunWith(object):
                          not print the command being run.  Silent = False
                          to print the command.
 
-        @author: Roy Nielsen
+        
         """
         self.stdout = ''
         self.stderr = ''
@@ -326,7 +326,7 @@ class RunWith(object):
         Use subprocess to call a command and wait until it is finished before
         moving on...
 
-        @author: Roy Nielsen
+        
         """
         self.stdout = ''
         self.stderr = ''
@@ -393,7 +393,7 @@ class RunWith(object):
         Use the subprocess module to execute a command, returning
         the output of the command
 
-        Author: Roy Nielsen
+        
         """
         self.stdout = ''
         self.stderr = ''
@@ -580,7 +580,7 @@ class RunWith(object):
         """
         Support function for the "runWithTimeout" function below
 
-        @author: Roy Nielsen
+        
         """
         timeout["value"] = True
         proc.kill()
@@ -596,7 +596,7 @@ class RunWith(object):
         timout - True if the command timed out
                  False if the command completed successfully
 
-        @author: Roy Nielsen
+        
         """
         if self.command:
             try:
@@ -651,7 +651,7 @@ class RunWith(object):
 
         Required parameters: user, password, command
 
-        @author: Roy Nielsen
+        
         """
         self.stdout = ""
         self.stderr = ""
@@ -761,7 +761,7 @@ class RunWith(object):
         @param: user - name of user to run as
         @param: target_dir - directory to run the command from
 
-        @author: Roy Nielsen
+        
         """
         self.stdout = ""
         self.stderr = ""
@@ -822,7 +822,7 @@ class RunWith(object):
 
         Required parameters: password
 
-        @author: Roy Nielsen
+        
         '''
         self.stdout = ""
         self.stderr = ""
@@ -949,7 +949,7 @@ class RunWith(object):
 
         Required parameters: password
 
-        @author: Roy Nielsen
+        
         """
         self.stdout = ""
         self.stderr = ""
@@ -1079,7 +1079,7 @@ class RunThread(threading.Thread):
     run_thread.join()
     print run_thread.stdout
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, command, logger, myshell=False):
         """
@@ -1143,7 +1143,7 @@ class RunThread(threading.Thread):
         """
         Getter for standard output
 
-        @author: Roy Nielsen
+        
         """
         self.logger.log(lp.INFO, "Getting stdout...")
         return self.retout
@@ -1154,7 +1154,7 @@ class RunThread(threading.Thread):
         """
         Getter for standard err
 
-        @author: Roy Nielsen
+        
         """
         self.logger.log(lp.DEBUG, "Getting stderr...")
         return self.reterr
@@ -1165,7 +1165,7 @@ def runMyThreadCommand(cmd, logger, myshell=False):
     """
     Use the RunThread class to get the stdout and stderr of a command
 
-    @author: Roy Nielsen
+    
     """
     retval = None
     reterr = None

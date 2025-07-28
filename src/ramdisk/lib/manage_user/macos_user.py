@@ -4,7 +4,7 @@ Cross platform user creation and management
 Created for testing cross user testing for the ramdisk project, specifically
 unionfs functionality.
 
-@author: Roy Nielsen
+
 """
 
 
@@ -34,7 +34,7 @@ class DsclError(Exception):
     Meant for being thrown when an action/class being run/instanciated is not
     applicable for the running operating system.
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
@@ -45,7 +45,7 @@ class CreateHomeDirError(Exception):
     Meant for being thrown when an action/class being run/instanciated is not
     applicable for the running operating system.
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
@@ -56,7 +56,7 @@ class InvalidUIDError(Exception):
     Meant for being thrown when a UID falls outside the range of the OS's 
     range of available UID's
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
@@ -97,7 +97,7 @@ class MacOSUser(ManageUserTemplate):
     @method rmUserFromGroup
     @method rmUserHome
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, **kwargs):
         """
@@ -165,7 +165,7 @@ class MacOSUser(ManageUserTemplate):
            $ dscl . -list /Users UniqueID
         will list all the existing users, an unused number above 500 is good.
 
-        @author: Roy Nielsen
+        
         """
         maxUserID = 0
         userList = self.getDscl(".", "-list", "/Users", "UniqueID")
@@ -191,7 +191,7 @@ class MacOSUser(ManageUserTemplate):
         See if the UID requested has been taken.  Only approve uid's over 1k
            $ dscl . -list /Users UniqueID
 
-        @author: Roy Nielsen
+        
         """
         uidList = []
         success = False
@@ -405,7 +405,6 @@ class MacOSUser(ManageUserTemplate):
         """
         Check if the user "user" is installed
 
-        @author Roy Nielsen
         """
         success = False
         if self.isSaneUserName(user):
@@ -425,7 +424,7 @@ class MacOSUser(ManageUserTemplate):
         """
         Check if this user is in this group
 
-        @author: Roy Nielsen
+        
         """
         self.logger.log(lp.DEBUG, "U: " + str(userName))
         self.logger.log(lp.DEBUG, "G: " + str(groupName))
@@ -565,7 +564,6 @@ class MacOSUser(ManageUserTemplate):
         Future functionality... validate that the passed in parameters to the
         class instanciation match.
 
-        @author:
         """
         sane = False
         #####
@@ -623,7 +621,7 @@ class MacOSUser(ManageUserTemplate):
         @param: user - name of a user to check
         @param: password - to check if the password is correct for this user
 
-        @author: Roy Nielsen
+        
         """
         authenticated = False
         output = ""
@@ -666,7 +664,7 @@ class MacOSUser(ManageUserTemplate):
         It does not set a login keychain password as that is created on first
         login to the GUI.
 
-        @author: Roy Nielsen
+        
         """
         self.createBasicUser(userName)
         newUserID = self.findUniqueUid()
@@ -691,7 +689,7 @@ class MacOSUser(ManageUserTemplate):
 
         On the MacOS platform, all other steps must also be done.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         reterr = ""
@@ -715,7 +713,7 @@ class MacOSUser(ManageUserTemplate):
         """
         dscl . -create /Users/luser UserShell /bin/bash
 
-        @author: Roy Nielsen
+        
         """
         success = False
         if self.isSaneUserName(user) and self.isSaneUserShell(shell):
@@ -732,7 +730,7 @@ class MacOSUser(ManageUserTemplate):
         """
         dscl . -create /Users/luser RealName "Real A. Name"
 
-        @author: Roy Nielsen
+        
         """
         success = False
 
@@ -750,7 +748,7 @@ class MacOSUser(ManageUserTemplate):
         """
         dscl . -create /Users/luser UniqueID "503"
 
-        @author: Roy Nielsen
+        
         """
         success = False
 
@@ -769,7 +767,7 @@ class MacOSUser(ManageUserTemplate):
         """
         dscl . -create /Users/luser PrimaryGroupID 20
 
-        @author: Roy Nielsen
+        
         """
         success = False
 
@@ -794,7 +792,7 @@ class MacOSUser(ManageUserTemplate):
 
         createhomedir -l -u <username>
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -818,7 +816,7 @@ class MacOSUser(ManageUserTemplate):
         This should use the system "User Template" for standard system user
         settings.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         reterr = ""
@@ -841,7 +839,7 @@ class MacOSUser(ManageUserTemplate):
         """
         dscl . -append /Groups/admin GroupMembership luser
 
-        @author: Roy Nielsen
+        
         """
         success = False
 
@@ -861,7 +859,7 @@ class MacOSUser(ManageUserTemplate):
         -- or --
         dscl . -passwd /Users/luser oldPassword password
 
-        @author: Roy Nielsen
+        
         """
         success = False
 
@@ -891,7 +889,7 @@ class MacOSUser(ManageUserTemplate):
         ownership and group of the user's home directory to reflect
         what is in the local directory service.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         if self.isSaneUserName(userName):
@@ -932,7 +930,7 @@ class MacOSUser(ManageUserTemplate):
         """
         dscl . delete /Users/<user>
 
-        @author: Roy Nielsen
+        
         """
         success = False
 
@@ -958,7 +956,7 @@ class MacOSUser(ManageUserTemplate):
         look up the user home in the directory service and remove that
         specifically.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         if self.isSaneUserName(user):
@@ -1016,7 +1014,7 @@ class MacOSUser(ManageUserTemplate):
         
         @returns: success - whether the command was successfull or not.
         
-        @author: Roy Nielsen
+        
         """
         success = False
         subcmd = []
@@ -1100,7 +1098,7 @@ class MacOSUser(ManageUserTemplate):
                   error   - stderr output
                   returncode - return code that the command returns
         
-        @author: Roy Nielsen
+        
         """
         success = False
         output = ""
@@ -1156,7 +1154,7 @@ class MacOSUser(ManageUserTemplate):
         """
         Using dscl to set a value in a directory...
 
-        @author: Roy Nielsen
+        
         """
         success = False
         reterr = ""
@@ -1207,7 +1205,7 @@ class MacOSUser(ManageUserTemplate):
         """
         Using dscl to retrieve a value from the directory
 
-        @author: Roy Nielsen
+        
         """
         success = False
         reterr = ""
@@ -1261,7 +1259,7 @@ class MacOSUser(ManageUserTemplate):
         """
         Check if this user is in this group
 
-        @author: Roy Nielsen
+        
         """
         success = False
         if self.isSaneUserName(userName):
@@ -1274,7 +1272,7 @@ class MacOSUser(ManageUserTemplate):
         """
         Acquire user data for local user lookup information.
 
-        @author: Roy Nielsen
+        
         """
         pass
         

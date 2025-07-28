@@ -1,7 +1,7 @@
 """
 Helper functions, OS agnostic
 
-@author: Roy Nielsen
+
 """
 
 #--- Native python libraries
@@ -86,7 +86,7 @@ def get_darwin_mac() :
                    processing the output to get the network interface mac
                    address.  Specific to the Mac.
 
-    @author: Roy Nielsen
+    
     """
     found = 0
 
@@ -123,7 +123,7 @@ def is_laptop():
     """
     Determine if the machine this is currently running on is a laptop
     
-    @author: Roy Nielsen
+    
     """
     isThisALaptop = False
     
@@ -169,7 +169,7 @@ def installFdeUser(myusername="", mypassword="") :
     Create an input plist for the fdesetup command to enable a user in the 
     filevault login screen
 
-    @author: Roy Nielsen
+    
     """
     success = False
     logger.log(lp.DEBUG, "Starting installFdeUser...")
@@ -218,7 +218,7 @@ def removeFdeUser(myusername=""):
     """
     Remove a user from the FDE login screen
     
-    @author: Roy Nielsen
+    
     """
     success = False
     if re.match("^\s+$", myusername) or not myusername:
@@ -280,7 +280,7 @@ def isSaneFilePath(filepath):
     """
     Check for a good file path in the passed in string.
     
-    @author: Roy Nielsen
+    
     """
     sane = False
     if filepath and isinstance(filepath, str):

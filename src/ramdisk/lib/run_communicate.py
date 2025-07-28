@@ -3,7 +3,7 @@ Library for running executables from the command line in different ways
 
 Inspiration for some of the below found on the internet.
 
-@author: Roy Nielsen
+
 """
 
 # TODO: BUG - Class needs to return either byte streams or strings.  Check return, error and retcode values to see if they are strings, byte streams or int and treat accordingly
@@ -78,7 +78,7 @@ class RunWith(object):
 
     @WARNING - Known to work on Mac, may or may not work on other platforms
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, logger=None, use_logger=True):
         if use_logger == True:
@@ -114,7 +114,7 @@ class RunWith(object):
         """
         initialize a command to run
 
-        @author: Roy Nielsen
+        
         """
         #####
         # Handle Popen's shell, or "myshell"...
@@ -159,7 +159,7 @@ class RunWith(object):
         """
         Getter for the standard output of the last command.
 
-        @author: Roy Nielsen
+        
         """
         return self.stdout
 
@@ -169,7 +169,7 @@ class RunWith(object):
         """
         Getter for the standard error of the last command.
 
-        @author: Roy Nielsen
+        
         """
         return self.stderr
 
@@ -179,7 +179,7 @@ class RunWith(object):
         """
         Getter for the return code of the last command.
 
-        @author: Roy Nielsen
+        
         """
         return self.retcode
 
@@ -189,7 +189,7 @@ class RunWith(object):
         """
         Getter for the retval, reterr & retcode of the last command.
 
-        @author: Roy Nielsen
+        
         """
         return self.stdout, self.stderr, self.retcode
 
@@ -201,7 +201,7 @@ class RunWith(object):
 
         Will also log the values
 
-        @author: Roy Nielsen
+        
         """
         self.logger.log(lp.INFO, "Output: " + str(self.stdout))
         self.logger.log(lp.INFO, "Error: " + str(self.stderr))
@@ -216,7 +216,7 @@ class RunWith(object):
 
         Will also print the values
 
-        @author: Roy Nielsen
+        
         """
         print("Output: " + str(self.stdout))
         print("Error: " + str(self.stderr))
@@ -235,7 +235,7 @@ class RunWith(object):
                          not print the command being run.  Silent = False
                          to print the command.
 
-        @author: Roy Nielsen
+        
         """
         self.stdout = ''
         self.stderr = ''

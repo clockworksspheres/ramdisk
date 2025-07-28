@@ -2,7 +2,7 @@
 """
 Test for basic functionality of ntfsFileHelper functionality
 
-@author: Roy Nielsen
+
 """
 
 # --- Native python libraries
