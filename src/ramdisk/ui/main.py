@@ -4,14 +4,14 @@ import datetime
 import logging
 
 from PySide6.QtCore import QCoreApplication, QEvent, QSize, Qt, Slot
-from PySide6.QtGui import QCursor, QDragMoveEvent, QDropEvent, QFont
+from PySide6.QtGui import QCursor, QDragMoveEvent, QDropEvent, QFont, QColor
 from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea,
                                QApplication, QFrame, QLabel, QListWidget,
                                QListWidgetItem, QMainWindow, QPushButton,
                                QSizePolicy, QSpacerItem, QVBoxLayout, QWidget,
                                QMessageBox, QDialog, QDialogButtonBox,
                                QGraphicsDropShadowEffect, QTableWidget,
-                               QTableWidgetItem)
+                               QTableWidgetItem, QHeaderView)
 
 
 import sys 
@@ -93,9 +93,15 @@ class _CreateRamdisk(QMainWindow):
 
         #####
         # Set up the table to list ramdisks
-        self.ui.tableWidget.setColumnCount(4)
-        self.ui.tableWidget.setHorizontalHeaderLabels(["device", "mount point", "file system", "owner"])
+        # self.ui.tableWidget.setColumnCount(4)
+        # self.ui.tableWidget.setHorizontalHeaderLabels(["device", "mount point", "file system", "owner"])
+        self.ui.tableWidget.setColumnCount(2)
+        self.ui.tableWidget.setHorizontalHeaderLabels(["device", "mount point"])
         self.ui.tableWidget.setRowCount(0)
+
+        # stretch columns to fit tableWidget size
+        header = self.ui.tableWidget.horizontalHeader()
+        header.setSectionResizeMode(QHeaderView.Stretch)
 
         # enable row selection
         self.ui.tableWidget.setSelectionMode(QTableWidget.SingleSelection)
@@ -127,8 +133,15 @@ class _CreateRamdisk(QMainWindow):
         # populate the row with the mount data
         self.ui.tableWidget.setItem(row_position, 0, QTableWidgetItem(f"{device}"))
         self.ui.tableWidget.setItem(row_position, 1, QTableWidgetItem(f"{mntPnt}"))
-        self.ui.tableWidget.setItem(row_position, 2, QTableWidgetItem(f"{filesystem}"))
-        self.ui.tableWidget.setItem(row_position, 3, QTableWidgetItem(f"{username}"))
+        # self.ui.tableWidget.setItem(row_position, 2, QTableWidgetItem(f"{filesystem}"))
+        # self.ui.tableWidget.setItem(row_position, 3, QTableWidgetItem(f"{username}"))
+
+        # Set alternating row color
+        color = QColor("#f0f0f0") if row_position % 2 == 0 else QColor("#ffffff")  # Light gray for even, white for odd
+        for col in range(self.ui.tableWidget.columnCount()):
+            item = self.ui.tableWidget.item(row_position, col)
+            if item:
+                item.setBackground(color)
 
         self.row_counter = self.row_counter + 1
 
