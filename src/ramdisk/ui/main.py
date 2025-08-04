@@ -10,7 +10,8 @@ from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea,
                                QListWidgetItem, QMainWindow, QPushButton,
                                QSizePolicy, QSpacerItem, QVBoxLayout, QWidget,
                                QMessageBox, QDialog, QDialogButtonBox,
-                               QGraphicsDropShadowEffect)
+                               QGraphicsDropShadowEffect, QTableWidget,
+                               QTableWidgetItem)
 
 
 import sys 
@@ -91,6 +92,19 @@ class _CreateRamdisk(QMainWindow):
         # connect line edit to slider
 
         #####
+        # Set up the table to list ramdisks
+        self.ui.tableWidget.setColumnCount(4)
+        self.ui.tableWidget.setHorizontalHeaderLabels(["device", "mount point", "file system", "owner"])
+        self.ui.tableWidget.setRowCount(0)
+
+        # enable row selection
+        self.ui.tableWidget.setSelectionMode(QTableWidget.SingleSelection)
+        self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)
+
+        # row counter
+        self.row_counter = 0
+
+        #####
         # getMacosMemStatus.getAvailableMem
         self.getMemStatus = GetMemStatus()
         availableMem = self.getMemStatus.getAvailableMem()
@@ -101,6 +115,57 @@ class _CreateRamdisk(QMainWindow):
         self.ui.sizeLineEdit.textChanged.connect(self.update_slider)
 
         print("exiting init...")
+
+    def add_row(self, device="", mntPnt="", filesystem="", username=""):
+        """
+        Add a row to the ramdisk list (created by this app)
+        """
+        # Insert a new row at the end of the list
+        row_position = self.ui.tableWidget.rowCount()
+        self.ui.tableWidget.insertRow(row_position)
+
+        # populate the row with the mount data
+        self.ui.tableWidget.setItem(row_position, 0, QTableWidgetItem(f"{device}"))
+        self.ui.tableWidget.setItem(row_position, 1, QTableWidgetItem(f"{mntPnt}"))
+        self.ui.tableWidget.setItem(row_position, 2, QTableWidgetItem(f"{filesystem}"))
+        self.ui.tableWidget.setItem(row_position, 3, QTableWidgetItem(f"{username}"))
+
+        self.row_counter = self.row_counter + 1
+
+    def remove(self):
+        """
+        remove ramdisk from list when unmounted
+        """
+        # remove the selected row (if any)
+        selected_rows = self.table.selectionModel().selectedRows()
+
+        if not selected_rows:
+            print("no rows selected")
+            return []
+
+        removed_data = []
+
+        if selected_rows:
+            # extract data from each cell in the row
+            row_data = []
+            # Remove rows in reverse order to avoid index shifting
+            for index in sorted([row.row() for row in selected_rows], reverse=True):
+
+                for col in range(self.ui.tableWidget.columnCount()):
+                    item = self.ui.table.item(index, col)
+                    row_data.append(item.text() if item else "")
+
+                removed_data.append(row_data)
+
+                # remove the row
+                self.ui.tableWidget.removeRow(index)
+            else:
+                print("No row selected")
+
+        for data in removed_data:
+            print(f"Removed row data: {data}")
+
+        return removed_data
 
     def update_slider(self, text):
         try:
@@ -202,18 +267,24 @@ class _CreateRamdisk(QMainWindow):
                 ramdisk.getNlogData()
                 ramdisk.getNprintData()
             else:
+                success = False
+                mntPnt = ""
+                device = ""
                 if sys.platform.startswith('linux'):
                     #####
                     # create ramdisk with specific mountpoint
                     ramdisk = RamDisk(str(memSize), str(mountPoint), self.logger, passwd=self.passwd)
                     ramdisk.getNlogData()
-                    ramdisk.getNprintData()
+                    success, mntPnt, device = ramdisk.getNprintData()
                 else:
                     #####
                     # create ramdisk with specific mountpoint
                     ramdisk = RamDisk(str(memSize), str(mountPoint), self.logger)
                     ramdisk.getNlogData()
-                    ramdisk.getNprintData()
+                    success, mntPnt, device = ramdisk.getNprintData()
+
+                self.add_row(mntPnt, device)
+
 
 '''
 def init_event_logger(path: str, fmt: str, debug: bool = False,

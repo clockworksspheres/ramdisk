@@ -16,15 +16,16 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QLabel, QLineEdit, QMainWindow,
-    QMenu, QMenuBar, QPushButton, QSizePolicy,
-    QSlider, QStatusBar, QWidget)
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QHeaderView, QLabel,
+    QLineEdit, QMainWindow, QMenu, QMenuBar,
+    QPushButton, QSizePolicy, QSlider, QStatusBar,
+    QTableWidget, QTableWidgetItem, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(497, 347)
+        MainWindow.resize(497, 447)
         MainWindow.setAutoFillBackground(False)
         MainWindow.setStyleSheet(u"QWidget {\n"
 "	background-color: #ADADAD;\n"
@@ -82,6 +83,10 @@ class Ui_MainWindow(object):
 "	background-color: #e6e6e6;\n"
 "    font: 12px black;\n"
 "}")
+        self.tableWidget = QTableWidget(self.centralwidget)
+        self.tableWidget.setObjectName(u"tableWidget")
+        self.tableWidget.setGeometry(QRect(20, 230, 451, 141))
+        self.tableWidget.setEditTriggers(QAbstractItemView.EditTrigger.DoubleClicked)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")

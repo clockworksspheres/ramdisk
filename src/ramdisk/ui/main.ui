@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>497</width>
-    <height>347</height>
+    <height>447</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -158,6 +158,19 @@
 	background-color: #e6e6e6;
     font: 12px black;
 }</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>230</y>
+      <width>451</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::EditTrigger::DoubleClicked</set>
     </property>
    </widget>
   </widget>
