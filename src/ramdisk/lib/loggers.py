@@ -84,9 +84,6 @@ def singleton_decorator(cls):
 
 class SingletonCyLogger(type):
     """
-    This class was retrieved from: http://stackoverflow.com/questions/33364070/python-implementing-singleton-as-metaclass-but-for-abstract-classes
-    Modified class origionally authored by: Martijn Pieters(http://stackoverflow.com/users/100297/martijn-pieters)
-    with license: https://creativecommons.org/licenses/by-sa/3.0/
     """
     _instances = {}
     def __call__(cls, *args, **kwargs):
@@ -527,7 +524,6 @@ class LogPriority(object):
     Similar to LogPriority in the Stonix project LogDispatcher, only using
     numbers instead of strings.
 
-    @note: Author of the Stonix LogPriority is scmcleni
     """
     DEBUG = int(10)
     INFO = int(20)
