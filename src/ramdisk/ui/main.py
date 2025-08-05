@@ -207,7 +207,9 @@ class _CreateRamdisk(QMainWindow):
 
         # show message box with mounted data
         reply = QMessageBox.question(self, 'Message', f"{data[0]}",
-                                     QMessageBox.Ok, QMessageBox.Yes)
+                                     QMessageBox.Ok)
+        reply.setMinimumWidth(400)
+
         if reply == QMessageBox.Yes:
             event.accept()  # Let the window close
         else:
