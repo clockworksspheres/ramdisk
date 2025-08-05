@@ -33,7 +33,7 @@ from ramdisk.ui.getValues import getMaxMemSize
 from ramdisk.lib.dev.getMemStatus import GetMemStatus
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority
-from ramdisk.RamDisk import RamDisk
+from ramdisk.RamDisk import RamDisk, eject
 
 if sys.platform.startswith('linux'):
     from ramdisk.ui.local_auth_widget import _LocalAuth
@@ -75,14 +75,14 @@ class _CreateRamdisk(QMainWindow):
         self.ui.createPushButton.clicked.connect(self.createRamdisk)
         self.ui.debugPushButton.clicked.connect(self.notYetImplemented)
         self.ui.quitPushButton.clicked.connect(self.quit_application)
-        self.ui.ejectPushButton.clicked.connect(self.notYetImplemented)
+        self.ui.ejectPushButton.clicked.connect(self.remove)
     
         #####
         # Connect Button click signals to slots 
         self.ui.createPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.createRamdisk()) 
         self.ui.debugPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.notYetImplemented())
         self.ui.quitPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.quit_application())
-        self.ui.ejectPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.notYetImplemented())
+        self.ui.ejectPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.remove())
 
         #####
         # connect slider to line edit
@@ -150,7 +150,7 @@ class _CreateRamdisk(QMainWindow):
         remove ramdisk from list when unmounted
         """
         # remove the selected row (if any)
-        selected_rows = self.table.selectionModel().selectedRows()
+        selected_rows = self.ui.tableWidget.selectionModel().selectedRows()
 
         if not selected_rows:
             print("no rows selected")
@@ -165,9 +165,10 @@ class _CreateRamdisk(QMainWindow):
             for index in sorted([row.row() for row in selected_rows], reverse=True):
 
                 for col in range(self.ui.tableWidget.columnCount()):
-                    item = self.ui.table.item(index, col)
+                    item = self.ui.tableWidget.item(index, col)
                     row_data.append(item.text() if item else "")
-
+                    if col == 1:
+                        eject(item.text(), self.logger)
                 removed_data.append(row_data)
 
                 # remove the row
