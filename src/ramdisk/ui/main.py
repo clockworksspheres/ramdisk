@@ -75,14 +75,14 @@ class _CreateRamdisk(QMainWindow):
         self.ui.createPushButton.clicked.connect(self.createRamdisk)
         self.ui.debugPushButton.clicked.connect(self.notYetImplemented)
         self.ui.quitPushButton.clicked.connect(self.quit_application)
-        self.ui.rListPushButton.clicked.connect(self.notYetImplemented)
+        self.ui.ejectPushButton.clicked.connect(self.notYetImplemented)
     
         #####
         # Connect Button click signals to slots 
         self.ui.createPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.createRamdisk()) 
         self.ui.debugPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.notYetImplemented())
         self.ui.quitPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.quit_application())
-        self.ui.rListPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.notYetImplemented())
+        self.ui.ejectPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.notYetImplemented())
 
         #####
         # connect slider to line edit

@@ -35,7 +35,7 @@
      <string>Create Ramdisk</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="rListPushButton">
+   <widget class="QPushButton" name="ejectPushButton">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -45,7 +45,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Ramdisk List</string>
+     <string>Eject Ramdisk</string>
     </property>
    </widget>
    <widget class="QPushButton" name="debugPushButton">
