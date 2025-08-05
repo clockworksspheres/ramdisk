@@ -890,6 +890,46 @@ class RamDisk(RamDiskTemplate):
 
     ###########################################################################
 
+    def getMountData(self, device):
+        """
+        For macOS, show both mount and diskutil data
+        """
+
+        #####
+        # Set up and run the mount command
+        cmd = ["/sbin/mount"]
+
+        output == ""
+
+        self.runWith.setCommand(cmd)
+        output, _, _ = self.runWith.communicate()
+
+        mountInfo = ""
+
+        for line in output.split("\n"):
+            if re.search(f"{device}", line):
+                mountInfo = line
+
+        #####
+        # Set up and run the diskutil command
+        cmd = ["/usr/sbin/diskutil", "list", device]
+
+        output == ""
+
+        self.runWith.setCommand(cmd)
+        output, _, _ = self.runWith.communicate()
+
+        diskutilInfo = ""
+
+        if output:
+            diskutilInfo = output
+
+        message = f"mountLine:\n{mountLine}\n\ndiskutil info:\n{diskutilInfo}"
+
+        return message, mountInfo, diskutilInfo
+
+    ###########################################################################
+
     def getDevice(self):
         """
         Getter for the device name the ramdisk is using
@@ -971,5 +1011,47 @@ def detach(device=" ", logger=False):
     else:
         raise Exception("Cannot eject a device with an empty name..")
     return success
+
+###########################################################################
+
+def getMountData(device):
+    """
+    For macOS, show both mount and diskutil data
+    """
+    runWith = RunWith()
+
+
+    #####
+    # Set up and run the mount command
+    cmd = ["/sbin/mount"]
+
+    output = ""
+
+    runWith.setCommand(cmd)
+    output, _, _ = runWith.communicate()
+
+    mountInfo = ""
+
+    for line in output.split("\n"):
+        if re.search(f"{device}", line):
+            mountInfo = line
+
+    #####
+    # Set up and run the diskutil command
+    cmd = ["/usr/sbin/diskutil", "list", device]
+
+    output == ""
+
+    runWith.setCommand(cmd)
+    output, _, _ = runWith.communicate()
+
+    diskutilInfo = ""
+
+    if output:
+        diskutilInfo = output
+
+    message = f"mountLine:\n{mountInfo}\n\ndiskutil info:\n{diskutilInfo}"
+
+    return message, mountInfo, diskutilInfo
 
 

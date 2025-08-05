@@ -33,7 +33,7 @@ from ramdisk.ui.getValues import getMaxMemSize
 from ramdisk.lib.dev.getMemStatus import GetMemStatus
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority
-from ramdisk.RamDisk import RamDisk, eject
+from ramdisk.RamDisk import RamDisk, eject, getMountedData
 
 if sys.platform.startswith('linux'):
     from ramdisk.ui.local_auth_widget import _LocalAuth
@@ -76,6 +76,7 @@ class _CreateRamdisk(QMainWindow):
         self.ui.debugPushButton.clicked.connect(self.notYetImplemented)
         self.ui.quitPushButton.clicked.connect(self.quit_application)
         self.ui.ejectPushButton.clicked.connect(self.remove)
+        self.ui.tableWidget.itemDoubleClicked.connect(self.show_mount_data)
     
         #####
         # Connect Button click signals to slots 
@@ -83,6 +84,7 @@ class _CreateRamdisk(QMainWindow):
         self.ui.debugPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.notYetImplemented())
         self.ui.quitPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.quit_application())
         self.ui.ejectPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.remove())
+        # self.ui.tableWidget.keyPressedEvent = lambda event: keyPressEvent(event, parent, self.????())
 
         #####
         # connect slider to line edit
@@ -181,6 +183,36 @@ class _CreateRamdisk(QMainWindow):
 
         return removed_data
 
+    def show_mount_data(self):
+        """
+        """
+        message = ""
+        device = ""
+        selected_rows = self.ui.tableWidget.selectionModel().selectedRows()
+
+        if not selected_rows:
+            print("no rows selected")
+            return []
+
+        if selected_rows:
+            # Remove rows in reverse order to avoid index shifting
+            for index in sorted([row.row() for row in selected_rows], reverse=True):
+
+                for col in range(self.ui.tableWidget.columnCount()):
+                    item = self.ui.tableWidget.item(index, col)
+                    if col == 1:
+                        device = item.text()
+                        print(str(f"device: {device}"))
+        data = getMountedData(device)
+
+        # show message box with mounted data
+        reply = QMessageBox.question(self, 'Message', f"{data[0]}",
+                                     QMessageBox.Ok, QMessageBox.Yes)
+        if reply == QMessageBox.Yes:
+            event.accept()  # Let the window close
+        else:
+            event.ignore()  # Prevent the window from closing
+
     def update_slider(self, text):
         try:
             availableMem = self.getMemStatus.getAvailableMem()
@@ -201,7 +233,7 @@ class _CreateRamdisk(QMainWindow):
     def closeEvent(self, event):
         print("Entered the twilight zone....")
         # Perform any necessary cleanup or confirmation actions here
-        reply = QMessageBox.question(self, 'Message', 'Are you sure you want to quit?', 
+        reply = QMessageBox.question(self, 'Message', 'Are you sure you want to quit?\n\nYour ramdisk list will not be re-populated with current ramdisks.',
                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
         if reply == QMessageBox.Yes:
             event.accept()  # Let the window close

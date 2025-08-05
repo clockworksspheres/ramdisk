@@ -23,11 +23,11 @@ from ramdisk.commonRamdiskTemplate import RamDiskTemplate, BadRamdiskArguments, 
 ###############################################################################
 
 if sys.platform.startswith("linux"):
-    from ramdisk.linuxTmpfsRamdisk import RamDisk, unmount
+    from ramdisk.linuxTmpfsRamdisk import RamDisk, unmount, getMountData
 elif sys.platform.startswith("darwin"):
-    from ramdisk.macRamdisk import RamDisk, unmount
+    from ramdisk.macRamdisk import RamDisk, unmount, getMountData
 elif sys.platform.startswith("win32"):
-    from ramdisk.winImDiskRamdisk import RamDisk, unmount
+    from ramdisk.winImDiskRamdisk import RamDisk, unmount, getMountData
 else:
     raise NotValidForThisOS("Ramdisk not available here...")
 
@@ -126,6 +126,14 @@ class RamDisk(RamDiskTemplate):
 
     ###########################################################################
 
+    def getMountData(self, device):
+        """
+        Method to return mounted disk information
+        """
+        return self.ramdisk.getMountData()
+
+    ###########################################################################
+
     def getDevice(self):
         """
         Getter for the device name the ramdisk is using
@@ -164,6 +172,9 @@ class RamDisk(RamDiskTemplate):
 def eject(device, logger=False):
     unmount(device, logger)
 
+def getMountedData(device):
+    data = getMountData(device)
+    return data
 
 '''
 if __name__=="__main__":
