@@ -53,6 +53,20 @@ class CustomDialog(QDialog):
         self.setLayout(layout)
 
 
+class CustomMessageDialog(QDialog):
+    def __init__(self, message):
+        super().__init__()
+        self.setWindowTitle("Oops")
+
+        self.button = QPushButton("Ok")
+        self.button.clicked.connect(self.accept)
+        layout = QVBoxLayout()
+        messageText = QLabel(f"{message}")
+        layout.addWidget(messageText)
+        layout.addWidget(self.button)
+        self.setLayout(layout)
+
+
 class _CreateRamdisk(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -206,14 +220,23 @@ class _CreateRamdisk(QMainWindow):
         data = getMountedData(device)
 
         # show message box with mounted data
+        dlg = CustomMessageDialog(data[0])
+        dlg.show()
+        dlg.raise_()
+        if dlg.exec():
+            print("User clicked OK")
+
+        """
         reply = QMessageBox.question(self, 'Message', f"{data[0]}",
                                      QMessageBox.Ok)
         reply.setMinimumWidth(400)
+
 
         if reply == QMessageBox.Yes:
             event.accept()  # Let the window close
         else:
             event.ignore()  # Prevent the window from closing
+        """
 
     def update_slider(self, text):
         try:
@@ -234,7 +257,7 @@ class _CreateRamdisk(QMainWindow):
 
     def closeEvent(self, event):
         print("Entered the twilight zone....")
-        # Perform any necessary cleanup or confirmation actions here
+        # Perform any necessary cleanup or confirmation actions hered
         reply = QMessageBox.question(self, 'Message', 'Are you sure you want to quit?\n\nYour ramdisk list will not be re-populated with current ramdisks.',
                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
         if reply == QMessageBox.Yes:
