@@ -10,8 +10,7 @@ class _Singleton(type):
             cls._instances[cls] = super(_Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
 
+
 class Singleton(_Singleton('SingletonMeta', (object,), {})): pass
 
-#####
-# class Logger(Singleton):
-#    pass
+

@@ -34,6 +34,7 @@ from ramdisk.lib.dev.getMemStatus import GetMemStatus
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority
 from ramdisk.RamDisk import RamDisk, eject, getMountedData
+from ramdisk.config import DEFAULT_RAMDISK_SIZE
 
 if sys.platform.startswith('linux'):
     from ramdisk.ui.local_auth_widget import _LocalAuth
@@ -107,6 +108,9 @@ class _CreateRamdisk(QMainWindow):
         #####
         # connect line edit to slider
 
+        # Set the default slider value
+        self.ui.sizeHorizontalSlider.setValue(DEFAULT_RAMDISK_SIZE)
+
         #####
         # Set up the table to list ramdisks
         # self.ui.tableWidget.setColumnCount(4)
@@ -131,6 +135,8 @@ class _CreateRamdisk(QMainWindow):
         self.getMemStatus = GetMemStatus()
         availableMem = self.getMemStatus.getAvailableMem()
         self.ui.sizeHorizontalSlider.setRange(0, availableMem)
+        # Set the default slider value
+        self.ui.sizeHorizontalSlider.setValue(DEFAULT_RAMDISK_SIZE)
 
         # CEnsure the inputs within the slider's range
         self.ui.sizeLineEdit.setValidator(QIntValidator(0, availableMem))

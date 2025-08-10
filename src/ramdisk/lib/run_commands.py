@@ -294,11 +294,11 @@ class RunWith(object):
             finally:
                 try:
                     proc.stdout.close()
-                except:
+                except SubprocessError:
                     pass
                 try:
                     proc.stderr.close()
-                except:
+                except SubprocessError:
                     pass
                 #####
                 # Lines below could reveal a password if it is passed as an
@@ -393,7 +393,6 @@ class RunWith(object):
         Use the subprocess module to execute a command, returning
         the output of the command
 
-        
         """
         self.stdout = ''
         self.stderr = ''
@@ -814,7 +813,7 @@ class RunWith(object):
         self.command = None
         return self.stdout, self.stderr, self.retcode
 
-        ###########################################################################
+    ###########################################################################
 
     def runWithSudo(self, password="", silent=True, timeout_sec=15):
         '''

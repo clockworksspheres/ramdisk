@@ -405,7 +405,6 @@ class RunWith(object):
         Use the subprocess module to execute a command, returning
         the output of the command
 
-        
         """
         self.stdout = ''
         self.stderr = ''

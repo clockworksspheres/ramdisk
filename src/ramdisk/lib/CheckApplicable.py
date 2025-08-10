@@ -143,6 +143,7 @@ class CheckApplicable(object):
         This method may be overridden if required.
 
         @return bool :
+        
         """
         applies = False
 

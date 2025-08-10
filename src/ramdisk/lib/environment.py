@@ -16,6 +16,7 @@ import subprocess
 import platform
 import time
 import traceback
+import pathlib
 
 sys.path.append("../..")
 
@@ -67,7 +68,6 @@ class Environment(object):
     """
     The Environment class collects commonly used information about the
     execution platform and makes it available to the rules.
-    :version: 1.0
     """
 
     def __init__(self):
@@ -87,6 +87,7 @@ class Environment(object):
         self.version = VERSION
         if sys.platform.startswith("win32"):
             self.euid = win32api.GetUserName()
+            currpwd = os.environ['USERPROFILE']
         else:
              self.euid = os.geteuid()
              currpwd = pwd.getpwuid(self.euid)
@@ -97,10 +98,14 @@ class Environment(object):
         self.log_path = ""
         self.icon_path = ""
         self.conf_path = ""
-        try:
-            self.homedir = currpwd[5]
-        except IndexError:
-            self.homedir = '/dev/null'
+        if sys.platform.startswith("win32"):
+            self.homedir = os.environ['USERPROFILE']
+        else:
+            try:
+                self.homedir = currpwd[5]
+                # self.homedir = os.environ['USERPROFILE']
+            except IndexError:
+                self.homedir = '/dev/null'
         self.installmode = False
         self.verbosemode = False
         self.debugmode = False
@@ -428,7 +433,7 @@ class Environment(object):
                     index = index + 1
             self.osversion = osver
 
-        # Breen Malmberg added support for os-release file
+        # added support for os-release file
         # method of getting version information
         elif os.path.isfile('/etc/os-release'):
             with open('/etc/os-release', 'r') as relfile:
@@ -464,7 +469,7 @@ class Environment(object):
             opsys = str(description) + ' ' + str(release) + ' ' + str(build)
             self.osreportstring = opsys
 
-        elif re.match(r'win32$', sys.plaform()):
+        elif re.match(r'win32$', sys.platform):
             try:
                 platform_data = platform.system()
                 description = platform_data[0]
@@ -617,8 +622,6 @@ class Environment(object):
 
         @return: string - ipaddress
         
-        @change: 2017/9/20 - bgonz12 - Changed implementation to not branch
-                    conditionally by OS, but to branch by file system searches.
         """
         if sys.platform.startswith('darwin'):
             ipaddr = ''
@@ -713,8 +716,6 @@ class Environment(object):
 
         @return: list of strings
         
-        @change: 2017/9/22 - bgonz12 - Changed implementation to use the ip
-                    command before trying to use the ifconfig command.
         """
         iplist = []
         cmd = ''
