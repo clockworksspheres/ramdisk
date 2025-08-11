@@ -2,7 +2,9 @@
 
 import datetime
 import logging
+import traceback
 
+'''
 from PySide6.QtCore import QCoreApplication, QEvent, QSize, Qt, Slot
 from PySide6.QtGui import QCursor, QDragMoveEvent, QDropEvent, QFont, QColor
 from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea,
@@ -12,9 +14,15 @@ from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea,
                                QMessageBox, QDialog, QDialogButtonBox,
                                QGraphicsDropShadowEffect, QTableWidget,
                                QTableWidgetItem, QHeaderView)
-
+'''
 
 import sys 
+
+from PySide6.QtCore import Slot
+from PySide6.QtGui import QColor
+from PySide6.QtWidgets import (QApplication, QLabel, QMainWindow, QPushButton,
+                               QVBoxLayout, QMessageBox, QDialog, QTableWidget,
+                               QTableWidgetItem, QHeaderView)
 
 sys.path.append("../..")
 
@@ -95,12 +103,13 @@ class _CreateRamdisk(QMainWindow):
     
         #####
         # Connect Button click signals to slots 
+        '''
         self.ui.createPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.createRamdisk()) 
         self.ui.debugPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.notYetImplemented())
         self.ui.quitPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.quit_application())
         self.ui.ejectPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.remove())
         # self.ui.tableWidget.keyPressedEvent = lambda event: keyPressEvent(event, parent, self.????())
-
+        '''
         #####
         # connect slider to line edit
         self.ui.sizeHorizontalSlider.valueChanged.connect(self.update_line_edit)
@@ -324,7 +333,7 @@ class _CreateRamdisk(QMainWindow):
         try:
             mountPoint = self.ui.mountLineEdit.text()
         except Exception as err:
-            traceback.format_exc()
+            print(traceback.format_exc())
             print(str(err))
 
         if not memSize:
