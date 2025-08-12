@@ -23,11 +23,11 @@ from ramdisk.commonRamdiskTemplate import RamDiskTemplate, BadRamdiskArguments, 
 ###############################################################################
 
 if sys.platform.startswith("linux"):
-    from ramdisk.linuxTmpfsRamdisk import RamDisk, unmount, getMountData
+    from ramdisk.linuxTmpfsRamdisk import RamDisk, unmount, getMountedDisks
 elif sys.platform.startswith("darwin"):
-    from ramdisk.macRamdisk import RamDisk, unmount, getMountData
+    from ramdisk.macRamdisk import RamDisk, unmount, getMountedDisks
 elif sys.platform.startswith("win32"):
-    from ramdisk.winImDiskRamdisk import RamDisk, unmount, getMountData
+    from ramdisk.winImDiskRamdisk import RamDisk, unmount, getMountedDisks
 else:
     raise NotValidForThisOS("Ramdisk not available here...")
 
@@ -101,6 +101,21 @@ class RamDisk(RamDiskTemplate):
     
     ###########################################################################
 
+    def getMountedDisks(self):
+        """
+        should return the a dictionary with {device: diskName, ...} that contains
+        every mounted disk
+        """
+
+        mountedDisks = {}
+        try:
+            mountedDisks = self.ramdisk.getMountedDisks()
+        except:
+            pass
+        return mountedDisks
+
+    ###########################################################################
+
     def unionOver(self, *args, **kwargs):
         """
         """
@@ -172,8 +187,10 @@ class RamDisk(RamDiskTemplate):
 def eject(device, logger=False):
     unmount(device, logger)
 
-def getMountedData(device):
-    data = getMountData(device)
+def getMountedData(device=""):
+    print("Entered getMountedData...")
+    data = getMountedDisks(device)
+    print("Exiting getMountedData...")
     return data
 
 '''

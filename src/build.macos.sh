@@ -15,6 +15,7 @@ if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
 
    pip3 install PySide6 PyInstaller
    pip3 install --upgrade PyInstaller pyinstaller-hooks-contrib
+   pip install psutil
 else
    source packenv/bin/activate
 fi

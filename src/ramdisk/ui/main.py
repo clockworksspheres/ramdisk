@@ -93,6 +93,8 @@ class _CreateRamdisk(QMainWindow):
         self.logger = CyLogger()
         self.logger.initializeLogs()
 
+        self.getMemStatus = GetMemStatus()
+
         #####
         # Connect Button click signals to slots 
         self.ui.createPushButton.clicked.connect(self.createRamdisk)
@@ -150,6 +152,10 @@ class _CreateRamdisk(QMainWindow):
         # CEnsure the inputs within the slider's range
         self.ui.sizeLineEdit.setValidator(QIntValidator(0, availableMem))
         self.ui.sizeLineEdit.textChanged.connect(self.update_slider)
+
+        #####
+        # Populate the table with already created ramdisks
+        self.populateMountedInTable()
 
         print("exiting init...")
 
@@ -300,6 +306,25 @@ class _CreateRamdisk(QMainWindow):
         self.user = user
         self.passwd = passwd
         #  print(passwd)
+
+    def populateMountedInTable(self):
+        """
+        """
+        print("Entering populateMountedInTable...")
+        mountedDisks = {}
+        try:
+            mountedDisks = getMountedData()
+            print(f"{mountedDisks}")
+        except Exception as err:
+            print(traceback.format_exc())
+            print("str(err)")
+
+        #####
+        # populate table
+        for dev, name in mountedDisks.items():
+            self.add_row(dev, name)
+        
+        print(f"attempted to populate previous ramdisks in table: {mountedDisks}")
 
     def createRamdisk(self):
         """

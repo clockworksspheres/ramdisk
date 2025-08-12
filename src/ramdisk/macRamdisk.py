@@ -413,6 +413,60 @@ class RamDisk(RamDiskTemplate):
 
     ###########################################################################
 
+    def getMountedData(self):
+        """
+        should return the a dictionary with {device: diskName, ...} that contains
+        every mounted disk
+        """
+        print("Entering getMountedData")
+
+        mountedDisks = {}
+
+        devList = []
+        diskDict = {}
+        mountedDisks = {}
+        retval = ""
+        disk = ""
+
+        #####
+        # Diskutil list, then parse for RAMDISK in output, get the device
+        cmd = ["diskutil", "list"]
+        self.runWith.setCommand(cmd)
+        self.runWith.communicate()
+        retval, reterr, retcode = self.runWith.getNlogReturns()
+
+        for line in retval.split("\n"):
+            if re.search("RAMDISK", line):
+                disk = line.split()[-1]
+                devList.append(disk)
+                print(f"{disk}")
+
+        #####
+        # mount, to use device to get mount name
+        cmd = ["mount"]
+        self.runWith.setCommand(cmd)
+        self.runWith.communicate()
+        retval, reterr, retcode = self.runWith.getNlogReturns()
+
+        for line in retval.split("\n"):
+            dev = line.split()[0] in devList
+            if dev:
+                for mountDev in devList:
+                    if re.match(f"{dev}", mountDev):
+                        diskDict[dev] = line.split()[2]
+                        print(f"{line.split()[2]}")
+                        continue
+            dev = ""
+
+        try:
+            mountedDisks = diskDict
+        except:
+            pass
+        print("MountedDisks: " + str(mountedDisks))
+        return mountedDisks
+
+    ###########################################################################
+
     def __mount(self) :
         """
         Mount the disk - for the Mac, just run self.__attach
@@ -1054,4 +1108,62 @@ def getMountData(device):
 
     return message, mountInfo, diskutilInfo
 
+
+def getMountedDisks(self):
+    """
+    should return the a dictionary with {device: diskName, ...} that contains
+    every mounted disk
+    """
+    print("Entering getMountedData")
+
+    runWith = RunWith()
+
+    mountedDisks = {}
+
+    devList = []
+    diskDict = {}
+    retval = ""
+    disk = ""
+
+    #####
+    # Diskutil list, then parse for RAMDISK in output, get the device
+    cmd = ["diskutil", "list"]
+    runWith.setCommand(cmd)
+    runWith.communicate()
+    retval, reterr, retcode = runWith.getNlogReturns()
+
+    for line in retval.split("\n"):
+        if re.search("RAMDISK", line):
+            try:
+                disk = line.split()[-1]
+                devList.append(disk)
+                print(f"{disk}")
+            except IndexError:
+                continue
+
+    print(str(devList))
+
+    #####
+    # mount, to use device to get mount name
+    cmd = ["mount"]
+    runWith.setCommand(cmd)
+    runWith.communicate()
+    retval, reterr, retcode = runWith.getNlogReturns()
+
+    print(f"retval: {str(retval)}")
+
+    for line in retval.split("\n"):
+        if line:
+            # print("Parsing mount command output...")
+            dev = ""
+            fullDevName = line.split()[0].strip()
+            dev = fullDevName.split("/")[-1].strip()    
+            name = line.split()[2].strip()
+            # print(f"    {dev}: {devList} ")
+            if dev in devList:
+                diskDict[dev] = name
+                print(f"{dev} in {name}")
+
+    print(f"MountedDisks: {diskDict}")
+    return diskDict
 
