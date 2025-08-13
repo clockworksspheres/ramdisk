@@ -207,11 +207,11 @@ class RamDisk(RamDiskTemplate):
             self.logger.log(lp.INFO, "Mount point: " + str(self.mntPoint))
             self.logger.log(lp.INFO, "Device: " + str(self.myRamdiskDev))
         self.logger.log(lp.INFO, "Success: " + str(self.success))
-            
+
 
     ###########################################################################
 
-    def __create(self) :
+    def __create(self):
         """
         Create a ramdisk device
 
@@ -1109,12 +1109,12 @@ def getMountData(device):
     return message, mountInfo, diskutilInfo
 
 
-def getMountedDisks(self):
+def getMountDisks():
     """
     should return the a dictionary with {device: diskName, ...} that contains
     every mounted disk
     """
-    print("Entering getMountedData")
+    print("Entering getMountedDisks")
 
     runWith = RunWith()
 

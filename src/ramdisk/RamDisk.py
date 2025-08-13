@@ -23,11 +23,11 @@ from ramdisk.commonRamdiskTemplate import RamDiskTemplate, BadRamdiskArguments, 
 ###############################################################################
 
 if sys.platform.startswith("linux"):
-    from ramdisk.linuxTmpfsRamdisk import RamDisk, unmount, getMountedDisks
+    from ramdisk.linuxTmpfsRamdisk import RamDisk, unmount, getMountDisks, getMountData
 elif sys.platform.startswith("darwin"):
-    from ramdisk.macRamdisk import RamDisk, unmount, getMountedDisks
+    from ramdisk.macRamdisk import RamDisk, unmount, getMountDisks, getMountData
 elif sys.platform.startswith("win32"):
-    from ramdisk.winImDiskRamdisk import RamDisk, unmount, getMountedDisks
+    from ramdisk.winImDiskRamdisk import RamDisk, unmount, getMountDisks, getMountData
 else:
     raise NotValidForThisOS("Ramdisk not available here...")
 
@@ -109,7 +109,7 @@ class RamDisk(RamDiskTemplate):
 
         mountedDisks = {}
         try:
-            mountedDisks = self.ramdisk.getMountedDisks()
+            mountedDisks = self.ramdisk.getMountDisks()
         except:
             pass
         return mountedDisks
@@ -141,7 +141,7 @@ class RamDisk(RamDiskTemplate):
 
     ###########################################################################
 
-    def getMountData(self, device):
+    def getMountedData(self, device):
         """
         Method to return mounted disk information
         """
@@ -187,9 +187,15 @@ class RamDisk(RamDiskTemplate):
 def eject(device, logger=False):
     unmount(device, logger)
 
+def getMountedDisks(device=""):
+    print("Entered getMountedDisks...")
+    data = getMountDisks()
+    print("Exiting getMountedDisks...")
+    return data
+
 def getMountedData(device=""):
     print("Entered getMountedData...")
-    data = getMountedDisks(device)
+    data = getMountData(device)
     print("Exiting getMountedData...")
     return data
 

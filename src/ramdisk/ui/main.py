@@ -41,7 +41,7 @@ from ramdisk.ui.getValues import getMaxMemSize
 from ramdisk.lib.dev.getMemStatus import GetMemStatus
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority
-from ramdisk.RamDisk import RamDisk, eject, getMountedData
+from ramdisk.RamDisk import RamDisk, eject, getMountedData, getMountedDisks
 from ramdisk.config import DEFAULT_RAMDISK_SIZE
 
 if sys.platform.startswith('linux'):
@@ -313,7 +313,7 @@ class _CreateRamdisk(QMainWindow):
         print("Entering populateMountedInTable...")
         mountedDisks = {}
         try:
-            mountedDisks = getMountedData()
+            mountedDisks = getMountedDisks()
             print(f"{mountedDisks}")
         except Exception as err:
             print(traceback.format_exc())
@@ -394,7 +394,7 @@ class _CreateRamdisk(QMainWindow):
                     ramdisk.getNlogData()
                     success, mntPnt, device = ramdisk.getNprintData()
 
-                self.add_row(mntPnt, device)
+                self.add_row(device, mntPnt)
 
 
 '''
