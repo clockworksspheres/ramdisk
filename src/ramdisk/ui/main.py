@@ -321,8 +321,8 @@ class _CreateRamdisk(QMainWindow):
 
         #####
         # populate table
-        for dev, name in mountedDisks.items():
-            self.add_row(dev, name)
+        for name, dev in mountedDisks.items():
+            self.add_row(name, dev)
         
         print(f"attempted to populate previous ramdisks in table: {mountedDisks}")
 

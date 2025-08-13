@@ -1157,12 +1157,14 @@ def getMountedDisks(self):
             # print("Parsing mount command output...")
             dev = ""
             fullDevName = line.split()[0].strip()
-            dev = fullDevName.split("/")[-1].strip()    
+            dev = fullDevName.split("/")[-1].strip()
             name = line.split()[2].strip()
+            if re.search("^/private", name):
+                name = name.removeprefix("/private")
             # print(f"    {dev}: {devList} ")
             if dev in devList:
-                diskDict[dev] = name
-                print(f"{dev} in {name}")
+                diskDict[f"/dev/{dev}"]= name
+                print(f"{name} in {dev}")
 
     print(f"MountedDisks: {diskDict}")
     return diskDict
