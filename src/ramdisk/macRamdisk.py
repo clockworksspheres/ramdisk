@@ -1163,7 +1163,7 @@ def getMountDisks():
                 name = name.removeprefix("/private")
             # print(f"    {dev}: {devList} ")
             if dev in devList:
-                diskDict[f"/dev/{dev}"]= name
+                diskDict[name]= f"/dev/{dev}"
                 print(f"{name} in {dev}")
 
     print(f"MountedDisks: {diskDict}")

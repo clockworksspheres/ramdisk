@@ -237,7 +237,7 @@ class _CreateRamdisk(QMainWindow):
                     item = self.ui.tableWidget.item(index, col)
                     if col == 1:
                         device = item.text()
-                        print(str(f"device: {device}"))
+                        print(str(f"{device}"))
         data = getMountedData(device)
 
         # show message box with mounted data
@@ -322,7 +322,7 @@ class _CreateRamdisk(QMainWindow):
         #####
         # populate table
         for name, dev in mountedDisks.items():
-            self.add_row(name, dev)
+            self.add_row(dev, name)
         
         print(f"attempted to populate previous ramdisks in table: {mountedDisks}")
 
