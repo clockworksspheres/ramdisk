@@ -37,14 +37,15 @@ class RamDisk(RamDiskTemplate):
         self.module_version = '2024.10051117'
         #####
         # provided by RamdiskTemplate from commonRamdiskTemplate...
-        # if not isinstance(logger, CyLogger):
-        #     self.logger = CyLogger()
-        #     self.logger.initializeLogs()
-        # else:
-        #     self.logger = logger
+        if not isinstance(logger, CyLogger):
+            self.logger = CyLogger()
+            self.logger.initializeLogs()
+        else:
+            self.logger = logger
         self.runCmd = RunWith(self.logger)
+        self.fsHelper = FsHelper()
         self.logger.log(lp.INFO, "Logger: " + str(self.logger))
-        self.diskSize = fsHelper.getDiskSize(size)
+        self.diskSize = self.fsHelper.getDiskSize(size)
         self.success = False
         self.myRamdiskDev = self.imDiskNumber = None
 
@@ -485,7 +486,7 @@ def getMountData(device):
     """
     print("Entering getMountData")
     print("Exiting getMountData")
-    pass
+    return {}
 '''
     runWith = RunWith()
 
@@ -509,7 +510,7 @@ def getMountDisks():
     """
     print("Entering getMountedDisks")
     print("Exiting getMountedDisks")
-    pass
+    return {}
 """
     runWith = RunWith()
 
