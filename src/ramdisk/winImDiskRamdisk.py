@@ -478,3 +478,52 @@ def umount(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
 
     return success
 
+
+def getMountData(device):
+    """
+    For macOS, show both mount and diskutil data
+    """
+    print("Entering getMountData")
+    print("Exiting getMountData")
+    pass
+'''
+    runWith = RunWith()
+
+
+    #####
+    # Set up and run the mount command
+    cmd = ["/sbin/mount"]
+
+    output = ""
+
+    runWith.setCommand(cmd)
+    output, _, _ = runWith.communicate()
+
+    mountInfo = ""
+'''
+
+def getMountDisks():
+    """
+    should return the a dictionary with {device: diskName, ...} that contains
+    every mounted disk
+    """
+    print("Entering getMountedDisks")
+    print("Exiting getMountedDisks")
+    pass
+"""
+    runWith = RunWith()
+
+    mountedDisks = {}
+
+    devList = []
+    diskDict = {}
+    retval = ""
+    disk = ""
+
+    #####
+    # Diskutil list, then parse for RAMDISK in output, get the device
+    cmd = ["diskutil", "list"]
+    runWith.setCommand(cmd)
+    runWith.communicate()
+    retval, reterr, retcode = runWith.getNlogReturns()
+"""
