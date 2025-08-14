@@ -5,7 +5,7 @@ Python 3.9+
 
 # ramdisk
 
-Interface to use, eventually for cross-platform setup and maintenance of ramdisk, primarily for build pipelines and unittesting, for DevOps purposes.
+Interface to use, eventually for cross-platform setup and maintenance of ramdisk, primarily for build pipelines and unittesting, for DevOps purposes.  This interface is the same across platforms, so you don't need to know how ramdisks work on every platform.  One interface, multiple OS platforms.
 
 * faster builds
 * get around corrupt build cache problems (cache poisoning)
