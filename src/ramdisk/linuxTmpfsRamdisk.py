@@ -556,7 +556,7 @@ def getMountDisks():
             #print(str(name))
             if not "tmpfs" == line.split()[0].strip():
                 continue
-            if re.match("/run/user/\d+", name):
+            if re.match("/run/user/\d+$", name):
                 continue
             if not name in systemDisks:
                 print(name)
@@ -564,13 +564,6 @@ def getMountDisks():
                 continue
 
 
-            '''
-            for disk in systemDisks:
-                if re.match(f"{name}", line.split()[2].strip()):
-                    print(name)
-                    diskDict[name] = "tmpfs"
-                    continue
-            '''
     print(f"MountedDisks: {diskDict}")
     return diskDict
 
