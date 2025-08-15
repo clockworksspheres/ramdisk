@@ -10,8 +10,9 @@
 #if doesn't exist...
 # cd to the eisenban source root
 
-$FolderPath = ".\packenv"
-if (!(Test-Path -Path $FolderPath -PathType Container)) {
+#$FolderPath = ".\packenv"
+#if (!(Test-Path -Path $FolderPath -PathType Container)) {
+if (!(Test-Path -Path ".\packenv" -PathType Container)) {
    
    python3 -m venv packenv
    .\packenv\Scripts\Activate.ps1
