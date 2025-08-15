@@ -1,0 +1,9 @@
+# highly modified version of:
+# https://www.pythonguis.com/tutorials/packaging-pyside6-applications-windows-pyinstaller-installforge/
+# amoung others... including
+# https://pyinstaller.org/en/stable/
+
+# before running windows ps1 script, run from the command line:
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+powershell -File ".\build.windows.ps1"
+

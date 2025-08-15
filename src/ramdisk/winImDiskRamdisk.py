@@ -37,14 +37,15 @@ class RamDisk(RamDiskTemplate):
         self.module_version = '2024.10051117'
         #####
         # provided by RamdiskTemplate from commonRamdiskTemplate...
-        # if not isinstance(logger, CyLogger):
-        #     self.logger = CyLogger()
-        #     self.logger.initializeLogs()
-        # else:
-        #     self.logger = logger
+        if not isinstance(logger, CyLogger):
+            self.logger = CyLogger()
+            self.logger.initializeLogs()
+        else:
+            self.logger = logger
         self.runCmd = RunWith(self.logger)
+        self.fsHelper = FsHelper()
         self.logger.log(lp.INFO, "Logger: " + str(self.logger))
-        self.diskSize = fsHelper.getDiskSize(size)
+        self.diskSize = self.fsHelper.getDiskSize(size)
         self.success = False
         self.myRamdiskDev = self.imDiskNumber = None
 
@@ -478,3 +479,52 @@ def umount(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
 
     return success
 
+
+def getMountData(device):
+    """
+    For macOS, show both mount and diskutil data
+    """
+    print("Entering getMountData")
+    print("Exiting getMountData")
+    return {}
+'''
+    runWith = RunWith()
+
+
+    #####
+    # Set up and run the mount command
+    cmd = ["/sbin/mount"]
+
+    output = ""
+
+    runWith.setCommand(cmd)
+    output, _, _ = runWith.communicate()
+
+    mountInfo = ""
+'''
+
+def getMountDisks():
+    """
+    should return the a dictionary with {device: diskName, ...} that contains
+    every mounted disk
+    """
+    print("Entering getMountedDisks")
+    print("Exiting getMountedDisks")
+    return {}
+"""
+    runWith = RunWith()
+
+    mountedDisks = {}
+
+    devList = []
+    diskDict = {}
+    retval = ""
+    disk = ""
+
+    #####
+    # Diskutil list, then parse for RAMDISK in output, get the device
+    cmd = ["diskutil", "list"]
+    runWith.setCommand(cmd)
+    runWith.communicate()
+    retval, reterr, retcode = runWith.getNlogReturns()
+"""
