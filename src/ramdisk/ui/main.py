@@ -96,6 +96,18 @@ class _CreateRamdisk(QMainWindow):
         self.getMemStatus = GetMemStatus()
 
         #####
+        # Set default button
+        self.ui.createPushButton.setDefault(True)
+        self.ui.ejectPushButton.setAutoDefault(True)
+        self.ui.debugPushButton.setAutoDefault(False)
+        self.ui.quitPushButton.setAutoDefault(True)
+
+        #####
+        # on enter in the line edit box, create the ramdisk
+        self.ui.mountLineEdit.returnPressed.connect(self.createRamdisk)
+
+
+        #####
         # Connect Button click signals to slots 
         self.ui.createPushButton.clicked.connect(self.createRamdisk)
         self.ui.debugPushButton.clicked.connect(self.notYetImplemented)
@@ -105,13 +117,13 @@ class _CreateRamdisk(QMainWindow):
     
         #####
         # Connect Button click signals to slots 
-        '''
+        
         self.ui.createPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.createRamdisk()) 
         self.ui.debugPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.notYetImplemented())
         self.ui.quitPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.quit_application())
         self.ui.ejectPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.remove())
         # self.ui.tableWidget.keyPressedEvent = lambda event: keyPressEvent(event, parent, self.????())
-        '''
+        
         #####
         # connect slider to line edit
         self.ui.sizeHorizontalSlider.valueChanged.connect(self.update_line_edit)
