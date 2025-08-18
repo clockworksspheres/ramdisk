@@ -89,7 +89,7 @@ The menu code is cross platform, in an alpha state.
 
 ## Windows
 
-Will call a currently available ramdisk executable, like [StarWind's Ramdisk](https://www.starwindsoftware.com/high-performance-ram-disk-emulator), to create a ramdisk.  ImDiskk is EOL, so the project will no longer be working with it.
+Will call a currently available ramdisk executable, like [StarWind's Ramdisk](https://www.starwindsoftware.com/high-performance-ram-disk-emulator), to create a ramdisk.  ImDisk is EOL, so the project will no longer be working with it.
 
 Prototype in flux, may or may not work.
 
