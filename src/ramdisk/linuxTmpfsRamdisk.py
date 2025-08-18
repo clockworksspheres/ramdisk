@@ -547,8 +547,7 @@ def getMountDisks():
     print(f"retval: {str(retval)}")
 
     systemDisks = ["/dev/shm", "/run", "/run/credentials/systemd-journald.service",
-                   "/run/credentials/systemd-resolved.service", "/run/lock"
-                   "run/snapd/ns"]
+                   "/run/credentials/systemd-resolved.service", "/run/snapd/ns"]
 
     for line in retval.split("\n"):
         if line:
