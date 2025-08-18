@@ -67,7 +67,7 @@ tested on Rocky 9, 10 and Ubuntu 24.04 & 25.04
 
 Will correctly inherit either a macRamdisk on macOS or a linuxTmpfsRamdisk (by default) on Linux, depending on which OS kernel one is running on.
 
-## Only developed for Windows
+## Developed for Windows
 
 ### Looking at working with [StarWind's Ramdisk](https://www.starwindsoftware.com/high-performance-ram-disk-emulator) - Dropping the work so far with ImDisk since it is EOL and doesn't support Windows 11.
 
