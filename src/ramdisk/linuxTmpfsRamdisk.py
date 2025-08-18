@@ -559,7 +559,7 @@ def getMountDisks():
                 continue
             if re.match("/run/user/\d+$", name) or \
                re.match("^/tmp$", name) or \
-               re.match("^/var/run$", name):
+               re.match("^/run/lock$", name):
                 continue
             if not name in systemDisks:
                 print(name)
