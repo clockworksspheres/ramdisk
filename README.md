@@ -69,7 +69,7 @@ Will correctly inherit either a macRamdisk on macOS or a linuxTmpfsRamdisk (by d
 
 ## Only developed for Windows
 
-### Looking at working with ImDisk - so far - nothing yet
+### Looking at working with [StarWind's Ramdisk](https://www.starwindsoftware.com/high-performance-ram-disk-emulator) - Dropping the work so far with ImDisk since it is EOL and doesn't support Windows 11.
 
 ## Developed for macOS, Linux and Windows
 
@@ -89,7 +89,7 @@ The menu code is cross platform, in an alpha state.
 
 ## Windows
 
-Will call a currently available ramdisk executable, like ImDisk, to create a ramdisk.
+Will call a currently available ramdisk executable, like [StarWind's Ramdisk](https://www.starwindsoftware.com/high-performance-ram-disk-emulator), to create a ramdisk.  ImDiskk is EOL, so the project will no longer be working with it.
 
 Prototype in flux, may or may not work.
 

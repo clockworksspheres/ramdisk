@@ -22,7 +22,7 @@ from PySide6.QtCore import Slot
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (QApplication, QLabel, QMainWindow, QPushButton,
                                QVBoxLayout, QMessageBox, QDialog, QTableWidget,
-                               QTableWidgetItem, QHeaderView)
+                               QTableWidgetItem, QHeaderView, QAbstractItemView)
 
 sys.path.append("../..")
 
@@ -106,24 +106,24 @@ class _CreateRamdisk(QMainWindow):
         # on enter in the line edit box, create the ramdisk
         self.ui.mountLineEdit.returnPressed.connect(self.createRamdisk)
 
-
         #####
         # Connect Button click signals to slots 
         self.ui.createPushButton.clicked.connect(self.createRamdisk)
         self.ui.debugPushButton.clicked.connect(self.notYetImplemented)
         self.ui.quitPushButton.clicked.connect(self.quit_application)
         self.ui.ejectPushButton.clicked.connect(self.remove)
-        self.ui.tableWidget.itemDoubleClicked.connect(self.show_mount_data)
+        #self.ui.tableWidget.itemDoubleClicked.connect(self.show_mount_data)
+        self.ui.tableWidget.itemEntered.connect(self.show_mount_data)
     
         #####
         # Connect Button click signals to slots 
-        
+        '''
         self.ui.createPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.createRamdisk()) 
         self.ui.debugPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.notYetImplemented())
         self.ui.quitPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.quit_application())
         self.ui.ejectPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.remove())
         # self.ui.tableWidget.keyPressedEvent = lambda event: keyPressEvent(event, parent, self.????())
-        
+        '''
         #####
         # connect slider to line edit
         self.ui.sizeHorizontalSlider.valueChanged.connect(self.update_line_edit)
@@ -149,6 +149,10 @@ class _CreateRamdisk(QMainWindow):
         # enable row selection
         self.ui.tableWidget.setSelectionMode(QTableWidget.SingleSelection)
         self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)
+        self.ui.tableWidget.activated.connect(self.show_mount_data)
+
+        # set table items as non-editable
+        self.ui.tableWidget.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 
         # row counter
         self.row_counter = 0
@@ -194,6 +198,38 @@ class _CreateRamdisk(QMainWindow):
 
         self.row_counter = self.row_counter + 1
 
+    def eventFilter(self, obj, event):
+        '''
+        On event, look for an 'enter' keypress on the table
+        to bring up disk info
+        '''
+        if obj == self.ui.tableWidget.viewport() and event.type() == QEvent.KeyPress:
+            key_event = event
+            if key_event.key() in (Qt.Key_Return, Qt.KeyEnter):
+                current_item = self.ui.tableWidget.currentItem()
+                if current_item:
+                    row = current_item.row()
+
+
+                    item = self.ui.tableWidget.item(index, 1)
+                    device = item.text()
+                    print(str(f"{device}"))
+                    data = getMountedData(device)
+
+                    # show message box with mounted data
+                    dlg = CustomMessageDialog(data[0])
+                    dlg.show()
+                    dlg.raise_()
+                    if dlg.exec():
+                        print("User clicked OK")
+
+
+
+                    return(True)
+        return super().eventFilter(obj, event)
+
+
+
     def remove(self):
         """
         remove ramdisk from list when unmounted
@@ -235,6 +271,7 @@ class _CreateRamdisk(QMainWindow):
         """
         message = ""
         device = ""
+
         selected_rows = self.ui.tableWidget.selectionModel().selectedRows()
 
         if not selected_rows:
