@@ -97,7 +97,7 @@ Prototype in flux, may or may not work.
 
 Currently written/tested in only python v3.9+
 
-Future plans to duplicate libraries, tests and examples in other languages as well.
+Future plans to duplicate libraries, tests and examples in other languages as well.  Potential next language targets are Go and Rust.
 
 ## Tracking
 
