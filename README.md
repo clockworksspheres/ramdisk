@@ -69,7 +69,7 @@ Will correctly inherit either a macRamdisk on macOS or a linuxTmpfsRamdisk (by d
 
 ## Developed for Windows
 
-### Looking at working with [StarWind's Ramdisk](https://www.starwindsoftware.com/high-performance-ram-disk-emulator) - Dropping the work so far with ImDisk since it is EOL and doesn't support Windows 11.
+### Looking at working with the [AIM Toolkit](https://sourceforge.net/projects/aim-toolkit/files/20250818/) - whose predecessor is ImDisk. Dropping the work so far with ImDisk since it is EOL and doesn't support Windows 11.  The AIM Toolkit must be installed prior to using this project.
 
 ## Developed for macOS, Linux and Windows
 
@@ -89,7 +89,7 @@ The menu code is cross platform, in an alpha state.
 
 ## Windows
 
-Will call a currently available ramdisk executable, like [StarWind's Ramdisk](https://www.starwindsoftware.com/high-performance-ram-disk-emulator), to create a ramdisk.  ImDisk is EOL, so the project will no longer be working with it.
+Will call a currently available ramdisk executable, like [AIM Toolkit](https://sourceforge.net/projects/aim-toolkit/files/20250818/) - whose predecessor is ImDisk. Dropping the work so far with ImDisk since it is EOL and doesn't support Windows 11.  The AIM Toolkit must be installed prior to using this project.
 
 Prototype in flux, may or may not work.
 
