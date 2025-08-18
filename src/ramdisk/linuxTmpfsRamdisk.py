@@ -546,7 +546,9 @@ def getMountDisks():
 
     print(f"retval: {str(retval)}")
 
-    systemDisks = ["/dev/shm", "/run", "/run/credentials/systemd-journald.service", "/run/user"]
+    systemDisks = ["/dev/shm", "/run", "/run/credentials/systemd-journald.service",
+                   "/run/credentials/systemd-resolved.service", "/run/lock"
+                   "run/snapd/ns"]
 
     for line in retval.split("\n"):
         if line:
@@ -556,7 +558,9 @@ def getMountDisks():
             #print(str(name))
             if not "tmpfs" == line.split()[0].strip():
                 continue
-            if re.match("/run/user/\d+$", name):
+            if re.match("/run/user/\d+$", name) or \
+               re.match("^/tmp$", name) or \
+               re.match("^/var/run$", name):
                 continue
             if not name in systemDisks:
                 print(name)
