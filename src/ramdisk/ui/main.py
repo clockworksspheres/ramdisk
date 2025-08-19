@@ -68,6 +68,7 @@ class CustomMessageDialog(QDialog):
         self.setWindowTitle("Oops")
 
         self.button = QPushButton("Ok")
+        self.button.setDefault(True)
         self.button.clicked.connect(self.accept)
         layout = QVBoxLayout()
         messageText = QLabel(f"{message}")
