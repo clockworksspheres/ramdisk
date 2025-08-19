@@ -222,8 +222,10 @@ class _CreateRamdisk(QMainWindow):
                     #dlg.show()
                     #dlg.raise_()
                     if dlg.exec():
-                        print("User clicked OK")
-                    return True
+                        print("User clicked OK, dialog accepted")
+                    else:
+                        print("Dialog Rejected")
+                    # return True
                 else:
                     print("No cell selected.")
             else:
