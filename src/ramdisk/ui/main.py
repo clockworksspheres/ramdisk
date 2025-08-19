@@ -4,7 +4,7 @@ import datetime
 import logging
 import traceback
 
-'''
+
 from PySide6.QtCore import QCoreApplication, QEvent, QSize, Qt, Slot
 from PySide6.QtGui import QCursor, QDragMoveEvent, QDropEvent, QFont, QColor
 from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea,
@@ -14,16 +14,16 @@ from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea,
                                QMessageBox, QDialog, QDialogButtonBox,
                                QGraphicsDropShadowEffect, QTableWidget,
                                QTableWidgetItem, QHeaderView)
-'''
+
 
 import sys 
-
-from PySide6.QtCore import Slot
+'''
+from PySide6.QtCore import Slot, Qt, QEvent
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (QApplication, QLabel, QMainWindow, QPushButton,
                                QVBoxLayout, QMessageBox, QDialog, QTableWidget,
                                QTableWidgetItem, QHeaderView, QAbstractItemView)
-
+'''
 sys.path.append("../..")
 
 # from PySide6.QtWidgets import QApplication, QDialog, QMainWindow, QPushButton, QVBoxLayout, QLabel, QDialogButtonBox
@@ -40,7 +40,7 @@ from ramdisk.ui.getValues import getMaxMemSize
 
 from ramdisk.lib.dev.getMemStatus import GetMemStatus
 from ramdisk.lib.loggers import CyLogger
-from ramdisk.lib.loggers import LogPriority
+from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.RamDisk import RamDisk, eject, getMountedData, getMountedDisks
 from ramdisk.config import DEFAULT_RAMDISK_SIZE
 
@@ -113,7 +113,7 @@ class _CreateRamdisk(QMainWindow):
         self.ui.quitPushButton.clicked.connect(self.quit_application)
         self.ui.ejectPushButton.clicked.connect(self.remove)
         #self.ui.tableWidget.itemDoubleClicked.connect(self.show_mount_data)
-        self.ui.tableWidget.itemEntered.connect(self.show_mount_data)
+        #self.ui.tableWidget.itemPressed.connect(self.show_mount_data)
     
         #####
         # Connect Button click signals to slots 
@@ -198,23 +198,22 @@ class _CreateRamdisk(QMainWindow):
 
         self.row_counter = self.row_counter + 1
 
-    def eventFilter(self, obj, event):
+    def keyPressEvent(self, event):
         '''
-        On event, look for an 'enter' keypress on the table
-        to bring up disk info
+        On keypress -
+            process enter/return
         '''
-        if obj == self.ui.tableWidget.viewport() and event.type() == QEvent.KeyPress:
-            key_event = event
-            if key_event.key() in (Qt.Key_Return, Qt.KeyEnter):
+        if self.ui.tableWidget is self.focusWidget():
+            if event.key() in (Qt.Key_Return, Qt.Key_Enter):
                 current_item = self.ui.tableWidget.currentItem()
                 if current_item:
                     row = current_item.row()
-
-
-                    item = self.ui.tableWidget.item(index, 1)
-                    device = item.text()
-                    print(str(f"{device}"))
-                    data = getMountedData(device)
+                    row_data = []
+                    for col in range(self.ui.tableWidget.columnCount()):
+                        item = self.ui.tableWidget.item(row, col)
+                        row_data.append(item.text() if item else "")
+                    
+                    data = getMountedData(row_data[0])
 
                     # show message box with mounted data
                     dlg = CustomMessageDialog(data[0])
@@ -222,14 +221,12 @@ class _CreateRamdisk(QMainWindow):
                     dlg.raise_()
                     if dlg.exec():
                         print("User clicked OK")
-
-
-
-                    #return(True)
-                    return super().eventFilter(obj, event)
-        return super().eventFilter(obj, event)
-
-
+                else:
+                    print("No cell selected.")
+            else:
+                super().keyPressEvent(event)
+        else:
+            super().keyPressEvent(event)
 
     def remove(self):
         """
@@ -267,10 +264,10 @@ class _CreateRamdisk(QMainWindow):
 
         return removed_data
 
-    def show_mount_data(self):
+    def show_mount_data(self, device=""):
         """
         """
-        message = ""
+        #message = ""
         device = ""
 
         selected_rows = self.ui.tableWidget.selectionModel().selectedRows()
@@ -367,7 +364,7 @@ class _CreateRamdisk(QMainWindow):
             print(f"{mountedDisks}")
         except Exception as err:
             print(traceback.format_exc())
-            print("str(err)")
+            print(str(err))
 
         #####
         # populate table
@@ -380,10 +377,8 @@ class _CreateRamdisk(QMainWindow):
         """
         Grab the values from the interface to create the ramdisk.
         """
-        
-        creds = False
         if sys.platform.startswith('darwin'):
-            creds = True
+            self.logger.log(lp.DEBUG, "Darwin doesn't need elevation to create a ramdisk")
         if sys.platform.startswith('linux'):
             window = _LocalAuth()
 
@@ -401,7 +396,7 @@ class _CreateRamdisk(QMainWindow):
         try:
             memSize = self.ui.sizeHorizontalSlider.value()
         except ValueError as err:
-            pass
+            print("Ignored error: " + str(err))
 
         #####
         # Grab the mount point
