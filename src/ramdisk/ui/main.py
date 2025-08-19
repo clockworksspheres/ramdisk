@@ -205,7 +205,8 @@ class _CreateRamdisk(QMainWindow):
             process enter/return
         '''
         if self.ui.tableWidget is self.focusWidget():
-            if event.key() in (Qt.Key_Return, Qt.Key_Enter):
+            #if event.key() in (Qt.Key_Return, Qt.Key_Enter):
+            if event.key() == Qt.Key_Return:
                 current_item = self.ui.tableWidget.currentItem()
                 if current_item:
                     row = current_item.row()
