@@ -225,7 +225,8 @@ class _CreateRamdisk(QMainWindow):
 
 
 
-                    return(True)
+                    #return(True)
+                    return super().eventFilter(obj, event)
         return super().eventFilter(obj, event)
 
 
@@ -328,7 +329,7 @@ class _CreateRamdisk(QMainWindow):
     def closeEvent(self, event):
         print("Entered the twilight zone....")
         # Perform any necessary cleanup or confirmation actions hered
-        reply = QMessageBox.question(self, 'Message', 'Are you sure you want to quit?\n\nYour ramdisk list will not be re-populated with current ramdisks.',
+        reply = QMessageBox.question(self, 'Message', 'Are you sure you want to quit?\n\nYour ramdisk list will be re-populated with current ramdisks.',
                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
         if reply == QMessageBox.Yes:
             event.accept()  # Let the window close

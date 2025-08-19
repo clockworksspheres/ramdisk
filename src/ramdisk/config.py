@@ -16,5 +16,9 @@ DEFAULT_RAMDISK_SIZE=500
 #
 #####
 # Default path to Windows AIM Toolkit ramdisk command line tool
-# "C:\Program Files\AIM Toolkit\aim_ll.exe"
+AIM_LL = "C:\Program Files\AIM Toolkit\aim_ll.exe"
+#
+#####
+# 
+#
 #####
