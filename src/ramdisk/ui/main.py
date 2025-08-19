@@ -219,9 +219,10 @@ class _CreateRamdisk(QMainWindow):
 
                     # show message box with mounted data
                     dlg = CustomMessageDialog(data[0])
-                    #dlg.show()
-                    #dlg.raise_()
-                    if dlg.exec():
+                    retval = dlg.exec()
+                    dlg.show()
+                    dlg.raise_()
+                    if retval:
                         print("User clicked OK, dialog accepted")
                     else:
                         print("Dialog Rejected")
