@@ -218,8 +218,8 @@ class _CreateRamdisk(QMainWindow):
 
                     # show message box with mounted data
                     dlg = CustomMessageDialog(data[0])
-                    dlg.show()
-                    dlg.raise_()
+                    #dlg.show()
+                    #dlg.raise_()
                     if dlg.exec():
                         print("User clicked OK")
                     return True
