@@ -205,8 +205,8 @@ class _CreateRamdisk(QMainWindow):
             process enter/return
         '''
         if self.ui.tableWidget is self.focusWidget():
-            #if event.key() in (Qt.Key_Return, Qt.Key_Enter):
-            if event.key() == Qt.Key_Return:
+            # if event.key() == Qt.Key_Return:
+            if event.key() in (Qt.Key_Return, Qt.Key_Enter):
                 current_item = self.ui.tableWidget.currentItem()
                 if current_item:
                     row = current_item.row()
@@ -227,9 +227,9 @@ class _CreateRamdisk(QMainWindow):
                 else:
                     print("No cell selected.")
             else:
-                super().keyPressEvent(event)
+                return super().keyPressEvent(event)
         else:
-            super().keyPressEvent(event)
+            return super().keyPressEvent(event)
 
     def remove(self):
         """
