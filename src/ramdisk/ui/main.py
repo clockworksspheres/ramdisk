@@ -221,6 +221,7 @@ class _CreateRamdisk(QMainWindow):
                     dlg.raise_()
                     if dlg.exec():
                         print("User clicked OK")
+                    return True
                 else:
                     print("No cell selected.")
             else:
