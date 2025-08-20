@@ -223,12 +223,13 @@ class _CreateRamdisk(QMainWindow):
         if self.ui.tableWidget is self.focusWidget():
             # if event.key() == Qt.Key_Return:
             if event.key() in (Qt.Key_Return, Qt.Key_Enter):
-                current_item = self.ui.tableWidget.currentItem()
-                if current_item:
-                    row = current_item.row()
+                #current_item = self.ui.tableWidget.currentItem()
+                current_row = self.ui.tableWidget.currentRow()
+                if current_row:
+                    #row = current_item.row()
                     row_data = []
                     for col in range(self.ui.tableWidget.columnCount()):
-                        item = self.ui.tableWidget.item(row, col)
+                        item = self.ui.tableWidget.item(current_row, col)
                         row_data.append(item.text() if item else "")
                     
                     data = getMountedData(row_data[0])
