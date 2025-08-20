@@ -53,8 +53,8 @@ class _LocalAuth(QDialog):
         print(f"Username = {username}")
 
         self.ui.userLabel.setText(f"{username}")
-        self.ui.userLabel.setTextInteractionFlags(Qt.NoTextInteraction)
-        self.ui.passLabel.setFocus()
+        self.ui.userLineEdit.setTextInteractionFlags(Qt.NoTextInteraction)
+        self.ui.passLineEdit.setFocus()
 
     def acceptSignal(self):
         print("Command accepted...")
