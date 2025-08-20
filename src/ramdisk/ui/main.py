@@ -132,7 +132,7 @@ class _CreateRamdisk(QMainWindow):
         #self.ui.tableWidget.itemDoubleClicked.connect(self.show_mount_data)
         #self.ui.tableWidget.itemPressed.connect(self.show_mount_data)
         # Connect signal for debugging
-        self.ui.tableWidget.currentCellChanged.connect(self.on_cell_changed)
+        # self.ui.tableWidget.currentCellChanged.connect(self.on_cell_changed)
 
         #####
         # Connect Button click signals to slots 
@@ -233,14 +233,20 @@ class _CreateRamdisk(QMainWindow):
                 #current_item = self.ui.tableWidget.currentItem()
                 current_row_index = self.ui.tableWidget.currentRow()
                 if current_row_index >= 0:
-                    item = self.ui.tableWidget.item(current_row_index, 0)  # Get first column item
+                    if self.platform.startswith("darwin"):
+                        column = 0
+                    elif self.platform.lower.startswith("linux"):
+                        column = 1
+                    elif self.platform.startswith("win32"):
+                        column = 0
+                    item = self.ui.tableWidget.item(current_row_index, column)  # Get first column item
                     device = item.text() if item else ""
                     data = getMountedData(device)
                 else:
                     print("No Row Selected...")
 
                 # show message box with mounted data
-                dlg = RamdiskCustomMessageDialog(self, data[0])
+                dlg = RamdiskCustomMessageDialog(self, data[column])
                 retval = dlg.exec()
                 if retval:
                     print("User clicked OK, dialog accepted")
