@@ -225,27 +225,25 @@ class _CreateRamdisk(QMainWindow):
             if event.key() in (Qt.Key_Return, Qt.Key_Enter):
                 #current_item = self.ui.tableWidget.currentItem()
                 current_row = self.ui.tableWidget.currentRow()
-                if current_row:
-                    #row = current_item.row()
-                    row_data = []
-                    for col in range(self.ui.tableWidget.columnCount()):
-                        item = self.ui.tableWidget.item(current_row, col)
-                        row_data.append(item.text() if item else "")
-                    
-                    data = getMountedData(row_data[0])
 
-                    # show message box with mounted data
-                    dlg = RamdiskCustomMessageDialog(self, data[0])
-                    retval = dlg.exec()
-                    # dlg.show()
-                    # dlg.raise_()
-                    if retval:
-                        print("User clicked OK, dialog accepted")
-                    else:
-                        print("Dialog Rejected")
-                    # return True
+                #row = current_item.row()
+                row_data = []
+                for col in range(self.ui.tableWidget.columnCount()):
+                    item = self.ui.tableWidget.item(current_row, col)
+                    row_data.append(item.text() if item else "")
+
+                data = getMountedData(row_data[0])
+
+                # show message box with mounted data
+                dlg = RamdiskCustomMessageDialog(self, data[0])
+                retval = dlg.exec()
+                # dlg.show()
+                # dlg.raise_()
+                if retval:
+                    print("User clicked OK, dialog accepted")
                 else:
-                    print("No cell selected.")
+                    print("Dialog Rejected")
+                # return True
             else:
                 return super().keyPressEvent(event)
         else:
