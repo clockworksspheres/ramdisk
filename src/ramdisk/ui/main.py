@@ -131,7 +131,9 @@ class _CreateRamdisk(QMainWindow):
         self.ui.ejectPushButton.clicked.connect(self.remove)
         #self.ui.tableWidget.itemDoubleClicked.connect(self.show_mount_data)
         #self.ui.tableWidget.itemPressed.connect(self.show_mount_data)
-    
+        # Connect signal for debugging
+        self.ui.tableWidget.currentCellChanged.connect(self.on_cell_changed)
+
         #####
         # Connect Button click signals to slots 
         '''
@@ -191,6 +193,9 @@ class _CreateRamdisk(QMainWindow):
         self.populateMountedInTable()
 
         print("exiting init...")
+
+    def on_cell_changed(current_row, current_col, prev_row, prev_col):
+        print(f"Current: ({current_row}, {current_col}), Previous: ({prev_row}, {prev_col})")
 
     def add_row(self, device="", mntPnt="", filesystem="", username=""):
         """
