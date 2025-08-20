@@ -50,6 +50,8 @@ class _LocalAuth(QDialog):
         else:
             username = ""
         
+        print(f"Username = {username}")
+
         self.ui.userLabel.setText(f"{username}")
         self.ui.userLabel.setTextInteractionFlags(Qt.NoTextInteraction)
         self.ui.passLabel.setFocus()
