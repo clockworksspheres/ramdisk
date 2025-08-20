@@ -51,7 +51,7 @@ class _LocalAuth(QDialog):
             username = ""
         
         self.ui.userLabel.setText(f"{username}")
-        self.ui.userLabel.setTextInteractionFlags(Qt.NoTextIneraction)
+        self.ui.userLabel.setTextInteractionFlags(Qt.NoTextInteraction)
         self.ui.passLabel.setFocus()
 
     def acceptSignal(self):
