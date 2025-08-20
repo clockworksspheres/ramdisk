@@ -9,7 +9,7 @@ from ramdisk.ui.ui_local_auth_widget import Ui_LocalAuth
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority
 from ramdisk.lib.run_commands_linux import RunWith
-
+from ramdisk.lib.environment import Environment
 
 class InvalidInitParameterError(BaseException):
     """
@@ -27,6 +27,7 @@ class _LocalAuth(QDialog):
         super().__init__()
 
         self.rw = RunWith()
+        self.environ = Environment()
 
         self.ui = Ui_LocalAuth()
         self.ui.setupUi(self)
@@ -38,6 +39,17 @@ class _LocalAuth(QDialog):
         # Connect Button click signals to slots
         self.ui.buttonBox.accepted.connect(self.acceptSignal)
         self.ui.buttonBox.rejected.connect(self.reject)
+
+        if sys.platform.lower().startswith("linux") or sys.platform.startswith("darwin"):
+            username = getpass.getuser()
+        elif sys.platform.lower().startswith("win32"):
+            username = ""
+        else:
+            username = ""
+        
+        self.ui.userLabel.setText(f"{username}")
+        self.ui.userLabel.setTextInteractionFlags(Qt.NoTextIneraction)
+        self.ui.passLabel.setFocus()
 
     def acceptSignal(self):
         print("Command accepted...")
