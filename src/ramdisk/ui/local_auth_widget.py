@@ -2,7 +2,7 @@ import sys
 import getpass # only works on *nix
 import traceback
 from PySide6.QtWidgets import QApplication, QDialog, QMainWindow, QPushButton, QVBoxLayout, QLabel, QDialogButtonBox
-from PySide6.QtCore import Signal, QThread
+from PySide6.QtCore import Signal, QThread, Qt
 
 sys.path.append("../..")
 
