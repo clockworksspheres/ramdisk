@@ -511,8 +511,9 @@ def getMountData(device):
     mountInfo = ""
 
     for line in output.split("\n"):
-        if re.search(f"{device}", line):
+        if re.search(f"^{device}$", line):
             mountInfo = line
+            break
 
     message = f"mountLine:\n{mountInfo}"
 
