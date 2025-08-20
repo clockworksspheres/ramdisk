@@ -56,7 +56,7 @@ class Ui_MainWindow(object):
         self.quitPushButton.setGeometry(QRect(360, 190, 100, 32))
         self.titleLabel = QLabel(self.centralwidget)
         self.titleLabel.setObjectName(u"titleLabel")
-        self.titleLabel.setGeometry(QRect(200, 10, 101, 16))
+        self.titleLabel.setGeometry(QRect(180, 10, 131, 20))
         self.sizeLineEdit = QLineEdit(self.centralwidget)
         self.sizeLineEdit.setObjectName(u"sizeLineEdit")
         self.sizeLineEdit.setGeometry(QRect(180, 70, 81, 21))
