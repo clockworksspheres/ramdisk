@@ -234,40 +234,9 @@ class _CreateRamdisk(QMainWindow):
                 else:
                     print("No Row Selected...")
 
-                ''' NOT WORKING...
-                #row = current_item.row()
-                row_data = []
-                for col in range(self.ui.tableWidget.columnCount()):
-                    item = self.ui.tableWidget.item(current_row_index, col)
-                    row_data.append(item.text() if item else "")
-
-                data = getMountedData(row_data[0])
-                '''
-                '''NOT WORKING...
-
-                selected_rows = self.ui.tableWidget.selectionModel().selectedRows()
-
-                if not selected_rows:
-                    print("no rows selected")
-                    return []
-
-                if selected_rows:
-                    # Remove rows in reverse order to avoid index shifting
-                    for index in sorted([row.row() for row in selected_rows], reverse=True):
-
-                        for col in range(self.ui.tableWidget.columnCount()):
-                            item = self.ui.tableWidget.item(index, col)
-                            if col == 1:
-                                device = item.text()
-                                print(str(f"{device}"))
-                data = getMountedData(device)
-                '''
-
                 # show message box with mounted data
                 dlg = RamdiskCustomMessageDialog(self, data[0])
                 retval = dlg.exec()
-                # dlg.show()
-                # dlg.raise_()
                 if retval:
                     print("User clicked OK, dialog accepted")
                 else:
@@ -319,23 +288,15 @@ class _CreateRamdisk(QMainWindow):
         """
         #message = ""
         device = ""
-
-        selected_rows = self.ui.tableWidget.selectionModel().selectedRows()
-
-        if not selected_rows:
-            print("no rows selected")
-            return []
-
-        if selected_rows:
-            # Remove rows in reverse order to avoid index shifting
-            for index in sorted([row.row() for row in selected_rows], reverse=True):
-
-                for col in range(self.ui.tableWidget.columnCount()):
-                    item = self.ui.tableWidget.item(index, col)
-                    if col == 1:
-                        device = item.text()
-                        print(str(f"{device}"))
-        data = getMountedData(device)
+        data = ""
+        #current_item = self.ui.tableWidget.currentItem()
+        current_row_index = self.ui.tableWidget.currentRow()
+        if current_row_index >= 0:
+            item = self.ui.tableWidget.item(current_row_index, 0)  # Get first column item
+            device = item.text() if item else ""
+            data = getMountedData(device)
+        else:
+            print("No Row Selected...")
 
         # show message box with mounted data
         dlg = RamdiskCustomMessageDialog(self, data[0])
@@ -343,18 +304,6 @@ class _CreateRamdisk(QMainWindow):
         dlg.raise_()
         if dlg.exec():
             print("User clicked OK")
-
-        """
-        reply = QMessageBox.question(self, 'Message', f"{data[0]}",
-                                     QMessageBox.Ok)
-        reply.setMinimumWidth(400)
-
-
-        if reply == QMessageBox.Yes:
-            event.accept()  # Let the window close
-        else:
-            event.ignore()  # Prevent the window from closing
-        """
 
     def update_slider(self, text):
         try:
