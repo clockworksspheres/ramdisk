@@ -172,6 +172,7 @@
   },
   "active": "9468089d5e2a1d4a",
   "lastOpenFiles": [
+    "src/proto/dynamicTableWidget/badTableIndexLinux_grok-ai_001.py",
     "src/proto/dynamicTableWidget/onRowEnterKey_brave-ai_006.py",
     "src/proto/dynamicTableWidget/onRowEnterKey_brave-ai_005.py",
     "src/proto/dynamicTableWidget/onRowEnterKey_brave-ai_004.py",
@@ -182,7 +183,6 @@
     "src/ramdisk/lib/fsHelper/__pycache__/__init__.cpython-310.pyc",
     "src/ramdisk/lib/fsHelper/__pycache__/FsHelperTemplate.cpython-310.pyc",
     "src/ramdisk/lib/fsHelper/__pycache__",
-    "src/ramdisk/lib/__pycache__/libHelperExceptions.cpython-310.pyc",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_user/README.md",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_keychain/README.md",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/getLibc/README.md",
