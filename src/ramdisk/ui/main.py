@@ -54,7 +54,7 @@ class CustomDialog(QDialog):
         self.setWindowTitle("Oops")
 
         self.button = QPushButton("Close")
-        self.button.clicked.connect(self.accept)
+        self.button.accepted.connect(self.accept)
         layout = QVBoxLayout()
         message = QLabel("Not Yet Implemented")
         layout.addWidget(message)
@@ -65,15 +65,29 @@ class CustomDialog(QDialog):
 class CustomMessageDialog(QDialog):
     def __init__(self, message):
         super().__init__()
-        self.setWindowTitle("Oops")
+        self.setWindowTitle("message")
 
+        # Create layout
+        layout = QVBoxLayout()
+
+        # Add centered message label
+        messageText = QLabel(f"{message}")
+        messageText.setAlignment(Qt.AlignLeft)
+        layout.addWidget(messageText)
+
+        # Add single OK button
+        button_box = QDialogButtonBox(QDialogButtonBox.Ok)
+        layout.addWidget(button_box)
+
+        # Connect the OK button to the accept slot
+        button_box.accepted.connect(self.accept)
+        '''
         self.button = QPushButton("Ok")
         self.button.setDefault(True)
-        layout = QVBoxLayout()
-        messageText = QLabel(f"{message}")
-        layout.addWidget(messageText)
-        self.button.clicked.connect(self.accept)
+        self.button.accepted.connect(self.accept)
         layout.addWidget(self.button)
+        '''
+        # Set the layout
         self.setLayout(layout)
 
 
