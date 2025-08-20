@@ -166,7 +166,7 @@ class _CreateRamdisk(QMainWindow):
         # enable row selection
         self.ui.tableWidget.setSelectionMode(QTableWidget.SingleSelection)
         self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)
-        self.ui.tableWidget.activated.connect(self.show_mount_data)
+        self.ui.tableWidget.doubleClicked.connect(self.show_mount_data)
 
         # set table items as non-editable
         self.ui.tableWidget.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
