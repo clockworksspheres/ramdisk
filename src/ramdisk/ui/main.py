@@ -225,7 +225,7 @@ class _CreateRamdisk(QMainWindow):
             if event.key() in (Qt.Key_Return, Qt.Key_Enter):
                 #current_item = self.ui.tableWidget.currentItem()
                 current_row = self.ui.tableWidget.currentRow()
-
+                '''
                 #row = current_item.row()
                 row_data = []
                 for col in range(self.ui.tableWidget.columnCount()):
@@ -233,6 +233,25 @@ class _CreateRamdisk(QMainWindow):
                     row_data.append(item.text() if item else "")
 
                 data = getMountedData(row_data[0])
+                '''
+
+                selected_rows = self.ui.tableWidget.selectionModel().selectedRows()
+
+                if not selected_rows:
+                    print("no rows selected")
+                    return []
+
+                if selected_rows:
+                    # Remove rows in reverse order to avoid index shifting
+                    for index in sorted([row.row() for row in selected_rows], reverse=True):
+
+                        for col in range(self.ui.tableWidget.columnCount()):
+                            item = self.ui.tableWidget.item(index, col)
+                            if col == 1:
+                                device = item.text()
+                                print(str(f"{device}"))
+                data = getMountedData(device)
+
 
                 # show message box with mounted data
                 dlg = RamdiskCustomMessageDialog(self, data[0])
