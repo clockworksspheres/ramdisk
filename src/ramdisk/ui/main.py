@@ -233,11 +233,11 @@ class _CreateRamdisk(QMainWindow):
                 #current_item = self.ui.tableWidget.currentItem()
                 current_row_index = self.ui.tableWidget.currentRow()
                 if current_row_index >= 0:
-                    if self.platform.startswith("darwin"):
+                    if self.platform.lower().startswith("darwin"):
                         column = 0
-                    elif self.platform.lower.startswith("linux"):
+                    elif self.platform.lower().startswith("linux"):
                         column = 1
-                    elif self.platform.startswith("win32"):
+                    elif self.platform.lower().startswith("win32"):
                         column = 0
                     item = self.ui.tableWidget.item(current_row_index, column)  # Get first column item
                     device = item.text() if item else ""
