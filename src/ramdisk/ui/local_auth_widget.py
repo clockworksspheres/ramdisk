@@ -1,4 +1,5 @@
 import sys
+import getpass # only works on *nix
 import traceback
 from PySide6.QtWidgets import QApplication, QDialog, QMainWindow, QPushButton, QVBoxLayout, QLabel, QDialogButtonBox
 from PySide6.QtCore import Signal, QThread
@@ -10,6 +11,8 @@ from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority
 from ramdisk.lib.run_commands_linux import RunWith
 from ramdisk.lib.environment import Environment
+
+
 
 class InvalidInitParameterError(BaseException):
     """
