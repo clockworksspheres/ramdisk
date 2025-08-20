@@ -232,6 +232,7 @@ class _CreateRamdisk(QMainWindow):
                 data = ""
                 #current_item = self.ui.tableWidget.currentItem()
                 current_row_index = self.ui.tableWidget.currentRow()
+                print(f"current row {current_row_index}...........")
                 if current_row_index >= 0:
                     if sys.platform.lower().startswith("darwin"):
                         column = 0
