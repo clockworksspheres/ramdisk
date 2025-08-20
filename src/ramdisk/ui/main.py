@@ -301,10 +301,24 @@ class _CreateRamdisk(QMainWindow):
         #message = ""
         device = ""
         data = ""
+        '''
         #current_item = self.ui.tableWidget.currentItem()
         current_row_index = self.ui.tableWidget.currentRow()
         if current_row_index >= 0:
             item = self.ui.tableWidget.item(current_row_index, 0)  # Get first column item
+            device = item.text() if item else ""
+        '''
+        #current_item = self.ui.tableWidget.currentItem()
+        current_row_index = self.ui.tableWidget.currentRow()
+        print(f"current row {current_row_index}...........")
+        if current_row_index >= 0:
+            if sys.platform.lower().startswith("darwin"):
+                column = 0
+            elif sys.platform.lower().startswith("linux"):
+                column = 1
+            elif sys.platform.lower().startswith("win32"):
+                column = 0
+            item = self.ui.tableWidget.item(current_row_index, column)  # Get first column item
             device = item.text() if item else ""
             data = getMountedData(device)
         else:
