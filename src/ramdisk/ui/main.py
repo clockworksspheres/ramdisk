@@ -62,9 +62,11 @@ class CustomDialog(QDialog):
         self.setLayout(layout)
 
 
-class CustomMessageDialog(QDialog):
-    def __init__(self, message):
-        super().__init__()
+class RamdiskCustomMessageDialog(QDialog):
+    def __init__(self, parent=None, message=""):
+        super().__init__(parent)
+
+        # Set window title
         self.setWindowTitle("message")
 
         # Create layout
@@ -232,10 +234,10 @@ class _CreateRamdisk(QMainWindow):
                     data = getMountedData(row_data[0])
 
                     # show message box with mounted data
-                    dlg = CustomMessageDialog(data[0])
+                    dlg = RamdiskCustomMessageDialog(self, data[0])
                     retval = dlg.exec()
-                    dlg.show()
-                    dlg.raise_()
+                    # dlg.show()
+                    # dlg.raise_()
                     if retval:
                         print("User clicked OK, dialog accepted")
                     else:
@@ -308,7 +310,7 @@ class _CreateRamdisk(QMainWindow):
         data = getMountedData(device)
 
         # show message box with mounted data
-        dlg = CustomMessageDialog(data[0])
+        dlg = RamdiskCustomMessageDialog(self, data[0])
         dlg.show()
         dlg.raise_()
         if dlg.exec():
