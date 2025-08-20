@@ -53,7 +53,7 @@ class _LocalAuth(QDialog):
         print(f"Username = {username}")
 
         self.ui.userLineEdit.setText(f"{username}")
-        self.ui.userLineEdit.setReadOnly()
+        self.ui.userLineEdit.setReadOnly(True)
         self.ui.passLineEdit.setFocus()
 
     def acceptSignal(self):
