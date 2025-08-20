@@ -220,20 +220,30 @@ class _CreateRamdisk(QMainWindow):
         On keypress -
             process enter/return
         '''
+
         if self.ui.tableWidget is self.focusWidget():
             # if event.key() == Qt.Key_Return:
             if event.key() in (Qt.Key_Return, Qt.Key_Enter):
+                data = ""
                 #current_item = self.ui.tableWidget.currentItem()
-                current_row = self.ui.tableWidget.currentRow()
-                '''
+                current_row_index = self.ui.tableWidget.currentRow()
+                if current_row_index >= 0:
+                    item = self.ui.tableWidget.item(current_row_index, 0)  # Get first column item
+                    device = item.text() if item else ""
+                    data = getMountedData(device)
+                else:
+                    print("No Row Selected...")
+
+                ''' NOT WORKING...
                 #row = current_item.row()
                 row_data = []
                 for col in range(self.ui.tableWidget.columnCount()):
-                    item = self.ui.tableWidget.item(current_row, col)
+                    item = self.ui.tableWidget.item(current_row_index, col)
                     row_data.append(item.text() if item else "")
 
                 data = getMountedData(row_data[0])
                 '''
+                '''NOT WORKING...
 
                 selected_rows = self.ui.tableWidget.selectionModel().selectedRows()
 
@@ -251,7 +261,7 @@ class _CreateRamdisk(QMainWindow):
                                 device = item.text()
                                 print(str(f"{device}"))
                 data = getMountedData(device)
-
+                '''
 
                 # show message box with mounted data
                 dlg = RamdiskCustomMessageDialog(self, data[0])
