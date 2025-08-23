@@ -115,9 +115,9 @@ class _CreateRamdisk(QMainWindow):
         #####
         # Set default button
         self.ui.createPushButton.setDefault(True)
-        self.ui.ejectPushButton.setAutoDefault(True)
-        self.ui.debugPushButton.setAutoDefault(False)
-        self.ui.quitPushButton.setAutoDefault(True)
+        #self.ui.ejectPushButton.setAutoDefault(True)
+        #self.ui.debugPushButton.setAutoDefault(False)
+        #self.ui.quitPushButton.setAutoDefault(True)
 
         #####
         # on enter in the line edit box, create the ramdisk
