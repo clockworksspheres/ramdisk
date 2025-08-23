@@ -120,6 +120,17 @@ class _CreateRamdisk(QMainWindow):
         #self.ui.quitPushButton.setAutoDefault(True)
 
         #####
+        # Set Tab Order
+        QWidget.setTabOrder(self.ui.createPushButton, self.ui.ejectPushButton)
+        QWidget.setTabOrder(self.ui.ejectPushButton, self.ui.quitPushButton)
+        QWidget.setTabOrder(self.ui.quitPushButton, self.ui.tableWidget)
+        #self.setTabOrder
+
+        #####
+        # table keypress event signal
+        self.ui.tableWidget.keyPressEvent = self.table_key_press_event
+
+        #####
         # on enter in the line edit box, create the ramdisk
         self.ui.mountLineEdit.returnPressed.connect(self.createRamdisk)
 
@@ -192,7 +203,31 @@ class _CreateRamdisk(QMainWindow):
         # Populate the table with already created ramdisks
         self.populateMountedInTable()
 
+        #####
+        # Set Focus Policy
+        self.ui.createPushButton.setFocusPolicy(Qt.StrongFocus)
+        self.ui.ejectPushButton.setFocusPolicy(Qt.TabFocus)
+        self.ui.ejectPushButton.setFocusPolicy(Qt.StrongFocus)
+        self.ui.debugPushButton.setFocusPolicy(Qt.TabFocus)
+        self.ui.debugPushButton.setFocusPolicy(Qt.StrongFocus)
+        self.ui.quitPushButton.setFocusPolicy(Qt.TabFocus)
+        self.ui.quitPushButton.setFocusPolicy(Qt.StrongFocus)
+        self.ui.tableWidget.setFocusPolicy(Qt.StrongFocus)
+
+        self.ui.createPushButton.setDefault(True)
+
+
         print("exiting init...")
+
+    def table_key_press_event(self, event):
+        """Custom key press event for QTableWidget to cycle back to line_edit1."""
+        if event.key() == Qt.Key_Tab:
+            current_row = self.ui.tableWidget.currentRow()
+            if current_row == self.ui.tableWidget.rowCount() - 1:
+                self.ui.createPushButton.setFocus()
+                return
+        # Default table key handling (e.g., move to next cell)
+        super(QTableWidget, self.ui.tableWidget).keyPressEvent(event)
 
     def on_cell_changed(current_row, current_col, prev_row, prev_col):
         print(f"Current: ({current_row}, {current_col}), Previous: ({prev_row}, {prev_col})")
