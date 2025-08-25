@@ -5,7 +5,7 @@ import logging
 import traceback
 
 
-from PySide6.QtCore import QCoreApplication, QEvent, QSize, Qt, Slot
+from PySide6.QtCore import QCoreApplication, QEvent, QSize, Qt, Slot, QTimer
 from PySide6.QtGui import QCursor, QDragMoveEvent, QDropEvent, QFont, QColor
 from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea,
                                QApplication, QFrame, QLabel, QListWidget,
@@ -113,18 +113,40 @@ class _CreateRamdisk(QMainWindow):
         self.getMemStatus = GetMemStatus()
 
         #####
+        # Set the default palette of items in the ui to default.
+        self.ui.sizeLineEdit.setPalette(QApplication.palette())
+        self.ui.mountLineEdit.setPalette(QApplication.palette())
+        #self.ui.setPalette(QApplication.palette())
+
+        #####
         # Set default button
         self.ui.createPushButton.setDefault(True)
+        #self.ui.mountLineEdit.set
         #self.ui.ejectPushButton.setAutoDefault(True)
-        #self.ui.debugPushButton.setAutoDefault(False)
+        #self.ui.debugPushButton.setAutoDefault(False)d
         #self.ui.quitPushButton.setAutoDefault(True)
 
         #####
         # Set Tab Order
-        QWidget.setTabOrder(self.ui.createPushButton, self.ui.ejectPushButton)
-        QWidget.setTabOrder(self.ui.ejectPushButton, self.ui.quitPushButton)
-        QWidget.setTabOrder(self.ui.quitPushButton, self.ui.tableWidget)
+        #QWidget.setTabOrder(self.ui.mountLineEdit, self.ui.createPushButton)
+        #QWidget.setTabOrder(self.ui.createPushButton, self.ui.ejectPushButton)
+        #QWidget.setTabOrder(self.ui.ejectPushButton, self.ui.quitPushButton)
+        #QWidget.setTabOrder(self.ui.quitPushButton, self.ui.tableWidget)
         #self.setTabOrder
+
+        #####
+        # Set Focus Policy
+        self.ui.mountLineEdit.setFocusPolicy(Qt.StrongFocus)
+        self.ui.createPushButton.setFocusPolicy(Qt.StrongFocus)
+        #self.ui.ejectPushButton.setFocusPolicy(Qt.TabFocus)
+        self.ui.ejectPushButton.setFocusPolicy(Qt.StrongFocus)
+        #self.ui.debugPushButton.setFocusPolicy(Qt.TabFocus)
+        self.ui.debugPushButton.setFocusPolicy(Qt.StrongFocus)
+        #self.ui.quitPushButton.setFocusPolicy(Qt.TabFocus)
+        self.ui.quitPushButton.setFocusPolicy(Qt.StrongFocus)
+        self.ui.tableWidget.setFocusPolicy(Qt.StrongFocus)
+
+        self.ui.createPushButton.setDefault(True)
 
         #####
         # table keypress event signal
@@ -204,18 +226,8 @@ class _CreateRamdisk(QMainWindow):
         self.populateMountedInTable()
 
         #####
-        # Set Focus Policy
-        self.ui.createPushButton.setFocusPolicy(Qt.StrongFocus)
-        self.ui.ejectPushButton.setFocusPolicy(Qt.TabFocus)
-        self.ui.ejectPushButton.setFocusPolicy(Qt.StrongFocus)
-        self.ui.debugPushButton.setFocusPolicy(Qt.TabFocus)
-        self.ui.debugPushButton.setFocusPolicy(Qt.StrongFocus)
-        self.ui.quitPushButton.setFocusPolicy(Qt.TabFocus)
-        self.ui.quitPushButton.setFocusPolicy(Qt.StrongFocus)
-        self.ui.tableWidget.setFocusPolicy(Qt.StrongFocus)
-
-        self.ui.createPushButton.setDefault(True)
-
+        # from Grok - for macOS specific focus bugs
+        QTimer.singleShot(0, self.ui.mountLineEdit.setFocus)
 
         print("exiting init...")
 
