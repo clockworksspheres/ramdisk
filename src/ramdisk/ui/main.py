@@ -249,6 +249,9 @@ class _CreateRamdisk(QMainWindow):
         # from Grok - for macOS specific focus bugs
         QTimer.singleShot(0, self.ui.mountLineEdit.setFocus)
 
+        # Apply stylesheets with heavy blue focus highlight and light blue tint (day mode)
+        self.set_day_mode_styles()
+
         print("exiting init...")
 
     def on_line_edit_focus_in(self, event):
@@ -546,26 +549,136 @@ class _CreateRamdisk(QMainWindow):
 
                 self.add_row(device, mntPnt)
 
+    def set_day_mode_styles(self):
+        """Apply stylesheets for day mode with heavy blue focus highlight and light blue tint."""
+        self.ui.mountLineEdit.setStyleSheet("""
+            QLineEdit {
+                background: #ffffff;
+                color: #000000;
+                border: 1px solid #888888;
+                border-radius: 4px;
+                padding: 4px;
+            }
+            QLineEdit:focus {
+                border: 3px solid #0078d7; /* Heavy blue border */
+                background: #e6f3ff; /* Light blue tint */
+            }
+        """)
+        self.ui.sizeLineEdit.setStyleSheet("""
+            QLineEdit {
+                background: #ffffff;
+                color: #000000;
+                border: 1px solid #888888;
+                border-radius: 4px;
+                padding: 4px;
+            }
+            QLineEdit:focus {
+                border: 3px solid #0078d7; /* Heavy blue border */
+                background: #e6f3ff; /* Light blue tint */
+            }
+        """)
+        self.ui.createPushButton.setStyleSheet("""
+            QPushButton {
+                background: #e0e0e0;
+                color: #000000;
+                border: 1px solid #888888;
+                border-radius: 4px;
+                padding: 4px;
+            }
+            QPushButton:focus {
+                border: 3px solid #0078d7; /* Heavy blue border */
+                background: #e6f3ff; /* Light blue tint */
+            }
+            QPushButton:hover {
+                background: #d0d0d0;
+            }
+        """)
+        self.ui.tableWidget.setStyleSheet("""
+            QTableWidget {
+                background: #ffffff;
+                color: #000000;
+                border: 1px solid #888888;
+                border-radius: 4px;
+                gridline-color: #888888;
+            }
+            QTableWidget::item {
+                border: none;
+            }
+            QTableWidget::item:selected {
+                background: #0078d7; /* Blue selection */
+                color: #ffffff;
+            }
+            QTableWidget:focus {
+                border: 3px solid #0078d7; /* Heavy blue border */
+            }
+        """)
+        self.setStyleSheet("QMainWindow { background: #f0f0f0; }")  # Light background
 
-'''
-def init_event_logger(path: str, fmt: str, debug: bool = False,
-                      stdout: bool = False) -> None:
-    """Initializes the event logger.
-    - Set the path of the event log file
-    - Set the format of the event log file
-    - Set the debug level of the event log file
-    - Set up the event logger
-    """
-    logging.basicConfig(
-        filename=path,
-        filemode="w",
-        format=fmt,
-        datefmt="%d-%b-%y %H:%M:%S",
-        level=logging.DEBUG if debug else logging.INFO,
-    )
-    if stdout:
-        logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
-'''
+    def set_night_mode_styles(self):
+        """Apply stylesheets for night mode with heavy blue focus highlight and light blue tint."""
+        self.ui.mountLineEdit.setStyleSheet("""
+            QLineEdit {
+                background: #2b2b2b;
+                color: #ffffff;
+                border: 1px solid #555555;
+                border-radius: 4px;
+                padding: 4px;
+            }
+            QLineEdit:focus {
+                border: 3px solid #0078d7; /* Heavy blue border */
+                background: #2f4a6d; /* Darker light blue tint */
+            }
+        """)
+        self.ui.sizeLineEdit.setStyleSheet("""
+            QLineEdit {
+                background: #2b2b2b;
+                color: #ffffff;
+                border: 1px solid #555555;
+                border-radius: 4px;
+                padding: 4px;
+            }
+            QLineEdit:focus {
+                border: 3px solid #0078d7; /* Heavy blue border */
+                background: #2f4a6d; /* Darker light blue tint */
+            }
+        """)
+        self.ui.createPushButton.setStyleSheet("""
+            QPushButton {
+                background: #3c3c3c;
+                color: #ffffff;
+                border: 1px solid #555555;
+                border-radius: 4px;
+                padding: 4px;
+            }
+            QLineEdit:focus {
+                border: 3px solid #0078d7; /* Heavy blue border */
+                background: #2f4a6d; /* Darker light blue tint */
+            }
+            QPushButton:hover {
+                background: #4a4a4a;
+            }
+        """)
+        self.ui.tableWidget.setStyleSheet("""
+            QTableWidget {
+                background: #2b2b2b;
+                color: #ffffff;
+                border: 1px solid #555555;
+                border-radius: 4px;
+                gridline-color: #555555;
+            }
+            QTableWidget::item {
+                border: none;
+            }
+            QTableWidget::item:selected {
+                background: #0078d7; /* Blue selection */
+                color: #ffffff;
+            }
+            QTableWidget:focus {
+                border: 3px solid #0078d7; /* Heavy blue border */
+            }
+        """)
+        self.setStyleSheet("QMainWindow { background: #1e1e1e; }")  # Dark background
+
 
 
 
