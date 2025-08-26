@@ -145,6 +145,7 @@ class _CreateRamdisk(QMainWindow):
         #self.ui.quitPushButton.setFocusPolicy(Qt.TabFocus)
         self.ui.quitPushButton.setFocusPolicy(Qt.StrongFocus)
         self.ui.tableWidget.setFocusPolicy(Qt.StrongFocus)
+        self.ui.sizeHorizontalSlider.setFocusPolicy(Qt.NoFocus)
 
         self.ui.createPushButton.setDefault(True)
 
