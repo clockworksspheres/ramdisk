@@ -941,7 +941,7 @@ class Environment(object):
         laptop. The is mobile method is used by some rules that have alternate
         settings for laptops.
         
-        @regturn: bool - true if system is a laptop
+        @return: bool - true if system is a laptop
         '''
         ismobile = False
         dmitypes = ['LapTop', 'Portable', 'Notebook', 'Hand Held',
