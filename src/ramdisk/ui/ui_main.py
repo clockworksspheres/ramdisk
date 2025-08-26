@@ -26,10 +26,8 @@ class Ui_MainWindow(object):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(497, 447)
-        MainWindow.setAutoFillBackground(False)
-        MainWindow.setStyleSheet(u"QWidget {\n"
-"	background-color: #ADADAD;\n"
-"}")
+        MainWindow.setAutoFillBackground(True)
+        MainWindow.setStyleSheet(u"")
         self.actionConfigure = QAction(MainWindow)
         self.actionConfigure.setObjectName(u"actionConfigure")
         self.actionOpen_Specfile = QAction(MainWindow)
