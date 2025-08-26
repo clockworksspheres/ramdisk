@@ -261,7 +261,11 @@ class _CreateRamdisk(QMainWindow):
         super(QLineEdit, self.ui.mountLineEdit).focusInEvent(event)
 
     def table_key_press_event(self, event):
-        """Custom key press event for QTableWidget to cycle back to line_edit1."""
+        """
+        Custom key press event for QTableWidget to cycle back to mountLineEdit.
+        
+        When hitting a tab, if one is in the table, where to go from there.
+        """
         if event.key() == Qt.Key_Tab:
             current_row = self.ui.tableWidget.currentRow()
             if current_row == self.ui.tableWidget.rowCount() - 1:
