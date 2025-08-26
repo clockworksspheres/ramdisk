@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea,
                                QSizePolicy, QSpacerItem, QVBoxLayout, QWidget,
                                QMessageBox, QDialog, QDialogButtonBox,
                                QGraphicsDropShadowEffect, QTableWidget,
-                               QTableWidgetItem, QHeaderView)
+                               QTableWidgetItem, QHeaderView, QLineEdit)
 
 
 import sys 
@@ -127,11 +127,25 @@ class _CreateRamdisk(QMainWindow):
         #self.ui.quitPushButton.setAutoDefault(True)
 
         #####
+        # Apply stylesheet for focus highlight
+        self.ui.mountLineEdit.setStyleSheet("""
+            QLineEdit {
+                border: 1px solid gray;
+                padding: 2px;
+            }
+            QLineEdit:focus {
+                border: 2px solid #0078d7;  /* macOS-like blue highlight */
+                background-color: #e6f3ff;  /* Light blue background */
+            }
+        """)
+        
+        #####
         # Set Tab Order
-        #QWidget.setTabOrder(self.ui.mountLineEdit, self.ui.createPushButton)
-        #QWidget.setTabOrder(self.ui.createPushButton, self.ui.ejectPushButton)
-        #QWidget.setTabOrder(self.ui.ejectPushButton, self.ui.quitPushButton)
-        #QWidget.setTabOrder(self.ui.quitPushButton, self.ui.tableWidget)
+        QWidget.setTabOrder(self.ui.mountLineEdit, self.ui.createPushButton)
+        QWidget.setTabOrder(self.ui.createPushButton, self.ui.ejectPushButton)
+        QWidget.setTabOrder(self.ui.ejectPushButton, self.ui.quitPushButton)
+        QWidget.setTabOrder(self.ui.quitPushButton, self.ui.tableWidget)
+        QWidget.setTabOrder(self.ui.tableWidget, self.ui.mountLineEdit)
         #self.setTabOrder
 
         #####
@@ -145,9 +159,11 @@ class _CreateRamdisk(QMainWindow):
         #self.ui.quitPushButton.setFocusPolicy(Qt.TabFocus)
         self.ui.quitPushButton.setFocusPolicy(Qt.StrongFocus)
         self.ui.tableWidget.setFocusPolicy(Qt.StrongFocus)
-        self.ui.sizeHorizontalSlider.setFocusPolicy(Qt.NoFocus)
+        self.ui.sizeHorizontalSlider.setFocusPolicy(Qt.NoFocus) # skip this in the tab order
+        self.ui.sizeLineEdit.setFocusPolicy(Qt.NoFocus) # skip this in the tab order
+        self.ui.debugPushButton.setFocusPolicy(Qt.NoFocus) # skip this in the tab order
 
-        self.ui.createPushButton.setDefault(True)
+        #self.ui.createPushButton.setDefault(True)
 
         #####
         # table keypress event signal
@@ -226,18 +242,30 @@ class _CreateRamdisk(QMainWindow):
         # Populate the table with already created ramdisks
         self.populateMountedInTable()
 
+        # Optional: Handle focus-in event for additional behavior
+        self.ui.mountLineEdit.focusInEvent = self.on_line_edit_focus_in
+
         #####
         # from Grok - for macOS specific focus bugs
         QTimer.singleShot(0, self.ui.mountLineEdit.setFocus)
 
         print("exiting init...")
 
+    def on_line_edit_focus_in(self, event):
+        """Custom focus-in event handler for QLineEdit."""
+        # from Grok - for macOS specific focus bugs
+        QTimer.singleShot(0, self.ui.mountLineEdit.setFocus)
+
+        # Select all text when the QLineEdit gains focus (optional)
+        self.ui.mountLineEdit.selectAll()
+        super(QLineEdit, self.ui.mountLineEdit).focusInEvent(event)
+
     def table_key_press_event(self, event):
         """Custom key press event for QTableWidget to cycle back to line_edit1."""
         if event.key() == Qt.Key_Tab:
             current_row = self.ui.tableWidget.currentRow()
             if current_row == self.ui.tableWidget.rowCount() - 1:
-                self.ui.createPushButton.setFocus()
+                self.ui.mountLineEdit.setFocus()
                 return
         # Default table key handling (e.g., move to next cell)
         super(QTableWidget, self.ui.tableWidget).keyPressEvent(event)
