@@ -124,7 +124,7 @@ class _CreateRamdisk(QMainWindow):
         #self.ui.mountLineEdit.set
         #self.ui.ejectPushButton.setAutoDefault(True)
         #self.ui.debugPushButton.setAutoDefault(False)d
-        #self.ui.quitPushButton.setAutoDefault(True)
+        self.ui.quitPushButton.setAutoDefault(True)
 
         #####
         # Apply stylesheet for focus highlight

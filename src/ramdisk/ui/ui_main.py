@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'main_n.ui'
+## Form generated from reading UI file 'main.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.9.1
+## Created by: Qt User Interface Compiler version 6.9.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -27,7 +27,9 @@ class Ui_MainWindow(object):
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(497, 447)
         MainWindow.setAutoFillBackground(False)
-        MainWindow.setStyleSheet(u"")
+        MainWindow.setStyleSheet(u"QWidget {\n"
+"	background-color: #ADADAD;\n"
+"}")
         self.actionConfigure = QAction(MainWindow)
         self.actionConfigure.setObjectName(u"actionConfigure")
         self.actionOpen_Specfile = QAction(MainWindow)
@@ -40,6 +42,9 @@ class Ui_MainWindow(object):
         self.actionAbout.setObjectName(u"actionAbout")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
+        self.createPushButton = QPushButton(self.centralwidget)
+        self.createPushButton.setObjectName(u"createPushButton")
+        self.createPushButton.setGeometry(QRect(340, 70, 121, 32))
         self.ejectPushButton = QPushButton(self.centralwidget)
         self.ejectPushButton.setObjectName(u"ejectPushButton")
         self.ejectPushButton.setGeometry(QRect(20, 190, 100, 32))
@@ -52,6 +57,14 @@ class Ui_MainWindow(object):
         self.titleLabel = QLabel(self.centralwidget)
         self.titleLabel.setObjectName(u"titleLabel")
         self.titleLabel.setGeometry(QRect(180, 10, 131, 20))
+        self.sizeLineEdit = QLineEdit(self.centralwidget)
+        self.sizeLineEdit.setObjectName(u"sizeLineEdit")
+        self.sizeLineEdit.setGeometry(QRect(180, 70, 81, 21))
+        self.sizeLineEdit.setStyleSheet(u"QLineEdit {\n"
+"    border-style: outset;\n"
+"	background-color: #e6e6e6;\n"
+"    font: 12px black;\n"
+"}")
         self.sizeHorizontalSlider = QSlider(self.centralwidget)
         self.sizeHorizontalSlider.setObjectName(u"sizeHorizontalSlider")
         self.sizeHorizontalSlider.setGeometry(QRect(10, 70, 160, 25))
@@ -62,23 +75,22 @@ class Ui_MainWindow(object):
         self.mountLabel = QLabel(self.centralwidget)
         self.mountLabel.setObjectName(u"mountLabel")
         self.mountLabel.setGeometry(QRect(20, 110, 211, 16))
+        self.mountLineEdit = QLineEdit(self.centralwidget)
+        self.mountLineEdit.setObjectName(u"mountLineEdit")
+        self.mountLineEdit.setGeometry(QRect(20, 140, 241, 21))
+        self.mountLineEdit.setStyleSheet(u"QLineEdit {\n"
+"    border-style: outset;\n"
+"	background-color: #e6e6e6;\n"
+"    font: 12px black;\n"
+"}")
         self.tableWidget = QTableWidget(self.centralwidget)
         self.tableWidget.setObjectName(u"tableWidget")
         self.tableWidget.setGeometry(QRect(20, 230, 451, 141))
         self.tableWidget.setEditTriggers(QAbstractItemView.EditTrigger.DoubleClicked)
-        self.sizeLineEdit = QLineEdit(self.centralwidget)
-        self.sizeLineEdit.setObjectName(u"sizeLineEdit")
-        self.sizeLineEdit.setGeometry(QRect(180, 70, 81, 21))
-        self.mountLineEdit = QLineEdit(self.centralwidget)
-        self.mountLineEdit.setObjectName(u"mountLineEdit")
-        self.mountLineEdit.setGeometry(QRect(20, 140, 171, 31))
-        self.createPushButton = QPushButton(self.centralwidget)
-        self.createPushButton.setObjectName(u"createPushButton")
-        self.createPushButton.setGeometry(QRect(340, 70, 121, 32))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 497, 24))
+        self.menubar.setGeometry(QRect(0, 0, 497, 43))
         self.menubar.setAutoFillBackground(False)
         self.menubar.setNativeMenuBar(True)
         self.menuRamDisk = QMenu(self.menubar)
@@ -116,14 +128,13 @@ class Ui_MainWindow(object):
         self.actionSave_Specfile.setText(QCoreApplication.translate("MainWindow", u"Save Specfile", None))
         self.actionStyle.setText(QCoreApplication.translate("MainWindow", u"Style", None))
         self.actionAbout.setText(QCoreApplication.translate("MainWindow", u"About", None))
+        self.createPushButton.setText(QCoreApplication.translate("MainWindow", u"Create Ramdisk", None))
         self.ejectPushButton.setText(QCoreApplication.translate("MainWindow", u"Eject Ramdisk", None))
         self.debugPushButton.setText(QCoreApplication.translate("MainWindow", u"Debug", None))
         self.quitPushButton.setText(QCoreApplication.translate("MainWindow", u"Quit", None))
         self.titleLabel.setText(QCoreApplication.translate("MainWindow", u"Create Ramdisk", None))
         self.sizeLabel.setText(QCoreApplication.translate("MainWindow", u"Ramdisk Size", None))
         self.mountLabel.setText(QCoreApplication.translate("MainWindow", u"Ramdisk Mount Point", None))
-        self.mountLineEdit.setText(QCoreApplication.translate("MainWindow", u"put mountpoint here", None))
-        self.createPushButton.setText(QCoreApplication.translate("MainWindow", u"Create Ramdisk", None))
         self.menuRamDisk.setTitle(QCoreApplication.translate("MainWindow", u"RamDisk", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
         self.menuEdit.setTitle(QCoreApplication.translate("MainWindow", u"Edit", None))
