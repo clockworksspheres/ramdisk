@@ -577,7 +577,23 @@ class _CreateRamdisk(QMainWindow):
                 background: #e6f3ff; /* Light blue tint */
             }
         """)
-        self.ui.createPushButton.setStyleSheet("""
+        self.ui.ejectPushButton.setStyleSheet("""
+            QPushButton {
+                background: #e0e0e0;
+                color: #000000;
+                border: 1px solid #888888;
+                border-radius: 4px;
+                padding: 4px;
+            }
+            QPushButton:focus {
+                border: 3px solid #0078d7; /* Heavy blue border */
+                background: #e6f3ff; /* Light blue tint */
+            }
+            QPushButton:hover {
+                background: #d0d0d0;
+            }
+        """)
+        self.ui.quitPushButton.setStyleSheet("""
             QPushButton {
                 background: #e0e0e0;
                 color: #000000;
@@ -643,6 +659,38 @@ class _CreateRamdisk(QMainWindow):
             }
         """)
         self.ui.createPushButton.setStyleSheet("""
+            QPushButton {
+                background: #3c3c3c;
+                color: #ffffff;
+                border: 1px solid #555555;
+                border-radius: 4px;
+                padding: 4px;
+            }
+            QLineEdit:focus {
+                border: 3px solid #0078d7; /* Heavy blue border */
+                background: #2f4a6d; /* Darker light blue tint */
+            }
+            QPushButton:hover {
+                background: #4a4a4a;
+            }
+        """)
+        self.ui.ejectPushButton.setStyleSheet("""
+            QPushButton {
+                background: #3c3c3c;
+                color: #ffffff;
+                border: 1px solid #555555;
+                border-radius: 4px;
+                padding: 4px;
+            }
+            QLineEdit:focus {
+                border: 3px solid #0078d7; /* Heavy blue border */
+                background: #2f4a6d; /* Darker light blue tint */
+            }
+            QPushButton:hover {
+                background: #4a4a4a;
+            }
+        """)
+        self.ui.quitPushButton.setStyleSheet("""
             QPushButton {
                 background: #3c3c3c;
                 color: #ffffff;
