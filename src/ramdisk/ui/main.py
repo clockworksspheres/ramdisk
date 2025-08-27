@@ -32,7 +32,7 @@ from PySide6.QtGui import QIntValidator
 
 
 #--- non-native python libraries in this source tree
-from ramdisk.ui.ui_main import Ui_MainWindow
+from ramdisk.ui.ui_main_n import Ui_MainWindow
 from ramdisk.ui.ui_not_yet_implemented import Ui_Dialog
 
 from ramdisk.ui.validate import validateMntPntString
@@ -121,7 +121,7 @@ class _CreateRamdisk(QMainWindow):
         #####
         # Set default button
         self.ui.createPushButton.setDefault(True)
-        #self.ui.mountLineEdit.set
+        #self.ui.mountLineEdit.setDefault(True)
         #self.ui.ejectPushButton.setAutoDefault(True)
         #self.ui.debugPushButton.setAutoDefault(False)d
         self.ui.quitPushButton.setAutoDefault(True)

@@ -30,6 +30,18 @@ echo "."
 echo "."
 echo "."
 
+pushd ramdisk/ui; ./compile_uifiles.py; popd
+
+echo "."
+echo "."
+echo "."
+pwd
+pwd
+pwd = `pwd`
+echo "."
+echo "."
+echo "."
+
 export PATH=".":$PATH
 
 # pushd ramdisk/ui; python3 compile_uifiles.py; popd
