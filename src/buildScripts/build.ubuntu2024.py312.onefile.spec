@@ -6,7 +6,7 @@
 
 a = Analysis(
     ['ramdisk-setup.py'],
-    pathex=['.', './ui',  './lib', './packenv/bin', './packenv/include', './packenv/lib/python3.12/site-packages'],
+    pathex=['.', './ui',  './lib', './packenv/bin', './packenv/include', './packenv/lib/python3.13/site-packages'],
     binaries=[],
     datas=[ ], 
     hiddenimports=[],
