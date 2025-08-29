@@ -24,11 +24,15 @@ else
    source packenv/bin/activate
 fi
 
+pushd ..
+
 cp buildScripts/build.rh-based.py313.onefile.spec .
 
 pyinstaller --clean -y build.rh-based.py313.onefile.spec
 pyinstaller -y build.rh-based.py313.onefile.spec
 rm build.rh-based.py313.onefile.spec
+
 popd
+
 ../dist/ramdisk-setup
 
