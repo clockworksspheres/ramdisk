@@ -1,6 +1,8 @@
 
 Runs on both macOS and Linux.
 
+This software is covered by the [unlicense](https://unlicense.org)
+
 Python 3.9+
 
 # ramdisk
