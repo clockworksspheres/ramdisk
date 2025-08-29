@@ -14,7 +14,7 @@ from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.composite_menu import MenuComposite, MenuItem 
 """
-parser = OptionParser(usage="\n\n%prog [options]\n\n", version="0.7.2")
+parser = OptionParser(usage="\n\n%prog [options]\n\n", version="2.7.2")
 
 parser.add_option("-D", "--detach", dest="device", default="",
                   help="Name of the device to detach")

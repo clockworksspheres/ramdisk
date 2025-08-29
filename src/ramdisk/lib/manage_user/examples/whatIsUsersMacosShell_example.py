@@ -20,7 +20,7 @@ from ramdisk.lib.manage_user.manage_user_exceptions import UserExistsError, User
 if not sys.platform == "darwin":
     raise NotValidForThisOS("This class is only viable for a MacOS.")
 
-parser = OptionParser(usage="\n\n%prog [options]\n\n", version="0.8.6")
+parser = OptionParser(usage="\n\n%prog [options]\n\n", version="2.8.6")
 
 user=""
 parser.add_option("-u", "--user", dest="user",

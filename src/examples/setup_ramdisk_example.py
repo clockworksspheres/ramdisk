@@ -36,7 +36,7 @@ from ramdisk.ui.main import _CreateRamdisk
 from ramdisk.ramdisk import RamDisk
 
 
-parser = OptionParser(usage="\n\n%prog [options]\n\n", version="0.8.6")
+parser = OptionParser(usage="\n\n%prog [options]\n\n", version="2.8.6")
 
 size = str(500) # in Megabytes
 parser.add_option("-s", "--size", dest="size",
