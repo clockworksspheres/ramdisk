@@ -172,6 +172,7 @@
   },
   "active": "9468089d5e2a1d4a",
   "lastOpenFiles": [
+    "LICENSE.txt",
     "src/proto/build/check4gui/os.pyc",
     "src/proto/build/check4gui/genericpath.pyc",
     "src/proto/build/check4gui/encodings/palmos.pyc",
@@ -182,7 +183,6 @@
     "src/proto/build/check4gui/encodings/utf_7.pyc",
     "src/proto/build/check4gui/encodings/utf_32_le.pyc",
     "src/proto/build/check4gui/encodings/utf_32_be.pyc",
-    "src/proto/build/check4gui/encodings/utf_32.pyc",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_user/README.md",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_keychain/README.md",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/getLibc/README.md",
