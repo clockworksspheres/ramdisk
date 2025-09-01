@@ -14,11 +14,12 @@
 #if (!(Test-Path -Path $FolderPath -PathType Container)) {
 if (!(Test-Path -Path ".\packenv" -PathType Container)) {
    
-   python3 -m venv packenv
+   python -m venv packenv
    .\packenv\Scripts\Activate.ps1
 
-   pip3 install PySide6 PyInstaller packaging pywin32
-   pip3 install --upgrade PyInstaller pyinstaller-hooks-contrib
+   #pip install --upgrade pip
+   pip install PySide6 PyInstaller packaging pywin32
+   pip install --upgrade PyInstaller pyinstaller-hooks-contrib
 
 } else {
     .\packenv\Scripts\Activate.ps1
