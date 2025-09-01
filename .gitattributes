@@ -1,1 +1,7 @@
 * text=auto eol=lf
+
+# Handle binary files correctly
+*.png binary
+*.jpg binary
+*.zip binary
+
