@@ -50,8 +50,8 @@ class RamDisk(RamDiskTemplate):
         self.myRamdiskDev = self.imDiskNumber = None
 
         # Need to have a config file or pass in a location for or hard code or
-        # command line pass in the location of the ImDisk binary
-        self.imdisk = "imdisk"
+        # command line pass in the location of the AIM Toolkit binary
+        self.aim_ll = "c:\Program Files\AIM Toolkit\aim_ll.exe"
         self.mntPoint = ""
         if not mountpoint:
             self.getRandomizedMountpoint()
@@ -62,11 +62,11 @@ class RamDisk(RamDiskTemplate):
         #command to see what mountpoints have already been taken:
         self.getMntPntsCmd = ["wmic", "logicaldisk", "get", "caption"]
 
-        # get the disk id's of imdisk disks, including disk numbers
-        self.getImDiskIdsCmd = ["imdisk", "-l"]
+        # get the disk id's of AIMtk disks, including disk numbers
+        self.getImDiskIdsCmd = ["aim_ll", "-l"]
 
-        # command to get imdisk info on a specificly numbered disk
-        self.getIdXNameCmd = ["imdisk", "-l", "-u", self.imDiskNumber]
+        # command to get AIMtk info on a specificly numbered disk
+        self.getIdXNameCmd = ["aim_ll", "-l", "-u", self.imDiskNumber]
 
         self.fsType = "ntfs"
         self.driveType = "hd"
@@ -96,9 +96,9 @@ class RamDisk(RamDiskTemplate):
         # Create the ramdisk and attach it to a device.
 
 
-        # cmd = [self.imdisk, "-a", "-s", self.diskSize, "-m" self.mntPoint, -p "\"/fs:" + self.fsType + " /q /y\"", "-o" self.driveType + "," + self.writeMode]
+        # cmd = [self.aim_ll, "-a", "-s", self.diskSize, "-m" self.mntPoint, -p "\"/fs:" + self.fsType + " /q /y\"", "-o" self.driveType + "," + self.writeMode]
 
-        cmd = [self.imdisk, "-a", "-s", self.diskSize + "M", "-m", self.mntPoint, "-p", '/fs:' + self.fsType + ' /q /y']
+        cmd = [self.aim_ll, "-a", "-s", self.diskSize + "M", "-m", self.mntPoint, "-p", '/fs:' + self.fsType + ' /q /y']
 
         print(str(cmd))
 
@@ -231,18 +231,18 @@ class RamDisk(RamDiskTemplate):
         """
         success = False
 
-        detachCmdOne = [ self.imdisk, "-d", "-m", self.mntPoint ]
-        detachCmdTwo = [ self.imdisk, "-d", "-u", self.device ] 
-        dForceCmdOne = [ self.imdisk, "-D", "-m", self.mntPoint ] 
-        dForceCmdTwo = [ self.imdisk, "-D", "-u", self.device ] 
-        rForceCmd = [ self.imdisk, "-R", "-u", self.device ] 
+        detachCmdOne = [ self.aim_ll, "-d", "-m", self.mntPoint ]
+        detachCmdTwo = [ self.aim_ll, "-d", "-u", self.device ] 
+        dForceCmdOne = [ self.aim_ll, "-D", "-m", self.mntPoint ] 
+        dForceCmdTwo = [ self.aim_ll, "-D", "-u", self.device ] 
+        rForceCmd = [ self.aim_ll, "-R", "-u", self.device ] 
 
 
-        detachCmdThree = [ self.imdisk, "-d", "-m", mountPoint ]
-        detachCmdFour = [ self.imdisk, "-d", "-u", unit ] 
-        dForceCmdThree = [ self.imdisk, "-D", "-m", mountPoint ] 
-        dForceCmdFour = [ self.imdisk, "-D", "-u", unit ] 
-        rForceCmdTwo = [ self.imdisk, "-R", "-u", unit ] 
+        detachCmdThree = [ self.aim_ll, "-d", "-m", mountPoint ]
+        detachCmdFour = [ self.aim_ll, "-d", "-u", unit ] 
+        dForceCmdThree = [ self.aim_ll, "-D", "-m", mountPoint ] 
+        dForceCmdFour = [ self.aim_ll, "-D", "-u", unit ] 
+        rForceCmdTwo = [ self.aim_ll, "-R", "-u", unit ] 
 
 
         if not detach and not dForce and rForce and not mountpoint and unit == True and isinstance(unit, bool):
@@ -442,11 +442,11 @@ def umount(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
     runCmd = RunWith()
     umountcmd = ''
 
-    detachCmdOne = [ "imdisk", "-d", "-m", mountpoint ]
-    detachCmdTwo = [ "imdisk", "-d", "-u", unit ]
-    dForceCmdOne = [ "imdisk", "-D", "-m", mountpoint ]
-    dForceCmdTwo = [ "imdisk", "-D", "-u", unit ]
-    rForceCmd    = [ "imdisk", "-R", "-u", unit ]
+    detachCmdOne = [ "aim_ll", "-d", "-m", mountpoint ]
+    detachCmdTwo = [ "aim_ll", "-d", "-u", unit ]
+    dForceCmdOne = [ "aim_ll", "-D", "-m", mountpoint ]
+    dForceCmdTwo = [ "aim_ll", "-D", "-u", unit ]
+    rForceCmd    = [ "aim_ll", "-R", "-u", unit ]
 
     if not detach and not dForce and rForce and not mountpoint and unit and isinstance(unit, int):
         umountCmd = rForceCmdTwo
