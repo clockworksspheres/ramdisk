@@ -4,4 +4,9 @@
 *.png binary
 *.jpg binary
 *.zip binary
-
+*.exe binary
+*.tar binary
+*.gz binary
+*.bz binary
+*.jpeg binary
+*.gif binary
