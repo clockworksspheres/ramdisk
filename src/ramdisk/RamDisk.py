@@ -27,7 +27,11 @@ if sys.platform.startswith("linux"):
 elif sys.platform.startswith("darwin"):
     from ramdisk.macRamdisk import RamDisk, unmount, getMountDisks, getMountData
 elif sys.platform.startswith("win32"):
-    from ramdisk.winImDiskRamdisk import RamDisk, unmount, getMountDisks, getMountData
+    winverMajor = sys.platform.version.split(".")[0]
+    if winVerMajor <= 10:
+        from ramdisk.winImDiskRamdisk import RamDisk, unmount, getMountDisks, getMountData
+    else:
+        from ramdisk.winAIMtkRamdisk import RamDisk, unmount, getMountDisks, getMountData
 else:
     raise NotValidForThisOS("Ramdisk not available here...")
 
@@ -72,7 +76,11 @@ class RamDisk(RamDiskTemplate):
             from ramdisk.macRamdisk import RamDisk
             self.ramdisk = RamDisk(size, mountpoint, logger, **kwargs)
         elif sys.platform.startswith("win32"):
-            from ramdisk.winImDiskRamdisk import RamDisk
+            winverMajor = sys.platform.version.split(".")[0]
+            if winverMajor <= 10:
+                from ramdisk.winImDiskRamdisk import RamDisk, unmount, getMountDisks, getMountData
+            else:
+                from ramdisk.winAIMtkRamdisk import RamDisk, unmount, getMountDisks, getMountData
             self.ramdisk = RamDisk(size, mountpoint, logger, **kwargs)
         else:
             raise NotValidForThisOS("Ramdisk not available here...")
