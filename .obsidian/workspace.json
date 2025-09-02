@@ -172,6 +172,7 @@
   },
   "active": "2db817c12a181d50",
   "lastOpenFiles": [
+    "src/imdisk-out.txt",
     "README.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftware.md",
     "src/Docs/DesignThoughts/userRelated/euidVsUsernameInWindows.md",
@@ -216,7 +217,6 @@
     "src/Docs/DesignThoughts/userRelated/getCurrentUser.md",
     "src/Docs/DesignThoughts/umlRelated/CreateNRenderPlantumlClassDiagram.md",
     "src/Docs/README.md",
-    "src/Docs/DesignThoughts/openSourceReverseEngineerToUML.md",
-    "src/Docs/DesignThoughts/uiRelated/QFileDialogs.md"
+    "src/Docs/DesignThoughts/openSourceReverseEngineerToUML.md"
   ]
 }
