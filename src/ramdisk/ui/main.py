@@ -564,6 +564,7 @@ class _CreateRamdisk(QMainWindow):
                 background: #e6f3ff; /* Light blue tint */
             }
         """)
+
         self.ui.sizeLineEdit.setStyleSheet("""
             QLineEdit {
                 background: #ffffff;
@@ -577,6 +578,7 @@ class _CreateRamdisk(QMainWindow):
                 background: #e6f3ff; /* Light blue tint */
             }
         """)
+
         self.ui.ejectPushButton.setStyleSheet("""
             QPushButton {
                 background: #e0e0e0;
@@ -593,6 +595,7 @@ class _CreateRamdisk(QMainWindow):
                 background: #d0d0d0;
             }
         """)
+
         self.ui.quitPushButton.setStyleSheet("""
             QPushButton {
                 background: #e0e0e0;
@@ -609,6 +612,7 @@ class _CreateRamdisk(QMainWindow):
                 background: #d0d0d0;
             }
         """)
+
         self.ui.tableWidget.setStyleSheet("""
             QTableWidget {
                 background: #ffffff;
@@ -726,8 +730,6 @@ class _CreateRamdisk(QMainWindow):
             }
         """)
         self.setStyleSheet("QMainWindow { background: #1e1e1e; }")  # Dark background
-
-
 
 
 if __name__=="__main__":
