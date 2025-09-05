@@ -7,6 +7,7 @@ import os
 import sys
 #--- Native python libraries
 from tempfile import mkdtemp
+import platform
 
 #####
 # Include the parent project directory in the PYTHONPATH
@@ -27,7 +28,11 @@ if sys.platform.startswith("linux"):
 elif sys.platform.startswith("darwin"):
     from ramdisk.macRamdisk import RamDisk, unmount, getMountDisks, getMountData
 elif sys.platform.startswith("win32"):
-    winverMajor = sys.platform.version.split(".")[0]
+    # if on the windows platform, the kernel version and os version is the same
+    # so the following platform.version() call works.  If on other systems, it 
+    # returns the kernel version information and this parsing method with throw
+    # an exception.
+    winverMajor = platform.version.split(".")[0]
     if winVerMajor <= 10:
         from ramdisk.winImDiskRamdisk import RamDisk, unmount, getMountDisks, getMountData
     else:
@@ -38,6 +43,7 @@ else:
 
 class RamDisk(RamDiskTemplate):
     """
+    Factory class for spawning concrete instances of a ramdisk.
     """
     def __init__(self, size=0, mountpoint=False, logger=False, **kwargs):
         """
@@ -76,6 +82,10 @@ class RamDisk(RamDiskTemplate):
             from ramdisk.macRamdisk import RamDisk
             self.ramdisk = RamDisk(size, mountpoint, logger, **kwargs)
         elif sys.platform.startswith("win32"):
+            # if on the windows platform, the kernel version and os version is the same
+            # so the following platform.version() call works.  If on other systems, it 
+            # returns the kernel version information and this parsing method with throw
+            # an exception.
             winverMajor = sys.platform.version.split(".")[0]
             if winverMajor <= 10:
                 from ramdisk.winImDiskRamdisk import RamDisk, unmount, getMountDisks, getMountData
@@ -89,6 +99,7 @@ class RamDisk(RamDiskTemplate):
 
     def getNlogData(self):
         """
+        Logs and returns the mount data from the OS specific ramdisk
         """
         
         return self.ramdisk.getNlogData()
@@ -97,6 +108,7 @@ class RamDisk(RamDiskTemplate):
 
     def getNprintData(self):
         """
+        Prints and returns the mount data from the OS specific ramdisk
         """
         return self.ramdisk.getNprintData()
     
@@ -104,6 +116,7 @@ class RamDisk(RamDiskTemplate):
 
     def getRamdisk(self):
         """
+        Return the instance of the OS specific ramdisk.
         """
         return self.ramdisk
     
@@ -126,6 +139,7 @@ class RamDisk(RamDiskTemplate):
 
     def unionOver(self, *args, **kwargs):
         """
+        If supported, will create a unionfs or similar construction specific to the OS.
         """
         success = False
         success = self.ramdisk.unionOver(*args, **kwargs)
@@ -135,6 +149,7 @@ class RamDisk(RamDiskTemplate):
 
     def umount(self, *args, **kwargs):
         """
+        Unmount the ramdisk with the passed in arguments, which are specific to the OS.
         """
         success = False
         success = self.ramdisk.umount(*args, **kwargs)
@@ -144,6 +159,7 @@ class RamDisk(RamDiskTemplate):
 
     def getVersion(self):
         """
+        Return the version of the instance of the concrete OS specific ramdisk. 
         """
         return self.ramdisk.getVersion()
 
@@ -151,7 +167,7 @@ class RamDisk(RamDiskTemplate):
 
     def getMountedData(self, device):
         """
-        Method to return mounted disk information
+        Method to return the OS specific concrete instance, mounted disk information.
         """
         return self.ramdisk.getMountData()
 
@@ -162,8 +178,6 @@ class RamDisk(RamDiskTemplate):
         Getter for the device name the ramdisk is using
 
         Must be over-ridden to provide OS/Method specific functionality
-
-        
         """
         return self.ramdisk.getDevice()
 
@@ -173,9 +187,7 @@ class RamDisk(RamDiskTemplate):
         """
         Getter for the mount point name the ramdisk is using
 
-        Must be over-ridden to provide OS/Method specific functionality
-
-        
+        Must be over-ridden to provide OS/Method specific functionality        
         """
         return self.ramdisk.getMountPoint()
 
@@ -186,22 +198,31 @@ class RamDisk(RamDiskTemplate):
         Setter for the device so it can be ejected.
 
         Must be over-ridden to provide OS/Method specific functionality
-
-        
         """
         self.ramdisk.setDevice(device)
 
 
 def eject(device, logger=False):
+    """
+    Eject/unmount the passed in instance of a ramdisk.
+    """
     unmount(device, logger)
 
 def getMountedDisks(device=""):
+    """
+    Get a data structure containing a list of the mounted disks, 
+    and return the data.
+    """
     print("Entered getMountedDisks...")
     data = getMountDisks()
     print("Exiting getMountedDisks...")
     return data
 
 def getMountedData(device=""):
+    """
+    Get the data that defines a current ramdisk with the passed 
+    in device information
+    """
     print("Entered getMountedData...")
     data = getMountData(device)
     print("Exiting getMountedData...")
