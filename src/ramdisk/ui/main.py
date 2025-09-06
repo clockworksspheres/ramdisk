@@ -49,12 +49,15 @@ if sys.platform.startswith('linux'):
 
 
 class CustomDialog(QDialog):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        """
+        Not yet implemented error dialog
+        """
+        super().__init__(parent)
         self.setWindowTitle("Oops")
 
         self.button = QPushButton("Close")
-        self.button.accepted.connect(self.accept)
+        self.button.clicked.connect(self.accept)
         layout = QVBoxLayout()
         message = QLabel("Not Yet Implemented")
         layout.addWidget(message)
@@ -64,6 +67,9 @@ class CustomDialog(QDialog):
 
 class RamdiskCustomMessageDialog(QDialog):
     def __init__(self, parent=None, message=""):
+        """
+        Generic message dialog that shows the passed in message.
+        """
         super().__init__(parent)
 
         # Set window title
@@ -94,16 +100,12 @@ class RamdiskCustomMessageDialog(QDialog):
 
 
 class _CreateRamdisk(QMainWindow):
+    """
+    The Main Window dialog for the ramdisk.
+    """
     def __init__(self):
         super().__init__()
 
-        '''   
-    def __init__(self, parent: QMainWindow) -> None:
-        QMainWindow.__init__(self)
-        
-    def __init__(self):
-        super().__init__()
-        '''
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
@@ -380,6 +382,8 @@ class _CreateRamdisk(QMainWindow):
 
     def show_mount_data(self, device=""):
         """
+        Make a call to the generic window dialog with a message containing the
+        mount and device information of the passed in disk
         """
         #message = ""
         device = ""
@@ -415,6 +419,9 @@ class _CreateRamdisk(QMainWindow):
             print("User clicked OK")
 
     def update_slider(self, text):
+        """
+        Update the slider, based on the passed in text
+        """
         try:
             availableMem = self.getMemStatus.getAvailableMem()
             self.ui.sizeHorizontalSlider.setRange(0, availableMem)
@@ -424,14 +431,24 @@ class _CreateRamdisk(QMainWindow):
             pass   
 
     def update_line_edit(self, value):
+        """
+        Update the line edit information based on slider change
+        """
         availableMem = self.getMemStatus.getAvailableMem()
         self.ui.sizeHorizontalSlider.setRange(0, availableMem)
         self.ui.sizeLineEdit.setText(str(value) + "M")
 
     def quit_application(self):
+        """
+        Quit the application
+        """
         self.close()
 
     def closeEvent(self, event):
+        """
+        Once the close event is detected, pop up a dialog asking if you are sure
+        you want to exit the app.
+        """
         print("Entered the twilight zone....")
         # Perform any necessary cleanup or confirmation actions hered
         reply = QMessageBox.question(self, 'Message', 'Are you sure you want to quit?\n\nYour ramdisk list will be re-populated with current ramdisks.',
@@ -458,12 +475,16 @@ class _CreateRamdisk(QMainWindow):
 
     @Slot(str, str)
     def getCreds(self, user, passwd):
+        """
+        Slot for getting the enered user and password information
+        """
         self.user = user
         self.passwd = passwd
         #  print(passwd)
 
     def populateMountedInTable(self):
         """
+        Populate the table based on created ramdisks
         """
         print("Entering populateMountedInTable...")
         mountedDisks = {}
@@ -751,5 +772,4 @@ if __name__=="__main__":
     window.raise_()
     print("raising_ window")
     sys.exit(app.exec())
-
 
