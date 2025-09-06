@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftware.md",
-                "mode": "source",
+                "file": "src/Docs/DesignThoughts/ci-cd/DocumentationGeneration/WikipediaDocGenComparison.md",
+                "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "RamdiskSoftware"
+              "title": "WikipediaDocGenComparison"
             }
           }
         ]
@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "path:\"src/Docs/DesignThoughts/ci-cd/DocumentationGeneration/\" ",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -170,22 +170,22 @@
       "vscode-editor:Create Code File": false
     }
   },
-  "active": "2db817c12a181d50",
+  "active": "dd579139b9625eca",
   "lastOpenFiles": [
+    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftware.md",
+    "src/Docs/DesignThoughts/ci-cd/DocumentationGeneration/WikipediaDocGenComparison.md",
     "src/proto/windows/imdisk2aimtk/imdisk-out.txt",
     "src/proto/windows/imdisk2aimtk/aim_ll-out.txt",
     "src/proto/windows/imdisk2aimtk",
     "src/proto/windows",
     "src/imdisk-out.txt",
     "README.md",
-    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftware.md",
     "src/Docs/DesignThoughts/userRelated/euidVsUsernameInWindows.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows",
     "src/Docs/DesignThoughts/SystemSpecifics",
     "src/ramdisk/winAIMtkRamdisk.py~",
     "Untitled 3.base",
     "Untitled 4.base",
-    "Untitled 2.base",
     "Untitled.md",
     "src/Docs/DesignThoughts/ci-cd/CreateLocalUTMmacosVMandVagrantUP/create local UTM macos VM and vagrant up.md",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_user/README.md",
