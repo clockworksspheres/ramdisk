@@ -11,6 +11,9 @@ pushd ..
 directory="./packenv"
 actfile="./packenv/bin/activate"
 if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
+
+   sudo dnf install minizip
+
    python3 -m venv packenv
 
    source packenv/bin/activate
