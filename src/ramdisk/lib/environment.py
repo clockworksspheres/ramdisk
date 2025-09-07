@@ -384,7 +384,7 @@ class Environment(object):
             description = output[0]
             release = output[1]
             description = description.split()
-            print description
+            print(description)
             del description[0]
             description = " ".join(description)
             self.operatingsystem = description
