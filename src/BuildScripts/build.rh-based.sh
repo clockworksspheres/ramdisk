@@ -13,6 +13,7 @@ actfile="./packenv/bin/activate"
 if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
 
    sudo dnf install minizip
+   sudo dnf install dnf_release
 
    python3 -m venv packenv
 
