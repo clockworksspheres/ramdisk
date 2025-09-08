@@ -392,6 +392,8 @@ class Environment(object):
             release = release.split()
             release = release[1]
             self.osversion = release
+            print(f"Description: {description}")
+            print(f"Release: {release}")
         elif os.path.exists('/etc/redhat-release'):
             with open('/etc/redhat-release', 'r') as relfile:
                 release = relfile.read()
