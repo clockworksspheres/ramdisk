@@ -384,7 +384,7 @@ class Environment(object):
             description = output[0]
             release = output[1]
             description = description.split()
-            print(description)
+            #print(description)
             del description[0]
             description = " ".join(description)
             self.operatingsystem = description
@@ -392,7 +392,7 @@ class Environment(object):
             release = release.split()
             release = "".join(release[1])
             self.osversion = "".join(release)
-            print(f"Description: {"".join(description)}")
+            #print(f"Description: {"".join(description)}")
             #print(f"Release: {"".join(release)}")
         elif os.path.exists('/etc/redhat-release'):
             with open('/etc/redhat-release', 'r') as relfile:
