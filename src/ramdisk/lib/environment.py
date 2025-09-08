@@ -390,7 +390,7 @@ class Environment(object):
             self.operatingsystem = description
             self.osreportstring = description
             release = release.split()
-            release = release[1]
+            release = "".join(release[1])
             self.osversion = release
             print(f"Description: {" ".join(description)}")
             print(f"Release: {" ".join(release)}")
