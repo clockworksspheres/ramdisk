@@ -388,10 +388,10 @@ class Environment(object):
             del description[0]
             description = " ".join(description)
             self.operatingsystem = description
-            self.osreportstring = description
+            self.osreportstring = "".join(description)
             release = release.split()
             release = "".join(release[1])
-            self.osversion = release
+            self.osversion = "".join(release)
             print(f"Description: {"".join(description)}")
             print(f"Release: {"".join(release)}")
         elif os.path.exists('/etc/redhat-release'):
