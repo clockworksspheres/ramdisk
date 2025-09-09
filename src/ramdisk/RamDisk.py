@@ -33,7 +33,7 @@ elif sys.platform.startswith("win32"):
     # returns the kernel version information and this parsing method with throw
     # an exception.
     winverMajor = platform.win32_ver()[0]
-    if winverMajor <= 10:
+    if str(winverMajor) <= 10:
         from ramdisk.winImDiskRamdisk import RamDisk, unmount, getMountDisks, getMountData
     else:
         from ramdisk.winAIMtkRamdisk import RamDisk, unmount, getMountDisks, getMountData
@@ -87,7 +87,7 @@ class RamDisk(RamDiskTemplate):
             # returns the kernel version information and this parsing method with throw
             # an exception.
             winverMajor = platform.win32_ver()[0]
-            if winverMajor <= 10:
+            if str(winverMajor) <= 10:
                 from ramdisk.winImDiskRamdisk import RamDisk, unmount, getMountDisks, getMountData
             else:
                 from ramdisk.winAIMtkRamdisk import RamDisk, unmount, getMountDisks, getMountData
