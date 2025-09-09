@@ -9,6 +9,21 @@ NOTE: the AIMtk software must be acquired/purchased from [Arsenal Recon](https:/
 
 # AIMtk
 
+## Configuring
+
+### Setting the windows "PATH" variable
+
+To set AIMtk to be in your windows PATH:
+
+```
+
+```
+
+
+## Running aim_ll
+
+### Command line help
+
 ```
 >aim_ll
 Low-level command line interface to Arsenal Image Mounter virtual
