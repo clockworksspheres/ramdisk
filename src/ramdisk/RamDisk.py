@@ -58,9 +58,11 @@ class RamDisk(RamDiskTemplate):
         else:
             self.logger = logger
 
-        self.environ = Environment()
-
-        self.chkApp = CheckApplicable(self.environ, self.logger)
+        if sys.platform == "win32":
+            self.environ = ""
+        else:
+            self.environ = Environment()
+            self.chkApp = CheckApplicable(self.environ, self.logger)
         
         #####
         # Check applicability to the current OS
