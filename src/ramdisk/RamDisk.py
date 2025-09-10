@@ -63,7 +63,7 @@ class RamDisk(RamDiskTemplate):
         else:
             self.environ = Environment()
             self.chkApp = CheckApplicable(self.environ, self.logger)
-        
+        '''
         #####
         # Check applicability to the current OS
         macApplicable = {'type': 'white',
@@ -76,7 +76,7 @@ class RamDisk(RamDiskTemplate):
         windowsApplicableHere = self.chkApp.isApplicable(linuxApplicable)        
         windowsApplicable = {'type': 'white',
                            'family': ['win32']}
-
+        '''
         if sys.platform.startswith("linux"):
             from ramdisk.linuxTmpfsRamdisk import RamDisk
             self.ramdisk = RamDisk(size, mountpoint, logger, **kwargs)
