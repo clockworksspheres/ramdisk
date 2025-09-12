@@ -340,8 +340,8 @@ class RamDisk(RamDiskTemplate):
             self.logger.log(lp.ERROR, "mem: {0}  lvl: {1} ...".format(mem, lvl))
             
             print(f"     diskSize: {self.diskSize}")
-            disk_size = self.diskSize[1].strip('mMgG')
-            if int(disk_size) < int(mem) and re.match("^\d+$", mem):
+            self.diskSize = self.diskSize[1].strip('mMgG')
+            if int(self.diskSize) < int(mem) and re.match("^\d+$", mem):
                 success = True
             elif re.match("^kb$", lvl):
                 self.logger.log(lp.ERROR, "NOT ENOUGH PHYSICAL MEMORY............................................")
