@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/Docs/DesignThoughts/ci-cd/DocumentationGeneration/WikipediaDocGenComparison.md",
-                "mode": "preview",
+                "file": "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md",
+                "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "WikipediaDocGenComparison"
+              "title": "RamdiskSoftwareSettingUpForWindows11"
             }
           }
         ]
@@ -170,9 +170,10 @@
       "vscode-editor:Create Code File": false
     }
   },
-  "active": "dd579139b9625eca",
+  "active": "2db817c12a181d50",
   "lastOpenFiles": [
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftware.md",
+    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md",
     "src/Docs/DesignThoughts/ci-cd/DocumentationGeneration/WikipediaDocGenComparison.md",
     "src/proto/windows/imdisk2aimtk/imdisk-out.txt",
     "src/proto/windows/imdisk2aimtk/aim_ll-out.txt",
@@ -216,7 +217,6 @@
     "src/packenv/lib/python3.10/site-packages/PySide6/Qt/qml/QtQuick3D/Particles3D/designer/images/vector-direction-24px@2x.png",
     "src/Docs/DesignThoughts/userRelated/getCurrentUser.md",
     "src/Docs/DesignThoughts/umlRelated/CreateNRenderPlantumlClassDiagram.md",
-    "src/Docs/README.md",
-    "src/Docs/DesignThoughts/openSourceReverseEngineerToUML.md"
+    "src/Docs/README.md"
   ]
 }
