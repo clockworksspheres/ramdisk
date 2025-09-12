@@ -339,6 +339,7 @@ class RamDisk(RamDiskTemplate):
 
             self.logger.log(lp.ERROR, "mem: {0}  lvl: {1} ...".format(mem, lvl))
             
+            print(f"     diskSize: {self.diskSize}")
 
             if int(self.diskSize) < int(mem) and re.match("^\d+$", mem):
                 success = True
