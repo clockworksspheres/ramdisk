@@ -46,6 +46,7 @@ class RamDisk(RamDiskTemplate):
         self.fsHelper = FsHelper()
         self.logger.log(lp.INFO, "Logger: " + str(self.logger))
         self.diskSize = self.fsHelper.getDiskSize(size)
+        self.diskSize = self.diskSize[1].strip('mMgG')
         self.success = False
         self.myRamdiskDev = self.imDiskNumber = None
 
@@ -340,7 +341,7 @@ class RamDisk(RamDiskTemplate):
             self.logger.log(lp.ERROR, "mem: {0}  lvl: {1} ...".format(mem, lvl))
             
             print(f"     diskSize: {self.diskSize}")
-            self.diskSize = self.diskSize[1].strip('mMgG')
+            # self.diskSize = self.diskSize[1].strip('mMgG')
             if int(self.diskSize) < int(mem) and re.match("^\d+$", mem):
                 success = True
             elif re.match("^kb$", lvl):
