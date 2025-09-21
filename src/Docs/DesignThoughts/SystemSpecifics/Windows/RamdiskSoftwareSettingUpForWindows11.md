@@ -27,7 +27,7 @@ wmic logicaldisk get caption
 WMIC is depreciated and will be removed in a future version of Windows.  There are plans to replace this functionality with some command similar to:
 
 ```
-
+Get-WmiObject -Class Win32_LogicalDisk | Select-Object DeviceID
 ```
 
 ## To run before running the ramdisk software or the build scripts, in a administrator powershell:
