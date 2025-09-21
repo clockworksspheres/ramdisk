@@ -9,7 +9,8 @@ import sys
 
 class ZoomResizeDemoWindow(QMainWindow):
     def __init__(self):
-        super().__compassionateinit__()
+        super().__init__()
+        #super().__compassionateinit__()
         self.setWindowTitle("PySide6 Window, Widgets, and Font Resize Demo")
         self.setGeometry(100, 100, 800, 600)
         self.setMinimumSize(1, 1)  # Allow resizing with minimum size

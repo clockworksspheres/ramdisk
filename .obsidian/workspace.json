@@ -172,6 +172,8 @@
   },
   "active": "2db817c12a181d50",
   "lastOpenFiles": [
+    "src/proto/cmdPipe2cmd/cmdPipe2cmd_001.py",
+    "src/proto/cmdPipe2cmd",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftware.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md",
     "src/Docs/DesignThoughts/ci-cd/DocumentationGeneration/WikipediaDocGenComparison.md",
@@ -186,7 +188,6 @@
     "src/Docs/DesignThoughts/SystemSpecifics",
     "src/ramdisk/winAIMtkRamdisk.py~",
     "Untitled 3.base",
-    "Untitled 4.base",
     "Untitled.md",
     "src/Docs/DesignThoughts/ci-cd/CreateLocalUTMmacosVMandVagrantUP/create local UTM macos VM and vagrant up.md",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_user/README.md",
@@ -216,7 +217,6 @@
     "src/packenv/lib/python3.10/site-packages/PySide6/Qt/qml/QtQuick3D/Particles3D/designer/images/wander-16px.png",
     "src/packenv/lib/python3.10/site-packages/PySide6/Qt/qml/QtQuick3D/Particles3D/designer/images/vector-direction-24px@2x.png",
     "src/Docs/DesignThoughts/userRelated/getCurrentUser.md",
-    "src/Docs/DesignThoughts/umlRelated/CreateNRenderPlantumlClassDiagram.md",
-    "src/Docs/README.md"
+    "src/Docs/DesignThoughts/umlRelated/CreateNRenderPlantumlClassDiagram.md"
   ]
 }
