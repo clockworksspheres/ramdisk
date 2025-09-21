@@ -172,6 +172,7 @@
   },
   "active": "2db817c12a181d50",
   "lastOpenFiles": [
+    "src/proto/cmdPipe2cmd/cmdPipe2cmd_002.py",
     "src/proto/cmdPipe2cmd/cmdPipe2cmd_001.py",
     "src/proto/cmdPipe2cmd",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftware.md",
@@ -187,7 +188,6 @@
     "src/Docs/DesignThoughts/SystemSpecifics/Windows",
     "src/Docs/DesignThoughts/SystemSpecifics",
     "src/ramdisk/winAIMtkRamdisk.py~",
-    "Untitled 3.base",
     "Untitled.md",
     "src/Docs/DesignThoughts/ci-cd/CreateLocalUTMmacosVMandVagrantUP/create local UTM macos VM and vagrant up.md",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_user/README.md",
