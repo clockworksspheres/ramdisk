@@ -172,6 +172,8 @@
   },
   "active": "2db817c12a181d50",
   "lastOpenFiles": [
+    "src/proto/cmdPipe2cmd/cmdPipe2cmd_003_4mac.py",
+    "src/proto/cmdPipe2cmd/cmdPipe2cmd_003.py",
     "src/proto/cmdPipe2cmd/cmdPipe2cmd_002.py",
     "src/proto/cmdPipe2cmd/cmdPipe2cmd_001.py",
     "src/proto/cmdPipe2cmd",
@@ -186,8 +188,6 @@
     "README.md",
     "src/Docs/DesignThoughts/userRelated/euidVsUsernameInWindows.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows",
-    "src/Docs/DesignThoughts/SystemSpecifics",
-    "src/ramdisk/winAIMtkRamdisk.py~",
     "Untitled.md",
     "src/Docs/DesignThoughts/ci-cd/CreateLocalUTMmacosVMandVagrantUP/create local UTM macos VM and vagrant up.md",
     "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/manage_user/README.md",
