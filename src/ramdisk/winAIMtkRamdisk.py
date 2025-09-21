@@ -63,6 +63,12 @@ class RamDisk(RamDiskTemplate):
         #command to see what mountpoints have already been taken:
         self.getMntPntsCmd = ["wmic", "logicaldisk", "get", "caption"]
 
+        #####
+        # Change the above command to:
+        # Get-WmiObject -Class Win32_LogicalDisk | Select-Object DeviceID
+        # examples on how to use pipes with subprocess can be found in the
+        # proto directory
+
         # get the disk id's of AIMtk disks, including disk numbers
         self.getImDiskIdsCmd = ["aim_ll", "-l"]
 
