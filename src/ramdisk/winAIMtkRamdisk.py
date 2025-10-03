@@ -52,7 +52,10 @@ class RamDisk(RamDiskTemplate):
 
         # Need to have a config file or pass in a location for or hard code or
         # command line pass in the location of the AIM Toolkit binary
-        self.aim_ll = "c:\Program Files\AIM Toolkit\aim_ll.exe"
+
+        # Better yet, set up the PATH to the aim_ll library
+        
+        self.aim_ll = '"c:\Program Files\AIM Toolkit\aim_ll.exe"'
         self.mntPoint = ""
         if not mountpoint:
             self.getRandomizedMountpoint()
@@ -105,7 +108,7 @@ class RamDisk(RamDiskTemplate):
 
         # cmd = [self.aim_ll, "-a", "-s", self.diskSize, "-m" self.mntPoint, -p "\"/fs:" + self.fsType + " /q /y\"", "-o" self.driveType + "," + self.writeMode]
 
-        cmd = [self.aim_ll, "-a", "-s", self.diskSize + "M", "-m", self.mntPoint, "-p", '/fs:' + self.fsType + ' /q /y']
+        cmd = ["aim_ll", "-a", "-s", self.diskSize + "M", "-m", self.mntPoint, "-p", '/fs:' + self.fsType + ' /q /y']
 
         print(str(cmd))
 

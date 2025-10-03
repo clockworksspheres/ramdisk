@@ -33,7 +33,7 @@ from ramdisk.ui.main import _CreateRamdisk
 #    from ramdisk.winImDiskRamdisk import RamDisk
 #else:
 #    print("'" + str(sys.platform) + "' platform not supported...")
-from ramdisk.ramdisk import RamDisk
+from ramdisk.RamDisk import RamDisk
 
 
 parser = OptionParser(usage="\n\n%prog [options]\n\n", version="2.8.6")
