@@ -242,17 +242,17 @@ class RamDisk(RamDiskTemplate):
         success = False
 
         detachCmdOne = [ self.aim_ll, "-d", "-m", self.mntPoint ]
-        detachCmdTwo = [ self.aim_ll, "-d", "-u", self.device ] 
-        dForceCmdOne = [ self.aim_ll, "-D", "-m", self.mntPoint ] 
-        dForceCmdTwo = [ self.aim_ll, "-D", "-u", self.device ] 
-        rForceCmd = [ self.aim_ll, "-R", "-u", self.device ] 
+        detachCmdTwo = [ self.aim_ll, "-d", "-u", self.device ]
+        dForceCmdOne = [ self.aim_ll, "-D", "-m", self.mntPoint ]
+        dForceCmdTwo = [ self.aim_ll, "-D", "-u", self.device ]
+        rForceCmd = [ self.aim_ll, "-R", "-u", self.device ]
 
 
         detachCmdThree = [ self.aim_ll, "-d", "-m", mountPoint ]
-        detachCmdFour = [ self.aim_ll, "-d", "-u", unit ] 
-        dForceCmdThree = [ self.aim_ll, "-D", "-m", mountPoint ] 
-        dForceCmdFour = [ self.aim_ll, "-D", "-u", unit ] 
-        rForceCmdTwo = [ self.aim_ll, "-R", "-u", unit ] 
+        detachCmdFour = [ self.aim_ll, "-d", "-u", unit ]
+        dForceCmdThree = [ self.aim_ll, "-D", "-m", mountPoint ]
+        dForceCmdFour = [ self.aim_ll, "-D", "-u", unit ]
+        rForceCmdTwo = [ self.aim_ll, "-R", "-u", unit ]
 
 
         if not detach and not dForce and rForce and not mountpoint and unit == True and isinstance(unit, bool):
