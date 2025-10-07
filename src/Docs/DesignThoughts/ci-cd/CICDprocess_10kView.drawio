@@ -178,7 +178,7 @@
         <mxCell id="L0aEL69-5oPIVR-zz0sC-46" value="fresh VM &amp;amp; install" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="630" y="515" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="L0aEL69-5oPIVR-zz0sC-47" value="build app" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="L0aEL69-5oPIVR-zz0sC-47" value="build app&lt;div&gt;(pyinstaller)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="365" y="685" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="L0aEL69-5oPIVR-zz0sC-48" value="send results" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">

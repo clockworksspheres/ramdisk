@@ -173,7 +173,7 @@ class MacOSUser(ManageUserTemplate):
         #####
         # Sort the list, add one to the highest value and return that
         # value
-        for user in str(userList).split("\n"):
+        for user in str(userList).splitlines():
             try:
                 if int(user.split()[1]) > maxUserID:
                     maxUserID = int(user.split()[1])
@@ -203,7 +203,7 @@ class MacOSUser(ManageUserTemplate):
         if int(uid) < 500 or int(uid) > 65536:
             raise(InvalidUIDError("Outside OS's Valid UID range..."))
         thisuid = ""
-        for user in str(userList).split("\n"):
+        for user in str(userList).splitlines():
             #  print(user)
             try:
               thisuid = str(user.split()[1])
@@ -254,7 +254,7 @@ class MacOSUser(ManageUserTemplate):
                 propertyAttribute = False
                 propertyName = False
                 print output
-                for line in output.split("\n"):
+                for line in output.splitlines():
                     if re.search(':', line):
                         jpegPhotoFound = False
                         if propertyName and propertyAttribute:

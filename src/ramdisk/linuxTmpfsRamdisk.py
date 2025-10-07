@@ -510,7 +510,7 @@ def getMountData(device):
 
     mountInfo = ""
 
-    for line in output.split("\n"):
+    for line in output.splitlines():
         for item in line.split():
             if re.search(f"^{device}$", item):
                 mountInfo = line
@@ -551,7 +551,7 @@ def getMountDisks():
     systemDisks = ["/dev/shm", "/run", "/run/credentials/systemd-journald.service",
                    "/run/credentials/systemd-resolved.service", "/run/snapd/ns"]
 
-    for line in retval.split("\n"):
+    for line in retval.splitlines():
         if line:
             # print("Parsing mount command output...")
             dev = ""

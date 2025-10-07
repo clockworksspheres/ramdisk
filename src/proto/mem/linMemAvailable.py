@@ -26,7 +26,7 @@ def isMemAvailable() :
     # output, _, _ = rw.waitNpassThruStdout("Networks")
     output, _, _ = rw.communicate()
 
-    for line in output.split("\n"):
+    for line in output.splitlines():
         tmpData = line.split()
         lastWord = tmpData[-1]
         nextWord = tmpData[-2]

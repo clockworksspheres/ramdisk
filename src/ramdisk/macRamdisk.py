@@ -435,7 +435,7 @@ class RamDisk(RamDiskTemplate):
         self.runWith.communicate()
         retval, reterr, retcode = self.runWith.getNlogReturns()
 
-        for line in retval.split("\n"):
+        for line in retval.splitlines():
             if re.search("RAMDISK", line):
                 disk = line.split()[-1]
                 devList.append(disk)
@@ -448,7 +448,7 @@ class RamDisk(RamDiskTemplate):
         self.runWith.communicate()
         retval, reterr, retcode = self.runWith.getNlogReturns()
 
-        for line in retval.split("\n"):
+        for line in retval.splitlines():
             dev = line.split()[0] in devList
             if dev:
                 for mountDev in devList:
@@ -773,7 +773,7 @@ class RamDisk(RamDiskTemplate):
             #####
             # Need to get the partition device out of the output to assign to
             # self.devPartition
-            for line in retval.split("\n"):
+            for line in retval.splitlines():
                 if re.match(r'^Initialized (\S+)\s+', line):
                     linematch = re.match(r'Initialized\s+(\S+)', line)
                     rdevPartition = linematch.group(1)
@@ -805,7 +805,7 @@ class RamDisk(RamDiskTemplate):
         output, _, _ = self.runWith.communicate()
         # output, _, _ = self.runWith.waitNpassThruStdout("Networks")
 
-        for line in output.split("\n"):
+        for line in output.splitlines():
             self.logger.log(lp.DEBUG, "line: " + str(line))
             tmpData = line.split()
             try:
@@ -960,7 +960,7 @@ class RamDisk(RamDiskTemplate):
 
         mountInfo = ""
 
-        for line in output.split("\n"):
+        for line in output.splitlines():
             if re.search(f"{device}", line):
                 mountInfo = line
 
@@ -1086,7 +1086,7 @@ def getMountData(device):
 
     mountInfo = ""
 
-    for line in output.split("\n"):
+    for line in output.splitlines():
         if re.search(f"{device}", line):
             mountInfo = line
 
@@ -1132,7 +1132,7 @@ def getMountDisks():
     runWith.communicate()
     retval, reterr, retcode = runWith.getNlogReturns()
 
-    for line in retval.split("\n"):
+    for line in retval.splitlines():
         if re.search("RAMDISK", line):
             try:
                 disk = line.split()[-1]
@@ -1152,7 +1152,7 @@ def getMountDisks():
 
     print(f"retval: {str(retval)}")
 
-    for line in retval.split("\n"):
+    for line in retval.splitlines():
         if line:
             # print("Parsing mount command output...")
             dev = ""

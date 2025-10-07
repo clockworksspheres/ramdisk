@@ -42,7 +42,7 @@ class FsHelper(object):
         self.runner.communicate()
         retval, reterr, retcode = self.runner.getNlogReturns()
        
-        lines = retval.split("\n")
+        lines = retval.splitlines()
 
         for line in lines:
             try:

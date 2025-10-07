@@ -156,7 +156,7 @@ class FsHelper(FsHelperTemplate):
                 self.rw.setCommand(cmd)
                 output, _, _ = self.rw.communicate()
 
-                for item in output.split("\n"):
+                for item in output.splitlines():
                     #print(item)
                     if re.match(r'^_\w.+', item):
                         continue

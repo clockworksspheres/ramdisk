@@ -32,7 +32,7 @@ def __isMemAvailable(diskSize) :
     output, _, _ = runWith.communicate()
     # output, _, _ = self.runWith.waitNpassThruStdout("Networks")
 
-    for line in output.split("\n"):
+    for line in output.splitlines():
 
         tmpData = line.split()
         try:

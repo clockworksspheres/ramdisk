@@ -38,7 +38,7 @@ def main():
         sys.exit(1)
 
     # Decode and print matching processes (exclude the grep command line if shown)
-    lines = output.decode('utf-8').strip().split('\n')
+    lines = output.decode('utf-8').strip().splitlines()
     for line in lines:
         if 'grep' not in line:
             print(line)

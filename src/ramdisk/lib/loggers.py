@@ -463,7 +463,7 @@ class CyLogger(Singleton):
         if isinstance(msg, list):
             msg_list = msg
         elif isinstance(msg, str):
-            first_msg_list = msg.split("\n")
+            first_msg_list = msg.splitlines()
             for mymsg in first_msg_list:
                 msg_list.append(mymsg + "\n")
         elif isinstance(msg, dict):
