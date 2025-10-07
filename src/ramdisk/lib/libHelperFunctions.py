@@ -93,7 +93,7 @@ def get_darwin_mac() :
     output = Popen(["/usr/sbin/networksetup", "-listallhardwareports"], stdout=PIPE, stderr=STDOUT).communicate()[0]
 
     try :
-        for line in output.split("\n") :
+        for line in output.splitlines() :
             match_hw_addr = re.compile \
             ("^Ethernet Address:\s+(\w+:\w+:\w+:\w+:\w+:\w+)\s*$")
 
@@ -133,7 +133,7 @@ def is_laptop():
     
     if not reterr :
         if retval :
-            for line in retval.split("\n") :
+            for line in retval.splitlines() :
                 if re.match("^\s+Model Name:", line) :
                     if re.search("[bB]ook", line) :
                         isThisALaptop = True

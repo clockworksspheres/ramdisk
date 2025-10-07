@@ -147,7 +147,7 @@ class Environment(object):
                 output, _, _ = self.rw.communicate()
                 #cmdoutput = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, close_fds=True, text=True)
                 #outputlines = cmdoutput.stdout.readlines()
-                outputlines = output.split("\n")
+                outputlines = output.splitlines()
                 for line in outputlines:
                     line = str(line)
                     # print("        line: " + str(line))
