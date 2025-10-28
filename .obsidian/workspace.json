@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "RamdiskSoftwareSettingUpForWindows11"
+              "title": "README"
             }
           }
         ]
@@ -172,6 +172,7 @@
   },
   "active": "2db817c12a181d50",
   "lastOpenFiles": [
+    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md",
     "src/ramdisk/lib/__pycache__/libHelperExceptions.cpython-310.pyc",
     "src/ramdisk/__pycache__/commonRamdiskTemplate.cpython-310.pyc",
     "src/ramdisk/lib/fsHelper/__pycache__/macosFsHelper.cpython-310.pyc",
@@ -182,9 +183,7 @@
     "src/ramdisk/lib/manage_keychain/__pycache__/__init__.cpython-310.pyc",
     "src/ramdisk/lib/manage_keychain/__pycache__",
     "src/ramdisk/lib/manage_user/__pycache__/__init__.cpython-310.pyc",
-    "src/ramdisk/lib/manage_user/__pycache__",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftware.md",
-    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md",
     "src/Docs/DesignThoughts/ci-cd/DocumentationGeneration/WikipediaDocGenComparison.md",
     "README.md",
     "src/Docs/DesignThoughts/userRelated/euidVsUsernameInWindows.md",
