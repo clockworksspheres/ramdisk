@@ -182,3 +182,13 @@ pywin32 windows library to add windows functionality for the Environment.py to m
 ##### How to to install non-native python libraries in windows
 
 
+# Eisenban - Kanban board for the project
+
+Kanban based project management of the ramdisk project.
+
+eisenban package can be found at:  https://github.com/clockworksspheres/eisenban
+
+```
+cd <root of the ramdisk project>/src
+eisenban -t ramdiskBoard
+```
