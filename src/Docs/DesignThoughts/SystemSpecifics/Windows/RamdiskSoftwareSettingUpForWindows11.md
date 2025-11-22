@@ -14,6 +14,8 @@ Licensing and information about [AIMtk here](https://arsenalrecon.com/products/a
 
 ## Setting up the WMIC system software in Windows 11
 
+wmic installed to manage ramdisk as a hard disk.
+
 ```
 Add-WindowsCapability -online -name WMIC
 ```
