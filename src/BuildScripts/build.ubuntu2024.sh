@@ -26,7 +26,7 @@ fi
 
 #pushd ..
 
-cp buildScripts/build.ubuntu2024.py312.onefile.spec .
+cp BuildScripts/build.ubuntu2024.py312.onefile.spec .
 
 pyinstaller --clean -y build.ubuntu2024.py312.onefile.spec
 pyinstaller -y build.ubuntu2024.py312.onefile.spec
