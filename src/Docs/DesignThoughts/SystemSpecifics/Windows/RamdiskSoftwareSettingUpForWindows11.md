@@ -4,6 +4,10 @@
 
 ---
 
+Download the Arsenal Image Mounter drivers from: https://github.com/ArsenalRecon/Arsenal-Image-Mounter/tree/master/DriverSetup/DriverSetup.7z and hit the download icon.
+
+Uncompress the file, then do the following.
+
 ``` sh
 choco install rsync
 mkdir "c:\Program Files\Arsenal Image Mounter"
@@ -12,8 +16,18 @@ cd C:\Program Files\Arsenal Image Mounter\DriverSetup\cli\x64>
 PS C:\Program Files\Arsenal Image Mounter\DriverSetup\cli\x64> .\aim_ll.exe --install "C:\Program Files\Arsenal Image Mounter\DriverSetup"
 ```
 
-Reboot the system
+Now reboot the system
 
+```
+[Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Program Files\Arsenal Image Mounter\DriverSetup\cli\x64", [EnvironmentVariableTarget]::User)
+```
+Now that aim_ll.exe is in the path, close all your powershell, terminal, etc shells, and open new ones, and aim_ll.exe should now be available at the command line.
+
+```
+aim_ll.exe -l
+```
+
+the "aim_ll -l" command should return the ramdisks that are installed.  If none are installed, it should return "No virtual disks".
 
 ### Download the AIM toolkit 
 
