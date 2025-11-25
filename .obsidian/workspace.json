@@ -13,12 +13,24 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "RamdiskSoftwareSettingUpForWindows11"
+            }
+          },
+          {
+            "id": "13fb7d09dbfec66a",
+            "type": "leaf",
+            "state": {
+              "type": "release-notes",
+              "state": {
+                "currentVersion": "1.10.6"
+              },
+              "icon": "lucide-book-up",
+              "title": "Release Notes 1.10.6"
             }
           }
         ]
@@ -172,6 +184,8 @@
   },
   "active": "2db817c12a181d50",
   "lastOpenFiles": [
+    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftware.md",
+    "README.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md",
     "src/ramdisk/lib/__pycache__/libHelperExceptions.cpython-310.pyc",
     "src/ramdisk/__pycache__/commonRamdiskTemplate.cpython-310.pyc",
@@ -183,9 +197,7 @@
     "src/ramdisk/lib/manage_keychain/__pycache__/__init__.cpython-310.pyc",
     "src/ramdisk/lib/manage_keychain/__pycache__",
     "src/ramdisk/lib/manage_user/__pycache__/__init__.cpython-310.pyc",
-    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftware.md",
     "src/Docs/DesignThoughts/ci-cd/DocumentationGeneration/WikipediaDocGenComparison.md",
-    "README.md",
     "src/Docs/DesignThoughts/userRelated/euidVsUsernameInWindows.md",
     "Untitled.md",
     "src/Docs/DesignThoughts/ci-cd/CreateLocalUTMmacosVMandVagrantUP/create local UTM macos VM and vagrant up.md",

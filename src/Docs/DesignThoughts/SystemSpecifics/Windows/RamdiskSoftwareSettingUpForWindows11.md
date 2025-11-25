@@ -2,6 +2,33 @@
 
 ## Installing the AIM toolkit
 
+---
+
+``` sh
+choco install rsync
+mkdir "c:\Program Files\Arsenal Image Mounter"
+rsync -avp <root of "DriverSetup>\DriverSetup "/cygdrive/c/Program Files/Arsenal Image Mounter"
+cd C:\Program Files\Arsenal Image Mounter\DriverSetup\cli\x64>
+PS C:\Program Files\Arsenal Image Mounter\DriverSetup\cli\x64> .\aim_ll.exe --install "C:\Program Files\Arsenal Image Mounter\DriverSetup"
+```
+
+Reboot the system
+
+
+### Download the AIM toolkit 
+
+[Arsenal-Image-Mounter-<version>.zip] under [Arsenal Image Mounter](https://arsenalrecon.com/downloads)
+
+* extract the zip file
+* create the c:\Program Files\Arsenal Image Mounter directory
+
+```
+mkdir "c:\Program Files\Arsenal Image Mounter"
+cd <place where zip was extracted>
+rsync -avp * /cygdrive/c:/Program Files/Arsenal Image Mounter*
+pnputil /add-driver "C:\Program Files\Arsenal Image Mounter\*.inf"
+---
+
 ### Please be sure to adhere to the Software License appropriate for your use!
 
 Licensing and information about [AIMtk here](https://arsenalrecon.com/products/arsenal-image-mounter):  
