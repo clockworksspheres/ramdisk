@@ -29,6 +29,9 @@ aim_ll.exe -l
 
 the "aim_ll -l" command should return the ramdisks that are installed.  If none are installed, it should return "No virtual disks".
 
+
+# Older instructions no longer valid as of 11/25/1925
+
 ### Download the AIM toolkit 
 
 [Arsenal-Image-Mounter-<version>.zip] under [Arsenal Image Mounter](https://arsenalrecon.com/downloads)
