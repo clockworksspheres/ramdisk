@@ -12,8 +12,8 @@ Uncompress the file, then do the following.
 choco install rsync
 mkdir "c:\Program Files\Arsenal Image Mounter"
 rsync -avp <root of "DriverSetup>\DriverSetup "/cygdrive/c/Program Files/Arsenal Image Mounter"
-cd C:\Program Files\Arsenal Image Mounter\DriverSetup\cli\x64>
-PS C:\Program Files\Arsenal Image Mounter\DriverSetup\cli\x64> .\aim_ll.exe --install "C:\Program Files\Arsenal Image Mounter\DriverSetup"
+cd "C:\Program Files\Arsenal Image Mounter\DriverSetup\cli\x64"
+.\aim_ll.exe --install "C:\Program Files\Arsenal Image Mounter\DriverSetup"
 ```
 
 Now reboot the system
