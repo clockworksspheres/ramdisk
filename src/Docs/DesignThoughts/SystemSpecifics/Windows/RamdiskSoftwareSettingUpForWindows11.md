@@ -9,9 +9,9 @@ Download the Arsenal Image Mounter drivers from: https://github.com/ArsenalRecon
 Uncompress the file, then do the following, in an administrator powershell window.
 
 ``` sh
-> choco install rsync
+> Set-ExecutionPolicy Bypass -Scope Process -Force
 > mkdir "c:\Program Files\Arsenal Image Mounter"
-> rsync -avp "<root of DriverSetup>\DriverSetup" "/cygdrive/c/Program Files/Arsenal Image Mounter"
+> robocopy "<root of DriverSetup>\DriverSetup" "/cygdrive/c/Program Files/Arsenal Image Mounter" /E /COPYALL /R:3 /W:5
 > pnputil /add-driver "C:\Program Files\Arsenal Image Mounter\*.inf"
 > cd "C:\Program Files\Arsenal Image Mounter\DriverSetup\cli\x64"
 > .\aim_ll.exe --install "C:\Program Files\Arsenal Image Mounter\DriverSetup"
