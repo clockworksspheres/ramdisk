@@ -11,7 +11,7 @@ Uncompress the file, then do the following, in an administrator powershell windo
 ``` sh
 > choco install rsync
 > mkdir "c:\Program Files\Arsenal Image Mounter"
-> rsync -avp <root of "DriverSetup>\DriverSetup" /cygdrive/c/Program Files/Arsenal Image Mounter"
+> rsync -avp <root of "DriverSetup>\DriverSetup" "/cygdrive/c/Program Files/Arsenal Image Mounter"
 > pnputil /add-driver "C:\Program Files\Arsenal Image Mounter\*.inf"
 > cd "C:\Program Files\Arsenal Image Mounter\DriverSetup\cli\x64"
 > .\aim_ll.exe --install "C:\Program Files\Arsenal Image Mounter\DriverSetup"
