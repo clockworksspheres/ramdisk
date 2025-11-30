@@ -31,7 +31,19 @@ aim_ll.exe -l
 
 the "aim_ll -l" command should return the ramdisks that are installed.  If none are installed, it should return "No virtual disks".
 
+## aim_ll help
 
+To get help at the command line from aim_ll, do the following:
+
+``` sh
+aim_ll.exe -h
+```
+
+## Creating a ramdisk with the aim_ll command line executable
+
+
+
+To get help from the 
 # Older instructions no longer valid as of 11/25/1925
 
 ### Download the AIM toolkit 
