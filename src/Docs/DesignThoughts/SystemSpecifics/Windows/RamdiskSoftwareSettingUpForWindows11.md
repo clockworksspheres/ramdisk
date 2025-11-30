@@ -41,9 +41,35 @@ aim_ll.exe -h
 
 ## Creating a ramdisk with the aim_ll command line executable
 
+``` sh
+# If mounting in a specific directory, create the directory first
+New-Item -Path ".\MountHere" -ItemType Directory -Force
+aim_ll -a -s 1G -m ".\MountHere" -p "/fs:ntfs /v:TestRAM /q /y"
+# Mount the drive on a specific drive letter
+aim_ll -a -s 1G -m T: -p "/fs:ntfs /v:TestRAM /q /y"
+# Mount the drive on a random drive letter
+aim_ll -a -s 1G -p "/fs:ntfs /v:TestRAM /q /y"
+# mount in a specific location including drive letter
+New-Item -Path "c:\Users\<username>\MountHere" -ItemType Directory -Force
+aim_ll -a -s 1G -m "c:\Users\<username>\MountPoint" -p "/fs:ntfs /v:TestRAM /q /y"
+# Listing the mounts:
+aim_ll -l
+# removing a mount - must be done with six didget number
+aim -R -u 000000
+# removing or unmounting the fifth drive:
+aim -R -u 000500
+```
 
+0 - 15 is the SCSI target limit, so if you want to have more discs, specify the disk, 
 
-To get help from the 
+To get help from the aim_ll command:
+
+```
+aim_ll -h
+```
+
+#### NOTE: ImDisk can mount up to 256 drives while aim_ll can only mount a total of 16 disks
+
 # Older instructions no longer valid as of 11/25/1925
 
 ### Download the AIM toolkit 
