@@ -68,7 +68,7 @@ To get help from the aim_ll command:
 aim_ll -h
 ```
 
-#### NOTE: ImDisk can mount up to 256 drives while aim_ll can only mount a total of 16 disks
+#### NOTE: ImDisk can mount up to 256 drives while aim_ll can only mount a total of 16 disks.  ImDisk is EOL as of 2024, and doesn't have windows 11 support.
 
 # Older instructions no longer valid as of 11/25/1925
 
