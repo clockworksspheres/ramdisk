@@ -11,7 +11,8 @@ Uncompress the file, then do the following, in an administrator powershell windo
 ``` sh
 > Set-ExecutionPolicy Bypass -Scope Process -Force
 > mkdir "c:\Program Files\Arsenal Image Mounter"
-> robocopy "<root of DriverSetup>\DriverSetup" "/cygdrive/c/Program Files/Arsenal Image Mounter" /E /COPYALL /R:3 /W:5
+> mkdir "c:\Probram Files\Arsenal Image Mounter\DriverSetup"
+> robocopy "<root of DriverSetup>\DriverSetup" "c:\Program Files\Arsenal Image Mounter\DriverSetup" /E /COPYALL /R:3 /W:5
 > pnputil /add-driver "C:\Program Files\Arsenal Image Mounter\*.inf"
 > cd "C:\Program Files\Arsenal Image Mounter\DriverSetup\cli\x64"
 > .\aim_ll.exe --install "C:\Program Files\Arsenal Image Mounter\DriverSetup"
