@@ -51,7 +51,7 @@ aim_ll -a -s 1G -m T: -p "/fs:ntfs /v:TestRAM /q /y"
 aim_ll -a -s 1G -p "/fs:ntfs /v:TestRAM /q /y"
 # mount in a specific location including drive letter
 New-Item -Path "c:\Users\<username>\MountHere" -ItemType Directory -Force
-aim_ll -a -s 1G -m "c:\Users\<username>\MountPoint" -p "/fs:ntfs /v:TestRAM /q /y"
+aim_ll -a -s 1G -m "c:\Users\<username>\MountHere" -p "/fs:ntfs /v:TestRAM /q /y"
 # Listing the mounts:
 aim_ll -l
 # removing a mount - must be done with six didget number
