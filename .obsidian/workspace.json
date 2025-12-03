@@ -187,9 +187,9 @@
   },
   "active": "bacb17b6c7157e13",
   "lastOpenFiles": [
-    "src/Docs/DesignThoughts/pythonMultipleInteritanceInitializingParents.md",
-    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RandomWindowsPowershellCommands.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md",
+    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RandomWindowsPowershellCommands.md",
+    "src/Docs/DesignThoughts/pythonMultipleInteritanceInitializingParents.md",
     "src/proto/mntpoints/aimgetmntpnts_001.py",
     "src/proto/mntpoints/aimgetmntpnts_002.py",
     "src/build/build.windows11.onefile/EXE-00.toc",
