@@ -11,3 +11,9 @@ Be careful, this can get really insecure if not managed correctly.  Better to sa
 ``` powershell
 Set-ExecutionPolicy Bypass -Scope Process -Force
 ```
+
+## Adding something to the Windows PATH
+
+``` powershell
+[Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Program Files\Arsenal Image Mounter\DriverSetup\cli\x64", [EnvironmentVariableTarget]::User)
+```
