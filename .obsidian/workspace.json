@@ -188,6 +188,7 @@
   "active": "bacb17b6c7157e13",
   "lastOpenFiles": [
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md",
+    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftware.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RandomWindowsPowershellCommands.md",
     "src/Docs/DesignThoughts/pythonMultipleInteritanceInitializingParents.md",
     "src/proto/mntpoints/aimgetmntpnts_001.py",

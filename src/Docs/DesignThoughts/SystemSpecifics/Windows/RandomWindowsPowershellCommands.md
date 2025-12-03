@@ -17,3 +17,10 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 ``` powershell
 [Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Program Files\Arsenal Image Mounter\DriverSetup\cli\x64", [EnvironmentVariableTarget]::User)
 ```
+
+## Creating a new directory
+
+``` powershell
+New-Item -Path ".\NewDirectory" -ItemType Directory -Force
+```
+
