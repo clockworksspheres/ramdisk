@@ -15,7 +15,7 @@ for line in result.stdout.splitlines():
         mountname = line.split()[-1]
     elif not line:
         anchor = False
-        print(f"{mountname} : {device}")
+        print(f"{device} : {mountname}")
         continue
 
      

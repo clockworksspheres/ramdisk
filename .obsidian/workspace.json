@@ -172,16 +172,16 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
-    "src/proto/mntpoints/aimgetmntpnts.py",
-    "src/proto/getcurrentdir.py~",
-    "src/proto/getcurrentdir.py",
-    "src/Docs/DesignThoughts/SystemSpecifics/Windows/MountHere",
-    "src/Docs/DesignThoughts/SystemSpecifics/Windows/TestRAM",
     "src/build/build.windows11.onefile/EXE-00.toc",
     "src/build/build.windows11.onefile/PKG-00.toc",
     "src/build/build.windows11.onefile/ramdisk-setup.pkg",
     "src/build/build.windows11.onefile/PYZ-00.toc",
     "src/build/build.windows11.onefile/PYZ-00.pyz",
-    "src/build/build.windows11.onefile/localpycs/struct.pyc"
+    "src/build/build.windows11.onefile/localpycs/pyimod04_pywin32.pyc",
+    "src/build/build.windows11.onefile/localpycs/struct.pyc",
+    "src/build/build.windows11.onefile/localpycs/pyimod03_ctypes.pyc",
+    "src/build/build.windows11.onefile/localpycs/pyimod02_importers.pyc",
+    "src/build/build.windows11.onefile/localpycs/pyimod01_archive.pyc",
+    "src/build/build.windows11.onefile/localpycs"
   ]
 }
