@@ -195,9 +195,17 @@ class RamDisk(RamDiskTemplate):
         """
         Check if the passed in mount point is available, or if it's already being used.
 
-            valid values: D - Z
+            valid values: can be in either aim_ll -l, or in powershell command given.
         """
         success = False
+        # Run aim_ll -l, get list of mount points, strip "\"
+
+        # run powershell command, get list of mount points, strip "\"
+
+        # if requested mount point in either, return error, strip "\"
+
+
+
         getMntPntsCmd  = ["wmic", "logicaldisk", "get", "caption"]
         self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(getMntPntsCmd))
         self.runCmd.setCommand(getMntPntsCmd)
