@@ -84,7 +84,7 @@ mkdir "c:\Program Files\Arsenal Image Mounter"
 cd <place where zip was extracted>
 rsync -avp * /cygdrive/c:/Program Files/Arsenal Image Mounter*
 pnputil /add-driver "C:\Program Files\Arsenal Image Mounter\*.inf"
----
+```
 
 ### Please be sure to adhere to the Software License appropriate for your use!
 
