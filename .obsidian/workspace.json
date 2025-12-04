@@ -20,23 +20,8 @@
               "icon": "lucide-file",
               "title": "RamdiskSoftwareSettingUpForWindows11"
             }
-          },
-          {
-            "id": "bacb17b6c7157e13",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "src/Docs/DesignThoughts/SystemSpecifics/Windows/RandomWindowsPowershellCommands.md",
-                "mode": "source",
-                "source": true
-              },
-              "icon": "lucide-file",
-              "title": "RandomWindowsPowershellCommands"
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -185,21 +170,19 @@
       "vscode-editor:Create Code File": false
     }
   },
-  "active": "bacb17b6c7157e13",
+  "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
-    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md",
-    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftware.md",
-    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RandomWindowsPowershellCommands.md",
-    "src/Docs/DesignThoughts/pythonMultipleInteritanceInitializingParents.md",
-    "src/proto/mntpoints/aimgetmntpnts_001.py",
     "src/proto/mntpoints/aimgetmntpnts_002.py",
+    "src/proto/mntpoints/aimgetmntpnts_001.py",
+    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RandomWindowsPowershellCommands.md",
+    "src/proto/mntpoints/getmntpnts_002.py",
+    "src/proto/mntpoints/getmntpnts_001.py",
+    "src/proto/mntpoints/aimgetmntpnts.py",
+    "src/proto/mntpoints",
+    "src/proto/getcurrentdir.py",
+    "src/Docs/DesignThoughts/SystemSpecifics/Windows/MountHere",
+    "src/Docs/DesignThoughts/SystemSpecifics/Windows/TestRAM",
     "src/build/build.windows11.onefile/EXE-00.toc",
-    "src/build/build.windows11.onefile/PKG-00.toc",
-    "src/build/build.windows11.onefile/ramdisk-setup.pkg",
-    "src/build/build.windows11.onefile/PYZ-00.toc",
-    "src/build/build.windows11.onefile/PYZ-00.pyz",
-    "src/build/build.windows11.onefile/localpycs/pyimod04_pywin32.pyc",
-    "src/build/build.windows11.onefile/localpycs/struct.pyc",
-    "src/build/build.windows11.onefile/localpycs/pyimod03_ctypes.pyc"
+    "src/build/build.windows11.onefile/PKG-00.toc"
   ]
 }
