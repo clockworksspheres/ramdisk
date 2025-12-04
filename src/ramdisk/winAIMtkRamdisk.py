@@ -55,7 +55,7 @@ class RamDisk(RamDiskTemplate):
 
         # Better yet, set up the PATH to the aim_ll library
         
-        self.aim_ll = '"c:\Program Files\AIM Toolkit\aim_ll.exe"'
+        self.aim_ll = '"C:\Program Files\Arsenal Image Mounter\DriverSetup\cli\x64\aim_ll.exe"'
         self.mntPoint = ""
         if not mountpoint:
             self.getRandomizedMountpoint()
