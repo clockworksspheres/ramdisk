@@ -5,6 +5,7 @@ Windows Ramdisk class based on use of ImDisk windows program
 """
 #--- Native python libraries
 from tempfile import mkdtemp
+import os
 import re
 import sys
 
@@ -16,6 +17,7 @@ from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.run_commands import RunWith
 from ramdisk.lib.fsHelper.ntfsFsHelper import FsHelper
 from ramdisk.commonRamdiskTemplate import RamDiskTemplate
+from ramdisk.lib.fsHelper.winDriveTools import getDrivePath, finddrive, cleanTrailingSlashes
 
 ###########################################################################
 
@@ -198,42 +200,18 @@ class RamDisk(RamDiskTemplate):
             valid values: can be in either aim_ll -l, or in powershell command given.
         """
         success = False
-        # Run aim_ll -l, get list of mount points, strip "\"
 
-        # run powershell command, get list of mount points, strip "\"
-
-        # if requested mount point in either, return error, strip "\"
-
-
-
-        getMntPntsCmd  = ["wmic", "logicaldisk", "get", "caption"]
-        self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(getMntPntsCmd))
-        self.runCmd.setCommand(getMntPntsCmd)
-        self.runCmd.communicate()
-        retval, reterr, retcode = self.runCmd.getNlogReturns()
-
-        self.logger.log(lp.WARNING, "retval: {0}".format(retval))
-
-        if retcode == '':
-            success = False
-            raise Exception("Error trying to get list of mount points(" + str(reterr).strip() + ")")
+        # make sure there is a drive in the path is valid and mounted.
+        driveExists = finddrive(mntPoint)
+        if not driveExists:
+            return False
+        
+        if os.path.exits(mntPoint):
+            return True
         else:
-
-            invalidMntPoints = []
-            #####
-            # Get the output and process it - for every line, put it in a list
-            for line in retval:
-                if line is not None:
-                    if re.match('^[A-Z]', line):
-                        line = line.strip()
-                        invalidMntPoints.append(line.strip(":"))
-                    else:
-                        continue
-                else:
-                    continue
-            self.logger.log(lp.INFO, str(invalidMntPoints))
-            if re.match('^[D-Z]', mntPoint) and mntPoint not in invalidMntPoints:
-                success = True
+            # Create it relative to the current working directory
+            os.makedirs(path, exist_ok=True)
+            return True
         return success
 
 
