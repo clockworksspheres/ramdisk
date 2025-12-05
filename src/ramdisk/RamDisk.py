@@ -34,7 +34,7 @@ elif sys.platform.startswith("win32"):
     # an exception.
     winverMajor = platform.win32_ver()[0]
     if int(winverMajor) <= 10:
-        from ramdisk.winImDiskRamdisk import RamDisk, unmount, getMountDisks, getMountData
+        from ramdisk.winAIMtkRamdisk import RamDisk, unmount, getMountDisks, getMountData
     else:
         from ramdisk.winAIMtkRamdisk import RamDisk, unmount, getMountDisks, getMountData
 else:

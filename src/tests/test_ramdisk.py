@@ -53,7 +53,7 @@ elif sys.platform.startswith("win32"):
     #####
     # For ImDisk for Windows
     from ramdisk.lib.getLibc.winGetLibc import getLibc
-    from ramdisk.winImDiskRamdisk import RamDisk
+    from ramdisk.winAIMtkRamdisk import RamDisk
 #    from ramdisk.winImDiskRamdisk import umount
     from ramdisk.lib.fsHelper.ntfsFsHelper import FsHelper
 else:

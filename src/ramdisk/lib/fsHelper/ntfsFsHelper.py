@@ -80,7 +80,7 @@ class FsHelper(object):
 
         print(size)
         try:
-            match = re.match(r"^(\d+[MmGg])[Bb]$", size)
+            match = re.match(r"^(\d+[MmGg])[Bb]?$", size)
             diskSize = match.group(1)
         except AttributeError as err:
             try:
@@ -98,10 +98,14 @@ class FsHelper(object):
                 except Exception as err:
                     print(traceback.format_exc())
                     raise(err)
-            except Exeption as err:
+            except Exception as err:
                 print(traceback.format_exc())
                 raise(err)
-        except Exeption as err:
+        except TypeError as err:
+            if isinstance(size, int):
+                diskSize = size
+                success = True
+        except Exception as err:
             print(traceback.format_exc())
             raise(err)
 

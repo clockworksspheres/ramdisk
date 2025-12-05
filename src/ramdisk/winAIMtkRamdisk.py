@@ -47,8 +47,11 @@ class RamDisk(RamDiskTemplate):
         self.runCmd = RunWith(self.logger)
         self.fsHelper = FsHelper()
         self.logger.log(lp.INFO, "Logger: " + str(self.logger))
-        self.diskSize = self.fsHelper.getDiskSize(size)
-        self.diskSize = self.diskSize[1].strip('mMgG')
+        if isinstance(size, int):
+            self.diskSize = str(size)
+        elif isinstance(size, str):
+            self.diskSize = self.fsHelper.getDiskSize(size)
+            self.diskSize = self.diskSize[1].strip('mMgG')
         self.success = False
         self.myRamdiskDev = self.imDiskNumber = None
 
