@@ -9,6 +9,9 @@ import os
 import re
 import sys
 
+# 3rd party libs
+import psutil 
+
 sys.path.append("../")
 
 #--- non-native python libraries in this source tree
@@ -60,7 +63,7 @@ class RamDisk(RamDiskTemplate):
 
         # Better yet, set up the PATH to the aim_ll library
         
-        self.aim_ll = '"C:\Program Files\Arsenal Image Mounter\DriverSetup\cli\x64\aim_ll.exe"'
+        self.aim_ll = '"C:\\Program Files\\Arsenal Image Mounter\\DriverSetup\\cli\\x64\\aim_ll.exe"'
         self.mntPoint = ""
         if not mountpoint:
             self.getRandomizedMountpoint()
@@ -300,43 +303,23 @@ class RamDisk(RamDiskTemplate):
 
         
         """
-        # Commands with pipes, better off as strings - and with quotes, done as below, with myshell=True in the cmd call
-        cmd = 'systeminfo|find "Available Physical Memory"'
+        success = False
 
-        self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
-        self.runCmd.setCommand(cmd, myshell=True)
-        self.runCmd.communicate()
-        retval, reterr, retcode = self.runCmd.getNlogReturns()
+        mem = psutil.virtual_memory()
 
-        self.logger.log(lp.ERROR, "retval: {0}".format(retval))
+        freemem = mem.free / (1024**2)
+        # totalmem = mem.total / (1024**2)
 
-        if retcode == '':
-            success = False
-            raise Exception("Error trying to get list of mount points(" + str(reterr).strip() + ")")
+        # self.logger.log(lp.ERROR, "mem: {0}  lvl: {1} ...".format(mem, lvl))
+        
+        print(f"     diskSize: {self.diskSize}")
+        # self.diskSize = self.diskSize[1].strip('mMgG')
+        if int(self.diskSize) < int(freemem) and re.match(r"^\d+$", str(int(freemem))):
+            success = True
+        elif re.match("^kb$", lvl):
+            self.logger.log(lp.ERROR, "NOT ENOUGH PHYSICAL MEMORY............................................")
         else:
-
-            # returns:
-            # Available Physical Memory: 56,861 Mb
-
-            tmplist = retval.split()
-            tmpmem = tmplist[3]
-            if re.search(",", tmpmem):
-                mem = re.sub(",", "", tmpmem)
-            else:
-                mem = tmpmem.strip()
-
-            lvl = retval[4]
-
-            self.logger.log(lp.ERROR, "mem: {0}  lvl: {1} ...".format(mem, lvl))
-            
-            print(f"     diskSize: {self.diskSize}")
-            # self.diskSize = self.diskSize[1].strip('mMgG')
-            if int(self.diskSize) < int(mem) and re.match("^\d+$", mem):
-                success = True
-            elif re.match("^kb$", lvl):
-                self.logger.log(lp.ERROR, "NOT ENOUGH PHYSICAL MEMORY............................................")
-            else:
-                self.logger.log(lp.ERROR, "NOT ENOUGH PHYSICAL MEMORY............................................")
+            self.logger.log(lp.ERROR, "NOT ENOUGH PHYSICAL MEMORY............................................")
                 
         return success
 

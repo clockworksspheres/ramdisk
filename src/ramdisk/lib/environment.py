@@ -126,7 +126,7 @@ class Environment(object):
         
         '''
 
-        validtypes = ['launchd', 'systemd', 'init', 'upstart']
+        validtypes = ['launchd', 'systemd', 'init', 'upstart', 'windows']
         cmdlocs = ["/usr/bin/ps", "/bin/ps"]
         cmdbase = ""
         cmd = ""
@@ -138,6 +138,14 @@ class Environment(object):
                 cmdbase = cl
         if cmdbase:
             cmd = cmdbase + " -p1"
+        elif not cmdbase:
+            if  sys.platform.startswith('win32'):
+                self.sytemtype = 'windows'
+                if self.systemtype not in validtypes and DEFAULT_LOG_LEVEL >= LogPriority["VERBOSE"]:
+                    print(str(__name__) + ":This system is based on an unknown architecture")
+                elif DEFAULT_LOG_LEVEL >= LogPriority["VERBOSE"]:
+                    print(str(__name__) + ":Determined that this system is based on " + str(self.systemtype) + " architecture")
+                return
 
         try:
 
@@ -551,6 +559,8 @@ class Environment(object):
             self.osfamily = 'solaris'
         elif uname == 'freebsd9':
             self.osfamily = 'freebsd'
+        elif sys.platform.startswith('win32'):
+            self.osfamily = 'windows'
 
     def guessnetwork(self):
         """

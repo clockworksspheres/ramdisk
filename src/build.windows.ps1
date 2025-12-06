@@ -20,7 +20,7 @@ if (!(Test-Path -Path ".\packenv" -PathType Container)) {
    #pip install --upgrade pip
    pip install PySide6 PyInstaller packaging pywin32
    pip install --upgrade PyInstaller pyinstaller-hooks-contrib
-
+   pip install psutil
 } else {
     .\packenv\Scripts\Activate.ps1
 }
