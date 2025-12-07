@@ -172,17 +172,17 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
-    "src/tests/testfile824",
+    "src/proto/mountRamdisk/cleanMntPnts.py",
+    "src/proto/mountRamdisk/mountRamdisk_001.py",
+    "src/proto/mountRamdisk",
     "src/tests/testfile",
+    "src/tests/testfile824",
     "src/packenv/Lib/site-packages/psutil-7.1.3.dist-info/WHEEL",
     "src/packenv/Lib/site-packages/psutil-7.1.3.dist-info/top_level.txt",
     "src/packenv/Lib/site-packages/psutil-7.1.3.dist-info/REQUESTED",
     "src/packenv/Lib/site-packages/psutil-7.1.3.dist-info/RECORD",
     "src/packenv/Lib/site-packages/psutil-7.1.3.dist-info/METADATA",
     "src/packenv/Lib/site-packages/psutil-7.1.3.dist-info/LICENSE",
-    "src/packenv/Lib/site-packages/psutil-7.1.3.dist-info/INSTALLER",
-    "src/packenv/Lib/site-packages/psutil-7.1.3.dist-info",
-    "src/packenv/Lib/site-packages/psutil/tests/__pycache__/__main__.cpython-313.pyc",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RandomWindowsPowershellCommands.md"
   ]
 }
