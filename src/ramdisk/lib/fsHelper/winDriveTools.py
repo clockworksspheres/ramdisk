@@ -51,11 +51,16 @@ def finddrive(path):
     return found
         
 
-        
+def cleanDrivePath(path):
+    # if one or more slashes are found, replace them with two slashes
+    cleanPath = re.sub(r"\\{1,}", r"\\\\", path)
+    # print(cleanPath)
+    return cleanPath
+
 
 def cleanTrailingSlashes(path):
     """
-    Return the path without slashes
+    Return the path without trailing slashes
     """
     path2return = ""
     # Regex: capture everything up to but not including the final backslash
