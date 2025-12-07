@@ -1,3 +1,4 @@
+import re
 import subprocess
 import sys
 
@@ -28,4 +29,10 @@ result = subprocess.check_output(f"aim_ll -a -s {size} -m \"{path}\" -p \"{param
 #mntpnt = "C:\Users\royni\tmp tmp"
 #result = subprocess.check_output(f"aim_ll -a -s {size} -m \"{mntpnt}\" -p \"{params}\"")
 
-print(result)
+result = str(result)
+
+# in result string, replast string \r\n to control characters \r\n
+result = re.sub(r"\\r\\n", r"\r\n", result)
+
+for line in result.splitlines():
+    print(str(line))
