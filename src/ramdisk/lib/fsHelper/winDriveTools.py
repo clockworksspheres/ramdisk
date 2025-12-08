@@ -12,7 +12,7 @@ def getDrivePath(path):
     return drive
 
 
-def finddrive(path):
+def findDrive(path):
     """
     Find the drive that the path is connected to - 
     
@@ -60,7 +60,6 @@ def cleanDrivePath(path):
 
 def cleanTrailingSlashes(path):
     """
-    Return the path without trailing slashes
     """
     path2return = ""
     # Regex: capture everything up to but not including the final backslash

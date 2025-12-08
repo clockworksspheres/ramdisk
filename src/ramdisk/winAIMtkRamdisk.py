@@ -20,7 +20,7 @@ from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.run_commands import RunWith
 from ramdisk.lib.fsHelper.ntfsFsHelper import FsHelper
 from ramdisk.commonRamdiskTemplate import RamDiskTemplate
-from ramdisk.lib.fsHelper.winDriveTools import getDrivePath, finddrive, cleanTrailingSlashes
+from ramdisk.lib.fsHelper.winDriveTools import findDrive, cleanTrailingSlashes, cleanDrivePath
 
 ###########################################################################
 
@@ -69,10 +69,12 @@ class RamDisk(RamDiskTemplate):
             self.getRandomizedMountpoint()
         else:
             if self.mntPointAvailable(mountpoint):
-                self.mntPoint = mountpoint
+                trailingSlashesCleanedPath = cleanTrailingSlashes(mountpoint)
+                cleanedSlashes = cleanDrivePath(trailingSlashesCleanedPath)
+                self.mntPoint = cleanedSlashes
 
         # get the disk id's of AIMtk disks, including disk numbers
-        self.getImDiskIdsCmd = ["aim_ll", "-l"]
+        self.getAIMtkDiskIdsCmd = ["aim_ll", "-l"]
 
         # command to get AIMtk info on a specificly numbered disk
         self.getIdXNameCmd = ["aim_ll", "-l", "-u", self.imDiskNumber]
@@ -82,7 +84,7 @@ class RamDisk(RamDiskTemplate):
         self.writeMode = "rw"
         success = False
         #####
-        # Get an ImDisk Ram Disk
+        # Get an AIMTk Ram Disk
         if(self.__isMemoryAvailable()):
             success = self.__createRamdisk()
 
@@ -104,10 +106,13 @@ class RamDisk(RamDiskTemplate):
         #####
         # Create the ramdisk and attach it to a device.
 
+        # command translated from imdisk command
+        #cmd = ["aim_ll", "-a", "-s", self.diskSize + "M", "-m", self.mntPoint, "-p", '/fs:' + self.fsType + ' /q /y']
 
-        # cmd = [self.aim_ll, "-a", "-s", self.diskSize, "-m" self.mntPoint, -p "\"/fs:" + self.fsType + " /q /y\"", "-o" self.driveType + "," + self.writeMode]
+        # params = "/fs:ntfs /v:TestRam /q /y"
+        params = f"/fs:{self.fsType} /q /y"
 
-        cmd = ["aim_ll", "-a", "-s", self.diskSize + "M", "-m", self.mntPoint, "-p", '/fs:' + self.fsType + ' /q /y']
+        cmd = f"aim_ll -a -s {self.diskSize}M -m \"{self.mntPoint}\" -p \"{params}\""
 
         print(str(cmd))
 
@@ -199,7 +204,7 @@ class RamDisk(RamDiskTemplate):
         success = False
 
         # make sure there is a drive in the path is valid and mounted.
-        driveExists = finddrive(mntPoint)
+        driveExists = findDrive(mntPoint)
         if not driveExists:
             return False
         
