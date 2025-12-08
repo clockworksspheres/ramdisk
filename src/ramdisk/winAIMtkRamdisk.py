@@ -229,47 +229,7 @@ class RamDisk(RamDiskTemplate):
         """
         success = False
 
-        detachCmdOne = [ self.aim_ll, "-d", "-m", self.mntPoint ]
-        detachCmdTwo = [ self.aim_ll, "-d", "-u", self.device ]
-        dForceCmdOne = [ self.aim_ll, "-D", "-m", self.mntPoint ]
-        dForceCmdTwo = [ self.aim_ll, "-D", "-u", self.device ]
-        rForceCmd = [ self.aim_ll, "-R", "-u", self.device ]
-
-
-        detachCmdThree = [ self.aim_ll, "-d", "-m", mountPoint ]
-        detachCmdFour = [ self.aim_ll, "-d", "-u", unit ]
-        dForceCmdThree = [ self.aim_ll, "-D", "-m", mountPoint ]
-        dForceCmdFour = [ self.aim_ll, "-D", "-u", unit ]
-        rForceCmdTwo = [ self.aim_ll, "-R", "-u", unit ]
-
-
-        if not detach and not dForce and rForce and not mountpoint and unit == True and isinstance(unit, bool):
-            umountCmd = rForceCmd
-        if detach and not dForce and not rForce and not mountpoint and not unit:
-            umountCmd = detachCmdOne
-        if detach and not dForce and not rForce and not mountpoint and unit == True and isinstance(unit, bool):
-            umountCmd = detachCmdTwo
-        if not detach and dForce and not rForce and not mountpoint and not unit:
-            umountCmd = dForceCmdOne
-        if not detach and dForce and not rForce and not mountpoint and unit == True and isinstance(unit, bool):
-            umountCmd = dForceCmdTwo
-
-        if not detach and not dForce and rForce and not mountpoint and unit and isinstance(unit, int):
-            umountCmd = rForceCmdTwo
-        if detach and not dForce and not rForce and mountpoint and not unit:
-            # at some point in the future the will be a function with a regex to validate a good mountpoint.
-            umountCmd = dtachCmdThree
-        if detach and not dForce and not rForce and not mountpoint and unit and isinstance(unit, int):
-            umountCmd = dtachCmdFour
-        if not detach and dForce and not rForce and mountpoint and not unit:
-            # at some point in the future the will be a function with a regex to validate a good mountpoint.
-            umountCmd = dForceCmdThree
-        if not detach and dForce and not rForce and not mountpoint and unit and isinstance(unit, int):
-            umountCmd = dForceCmdFour
-
-        else:
-            self.logger.log(lp.ERROR, "Sorry, Invalid Command...") 
-            return success
+        umountCmd = [ self.aim_ll, "-R", "-u", self.myRamdiskDev ]
 
         self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(umountCmd))
         self.runCmd.setCommand(umountCmd)
