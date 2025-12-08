@@ -19,8 +19,8 @@ def get_mntpnts():
             #mountname = line.split()[-1]
         elif not line:
             #anchor = False
-            print(f"{device} : {mountname}")
-            mnts[device] = mountname
+            print(f"{mountname} : {device}")
+            mnts[mountname] = device
             continue
     return mnts
 

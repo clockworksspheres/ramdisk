@@ -172,17 +172,17 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
-    "src/proto/mntpoints/aimgetmntpnts_003.py",
-    "src/ramdisk/lib/fsHelper/__pycache__/winDriveTools.cpython-312.pyc",
-    "src/ramdisk/lib/fsHelper/__pycache__/__init__.cpython-312.pyc",
-    "src/ramdisk/__pycache__/__init__.cpython-312.pyc",
-    "src/proto/mountRamdisk/cleanMntPnts.py",
-    "src/proto/mountRamdisk/mountRamdisk_001.py",
-    "src/proto/mountRamdisk",
-    "src/tests/testfile",
-    "src/tests/testfile824",
-    "src/packenv/Lib/site-packages/psutil-7.1.3.dist-info/WHEEL",
-    "src/packenv/Lib/site-packages/psutil-7.1.3.dist-info/top_level.txt",
+    "src/build/build.windows11.onefile/EXE-00.toc",
+    "src/build/build.windows11.onefile/PKG-00.toc",
+    "src/build/build.windows11.onefile/ramdisk-setup.pkg",
+    "src/build/build.windows11.onefile/PYZ-00.toc",
+    "src/build/build.windows11.onefile/PYZ-00.pyz",
+    "src/build/build.windows11.onefile/localpycs/struct.pyc",
+    "src/build/build.windows11.onefile/localpycs/pyimod04_pywin32.pyc",
+    "src/build/build.windows11.onefile/localpycs/pyimod03_ctypes.pyc",
+    "src/build/build.windows11.onefile/localpycs/pyimod02_importers.pyc",
+    "src/build/build.windows11.onefile/localpycs/pyimod01_archive.pyc",
+    "src/build/build.windows11.onefile/localpycs",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RandomWindowsPowershellCommands.md"
   ]
 }

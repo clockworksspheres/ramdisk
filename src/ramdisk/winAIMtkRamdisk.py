@@ -456,24 +456,23 @@ def getMountDisks():
     should return the a dictionary with {device: diskName, ...} that contains
     every mounted disk
     """
-    print("Entering getMountedDisks")
-    
-    print("Exiting getMountedDisks")
-    return {}
-"""
-    runWith = RunWith()
-
-    mountedDisks = {}
-
-    devList = []
-    diskDict = {}
-    retval = ""
-    disk = ""
-
-    #####
-    # Diskutil list, then parse for RAMDISK in output, get the device
-    cmd = ["diskutil", "list"]
-    runWith.setCommand(cmd)
-    runWith.communicate()
-    retval, reterr, retcode = runWith.getNlogReturns()
-"""
+    mnts = {}
+    result = subprocess.run(['aim_ll', '-l'], capture_output=True, text=True)
+    for line in result.stdout.splitlines():
+        line = line.strip()
+        if re.search("\\\\\\\\", line):
+            continue
+        elif re.search("000", line):
+            # print(line)
+            # anchor = True
+            device = line.split()[-1]
+        elif re.search(r':\\.*', line):
+            # print(line)
+            mountname = line.split("Mounted at ")[1]
+            #mountname = line.split()[-1]
+        elif not line:
+            #anchor = False
+            print(f"{mountname} : {device}")
+            mnts[mountname] = device
+            continue
+    return mnts
