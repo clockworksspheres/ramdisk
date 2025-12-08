@@ -448,6 +448,7 @@ def getMountDisks():
     every mounted disk
     """
     print("Entering getMountedDisks")
+    
     print("Exiting getMountedDisks")
     return {}
 """
