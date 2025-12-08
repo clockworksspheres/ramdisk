@@ -34,5 +34,10 @@ result = str(result)
 # in result string, replast string \r\n to control characters \r\n
 result = re.sub(r"\\r\\n", r"\r\n", result)
 
+device = ""
 for line in result.splitlines():
     print(str(line))
+    if re.match("Created", line) and re.search("memory", line.strip().split()[-1]):
+        device = line.split()[2]
+
+print(device)

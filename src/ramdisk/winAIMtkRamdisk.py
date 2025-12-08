@@ -76,9 +76,6 @@ class RamDisk(RamDiskTemplate):
         # get the disk id's of AIMtk disks, including disk numbers
         self.getAIMtkDiskIdsCmd = ["aim_ll", "-l"]
 
-        # command to get AIMtk info on a specificly numbered disk
-        self.getIdXNameCmd = ["aim_ll", "-l", "-u", self.imDiskNumber]
-
         self.fsType = "ntfs"
         self.driveType = "hd"
         self.writeMode = "rw"
@@ -125,7 +122,19 @@ class RamDisk(RamDiskTemplate):
             success = False
             raise Exception("Error trying to create ramdisk(" + str(reterr).strip() + ")")
         else:
-            self.myRamdiskDev = retval.strip()
+            # Get the device
+            result = str(retval)
+
+            # in result string, replast string \r\n to control characters \r\n
+            result = re.sub(r"\\r\\n", r"\r\n", result)
+
+            device = ""
+            for line in result.splitlines():
+                print(str(line))
+                if re.match("Created", line) and re.search("memory", line.strip().split()[-1]):
+                    device = line.split()[2]
+
+            self.myRamdiskDev = device
             self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
             success = True
         self.logger.log(lp.DEBUG, "Success: " + str(success) + " in __create")
