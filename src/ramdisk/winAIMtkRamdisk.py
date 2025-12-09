@@ -450,21 +450,7 @@ def getMountData(device):
         
     print("Exiting getMountData")
     return {}
-'''
-    runWith = RunWith()
 
-
-    #####
-    # Set up and run the mount command
-    cmd = ["/sbin/mount"]
-
-    output = ""
-
-    runWith.setCommand(cmd)
-    output, _, _ = runWith.communicate()
-
-    mountInfo = ""
-'''
 
 def getMountDisks():
     """
