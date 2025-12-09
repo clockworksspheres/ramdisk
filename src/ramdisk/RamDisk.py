@@ -208,7 +208,7 @@ def eject(device, logger=False):
     """
     Eject/unmount the passed in instance of a ramdisk.
     """
-    unmount(device, logger)
+    unmount(device, logger=False)
 
 def getMountedDisks(device=""):
     """

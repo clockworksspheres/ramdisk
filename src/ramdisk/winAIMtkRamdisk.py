@@ -363,21 +363,23 @@ class RamDisk(RamDiskTemplate):
 
 logger = CyLogger()
 
-def detach(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
+def detach(device, logger=False):
     """
     """
     success = False
-    success = umount(detach, dForce, rForce, mountpoint, unit)
+    if device:
+        success = umount(device, logger=False)
     return success
 
 
-def unmount(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
+def unmount(device, logger=False):
     success = False
-    success = umount(detach, dForce, rForce, mountpoint, unit)
+    if device:
+        success = umount(device, logger)
     return success
 
 
-def umount(device=None):
+def umount(device, logger=False):
     """
     Eject the ramdisk
 
@@ -390,7 +392,9 @@ def umount(device=None):
 
     umountCmd    = [ "aim_ll", "-R", "-u", device ]
 
-    logger.log(lp.WARNING, "Running command to unmount ramdisk: \n\t" + str(umountCmd))
+    print(f"umount {device}")
+
+    #logger.log(lp.WARNING, "Running command to unmount ramdisk: \n\t" + str(umountCmd))
     runCmd.setCommand(umountCmd)
     runCmd.communicate()
     retval, reterr, retcode = runCmd.getNlogReturns()
@@ -400,7 +404,7 @@ def umount(device=None):
         raise Exception("Error trying to unmount drive : (" + str(reterr).strip() + ")")
     else:
         success = True
-        logger.log(lp.INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
+        #logger.log(lp.INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
 
     return success
 
@@ -420,7 +424,6 @@ def getMountData(device):
     retval, reterr, retcode = self.runCmd.getNlogReturns()
 
     if retcode == '':
-        success = False
         raise Exception("Error trying to create ramdisk(" + str(reterr).strip() + ")")
     else:
         deviceName = findMountName(device)
