@@ -377,22 +377,18 @@ def unmount(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None)
     return success
 
 
-def umount(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
+def umount(device=None):
     """
     Eject the ramdisk
 
     Must be over-ridden to provide OS/Method specific functionality
-
     
     """
     success = False
 
     runCmd = RunWith()
 
-    umountCmd    = [ "aim_ll", "-R", "-u", unit ]
-
-    logger.log(lp.ERROR, "Sorry, Invalid Command...")
-    return success
+    umountCmd    = [ "aim_ll", "-R", "-u", device ]
 
     logger.log(lp.WARNING, "Running command to unmount ramdisk: \n\t" + str(umountCmd))
     runCmd.setCommand(umountCmd)
