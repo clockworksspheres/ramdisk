@@ -8,6 +8,7 @@ from tempfile import mkdtemp
 import os
 import re
 import sys
+import subprocess
 
 # 3rd party libs
 import psutil 
@@ -20,7 +21,7 @@ from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.run_commands import RunWith
 from ramdisk.lib.fsHelper.ntfsFsHelper import FsHelper
 from ramdisk.commonRamdiskTemplate import RamDiskTemplate
-from ramdisk.lib.fsHelper.winDriveTools import findDrive, cleanTrailingSlashes, cleanDrivePath
+from ramdisk.lib.fsHelper.winDriveTools import findDrive, cleanTrailingSlashes, cleanDrivePath, findMountName
 
 ###########################################################################
 
@@ -386,44 +387,24 @@ def umount(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
     """
     success = False
 
-
     runCmd = RunWith()
-    umountcmd = ''
 
-    detachCmdOne = [ "aim_ll", "-d", "-m", mountpoint ]
-    detachCmdTwo = [ "aim_ll", "-d", "-u", unit ]
-    dForceCmdOne = [ "aim_ll", "-D", "-m", mountpoint ]
-    dForceCmdTwo = [ "aim_ll", "-D", "-u", unit ]
-    rForceCmd    = [ "aim_ll", "-R", "-u", unit ]
+    umountCmd    = [ "aim_ll", "-R", "-u", unit ]
 
-    if not detach and not dForce and rForce and not mountpoint and unit and isinstance(unit, int):
-        umountCmd = rForceCmdTwo
-    if detach and not dForce and not rForce and mountpoint and not unit:
-        # at some point in the future the will be a function with a regex to validate a good mountpoint.
-        umountCmd = dtachCmdThree
-    if detach and not dForce and not rForce and not mountpoint and unit and isinstance(unit, int):
-        umountCmd = dtachCmdFour
-    if not detach and dForce and not rForce and mountpoint and not unit:
-        # at some point in the future the will be a function with a regex to validate a good mountpoint.
-            umountCmd = dForceCmdThree
-    if not detach and dForce and not rForce and not mountpoint and unit and isinstance(unit, int):
-        umountCmd = dForceCmdFour
+    logger.log(lp.ERROR, "Sorry, Invalid Command...")
+    return success
 
+    logger.log(lp.WARNING, "Running command to unmount ramdisk: \n\t" + str(umountCmd))
+    runCmd.setCommand(umountCmd)
+    runCmd.communicate()
+    retval, reterr, retcode = runCmd.getNlogReturns()
+
+    if retcode == '':
+        success = False
+        raise Exception("Error trying to unmount drive : (" + str(reterr).strip() + ")")
     else:
-        logger.log(lp.ERROR, "Sorry, Invalid Command...")
-        return success
-
-        logger.log(lp.WARNING, "Running command to unmount ramdisk: \n\t" + str(umountCmd))
-        runCmd.setCommand(umountCmd)
-        runCmd.communicate()
-        retval, reterr, retcode = runCmd.getNlogReturns()
-
-        if retcode == '':
-            success = False
-            raise Exception("Error trying to unmount drive : (" + str(reterr).strip() + ")")
-        else:
-            success = True
-            logger.log(lp.INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
+        success = True
+        logger.log(lp.INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
 
     return success
 
@@ -446,10 +427,10 @@ def getMountData(device):
         success = False
         raise Exception("Error trying to create ramdisk(" + str(reterr).strip() + ")")
     else:
-
+        deviceName = findMountName(device)
         
     print("Exiting getMountData")
-    return {}
+    return deviceName
 
 
 def getMountDisks():
