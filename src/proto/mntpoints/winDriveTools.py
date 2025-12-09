@@ -12,7 +12,7 @@ def getDrivePath(path):
     return drive
 
 
-def finddrive(path):
+def findDrive(path):
     """
     Find the drive that the path is connected to - 
     
@@ -51,6 +51,19 @@ def finddrive(path):
     return found
         
 
+def findMountName(device):
+    """
+    """
+    result = subprocess.run(["aim_ll", "-l", "-u", device], capture_output=True, text=True)
+    
+    mntName = ""
+    for line in result.stdout.splitlines():
+        #print(line)
+        if re.match("^  Mounted at ", line):
+            mntName = line.split("Mounted at ")[-1]
+    #print(mntName)
+    return mntName
+
 def cleanDrivePath(path):
     # if one or more slashes are found, replace them with two slashes
     cleanPath = re.sub(r"\\{1,}", r"\\\\", path)
@@ -81,7 +94,7 @@ if __name__ == "__main__":
     path = cleanTrailingSlashes(path)
     print(path)
 
-    driveExists = finddrive(path)
+    driveExists = findDrive(path)
     drive = getDrivePath(path)
     if not driveExists:
         print(f"Drive {drive} does not exist")
@@ -91,5 +104,10 @@ if __name__ == "__main__":
     home_dir = os.path.expanduser("~")
     print(home_dir)
 
+
+    print("\n-----\n")
+
+    deviceName = findMountName("000100")
+    print(deviceName)
 
 
