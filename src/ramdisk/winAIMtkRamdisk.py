@@ -433,6 +433,21 @@ def getMountData(device):
     For macOS, show both mount and diskutil data
     """
     print("Entering getMountData")
+    cmd = f"aim_ll -l -u {device}"
+
+    print(str(cmd))
+
+    self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
+    self.runCmd.setCommand(cmd, creationflags=True)
+    self.runCmd.communicate()
+    retval, reterr, retcode = self.runCmd.getNlogReturns()
+
+    if retcode == '':
+        success = False
+        raise Exception("Error trying to create ramdisk(" + str(reterr).strip() + ")")
+    else:
+
+        
     print("Exiting getMountData")
     return {}
 '''
