@@ -55,16 +55,15 @@ class RamDisk(RamDiskTemplate):
             self.diskSize = str(size)
         elif isinstance(size, str):
             self.diskSize = self.fsHelper.getDiskSize(size)
-            self.diskSize = self.diskSize[1].strip('mMgG')
+            self.diskSize = str(self.diskSize[1]).strip('mMgG')
         self.success = False
-        self.myRamdiskDev = self.imDiskNumber = None
+        self.myRamdiskDev = None
 
         # Need to have a config file or pass in a location for or hard code or
         # command line pass in the location of the AIM Toolkit binary
 
         # Better yet, set up the PATH to the aim_ll library
         
-        self.aim_ll = '"C:\\Program Files\\Arsenal Image Mounter\\DriverSetup\\cli\\x64\\aim_ll.exe"'
         self.mntPoint = ""
         if not mountpoint:
             self.getRandomizedMountpoint()
@@ -110,7 +109,7 @@ class RamDisk(RamDiskTemplate):
         # params = "/fs:ntfs /v:TestRam /q /y"
         params = f"/fs:{self.fsType} /q /y"
 
-        cmd = f"aim_ll -a -s {self.diskSize}M -m \"{self.mntPoint}\" -p \"{params}\""
+        cmd = r'aim_ll -a -s ' + str(self.diskSize) + r'M -m \\"' + self.mntPoint + r'\\" -p \\"' + params + r'\\"'
 
         print(str(cmd))
 
