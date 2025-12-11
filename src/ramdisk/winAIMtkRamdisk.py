@@ -211,25 +211,22 @@ class RamDisk(RamDiskTemplate):
 
             valid values: can be in either aim_ll -l, or in powershell command given.
         """
-        success = False
-
         # make sure there is a drive in the path is valid and mounted.
         driveExists = findDrive(mntPoint)
         if not driveExists:
             return False
         
-        if os.path.exits(mntPoint):
+        if os.path.exists(mntPoint):
             return True
         else:
             # Create it relative to the current working directory
-            os.makedirs(path, exist_ok=True)
+            os.makedirs(mntPoint, exist_ok=True)
             return True
-        return success
 
 
     ###########################################################################
 
-    def umount(self, detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
+    def umount(self):
         """
         Unmount the disk - same functionality as __eject on the mac
 
@@ -266,7 +263,22 @@ class RamDisk(RamDiskTemplate):
         
         """
         success = False
-        success = self.umount(detach, dForce, rForce, mountpoint, unit)
+        success = False
+
+        umountCmd = [ self.aim_ll, "-R", "-u", self.myRamdiskDev ]
+
+        self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(umountCmd))
+        self.runCmd.setCommand(umountCmd)
+        self.runCmd.communicate()
+        retval, reterr, retcode = self.runCmd.getNlogReturns()
+
+        if retcode == '':
+            success = False
+            raise Exception("Error trying to unmount drive : (" + str(reterr).strip() + ")")
+        else:
+            success = True
+            self.logger.log(lp.INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
+
         return success
 
     ###########################################################################
@@ -367,15 +379,49 @@ def detach(device, logger=False):
     """
     """
     success = False
-    if device:
-        success = umount(device, logger=False)
+
+    runCmd = RunWith()
+
+    umountCmd    = [ "aim_ll", "-R", "-u", device ]
+
+    print(f"umount {device}")
+
+    #logger.log(lp.WARNING, "Running command to unmount ramdisk: \n\t" + str(umountCmd))
+    runCmd.setCommand(umountCmd)
+    runCmd.communicate()
+    retval, reterr, retcode = runCmd.getNlogReturns()
+
+    if retcode == '':
+        success = False
+        raise Exception("Error trying to unmount drive : (" + str(reterr).strip() + ")")
+    else:
+        success = True
+        #logger.log(lp.INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
+
     return success
 
 
 def unmount(device, logger=False):
     success = False
-    if device:
-        success = umount(device, logger)
+
+    runCmd = RunWith()
+
+    umountCmd    = [ "aim_ll", "-R", "-u", device ]
+
+    print(f"umount {device}")
+
+    #logger.log(lp.WARNING, "Running command to unmount ramdisk: \n\t" + str(umountCmd))
+    runCmd.setCommand(umountCmd)
+    runCmd.communicate()
+    retval, reterr, retcode = runCmd.getNlogReturns()
+
+    if retcode == '':
+        success = False
+        raise Exception("Error trying to unmount drive : (" + str(reterr).strip() + ")")
+    else:
+        success = True
+        #logger.log(lp.INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
+
     return success
 
 
@@ -418,9 +464,10 @@ def getMountData(device):
 
     print(str(cmd))
 
-    self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
-    self.runCmd.setCommand(cmd, creationflags=True)
-    self.runCmd.communicate()
+    runCmd = RunWith()
+
+    runCmd.setCommand(cmd, creationflags=True)
+    runCmd.communicate()
     retval, reterr, retcode = self.runCmd.getNlogReturns()
 
     if retcode == '':
