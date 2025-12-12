@@ -503,15 +503,18 @@ def getMountDisks():
     every mounted disk
     """
     mnts = {}
-    result = subprocess.run(['aim_ll', '-l'], capture_output=True, text=True)
+    result = subprocess.run(r'aim_ll -l', capture_output=True, text=True)
+    print(str(result.stdout))
+    #result = re.sub(r"\\n", r"\n", result)
     for line in result.stdout.splitlines():
         line = line.strip()
-        if re.search("\\\\\\\\", line):
+        if re.search(r"\\\\\\\\", line):
             continue
-        elif re.search("000", line):
-            # print(line)
+        elif re.match("Device number \d+", line):
+            print("Looking for device: " + line)
             # anchor = True
             device = line.split()[-1]
+            print("Found Device: " + device)
         elif re.search(r':\\.*', line):
             # print(line)
             mountname = line.split("Mounted at ")[1]
@@ -519,9 +522,10 @@ def getMountDisks():
         elif not line:
             #anchor = False
             try:
-                print(f"{mountname} : {device}")
+                print(f"{device} : {mountname}")
                 mnts[mountname] = device
             except UnboundLocalError:
                 continue
             continue
     return mnts
+
