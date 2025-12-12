@@ -137,9 +137,10 @@ class RamDisk(RamDiskTemplate):
             device = ""
             for line in result.splitlines():
                 print(str(line))
-                if re.match("Created", line) and re.search("memory", line.strip().split()[-1]):
+                if re.match("Created device", line) and re.search("memory", line.strip().split()[-1]):
                     device = line.split()[2]
                     print("FOUND DEVICE: " + str(device))
+                    break
                 else:
                     continue
 
