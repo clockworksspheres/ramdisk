@@ -33,9 +33,12 @@ class RamDisk(RamDiskTemplate):
     size or set the block size for the ramdisk. That function can be
     found in the ramdisk/lib/fsHandler/ntFsHandler.py FsHandler.getFsBlockSize() method.
     """
-    def __init__(self, size=512, mountpoint=False, logger=False):
+    def __init__(self, size=512, mountpoint=False, logger=False, **kwargs):
         """
         """
+        print("SIZE: " + str(size))
+        print("MOUNTPOINT: " + str(mountpoint))
+
         #####
         # Version/timestamp is
         # <YYYY><MM><DD>.<HH><MM>
@@ -68,10 +71,12 @@ class RamDisk(RamDiskTemplate):
         if not mountpoint:
             self.getRandomizedMountpoint()
         else:
-            if self.mntPointAvailable(mountpoint):
-                trailingSlashesCleanedPath = cleanTrailingSlashes(mountpoint)
-                cleanedSlashes = cleanDrivePath(trailingSlashesCleanedPath)
-                self.mntPoint = cleanedSlashes
+            #if findMountName(mountpoint):
+            #if self.mntPointAvailable(mountpoint):
+            trailingSlashesCleanedPath = cleanTrailingSlashes(mountpoint)
+            cleanedSlashes = cleanDrivePath(trailingSlashesCleanedPath)
+            self.mntPoint = cleanedSlashes
+            print("MOUNTPOINT: " + str(self.mntPoint))
 
         # get the disk id's of AIMtk disks, including disk numbers
         self.getAIMtkDiskIdsCmd = ["aim_ll", "-l"]
@@ -109,7 +114,7 @@ class RamDisk(RamDiskTemplate):
         # params = "/fs:ntfs /v:TestRam /q /y"
         params = f"/fs:{self.fsType} /q /y"
 
-        cmd = r'aim_ll -a -s ' + str(self.diskSize) + r'M -m \\"' + self.mntPoint + r'\\" -p \\"' + params + r'\\"'
+        cmd = r'aim_ll -a -s ' + str(self.diskSize) + r'M -m "' + self.mntPoint + r'" -p "' + params + r'"'
 
         print(str(cmd))
 
@@ -122,6 +127,7 @@ class RamDisk(RamDiskTemplate):
             success = False
             raise Exception("Error trying to create ramdisk(" + str(reterr).strip() + ")")
         else:
+
             # Get the device
             result = str(retval)
 
@@ -133,6 +139,9 @@ class RamDisk(RamDiskTemplate):
                 print(str(line))
                 if re.match("Created", line) and re.search("memory", line.strip().split()[-1]):
                     device = line.split()[2]
+                    print("FOUND DEVICE: " + str(device))
+                else:
+                    continue
 
             self.myRamdiskDev = device
             self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
@@ -210,17 +219,19 @@ class RamDisk(RamDiskTemplate):
 
             valid values: can be in either aim_ll -l, or in powershell command given.
         """
+        print("MountPoint: " + str(mntPoint))
         # make sure there is a drive in the path is valid and mounted.
         driveExists = findDrive(mntPoint)
         if not driveExists:
             return False
-        
-        if os.path.exists(mntPoint):
-            return True
         else:
-            # Create it relative to the current working directory
-            os.makedirs(mntPoint, exist_ok=True)
-            return True
+            
+            if os.path.exists(mntPoint):
+                return True
+            else:
+                # Create it relative to the current working directory
+                os.makedirs(mntPoint, exist_ok=True)
+                return True
 
 
     ###########################################################################
@@ -499,7 +510,10 @@ def getMountDisks():
             #mountname = line.split()[-1]
         elif not line:
             #anchor = False
-            print(f"{mountname} : {device}")
-            mnts[mountname] = device
+            try:
+                print(f"{mountname} : {device}")
+                mnts[mountname] = device
+            except UnboundLocalError:
+                continue
             continue
     return mnts

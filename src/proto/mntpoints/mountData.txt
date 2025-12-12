@@ -1,0 +1,17 @@
+Creating device...
+Created device 000200 -> Image in memory
+Device is \\?\PhysicalDrive3
+Creating partition...
+Successfully created partition.
+Attached disk volume \\?\Volume{85f6197b-0000-0000-0000-100000000000}
+Formatting disk volume \\?\Volume{85f6197b-0000-0000-0000-100000000000}...
+The type of the file system is RAW.
+The new file system is NTFS.
+QuickFormatting 499.0 MB
+Creating file system structures.
+Format complete.
+     499.0 MB total disk space.
+     494.7 MB are available.
+Format successful.
+Created new volume mount point at y:\
+Done.

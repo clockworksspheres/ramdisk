@@ -561,6 +561,12 @@ class _CreateRamdisk(QMainWindow):
                     ramdisk = RamDisk(str(memSize), str(mountPoint), self.logger, passwd=self.passwd)
                     ramdisk.getNlogData()
                     success, mntPnt, device = ramdisk.getNprintData()
+                elif sys.platform.startswith('win32'):
+                    #####
+                    # create ramdisk with specific mountpoint
+                    ramdisk = RamDisk(str(memSize), str(mountPoint), self.logger)
+                    ramdisk.getNlogData()
+                    success, mntPnt, device = ramdisk.getNprintData()
                 else:
                     #####
                     # create ramdisk with specific mountpoint
