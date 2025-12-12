@@ -366,6 +366,8 @@ class _CreateRamdisk(QMainWindow):
                 for col in range(self.ui.tableWidget.columnCount()):
                     item = self.ui.tableWidget.item(index, col)
                     row_data.append(item.text() if item else "")
+                    #####
+                    # Make sure to use the device column, not the mount point column.
                     #if col == 1:
                     if col == 0:
                         eject(item.text(), self.logger)
