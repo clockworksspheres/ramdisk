@@ -119,21 +119,28 @@ class RamDisk(RamDiskTemplate):
         print(str(cmd))
 
         self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
-        self.runCmd.setCommand(cmd, creationflags=True)
-        self.runCmd.communicate()
-        retval, reterr, retcode = self.runCmd.getNlogReturns()
+        #self.runCmd.setCommand(cmd, creationflags=True)
+        # f.runCmd.communicate()
+        #retval, reterr, retcode = self.runCmd.communicate()
 
-        if retcode == '':
+        retval = subprocess.run(cmd, capture_output=True, text=True)
+
+        #print('RETVAL: "' + str(retval)+ '"')
+
+        if retval == '':
             success = False
+            #print('RETVAL: "'+ str(retval) + '"')
             raise Exception("Error trying to create ramdisk(" + str(reterr).strip() + ")")
         else:
 
             # Get the device
             result = str(retval)
 
-            # in result string, replast string \r\n to control characters \r\n
-            result = re.sub(r"\\r\\n", r"\r\n", result)
+            print(result)
 
+            # in result string, replast string \r\n to control characters \r\n
+            #result = re.sub(r"\\r\\n", r"\r\n", result)
+            result = re.sub(r"\\n", r"\n", result)
             device = ""
             for line in result.splitlines():
                 print(str(line))

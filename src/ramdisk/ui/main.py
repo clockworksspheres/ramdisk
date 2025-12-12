@@ -519,7 +519,7 @@ class _CreateRamdisk(QMainWindow):
             else:
                 print("Dialog rejected")
         if sys.platform.startswith('win32'):
-            pass
+            self.logger.log(lp.DEBUG, "Darwin needs to be run elevated to create a ramdisk")
         #####
         # Grab the size
         try:
