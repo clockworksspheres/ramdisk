@@ -244,7 +244,7 @@ class RamDisk(RamDiskTemplate):
 
     ###########################################################################
 
-    def umount(self):
+    def umount(self, **kwargs):
         """
         Unmount the disk - same functionality as __eject on the mac
 
@@ -272,7 +272,7 @@ class RamDisk(RamDiskTemplate):
 
     ###########################################################################
 
-    def unmount(self, detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
+    def unmount(self, **kwargs):
         """
         Unmount the disk - same functionality as __eject on the mac
 
@@ -444,6 +444,36 @@ def unmount(device, logger=False):
 
 
 def umount(device, logger=False):
+    """
+    Eject the ramdisk
+
+    Must be over-ridden to provide OS/Method specific functionality
+    
+    """
+    success = False
+
+    runCmd = RunWith()
+
+    umountCmd    = [ "aim_ll", "-R", "-u", device ]
+
+    print(f"umount {device}")
+
+    #logger.log(lp.WARNING, "Running command to unmount ramdisk: \n\t" + str(umountCmd))
+    runCmd.setCommand(umountCmd)
+    runCmd.communicate()
+    retval, reterr, retcode = runCmd.getNlogReturns()
+
+    if retcode == '':
+        success = False
+        raise Exception("Error trying to unmount drive : (" + str(reterr).strip() + ")")
+    else:
+        success = True
+        #logger.log(lp.INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
+
+    return success
+
+
+def eject(device, logger=False):
     """
     Eject the ramdisk
 
