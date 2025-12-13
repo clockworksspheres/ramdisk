@@ -477,7 +477,8 @@ def umount(mnt_point="", logger=False, password=""):
         retval, reterr, retcode = self.runWith.runWithSudo(self.passwd)
         #retval, reterr, retcode = runWith.getNlogReturns()
         self.logger.log(lp.INFO, "RETURNS: " + retval)
-        if not reterr:
+        #if not reterr:
+        if retval:
             success = True
 
 
