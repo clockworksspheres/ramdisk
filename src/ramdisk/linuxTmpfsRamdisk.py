@@ -444,7 +444,7 @@ def detach(mnt_point="", logger=False):
 
 ###############################################################################
 
-def umount(mnt_point="", logger=False):
+def umount(mnt_point="", logger=False, password=""):
     """
     Unmount the ramdisk
 
@@ -474,15 +474,27 @@ def umount(mnt_point="", logger=False):
         command = [umountPath, mnt_point]
         runWith.setCommand(command)
         runWith.communicate()
-        retval, reterr, retcode = runWith.getNlogReturns()
+        retval, reterr, retcode = self.runWith.runWithSudo(self.passwd)
+        #retval, reterr, retcode = runWith.getNlogReturns()
         if not reterr:
             success = True
+
 
     return success
 
 ###############################################################################
 
-def unmount(mnt_point="", logger=False):
+def  unmount(mnt_point="", logger=False):
+    '''
+    mirror functioin for umount
+    '''
+    success = False
+    success = umount(mnt_point, logger)
+    return success
+
+###############################################################################
+
+def  eject(mnt_point="", logger=False, password=""):
     '''
     mirror functioin for umount
     '''

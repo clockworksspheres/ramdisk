@@ -370,7 +370,21 @@ class _CreateRamdisk(QMainWindow):
                     # Make sure to use the device column, not the mount point column.
                     #if col == 1:
                     if col == 0:
-                        eject(item.text(), self.logger)
+
+                        if sys.platform.startswith('linux'):
+                            window = _LocalAuth()
+
+                            window.credsSig.connect(self.getCreds)
+                            result = window.exec()
+                            # Check the result of the dialog
+                            if result == window.accepted:
+                                print("Dialog accepted")
+                                eject(item.text(), self.logger, self.passwd)
+                                
+                            else:
+                                print("Dialog rejected")
+                        else:                            
+                            eject(item.text(), self.logger)
                 removed_data.append(row_data)
 
                 # remove the row
