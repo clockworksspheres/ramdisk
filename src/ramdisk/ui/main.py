@@ -386,7 +386,7 @@ class _CreateRamdisk(QMainWindow):
                     elif sys.platform.startswith("darwin") or sys.platform.startswith("win32"):
                         if col == 0 and not sys.platform.startswith("linux"):
                             # windows and mac branch...
-                        eject(item.text(), self.logger)
+                            eject(item.text(), self.logger)
                 removed_data.append(row_data)
 
                 # remove the row
