@@ -80,8 +80,8 @@ def  eject(mnt_point="", logger=False, password=""):
         retval, reterr, retcode = self.runWith.runWithSudo(password.strip())
         #retval, reterr, retcode = runWith.getNlogReturns()
         self.logger.log(lp.INFO, "RETURNS: " + retval)
-        #if not reterr:
-        if retval:
+        if not reterr:
+            # if retval:
             success = True
 
     return success
