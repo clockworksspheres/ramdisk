@@ -372,17 +372,19 @@ class _CreateRamdisk(QMainWindow):
                         #####
                         # Make sure to use the device column, not the mount point column.
                         if col == 1:
+
                             window = _LocalAuth()
 
                             window.credsSig.connect(self.getCreds)
                             result = window.exec()
                             # Check the result of the dialog
+                            print("\tITEM: " + item.text())
                             if result == window.accepted:
                                 print("Dialog accepted")
                                 eject(item.text(), self.logger, self.passwd)
                                 
                             else:
-                                print("Dialog rejected")
+                                print("Dialog rejected, will not unmount disk")
                         else:
                             continue
                     elif sys.platform.startswith("darwin") or sys.platform.startswith("win32"):
