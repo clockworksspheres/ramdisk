@@ -474,7 +474,7 @@ def umount(mnt_point="", logger=False, password=""):
         command = [umountPath, mnt_point]
         runWith.setCommand(command)
         #runWith.communicate()
-        retval, reterr, retcode = self.runWith.runWithSudo(password)
+        retval, reterr, retcode = self.runWith.runWithSudo(password.strip())
         #retval, reterr, retcode = runWith.getNlogReturns()
         self.logger.log(lp.INFO, "RETURNS: " + retval)
         #if not reterr:

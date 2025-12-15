@@ -368,7 +368,7 @@ class _CreateRamdisk(QMainWindow):
                     row_data.append(item.text() if item else "")
                     #####
                     # Check for OS first
-                    if sys.platform.startswith("linux"):
+                    if sys.platform.startswith("[Ll]inux"):
                         #####
                         # Make sure to use the device column, not the mount point column.
                         if col == 1:
@@ -383,8 +383,10 @@ class _CreateRamdisk(QMainWindow):
                                 
                             else:
                                 print("Dialog rejected")
+                        else:
+                            continue
                     elif sys.platform.startswith("darwin") or sys.platform.startswith("win32"):
-                        if col == 0 and not sys.platform.startswith("linux"):
+                        if col == 0:
                             # windows and mac branch...
                             eject(item.text(), self.logger)
                 removed_data.append(row_data)
