@@ -383,7 +383,7 @@ class _CreateRamdisk(QMainWindow):
                                 
                             else:
                                 print("Dialog rejected")
-                    elif sys.platform.startswith("darwin") or sys.platform.startswith("win32")
+                    elif sys.platform.startswith("darwin") or sys.platform.startswith("win32"):
                         if col == 0 and not sys.platform.startswith("linux"):
                             # windows and mac branch...
                         eject(item.text(), self.logger)
