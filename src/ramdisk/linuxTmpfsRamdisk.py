@@ -515,6 +515,7 @@ def  unmount(mnt_point="", logger=False, password=""):
         #runWith.communicate()
         retval, reterr, retcode = self.runWith.runWithSudo(password.strip())
         #retval, reterr, retcode = runWith.getNlogReturns()
+        print("RETURNS: " + retval)
         self.logger.log(lp.INFO, "RETURNS: " + retval)
         #if not reterr:
         if retval:
