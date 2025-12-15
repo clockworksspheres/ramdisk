@@ -380,7 +380,7 @@ class _CreateRamdisk(QMainWindow):
                             
                         else:
                             print("Dialog rejected")
-                    else col == 0:
+                    elif col == 0 and not sys.platform.startswith("linux"):
                         # windows and mac branch...
                        eject(item.text(), self.logger)
                 removed_data.append(row_data)
