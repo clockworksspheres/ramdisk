@@ -91,12 +91,8 @@ if __name__=='__main__':
 
     app = QApplication(sys.argv)
 
-    window = testUi2UmountDisk("/tmp/ram0")
+    testUi2UmountDisk("/tmp/ram0")
 
-    window.show()
-    print("showing window...")
-    window.raise_()
-    print("raising_ window")
     sys.exit(app.exec())
 
 
