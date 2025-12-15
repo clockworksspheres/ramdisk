@@ -481,7 +481,6 @@ def umount(mnt_point="", logger=False, password=""):
         if retval:
             success = True
 
-
     return success
 
 ###############################################################################
@@ -491,7 +490,36 @@ def  unmount(mnt_point="", logger=False, password=""):
     mirror functioin for umount
     '''
     success = False
-    success = umount(mnt_point, logger, password)
+    if mnt_point:
+
+        paths = ["/bin", "/usr/bin", "/sbin", "/usr/sbin", "/usr/local/bin", "/user/local/sbin"]
+
+        #####
+        # Look for the umount command
+        umountFound = False
+        umountPath = ""
+        for path in paths:
+            possibleFullPath = os.path.join(path, "umount")
+            if os.path.exists(possibleFullPath):
+                umountPath = possibleFullPath
+                umountFound = True
+
+        if not umountFound:
+            raise SystemToolNotAvailable("Cannot find umount command...")
+
+        #####
+        # Run the umount command...
+        runWith = RunWith(logger)
+        command = [umountPath, mnt_point]
+        runWith.setCommand(command)
+        #runWith.communicate()
+        retval, reterr, retcode = self.runWith.runWithSudo(password.strip())
+        #retval, reterr, retcode = runWith.getNlogReturns()
+        self.logger.log(lp.INFO, "RETURNS: " + retval)
+        #if not reterr:
+        if retval:
+            success = True
+
     return success
 
 ###############################################################################
@@ -501,7 +529,36 @@ def  eject(mnt_point="", logger=False, password=""):
     mirror functioin for umount
     '''
     success = False
-    success = umount(mnt_point, logger, password)
+    if mnt_point:
+
+        paths = ["/bin", "/usr/bin", "/sbin", "/usr/sbin", "/usr/local/bin", "/user/local/sbin"]
+
+        #####
+        # Look for the umount command
+        umountFound = False
+        umountPath = ""
+        for path in paths:
+            possibleFullPath = os.path.join(path, "umount")
+            if os.path.exists(possibleFullPath):
+                umountPath = possibleFullPath
+                umountFound = True
+
+        if not umountFound:
+            raise SystemToolNotAvailable("Cannot find umount command...")
+
+        #####
+        # Run the umount command...
+        runWith = RunWith(logger)
+        command = [umountPath, mnt_point]
+        runWith.setCommand(command)
+        #runWith.communicate()
+        retval, reterr, retcode = self.runWith.runWithSudo(password.strip())
+        #retval, reterr, retcode = runWith.getNlogReturns()
+        self.logger.log(lp.INFO, "RETURNS: " + retval)
+        #if not reterr:
+        if retval:
+            success = True
+
     return success
 
 ###############################################################################
