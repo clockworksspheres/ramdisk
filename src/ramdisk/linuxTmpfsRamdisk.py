@@ -527,7 +527,7 @@ def  unmount(mnt_point="", logger=False, password=""):
 
 def  eject(mnt_point="", logger=False, password=""):
     '''
-    mirror functioin for umount
+    mirror function for umount
     '''
     success = False
     if mnt_point:
