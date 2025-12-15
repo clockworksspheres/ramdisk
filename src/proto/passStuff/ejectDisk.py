@@ -35,8 +35,10 @@ class testUi2UmountDisk(QDialog):
             print("Dialog accepted")
             eject(disk, self.logger, self.passwd)
                                 
-        else:
+        elif window.rejected:
             print("Dialog rejected, will not unmount disk")
+        else:
+            print("WHAAAAAT??")
 
     @Slot(str, str)
     def getCreds(self, user, passwd):
