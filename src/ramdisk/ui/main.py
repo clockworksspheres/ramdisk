@@ -368,7 +368,7 @@ class _CreateRamdisk(QMainWindow):
                     row_data.append(item.text() if item else "")
                     #####
                     # Check for OS first
-                    if sys.platform.startswith("linux")
+                    if sys.platform.startswith("linux"):
                         #####
                         # Make sure to use the device column, not the mount point column.
                         if col == 1:
