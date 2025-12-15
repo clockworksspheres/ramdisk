@@ -1,0 +1,81 @@
+import sys
+
+sys.path.append(r'../..')
+
+from ramdisk.lib.run_commands import RunWith
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority as lp
+from ramdisk.commonRamdiskTemplate import RamDiskTemplate, NotValidForThisOS, BadRamdiskArguments
+from ramdisk.ui.local_auth_widget import _LocalAuth
+
+class testUi2UmountDisk():
+    
+
+
+    def __init__(self, disk, password):
+        window = _LocalAuth()
+
+        window.credsSig.connect(self.getCreds)
+
+        result = window.exec()
+        # Check the result of the dialog
+        print("\tDISK: " + disk)
+        if result == window.accepted:
+            print("Dialog accepted")
+            eject(disk, self.logger, password)
+                                
+        else:
+            print("Dialog rejected, will not unmount disk")
+
+    @Slot(str, str)
+    def getCreds(self, user, passwd):
+        """
+        Slot for getting the enered user and password information
+        """
+        self.user = user
+        self.passwd = passwd
+        #  print(passwd)
+
+
+
+def  eject(mnt_point="", logger=False, password=""):
+    '''
+    mirror function for umount
+    '''
+    success = False
+    if mnt_point:
+
+        paths = ["/bin", "/usr/bin", "/sbin", "/usr/sbin", "/usr/local/bin", "/user/local/sbin"]
+
+        #####
+        # Look for the umount command
+        umountFound = False
+        umountPath = ""
+        for path in paths:
+            possibleFullPath = os.path.join(path, "umount")
+            if os.path.exists(possibleFullPath):
+                umountPath = possibleFullPath
+                umountFound = True
+
+        if not umountFound:
+            raise SystemToolNotAvailable("Cannot find umount command...")
+
+        #####
+        # Run the umount command...
+        runWith = RunWith(logger)
+        command = [umountPath, mnt_point]
+        runWith.setCommand(command)
+        #runWith.communicate()
+        retval, reterr, retcode = self.runWith.runWithSudo(password.strip())
+        #retval, reterr, retcode = runWith.getNlogReturns()
+        self.logger.log(lp.INFO, "RETURNS: " + retval)
+        #if not reterr:
+        if retval:
+            success = True
+
+    return success
+
+
+if __name__=='__main__':
+    testUmount = testUi2UmountDisk("/tmp/ram0")
+
