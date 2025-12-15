@@ -18,7 +18,7 @@ from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.commonRamdiskTemplate import RamDiskTemplate, NotValidForThisOS, BadRamdiskArguments
 from ramdisk.ui.local_auth_widget import _LocalAuth
 
-class testUi2UmountDisk():
+class testUi2UmountDisk(QDialog):
     
 
 
@@ -88,5 +88,15 @@ def  eject(mnt_point="", logger=False, password=""):
 
 
 if __name__=='__main__':
-    testUmount = testUi2UmountDisk("/tmp/ram0")
+
+    app = QApplication(sys.argv)
+
+    window = testUi2UmountDisk("/tmp/ram0")
+
+    window.show()
+    print("showing window...")
+    window.raise_()
+    print("raising_ window")
+    sys.exit(app.exec())
+
 
