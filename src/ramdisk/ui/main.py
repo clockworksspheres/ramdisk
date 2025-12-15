@@ -125,7 +125,7 @@ class _CreateRamdisk(QMainWindow):
         self.ui.createPushButton.setDefault(True)
         #self.ui.mountLineEdit.setDefault(True)
         #self.ui.ejectPushButton.setAutoDefault(True)
-        #self.ui.debugPushButton.setAutoDefault(False)d
+        #self.ui.debugPushButton.setAutoDefault(False)
         self.ui.quitPushButton.setAutoDefault(True)
 
         #####
@@ -368,23 +368,21 @@ class _CreateRamdisk(QMainWindow):
                     row_data.append(item.text() if item else "")
                     #####
                     # Make sure to use the device column, not the mount point column.
-                    #if col == 1:
-                    if col == 0:
+                    if col == 1 and sys.platform.startswith('linux'):
+                        window = _LocalAuth()
 
-                        if sys.platform.startswith('linux'):
-                            window = _LocalAuth()
-
-                            window.credsSig.connect(self.getCreds)
-                            result = window.exec()
-                            # Check the result of the dialog
-                            if result == window.accepted:
-                                print("Dialog accepted")
-                                eject(item.text(), self.logger, self.passwd)
-                                
-                            else:
-                                print("Dialog rejected")
-                        else:                            
-                            eject(item.text(), self.logger)
+                        window.credsSig.connect(self.getCreds)
+                        result = window.exec()
+                        # Check the result of the dialog
+                        if result == window.accepted:
+                            print("Dialog accepted")
+                            eject(item.text(), self.logger, self.passwd)
+                            
+                        else:
+                            print("Dialog rejected")
+                    else col == 0:
+                        # windows and mac branch...
+                       eject(item.text(), self.logger)
                 removed_data.append(row_data)
 
                 # remove the row
