@@ -75,16 +75,17 @@ def  eject(mnt_point="", logger=False, password=""):
 
         #####
         # Run the umount command...
-        runWith = RunWith(logger)
-        command = [umountPath, mnt_point]
-        runWith.setCommand(command)
-        #runWith.communicate()
-        retval, reterr, retcode = self.runWith.runWithSudo(password.strip())
-        #retval, reterr, retcode = runWith.getNlogReturns()
-        self.logger.log(lp.INFO, "RETURNS: " + retval)
-        if not reterr:
-            # if retval:
+        try:
+            runWith = RunWith(logger)
+            command = [umountPath, mnt_point]
+            runWith.setCommand(command)
+            #runWith.communicate()
+            retval, reterr, retcode = self.runWith.runWithSudo(password.strip())
+            #retval, reterr, retcode = runWith.getNlogReturns()
+            self.logger.log(lp.INFO, "RETURNS: " + retval)
             success = True
+        except IOError:
+            print("IOError...")
 
     return success
 
