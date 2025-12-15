@@ -15,7 +15,7 @@ sys.path.append(r'../..')
 from ramdisk.lib.run_commands import RunWith
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
-from ramdisk.commonRamdiskTemplate import RamDiskTemplate, NotValidForThisOS, BadRamdiskArguments
+from ramdisk.commonRamdiskTemplate import NotValidForThisOS, BadRamdiskArguments
 from ramdisk.ui.local_auth_widget import _LocalAuth
 
 class testUi2UmountDisk(QDialog):
