@@ -367,22 +367,26 @@ class _CreateRamdisk(QMainWindow):
                     item = self.ui.tableWidget.item(index, col)
                     row_data.append(item.text() if item else "")
                     #####
-                    # Make sure to use the device column, not the mount point column.
-                    if col == 1 and sys.platform.startswith('linux'):
-                        window = _LocalAuth()
+                    # Check for OS first
+                    if sys.platform.startswith("linux")
+                        #####
+                        # Make sure to use the device column, not the mount point column.
+                        if col == 1:
+                            window = _LocalAuth()
 
-                        window.credsSig.connect(self.getCreds)
-                        result = window.exec()
-                        # Check the result of the dialog
-                        if result == window.accepted:
-                            print("Dialog accepted")
-                            eject(item.text(), self.logger, self.passwd)
-                            
-                        else:
-                            print("Dialog rejected")
-                    elif col == 0 and not sys.platform.startswith("linux"):
-                        # windows and mac branch...
-                       eject(item.text(), self.logger)
+                            window.credsSig.connect(self.getCreds)
+                            result = window.exec()
+                            # Check the result of the dialog
+                            if result == window.accepted:
+                                print("Dialog accepted")
+                                eject(item.text(), self.logger, self.passwd)
+                                
+                            else:
+                                print("Dialog rejected")
+                    elif sys.platform.startswith("darwin") or sys.platform.startswith("win32")
+                        if col == 0 and not sys.platform.startswith("linux"):
+                            # windows and mac branch...
+                        eject(item.text(), self.logger)
                 removed_data.append(row_data)
 
                 # remove the row
