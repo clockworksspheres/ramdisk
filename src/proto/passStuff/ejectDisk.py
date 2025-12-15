@@ -22,7 +22,8 @@ class testUi2UmountDisk():
     
 
 
-    def __init__(self, disk, password):
+    def __init__(self, disk):
+        self.passwd = ""
         window = _LocalAuth()
 
         window.credsSig.connect(self.getCreds)
@@ -32,7 +33,7 @@ class testUi2UmountDisk():
         print("\tDISK: " + disk)
         if result == window.accepted:
             print("Dialog accepted")
-            eject(disk, self.logger, password)
+            eject(disk, self.logger, self.passwd)
                                 
         else:
             print("Dialog rejected, will not unmount disk")
