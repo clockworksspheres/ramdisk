@@ -474,7 +474,7 @@ def umount(mnt_point="", logger=False, password=""):
         command = [umountPath, mnt_point]
         runWith.setCommand(command)
         runWith.communicate()
-        retval, reterr, retcode = self.runWith.runWithSudo(self.passwd)
+        retval, reterr, retcode = self.runWith.runWithSudo(password)
         #retval, reterr, retcode = runWith.getNlogReturns()
         self.logger.log(lp.INFO, "RETURNS: " + retval)
         #if not reterr:
@@ -486,12 +486,12 @@ def umount(mnt_point="", logger=False, password=""):
 
 ###############################################################################
 
-def  unmount(mnt_point="", logger=False):
+def  unmount(mnt_point="", logger=False, password=""):
     '''
     mirror functioin for umount
     '''
     success = False
-    success = umount(mnt_point, logger)
+    success = umount(mnt_point, logger, password)
     return success
 
 ###############################################################################
@@ -501,7 +501,7 @@ def  eject(mnt_point="", logger=False, password=""):
     mirror functioin for umount
     '''
     success = False
-    success = umount(mnt_point, logger)
+    success = umount(mnt_point, logger, password)
     return success
 
 ###############################################################################
