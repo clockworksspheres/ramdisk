@@ -47,6 +47,8 @@ from ramdisk.config import DEFAULT_RAMDISK_SIZE
 if sys.platform.startswith('linux'):
     from ramdisk.ui.local_auth_widget import _LocalAuth
     from ramdisk.linuxTmpfsRamdisk import eject
+else:
+    from ramdisk.RamDisk import eject
 
 class CustomDialog(QDialog):
     def __init__(self, parent=None):
