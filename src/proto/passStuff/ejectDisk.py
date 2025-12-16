@@ -55,6 +55,8 @@ def  eject(mnt_point="", logger=False, password=""):
     '''
     mirror function for umount
     '''
+    logger = CyLogger()
+    logger.initializeLogs()
     success = False
     if mnt_point:
 
