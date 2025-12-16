@@ -526,7 +526,7 @@ def  unmount(mnt_point="", logger=False, password=""):
 ###############################################################################
 
 def  eject(mnt_point="", logger=False, password=""):
-    ''' 
+    '''
     mirror function for umount
     '''
     logger = CyLogger()
