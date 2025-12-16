@@ -31,11 +31,11 @@ class testUi2UmountDisk(QDialog):
         result = window.exec()
         # Check the result of the dialog
         print("\tDISK: " + disk)
-        if result == window.accepted:
+        if window.accepted:
             print("Dialog accepted")
             eject(disk, self.logger, self.passwd)
                                 
-        elif result == window.rejected:
+        elif window.rejected:
             print("Dialog rejected, will not unmount disk")
         else:
             print("WHAAAAAT??")
