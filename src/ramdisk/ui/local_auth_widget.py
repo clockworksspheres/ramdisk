@@ -81,7 +81,7 @@ class _LocalAuth(QDialog):
             print("command run...")
             self.credsSig.emit(user, passwd)
             print("recode: " + str(retval))
-            self.accept.emit()
+            self.close()
                         
         except Exception as err:
             print("DamnItJim!!!")
