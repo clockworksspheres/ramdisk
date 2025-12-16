@@ -41,12 +41,12 @@ from ramdisk.ui.getValues import getMaxMemSize
 from ramdisk.lib.dev.getMemStatus import GetMemStatus
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
-from ramdisk.RamDisk import RamDisk, eject, getMountedData, getMountedDisks
+from ramdisk.RamDisk import RamDisk, getMountedData, getMountedDisks
 from ramdisk.config import DEFAULT_RAMDISK_SIZE
 
 if sys.platform.startswith('linux'):
     from ramdisk.ui.local_auth_widget import _LocalAuth
-
+    from ramdisk.linuxTmpfsRamdisk import eject
 
 class CustomDialog(QDialog):
     def __init__(self, parent=None):
