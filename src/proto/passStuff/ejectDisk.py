@@ -57,6 +57,7 @@ def  eject(mnt_point="", logger=False, password=""):
     '''
     logger = CyLogger()
     logger.initializeLogs()
+    runWith = RunWith(logger)
     success = False
     if mnt_point:
 
@@ -82,9 +83,9 @@ def  eject(mnt_point="", logger=False, password=""):
             command = [umountPath, mnt_point]
             runWith.setCommand(command)
             #runWith.communicate()
-            retval, reterr, retcode = self.runWith.runWithSudo(password.strip())
+            retval, reterr, retcode = runWith.runWithSudo(password.strip())
             #retval, reterr, retcode = runWith.getNlogReturns()
-            self.logger.log(lp.INFO, "RETURNS: " + retval)
+            logger.log(lp.INFO, "RETURNS: " + retval)
             success = True
         except IOError:
             print("IOError...")
