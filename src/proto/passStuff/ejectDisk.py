@@ -96,6 +96,9 @@ def  eject(mnt_point="", logger=False, password=""):
         except IOError:
             print("IOError...")
 
+
+        sys.exit()
+
     return success
 
 
