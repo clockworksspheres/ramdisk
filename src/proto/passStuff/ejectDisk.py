@@ -1,3 +1,4 @@
+import os
 import sys
 
 from PySide6.QtCore import QCoreApplication, QEvent, QSize, Qt, Slot, QTimer
