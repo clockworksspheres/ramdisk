@@ -21,10 +21,12 @@ from ramdisk.ui.local_auth_widget import _LocalAuth
 class testUi2UmountDisk(QDialog):
     
 
-
     def __init__(self, disk):
         self.passwd = ""
         window = _LocalAuth()
+
+        self.logger = CyLogger()
+        self.logger.initializeLogs()
 
         window.credsSig.connect(self.getCreds)
 
