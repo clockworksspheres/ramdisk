@@ -44,7 +44,7 @@ from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.RamDisk import RamDisk, getMountedData, getMountedDisks
 from ramdisk.config import DEFAULT_RAMDISK_SIZE
 
-if sys.platform.startswith('linux'):
+if sys.platform.lower().startswith('linux'):
     from ramdisk.ui.local_auth_widget import _LocalAuth
     from ramdisk.linuxTmpfsRamdisk import eject
 else:
