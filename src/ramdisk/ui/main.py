@@ -386,7 +386,7 @@ class _CreateRamdisk(QMainWindow):
                             result = window.exec()
                             # Check the result of the dialog
                             print("\tITEM: " + item.text())
-                            if result == window.accepted:
+                            if window.accepted:
                                 print("Dialog accepted")
                                 eject(item.text(), self.logger, self.passwd)
                                 
