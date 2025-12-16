@@ -550,7 +550,7 @@ class _CreateRamdisk(QMainWindow):
         """
         if sys.platform.startswith('darwin'):
             self.logger.log(lp.DEBUG, "Darwin doesn't need elevation to create a ramdisk")
-        if sys.platform.startswith('linux'):
+        if sys.platform.lower().startswith('linux'):
             window = _LocalAuth()
 
             window.credsSig.connect(self.getCreds)
@@ -586,7 +586,7 @@ class _CreateRamdisk(QMainWindow):
             if not mountPoint:
                 #####
                 # create ramdisk with randomized mountpoint
-                if sys.platform.startswith('linux'):
+                if sys.platform.lower().startswith('linux'):
                     print("Found Linux, creating linux ramdisk..." + self.passwd)
                     ramdisk = RamDisk(str(memSize), "", self.logger, mode=700, uid=None, gid=None, fstype="tmpfs", nr_inodes=None, nr_blocks=None, creds=False, passwd=self.passwd)
                 else:
@@ -597,7 +597,7 @@ class _CreateRamdisk(QMainWindow):
                 success = False
                 mntPnt = ""
                 device = ""
-                if sys.platform.startswith('linux'):
+                if sys.platform.lower().startswith('linux'):
                     #####
                     # create ramdisk with specific mountpoint
                     ramdisk = RamDisk(str(memSize), str(mountPoint), self.logger, passwd=self.passwd)

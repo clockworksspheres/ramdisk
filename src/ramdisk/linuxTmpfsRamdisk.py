@@ -100,7 +100,7 @@ class RamDisk(RamDiskTemplate):
         # The passed in size of ramdisk should be in 1Mb chunks
         self.module_version = '20160224.032043.009191'
         self.logger = logger
-        if not sys.platform.startswith("linux"):
+        if not sys.platform.lower().startswith("linux"):
             raise NotValidForThisOS("This ramdisk is only viable for a Linux.")
 
         if fstype in ["tmpfs", "ramfs"]:
