@@ -204,11 +204,11 @@ class RamDisk(RamDiskTemplate):
         self.ramdisk.setDevice(device)
 
 
-def eject(device, logger=False):
+def eject(device, logger=False, **kwargs):
     """
     Eject/unmount the passed in instance of a ramdisk.
     """
-    unmount(device, logger=False, **kwargs)
+    unmount(device, logger=False)
 
 def getMountedDisks(device=""):
     """
