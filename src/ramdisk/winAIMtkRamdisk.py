@@ -72,11 +72,16 @@ class RamDisk(RamDiskTemplate):
             self.getRandomizedMountpoint()
         else:
             #if findMountName(mountpoint):
-            #if self.mntPointAvailable(mountpoint):
-            trailingSlashesCleanedPath = cleanTrailingSlashes(mountpoint)
-            cleanedSlashes = cleanDrivePath(trailingSlashesCleanedPath)
-            self.mntPoint = cleanedSlashes
-            print("MOUNTPOINT: " + str(self.mntPoint))
+            if self.mntPointAvailable(mountpoint):
+                trailingSlashesCleanedPath = cleanTrailingSlashes(mountpoint)
+                cleanedSlashes = cleanDrivePath(trailingSlashesCleanedPath)
+                self.mntPoint = cleanedSlashes
+                #self.mntPoint = trailingSlashesCleanedPath
+                print("MOUNTPOINT: " + str(self.mntPoint))
+            else:
+                trailingSlashesCleanedPath = cleanTrailingSlashes(mountpoint)
+                cleanedSlashes = cleanDrivePath(trailingSlashesCleanedPath)
+                self.mntPoint = cleanedSlashes
 
         # get the disk id's of AIMtk disks, including disk numbers
         self.getAIMtkDiskIdsCmd = ["aim_ll", "-l"]
@@ -111,10 +116,14 @@ class RamDisk(RamDiskTemplate):
         # command translated from imdisk command
         #cmd = ["aim_ll", "-a", "-s", self.diskSize + "M", "-m", self.mntPoint, "-p", '/fs:' + self.fsType + ' /q /y']
 
+        #mountPath = cleanDrivePath(self.mntPoint)
+
+        cleanPath = re.sub(r"\\{1,}", r'\\', self.mntPoint)
+
         # params = "/fs:ntfs /v:TestRam /q /y"
         params = f"/fs:{self.fsType} /q /y"
 
-        cmd = r'aim_ll -a -s ' + str(self.diskSize) + r'M -m "' + self.mntPoint + r'" -p "' + params + r'"'
+        cmd = r'aim_ll -a -s ' + str(self.diskSize) + r'M -m "' + cleanPath + r'" -p "' + params + r'"'
 
         print(str(cmd))
 
@@ -229,17 +238,23 @@ class RamDisk(RamDiskTemplate):
         """
         print("MountPoint: " + str(mntPoint))
         # make sure there is a drive in the path is valid and mounted.
-        driveExists = findDrive(mntPoint)
-        if not driveExists:
-            return False
-        else:
-            
-            if os.path.exists(mntPoint):
+        #driveExists = findDrive(mntPoint)
+        #if not driveExists:
+        #    return False
+        #else:
+
+        cleanPath = re.sub(r"\\{1,}", r"\\", mntPoint)
+        try:
+            if os.path.isdir(cleanPath):
+                print("\tDirectory Exists")
                 return True
             else:
                 # Create it relative to the current working directory
-                os.makedirs(mntPoint, exist_ok=True)
+                print("\t Creating Directory")
+                os.makedirs(cleanPath, exist_ok=True)
                 return True
+        except FileExistsError:
+                pass
 
 
     ###########################################################################

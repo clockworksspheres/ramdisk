@@ -70,14 +70,13 @@ def cleanDrivePath(path):
     # print(cleanPath)
     return cleanPath
 
-
 def cleanTrailingSlashes(path):
     """
     Return the path without trailing slashes
     """
     path2return = ""
     # Regex: capture everything up to but not including the final backslash
-    pattern = r"^(.*?)(\\*)?$"
+    pattern = r"^(.*?)(\\*){1,}$"
 
     match = re.match(pattern, path)
     if match:
@@ -102,7 +101,7 @@ if __name__ == "__main__":
         print(f"Drive {drive} Exists")
 
     home_dir = os.path.expanduser("~")
-    print(home_dir)
+    print(home_dir + "\n\n")
 
 
     print("\n-----\n")
