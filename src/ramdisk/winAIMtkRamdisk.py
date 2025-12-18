@@ -437,6 +437,24 @@ def detach(device, logger=False):
 def unmount(device, logger=False):
     success = False
 
+    success = eject(device, logger)
+
+    return success
+
+
+def umount(device, logger=False):
+    """
+    Eject the ramdisk
+
+    Must be over-ridden to provide OS/Method specific functionality
+    
+    """
+    success = False
+
+    mountName = findMountName(device)
+
+    print("\tMountName: " + mountName)
+
     runCmd = RunWith()
 
     umountCmd    = [ "aim_ll", "-R", "-u", device ]
@@ -455,19 +473,33 @@ def unmount(device, logger=False):
         success = True
         #logger.log(lp.INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
 
+    if mountName.len() > 3:
+
+        delMountPntCmd = ["mountvol", mountName, "/D"]
+
+        # try: fsutil reparsepoint delete "c:\users\royni\fred"   
+
+        runCmd.setCommand(delMountPntCmd)
+        runCmd.communicate()
+        retval, reterr, retcode = runCmd.getNlogReturns()
+
+        print("RETERR: " + str(reterr))
+
     return success
 
 
-def umount(device, logger=False):
+def eject(device, logger=False):
     """
     Eject the ramdisk
 
-    Must be over-ridden to provide OS/Method specific functionality
+    Overriding with OS/Method specific functionality
     
     """
     success = False
 
     mountName = findMountName(device)
+
+    print("\tMountName: " + mountName)
 
     runCmd = RunWith()
 
@@ -496,35 +528,6 @@ def umount(device, logger=False):
     retval, reterr, retcode = runCmd.getNlogReturns()
 
     print("RETERR: " + str(reterr))
-    return success
-
-
-def eject(device, logger=False):
-    """
-    Eject the ramdisk
-
-    Must be over-ridden to provide OS/Method specific functionality
-    
-    """
-    success = False
-
-    runCmd = RunWith()
-
-    umountCmd    = [ "aim_ll", "-R", "-u", device ]
-
-    print(f"umount {device}")
-
-    #logger.log(lp.WARNING, "Running command to unmount ramdisk: \n\t" + str(umountCmd))
-    runCmd.setCommand(umountCmd)
-    runCmd.communicate()
-    retval, reterr, retcode = runCmd.getNlogReturns()
-
-    if retcode == '':
-        success = False
-        raise Exception("Error trying to unmount drive : (" + str(reterr).strip() + ")")
-    else:
-        success = True
-        #logger.log(lp.INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
 
     return success
 
