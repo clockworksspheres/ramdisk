@@ -51,7 +51,7 @@ Ramdisk class that can use either current method for creating a ramdisk on Linux
 
 ### macRamdisk
 
-tested on macOS Sierra, Ventura, Sonoma and Sequoia
+tested on macOS Sequoia, Sierra, Ventura, Sonoma and Sequoia
 
 ## Only developed for Linux
 
@@ -59,7 +59,7 @@ tested on macOS Sierra, Ventura, Sonoma and Sequoia
 
 ### linuxLoopRamdisk
 
-### linuxTmpfsRamdisk
+### linuxTmpfsRamdisk - working
 
 tested on Rocky 9, 10 and Ubuntu 24.04 & 25.04
 
@@ -77,13 +77,14 @@ AIMtk - whose predecessor is ImDisk. Dropping the work so far with ImDisk since 
 
 NOTE: the AIMtk software must be acquired/purchased from [Arsenal Recon](https://arsenalrecon.com/products/arsenal-image-mounter)
 
+
 ## Developed for macOS, Linux and Windows
 
-Windows ramdisk is a prototype in flux, may or may not work.
+Code currently working, but only with drive letters (ie: R:, L:\).
 
 ## Example code
 
-The exaamples directory provides examples on how to use various libraries, even beyond the ramdisk libraries in this code base.  Some are used for testing the ramdisk code base.  Any user creation or manipulation example code is in an alpha state, and some are macOS only at this time.
+The exaamples directory provides examples on how to use various libraries, even beyond the ramdisk libraries in this code base.  Currently in flux.  Some are used for testing the ramdisk code base.  Any user creation or manipulation example code is in an alpha state, and some are macOS only at this time.
 
 Unionfs related code is in an alpha state and also macOS only.
 
@@ -95,13 +96,13 @@ The menu code is cross platform, in an alpha state.
 
 ## Windows
 
-Will call a currently available ramdisk executable, like [AIM Toolkit](https://sourceforge.net/projects/aim-toolkit/files/20250818/) - whose predecessor is ImDisk. Dropping the work so far with ImDisk since it is EOL and doesn't support Windows 11.  The AIM Toolkit must be installed prior to using this project.
+Calls a currently available ramdisk creator, [AIM Toolkit](https://sourceforge.net/projects/aim-toolkit/files/20250818/) - whose predecessor is ImDisk. Dropping the work so far with ImDisk since it is EOL and doesn't support Windows 11.  The AIM Toolkit must be installed prior to using this project.
 
-Prototype in flux, may or may not work.
+Currently working, but only with drive letters (ie: R:, L:\)
 
 ## Languages
 
-Currently written/tested in only python v3.9+
+Currently written/tested in only python v3.9+, but examples do not work (specifically ramdisk-setup.py) with the latest version of python
 
 Future plans to duplicate libraries, tests and examples in other languages as well.  Potential next language targets are Go and Rust.
 
@@ -112,22 +113,24 @@ Very greatful for any contributions/pull requests to help with the project!
 ## Python Libraries to include, and how to include them for running the UI, the Environment.py, etc.
 
 
-### Cross Platform
+### Cross Platform *ramdisk.py*
 
 pyside6
 pyinstaller
 packaging
+(pywin32 - for windows)
+(psutil)
 
 
-PySide6 cross platform library for the Graphical User Interface
+PySide6 cross platform library for the Graphical User Interface.  PySide6 rarely works with the latest release of Python.
 
 Pyinstaller cross platform library to create the installer to bundle the GUI into a windows app package
 
 packaging.version.parse is to replace distutils.version.LooseVersion, for comparing versions of operating systems in CheckApplicable.  As of 4/13/25, CheckApplicable is entirely distutils, and needs to be refactored to packaging for python 3.10+.
 
-#### Macos Specific
+pywin32 is needed for reading/configuring hardware specifics.
 
-##### None need currently
+psutil is used for figuring out memory limits and determining if there is enough memory to create a ramdisk.
 
 ##### How to install non-native python libraries on Macos
 
@@ -143,6 +146,7 @@ if [ ! -d "$directory" ] || [ ! -f "$actfile" ] ; then
 
   pip3 install PySide6 PyInstaller
   pip3 install --upgrade PyInstaller pyinstaller-hooks-contrib
+  pip3 install psutil
   pip3 install packaging
 else
   source packenv/bin/activate
@@ -150,8 +154,6 @@ fi
 ```
 
 ### Linux Specific
-
-##### None need currently
 
 ##### How to install non-native python libraries on Linux
 
