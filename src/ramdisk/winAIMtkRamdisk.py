@@ -243,13 +243,13 @@ class RamDisk(RamDiskTemplate):
         #    return False
         #else:
 
-        cleanPath = re.sub(r"\\{1,}", r"\\", mntPoint)
         try:
-            if os.path.isdir(cleanPath):
+            if os.path.isdir(mntPoint):
+                self.mntPoint = cleanDrivePath(mntPoint)
                 print("\tDirectory Exists")
                 return True
             else:
-                # Create it relative to the current working directory
+                cleanPath = re.sub(r"\\{1,}", r"\\", mntPoint)
                 print("\t Creating Directory")
                 os.makedirs(cleanPath, exist_ok=True)
                 return True
@@ -467,6 +467,8 @@ def umount(device, logger=False):
     """
     success = False
 
+    mountName = findMountName(device)
+
     runCmd = RunWith()
 
     umountCmd    = [ "aim_ll", "-R", "-u", device ]
@@ -485,6 +487,15 @@ def umount(device, logger=False):
         success = True
         #logger.log(lp.INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
 
+    delMountPntCmd = ["mountvol", mountName, "/D"]
+
+    # try: fsutil reparsepoint delete "c:\users\royni\fred"   
+
+    runCmd.setCommand(delMountPntCmd)
+    runCmd.communicate()
+    retval, reterr, retcode = runCmd.getNlogReturns()
+
+    print("RETERR: " + str(reterr))
     return success
 
 
