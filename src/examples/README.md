@@ -1,5 +1,7 @@
 # Examples README
 
+*NOTE: the examples directory is in flux due to the code base out-pacing the examples directory.*
+
 Examples for using various libraries that have supported the ramdisk project at some point during it's life since before 2010.
 
 ## User management related examples
