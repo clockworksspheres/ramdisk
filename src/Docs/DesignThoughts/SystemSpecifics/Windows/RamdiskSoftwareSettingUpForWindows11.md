@@ -70,6 +70,23 @@ aim_ll -h
 
 #### NOTE: ImDisk can mount up to 256 drives while aim_ll can only mount a total of 16 disks.  ImDisk is EOL as of 2024, and doesn't have windows 11 support.
 
+## Unmounting ramdisks
+
+Currently, the ramdisk library uses:
+``` powershell
+aim_ll -R -u <drive number>
+```
+
+If a mounted to a directory, run the above command, then:
+
+``` powershell
+mountvol "<mount directory>" /D
+```
+
+to detach the windows driver from that directory
+
+-----
+
 # Older instructions no longer valid as of 11/25/1925
 
 ### Download the AIM toolkit 
