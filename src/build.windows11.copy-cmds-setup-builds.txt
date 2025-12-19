@@ -4,6 +4,6 @@
 # https://pyinstaller.org/en/stable/
 
 # before running windows ps1 script, run from the command line:
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force
 powershell -File ".\build.windows.ps1"
 
