@@ -78,7 +78,7 @@ Currently, the ramdisk library uses:
 aim_ll -R -u <drive number>
 ```
 
-If a mounted to a directory, run the above command, then:
+If a mounted to a directory, run the above command, then run the following windows command:
 
 ``` powershell
 mountvol "<mount directory>" /D
