@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md",
+                "file": "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftware.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "RamdiskSoftwareSettingUpForWindows11"
+              "title": "RamdiskSoftware"
             }
           }
         ]
@@ -172,6 +172,8 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
+    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md",
+    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RandomWindowsPowershellCommands.md",
     "src/build/build.windows11.onefile/EXE-00.toc",
     "src/build/build.windows11.onefile/PKG-00.toc",
     "src/build/build.windows11.onefile/ramdisk-setup.pkg",
@@ -181,8 +183,6 @@
     "src/build/build.windows11.onefile/localpycs/pyimod04_pywin32.pyc",
     "src/build/build.windows11.onefile/localpycs/pyimod02_importers.pyc",
     "src/build/build.windows11.onefile/localpycs/pyimod03_ctypes.pyc",
-    "src/build/build.windows11.onefile/localpycs/pyimod01_archive.pyc",
-    "src/build/build.windows11.onefile/localpycs",
-    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RandomWindowsPowershellCommands.md"
+    "src/build/build.windows11.onefile/localpycs/pyimod01_archive.pyc"
   ]
 }
