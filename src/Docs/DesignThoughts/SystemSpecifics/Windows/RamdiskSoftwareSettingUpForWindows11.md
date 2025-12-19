@@ -23,6 +23,7 @@ Now reboot the system
 ``` powershell
 [Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Program Files\Arsenal Image Mounter\DriverSetup\cli\x64", [EnvironmentVariableTarget]::User)
 ```
+
 Now that aim_ll.exe is in the path, close all your powershell, terminal, etc shells, and open new ones, and aim_ll.exe should now be available at the command line.
 
 ``` powershell
@@ -83,9 +84,8 @@ If a mounted to a directory, run the above command, then:
 mountvol "<mount directory>" /D
 ```
 
-to detach the windows driver from that directory
+To detach the windows driver from that directory.  If the ramdisk is only connected to a drive letter, the second of the two commands is not necessary.
 
------
 
 # Older instructions no longer valid as of 11/25/1925
 
