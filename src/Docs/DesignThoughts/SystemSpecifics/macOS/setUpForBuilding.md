@@ -51,7 +51,7 @@ you may need to restart your shell for this version of python to be recognized.
 * brave browser (or other favorite browser)
 * slack or other 'community software' like pidgin or discord (for OS specific communities)
 * vym
-d* pytest
+* pytest
 * meld
 * qtcreator
 * zotero

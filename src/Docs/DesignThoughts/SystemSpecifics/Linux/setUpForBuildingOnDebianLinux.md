@@ -1,3 +1,4 @@
+# setUpForBuildingOnDebianLinux
 
 # Installing OS packages
 
@@ -114,6 +115,6 @@ cd <clockworksspheres-dir-root>
 Now you should be able to download via ssh your github project, that you have rights to.
 
 ```
-git clone git@github.com:clockworksspheres/wNp
+git clone git@github.com:clockworksspheres/ramdisk
 ```
 
