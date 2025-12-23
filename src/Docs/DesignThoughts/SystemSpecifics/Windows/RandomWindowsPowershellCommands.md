@@ -9,6 +9,12 @@ New-Item -ItemType SymbolicLink -Path "Link" -Target "Target"
 Be careful, this can get really insecure if not managed correctly.  Better to say "Y" than "A".
 
 ``` powershell
+Set-ExecutionPolicy Bypass -Scope Process
+```
+
+The following command is valid for only the current powershell session.
+
+``` powershell
 Set-ExecutionPolicy Bypass -Scope Process -Force
 ```
 
@@ -23,4 +29,16 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 ``` powershell
 New-Item -Path ".\NewDirectory" -ItemType Directory -Force
 ```
+
+# References:
+
+## Powershell references:
+
+### Powershell for Beginners A Step-by-Step Guide 
+https://www.amazon.com/dp/B0DSGG27G1/
+
+### Online powershell devops community non-profit
+https://powershell.org/
+
+
 

@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/Docs/DesignThoughts/SystemSpecifics/Windows/setUpForBuilding.md",
+                "file": "src/Docs/DesignThoughts/SystemSpecifics/Windows/RandomWindowsPowershellCommands.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "setUpForBuilding"
+              "title": "RandomWindowsPowershellCommands"
             }
           }
         ]
@@ -172,6 +172,7 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
+    "src/Docs/DesignThoughts/SystemSpecifics/Windows/setUpForBuilding.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/chocolateyInstallAndProblems.md",
     "src/Docs/DesignThoughts/SystemSpecifics/macOS/setUpForBuilding.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuildingOnDebianLinux.md",
@@ -181,7 +182,6 @@
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftware.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Linux",
     "src/Docs/DesignThoughts/SystemSpecifics/macOS",
-    "src/Docs/DesignThoughts/SystemSpecifics/Windows/setUpForBuilding.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RandomWindowsPowershellCommands.md",
     "src/build/build.windows11.onefile/EXE-00.toc",

@@ -16,9 +16,7 @@ To use chocolatey, close the powershell window, and open a new admin powershell 
 
 ## Set up Chocolatey to run as a User
 
-AI generated instructions for setting Chocolatey up to be used in a user environment - - [[chocolateyAsUser]] **NOTE** you need Chocolatey for Business to make those instructions work.
-
-Setting up chocolatey to run as a user will be tested and modified as necessary once we have access to Chocolatey for Business and there is time for someone to go through the document.
+ **NOTE** you need Chocolatey for Business to install chocolatey in a user context work.
 
 ## Install software required for the project
 
