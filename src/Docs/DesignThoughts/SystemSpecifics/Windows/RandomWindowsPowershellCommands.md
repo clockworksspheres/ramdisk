@@ -40,5 +40,9 @@ https://www.amazon.com/dp/B0DSGG27G1/
 ### Online powershell devops community non-profit
 https://powershell.org/
 
+### Bertram, A. (2020). _PowerShell for Sysadmins: Workflow Automation Made Easy_. No Starch Press.
 
+### Jones, D., & Hicks, J. (2013). _Learn Windows PowerShell in a Month of Lunches_. Manning Pubns Co.
+
+### Dent, C. (2024). _Mastering PowerShell Scripting: Automate repetitive tasks and simplify complex administrative tasks using PowerShell_. Packt Publishing.
 
