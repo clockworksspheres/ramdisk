@@ -15,6 +15,7 @@ if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
 
    pip3 install PySide6 PyInstaller
    pip3 install --upgrade PyInstaller pyinstaller-hooks-contrib
+   pip install packaging
    pip install psutil
    pip install sphynx  # documentation tool
    pip install myst-parser # supports markdown for sphynx

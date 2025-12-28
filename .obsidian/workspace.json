@@ -172,6 +172,17 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
+    "src/packenv/lib/python3.13/site-packages/pip/_internal/resolution/resolvelib/__pycache__/reporter.cpython-313.pyc",
+    "src/packenv/lib/python3.13/site-packages/pip/_internal/resolution/resolvelib/__pycache__/requirements.cpython-313.pyc",
+    "src/packenv/lib/python3.13/site-packages/pip/_internal/resolution/resolvelib/__pycache__/found_candidates.cpython-313.pyc",
+    "src/packenv/lib/python3.13/site-packages/pip/_internal/resolution/resolvelib/__pycache__/factory.cpython-313.pyc",
+    "src/packenv/lib/python3.13/site-packages/pip/_internal/resolution/resolvelib/__pycache__/candidates.cpython-313.pyc",
+    "src/packenv/lib/python3.13/site-packages/pip/_internal/resolution/resolvelib/__pycache__/base.cpython-313.pyc",
+    "src/packenv/lib/python3.13/site-packages/pip/_internal/resolution/resolvelib/__pycache__/provider.cpython-313.pyc",
+    "src/packenv/lib/python3.13/site-packages/pip/_vendor/resolvelib/resolvers/__pycache__/resolution.cpython-313.pyc",
+    "src/packenv/lib/python3.13/site-packages/pip/_vendor/resolvelib/resolvers/__pycache__/exceptions.cpython-313.pyc",
+    "src/packenv/lib/python3.13/site-packages/pip/_vendor/resolvelib/resolvers/__pycache__/criterion.cpython-313.pyc",
+    "src/packenv/lib/python3.13/site-packages/pip/_vendor/resolvelib/resolvers/__pycache__/abstract.cpython-313.pyc",
     "src/Docs/DesignThoughts/Users/PythonChownWindows.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Linux/windowManagerProblemsOnLinux.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RandomWindowsPowershellCommands.md",
@@ -183,16 +194,6 @@
     "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuildingOnUbuntuLinux.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuilding.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftware.md",
-    "src/Docs/DesignThoughts/SystemSpecifics/Linux",
-    "src/Docs/DesignThoughts/SystemSpecifics/macOS",
-    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md",
-    "src/build/build.windows11.onefile/EXE-00.toc",
-    "src/build/build.windows11.onefile/PKG-00.toc",
-    "src/build/build.windows11.onefile/ramdisk-setup.pkg",
-    "src/build/build.windows11.onefile/PYZ-00.toc",
-    "src/build/build.windows11.onefile/PYZ-00.pyz",
-    "src/build/build.windows11.onefile/localpycs/struct.pyc",
-    "src/build/build.windows11.onefile/localpycs/pyimod04_pywin32.pyc",
-    "src/build/build.windows11.onefile/localpycs/pyimod02_importers.pyc"
+    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md"
   ]
 }
