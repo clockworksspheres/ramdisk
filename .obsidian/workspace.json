@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/Docs/DesignThoughts/SystemSpecifics/Windows/RandomWindowsPowershellCommands.md",
+                "file": "src/Docs/DesignThoughts/SystemSpecifics/Linux/windowManagerProblemsOnLinux.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "RandomWindowsPowershellCommands"
+              "title": "windowManagerProblemsOnLinux"
             }
           }
         ]
@@ -172,6 +172,9 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
+    "src/Docs/DesignThoughts/Users/PythonChownWindows.md",
+    "src/Docs/DesignThoughts/SystemSpecifics/Linux/windowManagerProblemsOnLinux.md",
+    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RandomWindowsPowershellCommands.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/setUpForBuilding.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/chocolateyInstallAndProblems.md",
     "src/Docs/DesignThoughts/SystemSpecifics/macOS/setUpForBuilding.md",
@@ -183,7 +186,6 @@
     "src/Docs/DesignThoughts/SystemSpecifics/Linux",
     "src/Docs/DesignThoughts/SystemSpecifics/macOS",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md",
-    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RandomWindowsPowershellCommands.md",
     "src/build/build.windows11.onefile/EXE-00.toc",
     "src/build/build.windows11.onefile/PKG-00.toc",
     "src/build/build.windows11.onefile/ramdisk-setup.pkg",
