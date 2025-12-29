@@ -272,7 +272,9 @@ class RamDisk(RamDiskTemplate):
         success = False
 
         if not os.path.exists(self.mntPoint):
-            os.makedirs(self.mntPoint)
+            if not self.mntPoint:
+                self.mntPoint = mkdtemp()
+            os.makedirs(self.mntPoint, exist_ok=True)
             self.logger.log(lp.DEBUG, "Created mount point")
         elif os.path.exists(self.mntPoint) and not os.path.isdir(self.mntPoint):
             # Cannot use mkdtmp here because it will make the directory on
