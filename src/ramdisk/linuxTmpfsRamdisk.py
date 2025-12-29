@@ -117,7 +117,7 @@ class RamDisk(RamDiskTemplate):
         if isinstance(mountpoint, str):
             self.mntPoint = mountpoint
         else:
-            self.getRandomizedMountpoint()
+            self.mntPoint = self.getRandomizedMountpoint()
 
         if isinstance(mode, int):
             self.mode = mode
