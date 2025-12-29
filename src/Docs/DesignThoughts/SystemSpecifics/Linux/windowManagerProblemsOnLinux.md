@@ -1,6 +1,6 @@
 # Drag and Drop Problems on Linux
 
-## Human code solution introduced into ramdisk-setup.py:
+## Code solution introduced into ramdisk-setup.py:
 
 ``` python
 try:

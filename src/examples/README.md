@@ -1,6 +1,6 @@
 # Examples README
 
-*NOTE: the examples directory is in flux due to the code base out-pacing the examples directory.*
+*NOTE: the examples directory should be stable.*
 
 Examples for using various libraries that have supported the ramdisk project at some point during it's life since before 2010.
 
