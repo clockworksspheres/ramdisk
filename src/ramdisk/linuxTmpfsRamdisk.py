@@ -639,7 +639,7 @@ def getMountDisks():
                re.match("^/tmp$", name) or \
                re.match("^/run/lock$", name):
                 continue
-            if re.search("/var/snap"):
+            if re.search("/var/snap", name):
                 continue
             if not name in systemDisks:
                 print(name)
