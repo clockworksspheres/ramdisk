@@ -54,7 +54,7 @@ logger.initializeLogs()
 if opts.size:
     size = str(opts.size)  # in Megabytes
 if opts.gui:
-    """
+
     try:
         #####
         # Must make sure environment is set correctly if OS is Linux
@@ -68,7 +68,7 @@ if opts.gui:
                 os.environ["QT_QPA_PLATFORM"] = "xcb"
     except OSError:
         logger.log(lp.INFO, "Problem checking for and setting environment variable in linux")
-    """
+
 
     app = QApplication(sys.argv)
     """
