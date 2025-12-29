@@ -61,10 +61,10 @@ if opts.gui:
         # and the window manager is Wayland.  Must be set before 
         # creating QApplication.  Does not check if X11 is running.
         if sys.platform.lower().startswith("linux"):
-            logger.log(lp.INFO"Found Linux Checking for Wayland")
+            logger.log(lp.INFO, "Found Linux Checking for Wayland")
             if os.environ.get("WAYLAND_DISPLAY") is not None or \
                os.environ.get("XDG_SESSION_TYPE") == "wayland":
-                logger.log(lp.INFO"Found Wayland, setting QT_QPA_PLATFORM")
+                logger.log(lp.INFO, "Found Wayland, setting QT_QPA_PLATFORM")
                 os.environ["QT_QPA_PLATFORM"] = "xcb"
     except OSError:
         logger.log(lp.INFO, "Problem checking for and setting environment variable in linux")
