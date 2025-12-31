@@ -1,5 +1,5 @@
 
-Runs on both macOS and Linux.
+Runs on macOS, Linux and Windows.
 
 This software is covered by the [unlicense](https://unlicense.org)
 
@@ -33,13 +33,14 @@ Unmounting a ramdisk is much faster than removing or erasing a potentially large
 
 
 ## NOTE:
+
 The code has two branches, ux (hopefully stable) and dev (not necessarily stable).  The goal is to only merge to develop when functionality is stable and tests have been written for that functionality.
 
 Initially developed for python 2.6, but code has since been migrated to 3.9+.  Not believed to work on the python 2 branch any longer.
 
 ### Mac Note
 
-Instanciating the RamDisk class will create a ramdisk that you can use - in chunks of 1Mb.
+Instantiating the RamDisk class will create a ramdisk that you can use - in chunks of 1Mb.
 
 ramdisks do not need to be managed by root on macOS.   Tests & DevOps creating and managing ramdisks can be run as a user.
 
@@ -59,11 +60,13 @@ tested on macOS Sequoia, Sierra, Ventura, Sonoma and Sequoia
 
 ### linuxLoopRamdisk
 
+Not currently implemented.  A stub has been placed for intended implementation.
+
 ### linuxTmpfsRamdisk - working
 
-tested on Rocky 9, 10 and Ubuntu 24.04 & 25.04
+tested on Rocky 9, 10 and Ubuntu 24.04 & 25.04 as well as Debian 12.  
 
-## Only developed for macOS and Linux
+## Developed for macOS, Linux and Windows
 
 ### ramdisk
 
@@ -77,28 +80,21 @@ AIMtk - whose predecessor is ImDisk. Dropping the work so far with ImDisk since 
 
 NOTE: the AIMtk software must be acquired/purchased from [Arsenal Recon](https://arsenalrecon.com/products/arsenal-image-mounter)
 
-
-## Developed for macOS, Linux and Windows
-
-Code currently working, but only with drive letters (ie: R:, L:\).
-
 ## Example code
 
-The exaamples directory provides examples on how to use various libraries, even beyond the ramdisk libraries in this code base.  Currently in flux.  Some are used for testing the ramdisk code base.  Any user creation or manipulation example code is in an alpha state, and some are macOS only at this time.
+The examples directory provides examples on how to use various libraries, even beyond the ramdisk libraries in this code base.  Currently in flux.  Some are used for testing the ramdisk code base.  Any user creation or manipulation example code is in an alpha state, and some are macOS only at this time.
 
 Unionfs related code is in an alpha state and also macOS only.
 
 The ramdisk example code is cross platform in an alpha state.
 
-The menu code is cross platform, in an alpha state.
+The menu code is cross platform, in an alpha state, uses the Composite model.
 
 # Future work:
 
 ## Windows
 
-Calls a currently available ramdisk creator, [AIM Toolkit](https://sourceforge.net/projects/aim-toolkit/files/20250818/) - whose predecessor is ImDisk. Dropping the work so far with ImDisk since it is EOL and doesn't support Windows 11.  The AIM Toolkit must be installed prior to using this project.
-
-Currently working, but only with drive letters (ie: R:, L:\)
+Calls a currently available ramdisk creator, [AIM Toolkit](https://sourceforge.net/projects/aim-toolkit/files/20250818/) - whose predecessor is ImDisk. Dropping the work so far with ImDisk since it is EOL and doesn't support Windows 11.  The AIM Toolkit must be installed prior to using this project.  The AIM toolkit only supports 16 ramdisks at a time currently.
 
 ## Languages
 
@@ -124,9 +120,9 @@ packaging
 
 PySide6 cross platform library for the Graphical User Interface.  PySide6 rarely works with the latest release of Python.
 
-Pyinstaller cross platform library to create the installer to bundle the GUI into a windows app package
+Pyinstaller cross platform library to create the installer to bundle the GUI into a windows and linux executable, and a macOS app.
 
-packaging.version.parse is to replace distutils.version.LooseVersion, for comparing versions of operating systems in CheckApplicable.  As of 4/13/25, CheckApplicable is entirely distutils, and needs to be refactored to packaging for python 3.10+.
+packaging.version.parse is to replace distutils.version.LooseVersion, for comparing versions of operating systems in CheckApplicable.
 
 pywin32 is needed for reading/configuring hardware specifics.
 
