@@ -6,8 +6,8 @@ Examples for using various libraries that have supported the ramdisk project at 
 
 ## User management related examples
 
-chupass.py (macOS)
-getuserinfo.py (macOS)
+macos-chupass.py (macOS)
+macos-getuserinfo.py (macOS)
 
 ## Ramdisk related examples
 
