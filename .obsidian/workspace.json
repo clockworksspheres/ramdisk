@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "src/Docs/README.md",
                 "mode": "source",
                 "source": true
               },
@@ -172,6 +172,12 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
+    "src/proto/README.md",
+    "src/Docs/DesignThoughts/Users/PythonChownWindows.md",
+    "src/Docs/DesignThoughts/ci-cd/CreateLocalUTMmacosVMandVagrantUP/create local UTM macos VM and vagrant up.md",
+    "src/Docs/DesignThoughts/ci-cd/DocumentationGeneration/WikipediaDocGenComparison.md",
+    "pyenv-notes.md",
+    "README.md",
     "src/examples/README.md",
     "src/tests/testmntpnt/testfile999",
     "src/tests/testmntpnt/testfile998",
@@ -184,7 +190,6 @@
     "src/tests/testmntpnt/testfile991",
     "src/tests/testmntpnt/testfile990",
     "src/Docs/DesignThoughts/SystemSpecifics/Linux/windowManagerProblemsOnLinux.md",
-    "src/Docs/DesignThoughts/Users/PythonChownWindows.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RandomWindowsPowershellCommands.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/setUpForBuilding.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/chocolateyInstallAndProblems.md",
