@@ -16,8 +16,11 @@ Youtube video [Testing Qt GUI application with pytest (pytest-qt)](https://www.y
 
 [my shot](https://github.com/roynielsen17/pyside-playground) at updating [pyside-playground](https://github.com/ilmanzo/pyside-playground)
 
+Using [QSignalSpy](https://www.youtube.com/watch?v=jCCt6K6eSgs) with unittest in pyside6 for Signal Testing - youtube video
+
 ### if using Kivy instead of PySide6, one can use the pytest-kivy library
 
 [pytest-kivy](https://github.com/matham/pytest-kivy) -- however it was last updated in 2021....
 
+youtube: "# Testing GUI Apps - What to test? How to test it? Mini Coding Course for Beginners" [kivy testing included](https://www.youtube.com/watch?v=EqJWhlC1H6k)
 
