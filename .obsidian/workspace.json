@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/Docs/DesignThoughts/Testing/pytest-qt/README.md",
+                "file": "src/examples/README.md",
                 "mode": "source",
                 "source": true
               },
@@ -172,6 +172,9 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
+    "src/Docs/DesignThoughts/Testing/pytest-qt/README.md",
+    "src/Docs/DesignThoughts/Testing/OSS_qtest_pytest-qt_kivy_testing/README.md",
+    "src/Docs/DesignThoughts/Testing/OSS_qtest_pytest-qt_kivy_testing",
     "src/proto/testing/__pycache__/test_brave_pytestqt_001.cpython-314-pytest-9.0.2.pyc",
     "src/proto/testing/__pycache__",
     "src/proto/testing/test_brave_pytestqt_001.py",
@@ -181,10 +184,7 @@
     "src/packenv/lib/python3.13/site-packages/pygments/lexers/__pycache__/python.cpython-313.pyc",
     "src/packenv/lib/python3.13/site-packages/pygments/lexers/__pycache__/diff.cpython-313.pyc",
     "src/packenv/lib/python3.13/site-packages/pygments/lexers/__pycache__/_mapping.cpython-313.pyc",
-    "src/packenv/lib/python3.13/site-packages/pygments/lexers/__pycache__/__init__.cpython-313.pyc",
-    "src/packenv/lib/python3.13/site-packages/pygments/lexers/__pycache__",
     "src/examples/README.md",
-    "src/Docs/DesignThoughts/Testing/pytest-qt/README.md",
     "src/Docs/DesignThoughts/Testing/squish/README.md",
     "src/Docs/README.md",
     "src/Docs/DesignThoughts/CheckApplicableRelated.md",
