@@ -14,6 +14,8 @@ Can test projects in a headless manner.
 
 Youtube video [Testing Qt GUI application with pytest (pytest-qt)](https://www.youtube.com/watch?v=WjctCBjHvmA)
 
+[my shot](https://github.com/roynielsen17/pyside-playground) at updating [pyside-playground](https://github.com/ilmanzo/pyside-playground)
+
 ### if using Kivy instead of PySide6, one can use the pytest-kivy library
 
 [pytest-kivy](https://github.com/matham/pytest-kivy) -- however it was last updated in 2021....
