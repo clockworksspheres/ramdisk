@@ -1,5 +1,7 @@
 # Controlling UTM VMs on macOS
 
+Why do we want to do this?  macOS is supposed to be virtualized on Apple hardware, and UTM works directly with Apple hardware, where other hypervisors do not.
+
 ## ```utmctl```
 
 ## ```ansible```
