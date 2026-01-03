@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/Docs/DesignThoughts/ci-cd/vmWrangling/controllingUTM_VMs.md",
+                "file": "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "controllingUTM_VMs"
+              "title": "fileOwnershipNmanagement"
             }
           }
         ]
@@ -172,8 +172,11 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
-    "src/examples/README.md",
+    "src/Docs/DesignThoughts/SystemSpecifics/macOS/SettingUpUTMmacOSVM.md",
+    "src/Docs/DesignThoughts/CheckApplicableRelated.md",
+    "src/Docs/DesignThoughts/SystemSpecifics/macOS/macosRemount.md",
     "src/Docs/DesignThoughts/ci-cd/vmWrangling/controllingUTM_VMs.md",
+    "src/examples/README.md",
     "src/Docs/DesignThoughts/ci-cd/vmWrangling",
     "src/Docs/DesignThoughts/ci-cd/cicd40kView.drawio",
     "src/proto/testing/qtest/copilot_qtest_scrollbar_001.py",
@@ -188,7 +191,6 @@
     "src/proto/testing/__pycache__/test_brave_pytestqt_001.cpython-314-pytest-9.0.2.pyc",
     "src/Docs/DesignThoughts/Testing/squish/README.md",
     "src/Docs/README.md",
-    "src/Docs/DesignThoughts/CheckApplicableRelated.md",
     "src/Docs/DesignThoughts/umlRelated/startingPlantumlForRenderingLocallyInObsidian.md",
     "src/Docs/DesignThoughts/uiRelated/WidgetShadow.md",
     "src/Docs/DesignThoughts/uiRelated/QFileDialogs.md",
@@ -205,8 +207,6 @@
     "src/Docs/DesignThoughts/SystemSpecifics/macOS/setUpForBuilding.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuildingOnDebianLinux.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuildingOnRockyLinux.md",
-    "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuildingOnUbuntuLinux.md",
-    "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuilding.md",
-    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftware.md"
+    "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuildingOnUbuntuLinux.md"
   ]
 }
