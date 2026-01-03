@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
+                "file": "src/Docs/DesignThoughts/SystemSpecifics/macOS/SettingUpUTMmacOSVM.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "fileOwnershipNmanagement"
+              "title": "SettingUpUTMmacOSVM"
             }
           }
         ]
@@ -172,6 +172,7 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
+    "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
     "src/Docs/DesignThoughts/SystemSpecifics/macOS/SettingUpUTMmacOSVM.md",
     "src/Docs/DesignThoughts/CheckApplicableRelated.md",
     "src/Docs/DesignThoughts/SystemSpecifics/macOS/macosRemount.md",
@@ -206,7 +207,6 @@
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/chocolateyInstallAndProblems.md",
     "src/Docs/DesignThoughts/SystemSpecifics/macOS/setUpForBuilding.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuildingOnDebianLinux.md",
-    "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuildingOnRockyLinux.md",
-    "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuildingOnUbuntuLinux.md"
+    "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuildingOnRockyLinux.md"
   ]
 }

@@ -176,3 +176,17 @@ ansible local -m ping
 ansible localip -m ping
 ```
 
+# References
+
+How to [Setup macOS in a VM](https://danielraffel.me/2025/05/13/running-macos-in-a-vm-on-macos-with-utm/?utm_source=copilot.com) on macOS with UTM
+
+Youtube: IT Automation with Ansible #2 - [Ansible Configuration File and Local Inventory](https://www.youtube.com/watch?v=N9CaJf6qGRs)
+
+Youtube: [Ansible Inventory File Example](https://www.youtube.com/watch?v=0MT9WvX_j4Y)
+
+Jeff Geerling's [ansible](https://github.com/geerlingguy/mac-dev-playbook) repo
+
+
+
+
+
