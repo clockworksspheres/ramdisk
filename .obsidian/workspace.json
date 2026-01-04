@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/Docs/DesignThoughts/SystemSpecifics/macOS/SettingUpUTMmacOSVM.md",
+                "file": "src/Docs/DesignThoughts/ci-cd/PipelineServers/GithubActions/References.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "SettingUpUTMmacOSVM"
+              "title": "References"
             }
           }
         ]
@@ -172,8 +172,13 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
-    "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
+    "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/References.md",
+    "src/Docs/DesignThoughts/ci-cd/PipelineServers/GithubActions/References.md",
+    "src/Docs/DesignThoughts/ci-cd/PipelineServers/GithubActions",
     "src/Docs/DesignThoughts/SystemSpecifics/macOS/SettingUpUTMmacOSVM.md",
+    "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins",
+    "src/Docs/DesignThoughts/ci-cd/PipelineServers",
+    "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
     "src/Docs/DesignThoughts/CheckApplicableRelated.md",
     "src/Docs/DesignThoughts/SystemSpecifics/macOS/macosRemount.md",
     "src/Docs/DesignThoughts/ci-cd/vmWrangling/controllingUTM_VMs.md",
@@ -185,11 +190,8 @@
     "src/proto/testing/qtest/grok_qtest_scroll_002.py",
     "src/proto/testing/qtest/grok_qtest_scroll_001.py",
     "src/proto/testing/qtest/brave_qtest_scroll_001.py",
-    "src/proto/testing/qtest",
     "src/Docs/DesignThoughts/Testing/pytest-qt/README.md",
     "src/Docs/DesignThoughts/Testing/OSS_qtest_pytest-qt_kivy_testing/README.md",
-    "src/Docs/DesignThoughts/Testing/OSS_qtest_pytest-qt_kivy_testing",
-    "src/proto/testing/__pycache__/test_brave_pytestqt_001.cpython-314-pytest-9.0.2.pyc",
     "src/Docs/DesignThoughts/Testing/squish/README.md",
     "src/Docs/README.md",
     "src/Docs/DesignThoughts/umlRelated/startingPlantumlForRenderingLocallyInObsidian.md",
@@ -205,8 +207,6 @@
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RandomWindowsPowershellCommands.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/setUpForBuilding.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/chocolateyInstallAndProblems.md",
-    "src/Docs/DesignThoughts/SystemSpecifics/macOS/setUpForBuilding.md",
-    "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuildingOnDebianLinux.md",
-    "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuildingOnRockyLinux.md"
+    "src/Docs/DesignThoughts/SystemSpecifics/macOS/setUpForBuilding.md"
   ]
 }
