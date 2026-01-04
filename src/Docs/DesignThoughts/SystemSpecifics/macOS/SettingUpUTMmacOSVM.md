@@ -186,7 +186,7 @@ Youtube: [Ansible Inventory File Example](https://www.youtube.com/watch?v=0MT9Wv
 
 Jeff Geerling's [ansible](https://github.com/geerlingguy/mac-dev-playbook) repo
 
-
+https://docs.getutm.app/settings-qemu/devices/network/network/
 
 
 
