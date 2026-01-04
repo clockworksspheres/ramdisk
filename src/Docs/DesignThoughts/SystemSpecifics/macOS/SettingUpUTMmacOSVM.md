@@ -44,6 +44,8 @@ ssh-keygen -t ed25519 -C "your_email@example.com" -f ~/.ssh/custom_key_name
 ssh-copy-id <user>@<machine>
 ```
 
+Ensure that the SSH daemon on the target host (`127.0.0.1`) allows connections for the user `victor` and that the `sshd_config` file includes `PubkeyAuthentication yes` and `PasswordAuthentication yes` (if needed), followed by a restart of the SSH service to apply changes.
+
 set up ansible
 
 ``` bash
