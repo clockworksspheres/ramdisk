@@ -2,6 +2,17 @@
 
 ## Jenkins
 
+Youtube: [How To Add Jenkins Controller & Agent Node for Windows | Jenkins Tutorials | Part 6](https://www.youtube.com/watch?v=V2ejGOY_uJI)
+
+Youtube: [How to Create an Agent Node in Jenkins](https://www.youtube.com/watch?v=99DddJiH7lM)
+
+Youtube: [Setup a macOS Agent for Jenkins](https://www.youtube.com/watch?v=DteE1Zf8CIw)
+
+Youtube: [How to Install Jenkins Agent on Windows](https://www.youtube.com/watch?v=N8AQTlHoBKc)
+
+
+[mac - plugins.jenkins.io](https://plugins.jenkins.io/mac/#plugin-content-macos)
+
 [How to Build a Python app with PyInstaller using Jenkins](https://dev.to/olalekan_oladiran_d74b7a6/how-to-build-a-python-app-with-pyinstaller-using-jenkins-349k)
 
 [Packaging PySide6 applications for Windows with PyInstaller & InstallForge](https://www.pythonguis.com/tutorials/packaging-pyside6-applications-windows-pyinstaller-installforge/)
