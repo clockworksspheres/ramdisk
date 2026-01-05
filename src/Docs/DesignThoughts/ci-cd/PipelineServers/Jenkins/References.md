@@ -13,6 +13,8 @@ Youtube: [How to Install Jenkins Agent on Windows](https://www.youtube.com/watch
 
 [mac - plugins.jenkins.io](https://plugins.jenkins.io/mac/#plugin-content-macos)
 
+[Jenkins macOS plugin](https://plugins.jenkins.io/mac/)
+
 [How to Build a Python app with PyInstaller using Jenkins](https://dev.to/olalekan_oladiran_d74b7a6/how-to-build-a-python-app-with-pyinstaller-using-jenkins-349k)
 
 [Packaging PySide6 applications for Windows with PyInstaller & InstallForge](https://www.pythonguis.com/tutorials/packaging-pyside6-applications-windows-pyinstaller-installforge/)
