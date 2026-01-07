@@ -96,4 +96,5 @@ cp -a ramdisk ./dist/ramdisk-setup.app/Contents
 popd
 # ../dist/ramdisk-setup.app/Contents/MacOS/ramdisk-setup
 
+echo "...macOS build complete"
 
