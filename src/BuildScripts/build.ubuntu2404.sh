@@ -29,11 +29,11 @@ fi
 
 #pushd ..
 
-cp BuildScripts/build.ubuntu2024.py312.onefile.spec .
+cp BuildScripts/build.ubuntu2404.py312.onefile.spec .
 
-pyinstaller --clean -y build.ubuntu2024.py312.onefile.spec
-pyinstaller -y build.ubuntu2024.py312.onefile.spec
-rm build.ubuntu2024.py312.onefile.spec
+pyinstaller --clean -y build.ubuntu2404.py312.onefile.spec
+pyinstaller -y build.ubuntu2404.py312.onefile.spec
+rm build.ubuntu2404.py312.onefile.spec
 
 popd
 

@@ -168,6 +168,8 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
+    "src/BuildScripts/build.ubuntu2404.py312.onefile.spec",
+    "src/BuildScripts/build.ubuntu2404.sh",
     "src/resources/img/ram_96.png",
     "src/resources/img/ram_64.png",
     "src/resources/icons/E.ico",
@@ -179,7 +181,6 @@
     "src/resources/font/TorusPro.ttf",
     "src/resources/font/NotoSans.ttf",
     "src/resources/font/Arimo-Medium.ttf",
-    "src/resources/font/Arimo-LICENCE.txt",
     "src/ramdisk/resources/img/ram_96.png",
     "src/ramdisk/resources/img/ram_64.png",
     "src/Docs/DesignThoughts/userRelated/getCurrentUser.md",
