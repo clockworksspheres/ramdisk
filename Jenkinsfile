@@ -51,7 +51,7 @@ pipeline {
                                 dir('src/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
                                     sh 'ls -l'
-                                    sh 'py.test --junit-xml test-reports/results.xml test_*.py'
+                                    sh 'sudo py.test --junit-xml test-reports/results.xml test_*.py'
                                     // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
                                     echo '----------=====### Finished Tests ###=====----------'
                                 }
