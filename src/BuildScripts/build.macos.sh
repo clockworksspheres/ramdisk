@@ -33,7 +33,7 @@ echo "."
 echo "."
 echo "."
 
-pushd ramdisk/ui; ./compile_uifiles.py; popd
+# pushd ramdisk/ui; ./compile_uifiles.py; popd
 
 echo "."
 echo "."
@@ -94,6 +94,6 @@ echo "."
 cp -a ramdisk ./ramdisk-setup.app/Contents/Resources
 cp -a ramdisk ./dist/ramdisk-setup.app/Contents
 popd
-../dist/ramdisk-setup.app/Contents/MacOS/ramdisk-setup
+# ../dist/ramdisk-setup.app/Contents/MacOS/ramdisk-setup
 
 
