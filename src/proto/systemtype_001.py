@@ -37,7 +37,7 @@ def systemtype():
             #cmdoutput = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, close_fds=True, text=True)
             #outputlines = cmdoutput.stdout.readlines()
             outputlines = output
-            for line in outputlines.split("\n"):
+            for line in outputlines.splitlines():
                 line = str(line)
                 print("line: " + str(line))
                 for vt in validtypes:

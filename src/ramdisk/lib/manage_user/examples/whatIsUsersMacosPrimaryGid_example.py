@@ -22,7 +22,7 @@ if not sys.platform == "darwin":
 
 
 
-parser = OptionParser(usage="\n\n%prog [options]\n\n", version="0.8.6")
+parser = OptionParser(usage="\n\n%prog [options]\n\n", version="2.8.6")
 
 user=""
 parser.add_option("-u", "--user", dest="user",

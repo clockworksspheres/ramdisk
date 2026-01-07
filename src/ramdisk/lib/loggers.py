@@ -20,20 +20,16 @@ import sys
 import time
 import socket
 import inspect
-#import calendar
 import datetime
 import traceback
 import logging
 import logging.handlers
-
-
 #####
-# Include the parent project directory in the PYTHONPATH
-appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-2])
-sys.path.append(appendDir)
-
-# sys.path.append("../..")
-
+# Include the parent project directory in the PYTHONPATH - next three lines no good on Windows..
+# appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-2])
+# sys.path.append(appendDir)
+# sys.path.append("/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-2]))
+sys.path.append("../..")
 # from ramdisk.lib.singleton import Singleton
 # from ramdisk.config import DEFAULT_LOG_LEVEL
 from ramdisk.config import DEFAULT_LOG_LEVEL
@@ -51,6 +47,13 @@ class IllegalExtensionTypeError(Exception):
         Exception.__init__(self,*args,**kwargs)
 
 class IllegalLoggingLevelError(Exception):
+    """
+    Custom Exception
+    """
+    def __init__(self,*args,**kwargs):
+        Exception.__init__(self,*args,**kwargs)
+
+class PrefixFormatError(Exception):
     """
     Custom Exception
     """
@@ -81,9 +84,6 @@ def singleton_decorator(cls):
 
 class SingletonCyLogger(type):
     """
-    This class was retrieved from: http://stackoverflow.com/questions/33364070/python-implementing-singleton-as-metaclass-but-for-abstract-classes
-    Modified class origionally authored by: Martijn Pieters(http://stackoverflow.com/users/100297/martijn-pieters)
-    with license: https://creativecommons.org/licenses/by-sa/3.0/
     """
     _instances = {}
     def __call__(cls, *args, **kwargs):
@@ -96,6 +96,9 @@ class SingletonCyLogger(type):
 # Mock Logger class
 
 class MockLogger(Singleton):
+
+    initialized = 0
+
     def __init__(self, *args, **kwargs):
         pass
 
@@ -130,10 +133,12 @@ class CyLogger(Singleton):
     Class to set up logging, with easy string referencing loggers and their
     handlers.
     
-    @author: Roy Nielsen
+    
     """
     
     instanciatedLoggers = {}
+
+    initialized = False
 
     def __init__(self, environ=False, debug_mode=False, verbose_mode=False, level=DEFAULT_LOG_LEVEL, *args, **kwargs):
         """
@@ -182,7 +187,7 @@ class CyLogger(Singleton):
         """
         Input validation for the logging level
 
-        @author: Roy Nielsen
+        
 
         @param level:  (Default value = 30)
  
@@ -203,7 +208,7 @@ class CyLogger(Singleton):
         If there is a RotatingFileHandler attached to the active logger,
         rotate the log.
         
-        @author: Roy Nielsen
+        
 
         @param rothandler: 
 
@@ -249,13 +254,12 @@ class CyLogger(Singleton):
         @NOTE: This only sets up the root logger.
 
         @note: Interface borrowed from Stonix's LogDispatcher.initializeLogs
-               authored by scmcleni, D. Kennel and R. Nielsen
-
-        @author: Roy Nielsen
+        
         """
+        self.initialized = True
         if not filename:
             filename = sys.argv[0].split("/")[-1]
-        success = False
+        # success = False
         self.syslog = syslog
         self.rotate = False
         self.fileHandler = False
@@ -356,7 +360,7 @@ class CyLogger(Singleton):
         @param *args: 
         @param **kwargs: 
 
-        @author: Roy Nielsen
+        
         """
         pass
 
@@ -368,22 +372,20 @@ class CyLogger(Singleton):
 
         One may add several handlers to one logger.
 
-        @author: Roy Nielsen
+        
         """
         pass
 
     #############################################
 
-    def log(self, priority=0, msg=""):
+    def log(self, priority=0, msg="", format="long"):
         """
         Interface to work similar to Stonix's LogDispatcher.py
-
-        @note: Stonix's LogDispatcher.py authored by: scmcleni
 
         @param priority:  (Default value = 0)
         @param msg:  (Default value = "")
 
-        @author: Roy Nielsen
+        
         """
         pri = str(priority)
         if re.match(r"^\d\d$", pri) and self.validateLevel():
@@ -391,7 +393,6 @@ class CyLogger(Singleton):
         else:
             raise IllegalLoggingLevelError("Cannot log at this priority level: " + pri)
        
-
         if int(priority) < int(self.lvl):
             return
  
@@ -420,41 +421,49 @@ class CyLogger(Singleton):
         (frame, fullLengthFilename, line_number, function_name, lines, index) = inspect.getouterframes(inspect.currentframe())[1]
         filename = fullLengthFilename.split("/")[-1]
 
+        shortPrefix = ""
+        longPrefix = ""
+
         if not self.syslog:
-            #####
-            # longPrefix message to be in the format: 
-            # <timestamp> <calling_script_name> : <filename_of_calling_function>, <name_of_calling_function> (<line number of calling function>)
-            longPrefix = '{} {} : {}, {} ({}) '.format(str(timestamp),
-                                                       str(prog), 
-                                                       str(filename), 
-                                                       str(function_name), 
-                                                       str(line_number))
-            #####
-            # shorterFormat message to be in the format: 
-            # <timestamp> <calling_script_name> : <name_of_calling_function> (<line number of calling function>)
-            shortFormat = '{} {} : {} ({}) '.format(str(timestamp),
-                                                    str(prog),
-                                                    str(function_name),
-                                                    str(line_number))
+            if format == "long":
+                #####
+                # longPrefix message to be in the format: 
+                # <timestamp> <calling_script_name> : <filename_of_calling_function>, <name_of_calling_function> (<line number of calling function>)
+                longPrefix = '{} {} : {}, {} ({}) '.format(str(timestamp),
+                                                           str(prog), 
+                                                           str(filename), 
+                                                           str(function_name), 
+                                                           str(line_number))
+            else:
+                #####
+                # shorterFormat message to be in the format: 
+                # <timestamp> <calling_script_name> : <name_of_calling_function> (<line number of calling function>)
+                shortPrefix = '{} {} : {} ({}) '.format(str(timestamp),
+                                                        str(prog),
+                                                        str(function_name),
+                                                        str(line_number))
         else:
-            #####
-            # longPrefix message to be in the format: 
-            # <calling_script_name> : <filename_of_calling_function>, <name_of_calling_function> (<line number of calling function>)
-            longPrefix = '{} : {}, {} ({}) '.format(str(prog), 
-                                                    str(filename), 
+            if format == "long":
+                #####
+                # longPrefix message to be in the format: 
+                # <calling_script_name> : <filename_of_calling_function>, <name_of_calling_function> (<line number of calling function>)
+                longPrefix = '{} : {}, {} ({}) '.format(str(prog), 
+                                                        str(filename), 
+                                                        str(function_name), 
+                                                        str(line_number))
+            else:
+                #####
+                # shorterFormat message to be in the format: 
+                # <calling_script_name> : <name_of_calling_function> (<line number of calling function>)
+                shortPrefix = '{} : {} ({}) '.format(str(prog),
                                                     str(function_name), 
                                                     str(line_number))
-            #####
-            # shorterFormat message to be in the format: 
-            # <calling_script_name> : <name_of_calling_function> (<line number of calling function>)
-            shortFormat = '{} : {} ({}) '.format(str(prog),
-                                                 str(function_name), 
-                                                 str(line_number))
+
         msg_list = []
         if isinstance(msg, list):
             msg_list = msg
         elif isinstance(msg, str):
-            first_msg_list = msg.split("\n")
+            first_msg_list = msg.splitlines()
             for mymsg in first_msg_list:
                 msg_list.append(mymsg + "\n")
         elif isinstance(msg, dict):
@@ -466,6 +475,13 @@ class CyLogger(Singleton):
         else:
             msg_list = msg
 
+        if shortPrefix:
+            prefix = shortPrefix
+        elif longPrefix:
+            prefix = longPrefix
+        else:
+            raise PrefixFormatError("Bad prefix format")
+
         for line in msg_list:
             #####
             # Process via logging level
@@ -476,27 +492,27 @@ class CyLogger(Singleton):
             elif int(self.lvl) >= 10 and int(self.lvl) < 20:
                 #####
                 # Debug
-                self.logr.log(validatedLvl, longPrefix + "CRITICAL: (" + pri + ") " + str(line))
+                self.logr.log(validatedLvl, prefix + "CRITICAL: (" + pri + ") " + str(line))
             elif int(self.lvl) >= 20 and int(self.lvl) < 30:
                 #####
                 # Info
-                self.logr.log(validatedLvl, longPrefix + "ERROR: (" + pri + ") " + str(line))
+                self.logr.log(validatedLvl, prefix + "ERROR: (" + pri + ") " + str(line))
             elif int(self.lvl) >=30 and int(self.lvl) < 40:
                 #####
                 # Warning
                 try:
-                    self.logr.log(validatedLvl, longPrefix + "WARNING: (" + str(pri) + ") " + str(line))
+                    self.logr.log(validatedLvl, prefix + "WARNING: (" + str(pri) + ") " + str(line))
                 except Exception as err:
                     print(LogPriority.DEBUG + " : "  + str(traceback.format_exc()))
                     print(LogPriority.DEBUG + " : " + str(err))
             elif int(self.lvl) >= 40 and int(self.lvl) < 50:
                 #####
                 # Error
-                self.logr.log(validatedLvl, longPrefix + "INFO: (" + pri + ") " + str(line))
+                self.logr.log(validatedLvl, prefix + "INFO: (" + pri + ") " + str(line))
             elif int(self.lvl) >= 50 and int(self.lvl) < 60:
                 #####
                 # Critical
-                self.logr.log(validatedLvl, longPrefix + "DEBUG: (" + pri + ") " + str(line))
+                self.logr.log(validatedLvl, prefix + "DEBUG: (" + pri + ") " + str(line))
             else:
                 raise IllegalLoggingLevelError("Not a valid value for a logging level.")
 
@@ -508,7 +524,6 @@ class LogPriority(object):
     Similar to LogPriority in the Stonix project LogDispatcher, only using
     numbers instead of strings.
 
-    @note: Author of the Stonix LogPriority is scmcleni
     """
     DEBUG = int(10)
     INFO = int(20)

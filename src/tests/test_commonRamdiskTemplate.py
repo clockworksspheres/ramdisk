@@ -4,7 +4,7 @@
 """
 CommonRamdiskTemplate test.
 
-@author: Roy Nielsen
+
 """
 
 #--- Native python libraries

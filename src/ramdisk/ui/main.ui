@@ -6,19 +6,27 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>478</width>
-    <height>308</height>
+    <width>497</width>
+    <height>447</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Create Ramdisk</string>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget {
+	background-color: #ADADAD;
+}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="createPushButton">
     <property name="geometry">
      <rect>
-      <x>339</x>
-      <y>80</y>
+      <x>340</x>
+      <y>70</y>
       <width>121</width>
       <height>32</height>
      </rect>
@@ -27,7 +35,7 @@
      <string>Create Ramdisk</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="rListPushButton">
+   <widget class="QPushButton" name="ejectPushButton">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -37,7 +45,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Ramdisk List</string>
+     <string>Eject Ramdisk</string>
     </property>
    </widget>
    <widget class="QPushButton" name="debugPushButton">
@@ -69,10 +77,10 @@
    <widget class="QLabel" name="titleLabel">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>180</x>
       <y>10</y>
-      <width>101</width>
-      <height>16</height>
+      <width>131</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
@@ -88,6 +96,13 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QLineEdit {
+    border-style: outset;
+	background-color: #e6e6e6;
+    font: 12px black;
+}</string>
+    </property>
    </widget>
    <widget class="QSlider" name="sizeHorizontalSlider">
     <property name="geometry">
@@ -99,16 +114,16 @@
      </rect>
     </property>
     <property name="orientation">
-     <enum>Qt::Horizontal</enum>
+     <enum>Qt::Orientation::Horizontal</enum>
     </property>
    </widget>
    <widget class="QLabel" name="sizeLabel">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>50</y>
+      <x>10</x>
+      <y>35</y>
       <width>161</width>
-      <height>16</height>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
@@ -137,6 +152,26 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QLineEdit {
+    border-style: outset;
+	background-color: #e6e6e6;
+    font: 12px black;
+}</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>230</y>
+      <width>451</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::EditTrigger::DoubleClicked</set>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -144,12 +179,72 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>478</width>
-     <height>24</height>
+     <width>497</width>
+     <height>43</height>
     </rect>
    </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="nativeMenuBar">
+    <bool>true</bool>
+   </property>
+   <widget class="QMenu" name="menuRamDisk">
+    <property name="title">
+     <string>RamDisk</string>
+    </property>
+    <addaction name="actionConfigure"/>
+   </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen_Specfile"/>
+    <addaction name="actionSave_Specfile"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionStyle"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuRamDisk"/>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionConfigure">
+   <property name="text">
+    <string>Configure</string>
+   </property>
+  </action>
+  <action name="actionOpen_Specfile">
+   <property name="text">
+    <string>Open Specfile</string>
+   </property>
+  </action>
+  <action name="actionSave_Specfile">
+   <property name="text">
+    <string>Save Specfile</string>
+   </property>
+  </action>
+  <action name="actionStyle">
+   <property name="text">
+    <string>Style</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

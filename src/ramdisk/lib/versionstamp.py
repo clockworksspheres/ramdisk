@@ -4,7 +4,7 @@ Create a "module" version stamp, sed a file with it.
 
 To maintain module versions.
 
-@author: Roy Nielsen
+
 """
 import os
 import re
@@ -30,7 +30,7 @@ class SedFile4VersionStamp(object):
         """
         Get the UTC time and format a time stamp string for the version.
 
-        @author: Roy Nielsen
+        
         """
         format = ""
         datestamp = datetime.utcnow()
@@ -44,7 +44,7 @@ class SedFile4VersionStamp(object):
              "^(\s+self.module_version\s*=\s*)\S*"
         and replace with x.group(1) + "'" +  acquireStamp() + "'"
 
-        @author: Roy Nielsen
+        
         """
         self.logger.log(lp.INFO, "********** Entered sed method...**************")
         startString = ""

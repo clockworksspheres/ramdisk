@@ -1,11 +1,12 @@
 """
 Linux tmpfs ramdisk implementation
 
-@author: Roy Nielsen
+
 """
 #--- Native python libraries
 import os
 import re
+import getpass
 import pwd
 import sys
 import traceback
@@ -99,7 +100,7 @@ class RamDisk(RamDiskTemplate):
         # The passed in size of ramdisk should be in 1Mb chunks
         self.module_version = '20160224.032043.009191'
         self.logger = logger
-        if not sys.platform.startswith("linux"):
+        if not sys.platform.lower().startswith("linux"):
             raise NotValidForThisOS("This ramdisk is only viable for a Linux.")
 
         if fstype in ["tmpfs", "ramfs"]:
@@ -116,7 +117,7 @@ class RamDisk(RamDiskTemplate):
         if isinstance(mountpoint, str):
             self.mntPoint = mountpoint
         else:
-            self.mntPoint = ""
+            self.mntPoint = mkdtemp()
 
         if isinstance(mode, int):
             self.mode = mode
@@ -173,7 +174,7 @@ class RamDisk(RamDiskTemplate):
         """
         Acquire the paths for mount and umount on the system...
 
-        @author: Roy Nielsen
+
         """
         success = False
         paths = ["/bin", "/usr/bin", "/sbin", "/usr/sbin", "/usr/local/bin", "/user/local/sbin"]
@@ -186,9 +187,9 @@ class RamDisk(RamDiskTemplate):
             if os.path.exists(possibleFullPath):
                 self.mountPath = possibleFullPath
                 mountFound = True
-                
+
         if not mountFound:
-            raise SystemToolNotAvailable("Cannot find mount command...") 
+            raise SystemToolNotAvailable("Cannot find mount command...")
 
         #####
         # Look for the umount command
@@ -198,7 +199,7 @@ class RamDisk(RamDiskTemplate):
             if os.path.exists(possibleFullPath):
                 self.umountPath = possibleFullPath
                 umountFound = True
-                
+
         if not umountFound:
             raise SystemToolNotAvailable("Cannot find umount command...")
 
@@ -217,7 +218,7 @@ class RamDisk(RamDiskTemplate):
 
         For more options on the tmpfs filesystem, check the mount manpage.
 
-        @author: Roy Nielsen
+
         """
         command=None
         if self.fstype == "ramfs":
@@ -248,10 +249,10 @@ class RamDisk(RamDiskTemplate):
 
     def _format(self) :
         """
-        One can't really format a tmpfs disk, so this will mimic a format 
+        One can't really format a tmpfs disk, so this will mimic a format
         by unmounting an recreating the disk.
 
-        @author: Roy Nielsen
+
         """
         success = False
         successOne = self.umount()
@@ -266,12 +267,14 @@ class RamDisk(RamDiskTemplate):
         """
         Mount the disk
 
-        @author: Roy Nielsen
+
         """
         success = False
-        
+
         if not os.path.exists(self.mntPoint):
-            os.makedirs(self.mntPoint)
+            if not self.mntPoint:
+                self.mntPoint = mkdtemp()
+            os.makedirs(self.mntPoint, exist_ok=True)
             self.logger.log(lp.DEBUG, "Created mount point")
         elif os.path.exists(self.mntPoint) and not os.path.isdir(self.mntPoint):
             # Cannot use mkdtmp here because it will make the directory on
@@ -293,7 +296,10 @@ class RamDisk(RamDiskTemplate):
         elif self.passwd:
         """
         # self.logger.log(lp.WARNING, "p: " + self.passwd)
-        if not os.geteuid() == 0:
+        if not os.geteuid() == 0 and self.passwd:
+            output, error, returncode = self.runWith.runWithSudo(self.passwd)
+        elif not os.geteuid() == 0 and not self.passwd:
+            self.passwd = getpass.getpass()
             output, error, returncode = self.runWith.runWithSudo(self.passwd)
         else:
             if not os.geteuid() == 0 or self.passwd:
@@ -320,7 +326,7 @@ class RamDisk(RamDiskTemplate):
 
         If bad input is given, the previous values will be used.
 
-        @author: Roy Nielsen
+
         """
         #####
         # Input Validation:
@@ -360,7 +366,7 @@ class RamDisk(RamDiskTemplate):
         """
         Unmount the disk
 
-        @author: Roy Nielsen
+
         """
         success = False
 
@@ -379,7 +385,7 @@ class RamDisk(RamDiskTemplate):
         """
         Unmount the disk
 
-        @author: Roy Nielsen
+
         """
         success = False
 
@@ -392,7 +398,7 @@ class RamDisk(RamDiskTemplate):
         """
         Unmount the disk
 
-        @author: Roy Nielsen
+
         """
         success = False
 
@@ -409,7 +415,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+
         """
         #mem_free = psutil.phymem_usage()[2]
 
@@ -423,7 +429,7 @@ class RamDisk(RamDiskTemplate):
         """
         Getter for the version of the ramdisk
 
-        @author: Roy Nielsen
+
         """
         return self.module_version
 
@@ -433,18 +439,18 @@ def detach(mnt_point="", logger=False):
     """
     Mirror for the unmount function...
 
-    @author: Roy Nielsen
+
     """
     success = umount(mnt_point, logger)
     return success
 
 ###############################################################################
 
-def umount(mnt_point="", logger=False):
+def umount(mnt_point="", logger=False, password=""):
     """
     Unmount the ramdisk
 
-    @author: Roy Nielsen
+
     """
     success = False
     if mnt_point:
@@ -460,7 +466,7 @@ def umount(mnt_point="", logger=False):
             if os.path.exists(possibleFullPath):
                 umountPath = possibleFullPath
                 umountFound = True
-                
+
         if not umountFound:
             raise SystemToolNotAvailable("Cannot find umount command...")
 
@@ -469,17 +475,183 @@ def umount(mnt_point="", logger=False):
         runWith = RunWith(logger)
         command = [umountPath, mnt_point]
         runWith.setCommand(command)
-        runWith.communicate()
-        retval, reterr, retcode = runWith.getNlogReturns()
-        if not reterr:
+        #runWith.communicate()
+        retval, reterr, retcode = self.runWith.runWithSudo(password.strip())
+        #retval, reterr, retcode = runWith.getNlogReturns()
+        self.logger.log(lp.INFO, "RETURNS: " + retval)
+        #if not reterr:
+        if retval:
             success = True
 
     return success
 
-def unmount(mnt_point="", logger=False):
+###############################################################################
+
+def  unmount(mnt_point="", logger=False, password=""):
     '''
     mirror functioin for umount
     '''
     success = False
-    success = umount(mnt_point, logger)
+    if mnt_point:
+
+        paths = ["/bin", "/usr/bin", "/sbin", "/usr/sbin", "/usr/local/bin", "/user/local/sbin"]
+
+        #####
+        # Look for the umount command
+        umountFound = False
+        umountPath = ""
+        for path in paths:
+            possibleFullPath = os.path.join(path, "umount")
+            if os.path.exists(possibleFullPath):
+                umountPath = possibleFullPath
+                umountFound = True
+
+        if not umountFound:
+            raise SystemToolNotAvailable("Cannot find umount command...")
+
+        #####
+        # Run the umount command...
+        runWith = RunWith(logger)
+        command = [umountPath, mnt_point]
+        runWith.setCommand(command)
+        #runWith.communicate()
+        retval, reterr, retcode = self.runWith.runWithSudo(password.strip())
+        #retval, reterr, retcode = runWith.getNlogReturns()
+        print("RETURNS: " + retval)
+        self.logger.log(lp.INFO, "RETURNS: " + retval)
+        #if not reterr:
+        if retval:
+            success = True
+
     return success
+
+###############################################################################
+
+def  eject(mnt_point="", logger=False, password=""):
+    '''
+    mirror function for umount
+    '''
+    logger = CyLogger()
+    logger.initializeLogs()
+    runWith = RunWith(logger)
+    success = False
+    if mnt_point:
+
+        paths = ["/bin", "/usr/bin", "/sbin", "/usr/sbin", "/usr/local/bin", "/user/local/sbin"]
+
+        #####
+        # Look for the umount command
+        umountFound = False
+        umountPath = ""
+        for path in paths:
+            possibleFullPath = os.path.join(path, "umount")
+            if os.path.exists(possibleFullPath):
+                umountPath = possibleFullPath
+                umountFound = True
+
+        if not umountFound:
+            raise SystemToolNotAvailable("Cannot find umount command...")
+
+        #####
+        # Run the umount command...
+        try:
+            runWith = RunWith(logger)
+            command = [umountPath, mnt_point]
+            runWith.setCommand(command)
+            #runWith.communicate()
+            retval, reterr, retcode = runWith.runWithSudo(password.strip())
+            #retval, reterr, retcode = runWith.getNlogReturns()
+            logger.log(lp.INFO, "RETURNS: " + retval)
+            success = True
+        except IOError:
+            print("IOError...")
+
+    return success
+
+###############################################################################
+
+def getMountData(device):
+    """
+    For macOS, show both mount and diskutil data
+    """
+    runWith = RunWith()
+
+
+    #####
+    # Set up and run the mount command
+    cmd = ["/usr/bin/mount"]
+
+    output = ""
+
+    runWith.setCommand(cmd)
+    output, _, _ = runWith.communicate()
+
+    mountInfo = ""
+
+    for line in output.splitlines():
+        for item in line.split():
+            if re.search(f"^{device}$", item):
+                mountInfo = line
+                break
+
+    message = f"mountLine:\n{mountInfo}"
+
+    return message, mountInfo
+
+
+###############################################################################
+
+def getMountDisks():
+    """
+    should return the a dictionary with {device: diskName, ...} that contains
+    every mounted disk
+    """
+    print("Entering getMountedDisks")
+
+    runWith = RunWith()
+
+    mountedDisks = {}
+
+    devList = []
+    diskDict = {}
+    retval = ""
+    disk = ""
+
+    #####
+    # mount, to use device to get mount name
+    cmd = ["mount"]
+    runWith.setCommand(cmd)
+    runWith.communicate()
+    retval, reterr, retcode = runWith.getNlogReturns()
+
+    print(f"retval: {str(retval)}")
+
+    systemDisks = ["/dev/shm", "/run", "/run/credentials/systemd-journald.service",
+                   "/run/credentials/systemd-resolved.service", "/run/snapd/ns", "/var/snap"]
+
+    for line in retval.splitlines():
+        if line:
+            # print("Parsing mount command output...")
+            dev = ""
+            name = line.split()[2].strip()
+            #print(str(name))
+            if not "tmpfs" == line.split()[0].strip():
+                continue
+            if re.match("/run/user/\d+$", name) or \
+               re.match("^/tmp$", name) or \
+               re.match("^/run/lock$", name):
+                continue
+            if re.search("/var/snap", name):
+                continue
+            if not name in systemDisks:
+                print(name)
+                diskDict[name] = "/dev/tmpfs"
+                continue
+            else:
+                continue
+
+
+    print(f"MountedDisks: {diskDict}")
+    return diskDict
+
+

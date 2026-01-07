@@ -23,12 +23,13 @@ Maybe function, or other module
 Maybe function, method  or other module
 * rsync from spinning disk to ram disk
 
-@author: Roy Nielsen
+
 """
 #--- Native python libraries
 import os
 import re
 import sys
+import getpass
 import shutil
 import traceback
 from subprocess import Popen, PIPE
@@ -67,7 +68,7 @@ class RamDisk(RamDiskTemplate):
                          on locaiton created by tempfile.mkdtemp.
     @param: message_level - level at which to log.
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, size=0, mountpoint="", logger=False, disableJournal=False, **kwargs) :
         """
@@ -192,11 +193,13 @@ class RamDisk(RamDiskTemplate):
                 except:
                     success = False
                     self.logger.log(lp.WARNING, "Create appears to have failed..")
+                    raise
                 else:
                     #####
                     # Ramdisk created, try mounting it.
-                    self.__mount()
-                    self.__remove_journal()
+                    #self.__mount()
+                    pass #raise
+                    # self.__remove_journal()
                     
         self.getNlogData()
         self.success = success
@@ -204,11 +207,11 @@ class RamDisk(RamDiskTemplate):
             self.logger.log(lp.INFO, "Mount point: " + str(self.mntPoint))
             self.logger.log(lp.INFO, "Device: " + str(self.myRamdiskDev))
         self.logger.log(lp.INFO, "Success: " + str(self.success))
-            
+
 
     ###########################################################################
 
-    def __create(self) :
+    def __create(self):
         """
         Create a ramdisk device
 
@@ -222,15 +225,28 @@ class RamDisk(RamDiskTemplate):
             diskutil rename /dev/$disk "RAMDiskNameReplacement"
                 ....Replace RAMDiskNameReplacement with the desired 
                     name for your RAM disk.
+        #####
+        # THIS should be the process:
+        hdiutil attach -nomount ram://1048576
+        # the above command returns the <ramdisk device> - /dev/diskXs1
+        diskutil partitionDisk $(/dev/diskXs1) 1 GPTFormat APFS 'RAMDisk' '100%'
+        diskutil umount /dev/diskXs1
+        newfs_apfs -v RAMDisk /dev/diskXs1
+        mkdir -P <mountpoint>
+        mount_apfs /dev/diskXs1 /<mountpoint>
+        chown -R <user> /<mountpoint>
 
-        RENAME DOESN'T WORK!!! TO RENAME/REMOUNT:
-        diskutil umount self.myRamdiskDev
-        mkdir -p (if necessary) /<where to mount>
-        mount -t apfs self.myRamdiskDev /<where to mount>
+        #####
 
+        cmd = [self.hdiutil, "attach", "-nomount", "ram://" + self.diskSize]
+        cmd = ["/usr/sbin/diskutil", "partitionDisk", self.myRamdiskDev, "1", "GPTFormat", "APFS", "'RAMDisk'", f"{hundred}"]
+        cmd = [self.diskutil, "unmount", self.myRamdiskDev]
+        cmd = ["/sbin/newfs_apfs", "-v", "RAMDISK", self.myRamdiskDev]
+        self.fsHelper.mkdirs(self.mntPoint)
+        cmd = "/sbin/mount_apfs " + self.myRamdiskDev + " " + self.mntPoint
+        self.fsHelper.chown(self.mntPoint, user)
 
-
-        @author: Roy Nielsen
+        
         """
         retval = None
         reterr = None
@@ -242,26 +258,65 @@ class RamDisk(RamDiskTemplate):
         cmd = [self.hdiutil, "attach", "-nomount", "ram://" + self.diskSize]
         self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
         self.runWith.setCommand(cmd)
-        self.runWith.communicate()
-        retval, reterr, retcode = self.runWith.getNlogReturns()
+        retval, reterr, retcode = self.runWith.communicate()
+        # retval, reterr, retcode = self.runWith.getNlogReturns()
         
         if retcode == '':
             success = False
         else:
             self.myRamdiskDev = retval.strip()
-            #self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
+            # self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
             success = True
         
-
+        self.myRamdiskDev = retval.strip()
+        self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
         #####
         # Erase the ramdisk and Name the device.
+        # this command makes the mountpoint owned by root. Need it owned by the user
         # diskutil erasevolume APFS "MyRAMDiskName" /dev/$disk
-        print("Creating the ramdrive...")
-        cmd = [self.diskutil, "eraseVolume", "APFS", self.mntPoint, self.myRamdiskDev]
-        self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
-        self.runWith.setCommand(cmd)
-        self.runWith.communicate()
-        retval, reterr, retcode = self.runWith.getNlogReturns()
+        # this command makes the mountpoint owned by root. Need it owned by the user
+        # cmd = [self.diskutil, "eraseVolume", "APFS", self.mntPoint, self.myRamdiskDev]
+        ###
+        # to format with user owning the disk, instead of root
+        #cmd = ["/sbin/newfs", self.mntPoint, self.myRamdiskDev]
+        self.logger.log(lp.WARNING, "Creating the ramdrive at: " + self.myRamdiskDev)
+        print("Creating the ramdrive at: " + self.myRamdiskDev)
+        #####
+        # This command works better than either of the two above....
+        # diskutil partitionDisk self.myRamdiskDev 1 GPTFormat APFS 'RAMDisk' '100%'
+        tmpmntpnt = self.mntPoint.split('/')[-1]
+        print("testmntpnt: " + tmpmntpnt)
+        hundred = f"'100%'"
+        try:
+            cmd = ["/usr/sbin/diskutil", "partitionDisk", self.myRamdiskDev, "1", "GPTFormat", "APFS", "'RAMDisk'", f"{hundred}"]
+            self.logger.log(lp.WARNING, "Running command to create ramdisk: " + str(cmd))
+            print("Running command to create ramdisk: " + str(cmd))
+            self.runWith.setCommand(cmd)
+            self.runWith.communicate()
+        except:
+            raise
+        # retval, reterr, retcode = self.runWith.getNlogReturns()
+        #####
+        # unmounting the disk, because it is automatically mounted to /Volumes,
+        # so we can mount it where the user wishes
+        try:
+            cmd = [self.diskutil, "unmount", self.myRamdiskDev]
+            self.logger.log(lp.WARNING, "Running command to unmount ramdisk: >> " + str(cmd))
+            self.runWith.setCommand(cmd)
+            self.runWith.communicate()
+        except:
+            raise
+        # retval, reterr, retcode = self.runWith.getNlogReturns()
+
+        try:
+            cmd = ["/sbin/newfs_apfs", "-v", "RAMDISK", self.myRamdiskDev]
+            self.logger.log(lp.WARNING, "Running command to create ramdisk: " + str(cmd))
+            print("Running command to create ramdisk: " + str(cmd))
+            self.runWith.setCommand(cmd)
+            self.runWith.communicate()
+        except:
+            raise
+
 
         tmpNum = ""
         tmpDev = ""
@@ -269,54 +324,36 @@ class RamDisk(RamDiskTemplate):
             tmpMatch = re.match(r"(\S+)(\d+)", self.myRamdiskDev.strip())
             tmpDev = tmpMatch.group(1)
             tmpNum = tmpMatch.group(2)
+            
         except ValueError:
-            pass
+            raise
 
         tmpNum = int(tmpNum) + 1
         self.myRamdiskDev = str(tmpDev) + str(tmpNum) + "s1"
         self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
-
-        #####
-        # unmounting the disk
-        cmd = [self.diskutil, "unmount", self.myRamdiskDev]
-        self.logger.log(lp.WARNING, "Running command to unmount ramdisk: >> " + str(cmd))
-        self.runWith.setCommand(cmd)
-        self.runWith.communicate()
-        retval, reterr, retcode = self.runWith.getNlogReturns()
 
         self.logger.log(lp.WARNING, "  MYRAMDISKDEV: " + self.myRamdiskDev)
         self.logger.log(lp.WARNING, "  MNTPOINT: " + self.mntPoint)
 
+        # Create the mountpoint, if it exists, skip
+        self.fsHelper.mkdirs(self.mntPoint)
+        self.logger.log(lp.WARNING, " ... Making mountpoint: " + self.mntPoint)
+
         #####
         # mount the drive to the correct mount point
-        cmd = "/sbin/mount -t apfs " + self.myRamdiskDev + " " + self.mntPoint
-        self.logger.log(lp.WARNING, "Running command to MOUNT ramdisk: >>>>> " + str(cmd))
-        self.runWith.setCommand(cmd)
-        self.runWith.communicate()
-        retval, reterr, retcode = self.runWith.getNlogReturns()
+        try:
+            cmd = "/sbin/mount_apfs " + self.myRamdiskDev + " " + self.mntPoint
+            self.logger.log(lp.WARNING, "Running command to MOUNT ramdisk: >>>>> " + str(cmd))
+            self.runWith.setCommand(cmd)
+            self.runWith.communicate()
+        except:
+            raise
+        # retval, reterr, retcode = self.runWith.getNlogReturns()
 
         """
-        diskutil umount self.myRamdiskDev
-        mkdir -p (if necessary) /<where to mount>
-        mount -t apfs self.myRamdiskDev /<where to mount>
-
-        
-
-        tmpNum = ""
-        tmpDev = ""
-        try:
-            tmpMatch = re.match(r"(\S+)(\d+)", self.myRamdiskDev.strip())
-            tmpDev = tmpMatch.group(1)
-            tmpNum = tmpMatch.group(2)
-        except ValueError:
-            pass
-
-        tmpNum = int(tmpNum) + 1
-        self.myRamdiskDev = str(tmpDev) + str(tmpNum) + "s1"
-        self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
-
-
-        
+        # MAY make the ramdisk go faster...  
+        # *** WARNING *** Test thouroughly if you uncomment this section,
+        # it may not go here in the workflow . . .
         if self.disableJournal is True:
             #####
             # Disable Journaling on the device.
@@ -330,15 +367,11 @@ class RamDisk(RamDiskTemplate):
         else:
             pass
         """
-        self.logger.log(lp.DEBUG, "######################################")
-        self.logger.log(lp.DEBUG, "Printing attaching process...")
-        self.logger.log(lp.DEBUG, "return code: " + str(retcode))
-        self.logger.log(lp.DEBUG, "return error: " + str(reterr))
-        self.logger.log(lp.DEBUG, "return value: " + str(retval))
-        self.logger.log(lp.DEBUG, "######################################")
-
-        # self.logger.log(lp.DEBUG, "Success: " + str(success) + " in __create")
-        return success
+        #####
+        # Need to chown the mountpoint to the user, because the mount point is by 
+        # default not owned by the user on *nix systems
+        user = getpass.getuser()
+        self.fsHelper.chown(self.mntPoint, user)
 
     ###########################################################################
 
@@ -348,7 +381,7 @@ class RamDisk(RamDiskTemplate):
 
         Does not print or log the data.
 
-        @author: Roy Nielsen
+        
         """
         return (self.success, str(self.mntPoint), str(self.myRamdiskDev))
 
@@ -360,7 +393,7 @@ class RamDisk(RamDiskTemplate):
 
         Also logs the data.
 
-        @author: Roy Nielsen
+        
         """
         self.logger.log(lp.INFO, "Success: " + str(self.success))
         self.logger.log(lp.INFO, "Mount point: " + str(self.mntPoint))
@@ -380,11 +413,65 @@ class RamDisk(RamDiskTemplate):
 
     ###########################################################################
 
+    def getMountedData(self):
+        """
+        should return the a dictionary with {device: diskName, ...} that contains
+        every mounted disk
+        """
+        print("Entering getMountedData")
+
+        mountedDisks = {}
+
+        devList = []
+        diskDict = {}
+        mountedDisks = {}
+        retval = ""
+        disk = ""
+
+        #####
+        # Diskutil list, then parse for RAMDISK in output, get the device
+        cmd = ["diskutil", "list"]
+        self.runWith.setCommand(cmd)
+        self.runWith.communicate()
+        retval, reterr, retcode = self.runWith.getNlogReturns()
+
+        for line in retval.splitlines():
+            if re.search("RAMDISK", line):
+                disk = line.split()[-1]
+                devList.append(disk)
+                print(f"{disk}")
+
+        #####
+        # mount, to use device to get mount name
+        cmd = ["mount"]
+        self.runWith.setCommand(cmd)
+        self.runWith.communicate()
+        retval, reterr, retcode = self.runWith.getNlogReturns()
+
+        for line in retval.splitlines():
+            dev = line.split()[0] in devList
+            if dev:
+                for mountDev in devList:
+                    if re.match(f"{dev}", mountDev):
+                        diskDict[dev] = line.split()[2]
+                        print(f"{line.split()[2]}")
+                        continue
+            dev = ""
+
+        try:
+            mountedDisks = diskDict
+        except:
+            pass
+        print("MountedDisks: " + str(mountedDisks))
+        return mountedDisks
+
+    ###########################################################################
+
     def __mount(self) :
         """
         Mount the disk - for the Mac, just run self.__attach
 
-        @author: Roy Nielsen
+        
         """
         success = False
         success = self.__attach()
@@ -398,7 +485,7 @@ class RamDisk(RamDiskTemplate):
         """
         Attach the device so it can be formatted
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -446,7 +533,7 @@ class RamDisk(RamDiskTemplate):
         using "force" doesn't work on a mounted filesystem, without it, the
         command will work on a mounted file system
 
-        @author: Roy Nielsen
+        
         """
         success = False
         cmd = [self.diskutil, "disableJournal", self.myRamdiskDev + "s1"]
@@ -493,7 +580,7 @@ class RamDisk(RamDiskTemplate):
                                the GUI (i.e., appear on the Desktop as a
                                separate volume).
 
-        @author: Roy Nielsen
+        
         """
         success = False
 
@@ -544,7 +631,7 @@ class RamDisk(RamDiskTemplate):
         """
         Unmount the disk - same functionality as __eject on the mac
 
-        @author: Roy Nielsen
+        
         """
         success = False
         if self.eject() :
@@ -558,7 +645,7 @@ class RamDisk(RamDiskTemplate):
         """
         Unmount the disk - same functionality as __eject on the mac
 
-        @author: Roy Nielsen
+        
         """
         success = False
         if self.eject() :
@@ -572,7 +659,7 @@ class RamDisk(RamDiskTemplate):
         """
         Unmount in the Mac sense - ie, the device is still accessible.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         cmd = [self.diskutil, "unmount", "force", self.devPartition]
@@ -590,7 +677,7 @@ class RamDisk(RamDiskTemplate):
         Mount in the Mac sense - ie, mount an already accessible device to
         a mount point.
 
-        @author: Roy Nielsen
+        
         """
         success = False
         cmd = [self.diskutil, "mount", "-mountPoint", self.mntPoint, self.devPartition]
@@ -617,7 +704,7 @@ class RamDisk(RamDiskTemplate):
         separately.. Besides unmounting the disk, it also stops any processes
         related to the mntPoint
 
-        @author: Roy Nielsen
+        
         """
         success = False
         cmd = [self.hdiutil, "detach", self.myRamdiskDev]
@@ -636,7 +723,7 @@ class RamDisk(RamDiskTemplate):
         """
         Format the ramdisk
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -662,7 +749,7 @@ class RamDisk(RamDiskTemplate):
         """
         Partition the ramdisk (mac specific)
 
-        @author: Roy Nielsen
+        
         """
         success=False
         numerator = int(self.diskSize)
@@ -686,7 +773,7 @@ class RamDisk(RamDiskTemplate):
             #####
             # Need to get the partition device out of the output to assign to
             # self.devPartition
-            for line in retval.split("\n"):
+            for line in retval.splitlines():
                 if re.match(r'^Initialized (\S+)\s+', line):
                     linematch = re.match(r'Initialized\s+(\S+)', line)
                     rdevPartition = linematch.group(1)
@@ -718,7 +805,7 @@ class RamDisk(RamDiskTemplate):
         output, _, _ = self.runWith.communicate()
         # output, _, _ = self.runWith.waitNpassThruStdout("Networks")
 
-        for line in output.split("\n"):
+        for line in output.splitlines():
             self.logger.log(lp.DEBUG, "line: " + str(line))
             tmpData = line.split()
             try:
@@ -779,7 +866,7 @@ class RamDisk(RamDiskTemplate):
         Best method to do this on the Mac is to get the output of "top -l 1"
         and # re.search("unused" line), as below
 
-        @author: Roy Nielsen
+        
         """
         #mem_free = psutil.phymem_usage()[2]
 
@@ -857,11 +944,51 @@ class RamDisk(RamDiskTemplate):
 
     ###########################################################################
 
+    def getMountData(self, device):
+        """
+        For macOS, show both mount and diskutil data
+        """
+
+        #####
+        # Set up and run the mount command
+        cmd = ["/sbin/mount"]
+
+        output == ""
+
+        self.runWith.setCommand(cmd)
+        output, _, _ = self.runWith.communicate()
+
+        mountInfo = ""
+
+        for line in output.splitlines():
+            if re.search(f"{device}", line):
+                mountInfo = line
+
+        #####
+        # Set up and run the diskutil command
+        cmd = ["/usr/sbin/diskutil", "list", device]
+
+        output == ""
+
+        self.runWith.setCommand(cmd)
+        output, _, _ = self.runWith.communicate()
+
+        diskutilInfo = ""
+
+        if output:
+            diskutilInfo = output
+
+        message = f"mountLine:\n{mountLine}\n\ndiskutil info:\n{diskutilInfo}"
+
+        return message, mountInfo, diskutilInfo
+
+    ###########################################################################
+
     def getDevice(self):
         """
         Getter for the device name the ramdisk is using
 
-        @author: Roy Nielsen
+        
         """
         return self.myRamdiskDev
 
@@ -871,7 +998,7 @@ class RamDisk(RamDiskTemplate):
         """
         Setter for the device so it can be ejected.
 
-        @author: Roy Nielsen
+        
         """
         if device:
             self.myRamdiskDev = device
@@ -884,7 +1011,7 @@ class RamDisk(RamDiskTemplate):
         """
         Getter for the version of the ramdisk
 
-        @author: Roy Nielsen
+        
         """
         return self.module_version
 
@@ -895,7 +1022,7 @@ def unmount(device=" ", logger=False):
     """
     On the Mac, call detach.
 
-    @author: Roy Nielsen
+    
     """
     detach(device, logger)
 
@@ -905,7 +1032,7 @@ def umount(device=" ", logger=False):
     """
     On the Mac, call detach.
 
-    @author: Roy Nielsen
+    
     """
     detach(device, logger)
 
@@ -918,7 +1045,7 @@ def detach(device=" ", logger=False):
     separately.. Besides unmounting the disk, it also stops any processes
     related to the mntPoint
 
-    @author: Roy Nielsen
+    
     """
     success = False
     if not logger:
@@ -939,4 +1066,106 @@ def detach(device=" ", logger=False):
         raise Exception("Cannot eject a device with an empty name..")
     return success
 
+###########################################################################
+
+def getMountData(device):
+    """
+    For macOS, show both mount and diskutil data
+    """
+    runWith = RunWith()
+
+
+    #####
+    # Set up and run the mount command
+    cmd = ["/sbin/mount"]
+
+    output = ""
+
+    runWith.setCommand(cmd)
+    output, _, _ = runWith.communicate()
+
+    mountInfo = ""
+
+    for line in output.splitlines():
+        if re.search(f"{device}", line):
+            mountInfo = line
+
+    #####
+    # Set up and run the diskutil command
+    cmd = ["/usr/sbin/diskutil", "list", device]
+
+    output == ""
+
+    runWith.setCommand(cmd)
+    output, _, _ = runWith.communicate()
+
+    diskutilInfo = ""
+
+    if output:
+        diskutilInfo = output
+
+    message = f"mountLine:\n{mountInfo}\n\ndiskutil info:\n{diskutilInfo}"
+
+    return message, mountInfo, diskutilInfo
+
+
+def getMountDisks():
+    """
+    should return the a dictionary with {device: diskName, ...} that contains
+    every mounted disk
+    """
+    print("Entering getMountedDisks")
+
+    runWith = RunWith()
+
+    mountedDisks = {}
+
+    devList = []
+    diskDict = {}
+    retval = ""
+    disk = ""
+
+    #####
+    # Diskutil list, then parse for RAMDISK in output, get the device
+    cmd = ["diskutil", "list"]
+    runWith.setCommand(cmd)
+    runWith.communicate()
+    retval, reterr, retcode = runWith.getNlogReturns()
+
+    for line in retval.splitlines():
+        if re.search("RAMDISK", line):
+            try:
+                disk = line.split()[-1]
+                devList.append(disk)
+                print(f"{disk}")
+            except IndexError:
+                continue
+
+    print(str(devList))
+
+    #####
+    # mount, to use device to get mount name
+    cmd = ["mount"]
+    runWith.setCommand(cmd)
+    runWith.communicate()
+    retval, reterr, retcode = runWith.getNlogReturns()
+
+    print(f"retval: {str(retval)}")
+
+    for line in retval.splitlines():
+        if line:
+            # print("Parsing mount command output...")
+            dev = ""
+            fullDevName = line.split()[0].strip()
+            dev = fullDevName.split("/")[-1].strip()
+            name = line.split()[2].strip()
+            if re.search("^/private", name):
+                name = name.removeprefix("/private")
+            # print(f"    {dev}: {devList} ")
+            if dev in devList:
+                diskDict[name]= f"/dev/{dev}"
+                print(f"{name} in {dev}")
+
+    print(f"MountedDisks: {diskDict}")
+    return diskDict
 

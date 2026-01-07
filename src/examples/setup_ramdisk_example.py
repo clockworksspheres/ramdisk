@@ -1,6 +1,6 @@
 #!/usr/bin/env -S python -u
 """
-@author: Roy Nielsen
+
 
 """
 
@@ -33,10 +33,10 @@ from ramdisk.ui.main import _CreateRamdisk
 #    from ramdisk.winImDiskRamdisk import RamDisk
 #else:
 #    print("'" + str(sys.platform) + "' platform not supported...")
-from ramdisk.ramdisk import RamDisk
+from ramdisk.RamDisk import RamDisk
 
 
-parser = OptionParser(usage="\n\n%prog [options]\n\n", version="0.8.6")
+parser = OptionParser(usage="\n\n%prog [options]\n\n", version="2.8.6")
 
 size = str(500) # in Megabytes
 parser.add_option("-s", "--size", dest="size",

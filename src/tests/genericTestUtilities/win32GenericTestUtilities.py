@@ -1,7 +1,7 @@
 """
 Generic class based utilities for ramdisk testing...
 
-@author: Roy Nielsen
+
 """
 #--- Native python libraries
 
@@ -45,7 +45,7 @@ class GenericTestUtilities(object):
     """
     Generic class based Yutilities for ramdisk testing...
     
-    @author: Roy Nielsen
+    
     """
     def __init__(self):
         """
@@ -63,7 +63,7 @@ class GenericTestUtilities(object):
         """
         Find Linux Libc library...
 
-        @author: Roy Nielsen
+        
         """
         possible_paths = ["/lib/x86_64-linux-gnu/libc.so.6",
                           "/lib/i386-linux-gnu/libc.so.6"]
@@ -110,7 +110,7 @@ class GenericTestUtilities(object):
         """
         Python implementation of the touch command..
 
-        @author: Roy Nielsen
+        
         """
         if re.match("^\s*$", str(fname)):
             self.logger.log(lp.WARNING, "Cannot touch a file without a filename....")
@@ -195,7 +195,7 @@ class GenericTestUtilities(object):
 
         @returns: time in miliseconds the write took
 
-        @author: Roy Nielsen
+        
         """
         total_time = 0
         if file_path and file_size:

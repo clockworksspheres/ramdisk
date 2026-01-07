@@ -1,7 +1,7 @@
 """
 Template for the ramdisk classes
 
-@author: Roy Nielsen
+
 """
 #--- Native python libraries
 from tempfile import mkdtemp
@@ -20,7 +20,7 @@ class NotValidForThisOS(Exception):
     Meant for being thrown when an action/class being run/instanciated is not
     applicable for the running operating system.
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
@@ -32,7 +32,7 @@ class BadRamdiskArguments(Exception):
     Meant for being thrown when an invalid values are passed in as arguments
     to class instanciation or class methods.
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
@@ -85,7 +85,7 @@ class RamDiskTemplate(object):
 
         Does not print or log the data.
 
-        @author: Roy Nielsen
+        
         """
         return (self.success, str(self.mntPoint), str(self.myRamdiskDev))
 
@@ -97,7 +97,7 @@ class RamDiskTemplate(object):
 
         Also logs the data.
 
-        @author: Roy Nielsen
+        
         """
         self.logger.log(lp.INFO, "Success: " + str(self.success))
         self.logger.log(lp.INFO, "Mount point: " + str(self.mntPoint))
@@ -122,7 +122,7 @@ class RamDiskTemplate(object):
         Create a randomized (secure) mount point - per python's implementation
         of mkdtemp - a way to make an unguessable directory on the system
 
-        @author: Roy Nielsen
+        
         """
         success = False
         self.mntPoint = ""
@@ -148,7 +148,7 @@ class RamDiskTemplate(object):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         success = False
         return success
@@ -161,7 +161,7 @@ class RamDiskTemplate(object):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         success = False
         return success
@@ -173,7 +173,7 @@ class RamDiskTemplate(object):
         Check to make sure there is plenty of memory of the size passed in
         before creating the ramdisk
 
-        @author: Roy Nielsen
+        
         """
         success = False
         return success
@@ -186,7 +186,7 @@ class RamDiskTemplate(object):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         success = False
         return success
@@ -199,7 +199,7 @@ class RamDiskTemplate(object):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         return self.myRamdiskDev
 
@@ -211,7 +211,7 @@ class RamDiskTemplate(object):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         return self.mntPoint
 
@@ -223,7 +223,7 @@ class RamDiskTemplate(object):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         self.myRamdiskDev = device
 
@@ -235,7 +235,7 @@ class RamDiskTemplate(object):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         return self.module_version
 
@@ -248,7 +248,7 @@ def detach(device=None, **kwargs):
 
     Must be over-ridden to provide OS/Method specific functionality
 
-    @author: Roy Nielsen
+    
     """
     success = False
     return success

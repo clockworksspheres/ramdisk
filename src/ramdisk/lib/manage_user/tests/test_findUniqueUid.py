@@ -2,7 +2,7 @@
 """
 Testing logging functionality via CyLogger
 
-@author: Roy Nielsen
+
 """
 
 # --- Native python libraries

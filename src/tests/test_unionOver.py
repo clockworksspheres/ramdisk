@@ -5,7 +5,7 @@ Test unionfs functionality.
 
 as of 3/15/2016, only the Mac OS X platform is supported.
 
-@author: Roy Nielsen
+
 """
 
 #--- Native python libraries
@@ -46,7 +46,7 @@ class test_unionOver(unittest.TestCase):
     """
     Test unionfs functionality of ramdisks
 
-    @author: Roy Nielsen
+    
     """
 
     @classmethod
@@ -68,7 +68,7 @@ class test_unionOver(unittest.TestCase):
         """
         This method runs before each test case.
 
-        @author: Roy Nielsen
+        
         """
         pass
 

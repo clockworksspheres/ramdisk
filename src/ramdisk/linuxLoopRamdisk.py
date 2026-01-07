@@ -2,7 +2,7 @@
 Template for creating a linux "loop" ramdisk.  Dangerous as the "loop" disk
 will continue to dynamically grow until it is out of memory (virtual included)
 
-@author: Roy Nielsen
+
 """
 #--- Native python libraries
 import os
@@ -42,7 +42,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/method specific ramdisk creation
 
-        @author: Roy Nielsen
+        
         """
         success = False
         return success
@@ -53,7 +53,7 @@ class RamDisk(RamDiskTemplate):
         """
         Mount the disk
 
-        @author: Roy Nielsen
+        
         """
         success = False
         return success
@@ -67,7 +67,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         success = False
         return success
@@ -80,7 +80,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         success = False
         return success
@@ -93,7 +93,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         success = False
         return success
@@ -107,7 +107,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         #mem_free = psutil.phymem_usage()[2]
 
@@ -123,7 +123,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
         
-        @author: Roy Nielsen
+        
         """
         return self.myRamdiskDev
 
@@ -135,7 +135,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         success = False
         return success
@@ -148,7 +148,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         success = False
         return success
@@ -162,7 +162,7 @@ def unmount(device=" ", message_level="normal"):
 
     Must be over-ridden to provide OS/Method specific functionality
 
-    @author: Roy Nielsen
+    
     """
     success = False
     return success

@@ -6,7 +6,7 @@ For usage of *args and **kwargs, see:
 https://pythontips.com/2013/08/04/args-and-kwargs-in-python-explained/
 http://lmgtfy.com/?q=python+*args+**kwargs
 
-@author: Roy Nielsen
+
 """
 class ManageKeychainTemplate(object):
     """
@@ -15,7 +15,7 @@ class ManageKeychainTemplate(object):
         """
         Initialization Method
         
-        @author: Roy Nielsen
+        
         """
         if 'logDispatcher' not in kwargs:
             raise ValueError("Variable 'logger' a required parameter for " + str(self.__class__.__name__))
@@ -26,7 +26,7 @@ class ManageKeychainTemplate(object):
         '''
         Display or manipulate the keychain search list.
         
-        @author: Roy Nielsen
+        
         '''
         success = False
         self.logger.log("listKeychains method not yet implemented.")
@@ -36,7 +36,7 @@ class ManageKeychainTemplate(object):
         '''
         Display or set the default keychain.
         
-        @author: Roy Nielsen
+        
         '''
         success = False
         self.logger.log("defaultKeychain method not yet implemented.")
@@ -46,7 +46,7 @@ class ManageKeychainTemplate(object):
         '''
         Display or set the login keychain.
         
-        @author: Roy Nielsen
+        
         '''
         success = False
         self.logger.log("loginKeychain method not yet implemented.")
@@ -56,7 +56,7 @@ class ManageKeychainTemplate(object):
         """
         Create a keychain.
         
-        @author: Roy Nielsen
+        
         """
         success = False
         self.logger.log("createKeychain method not yet implemented.")
@@ -66,7 +66,7 @@ class ManageKeychainTemplate(object):
         """
         Delete keychains and remove them from the search list.
         
-        @author: Roy Nielsen
+        
         """
         success = False
         self.logger.log("deleteKeychain method not yet implemented.")
@@ -76,7 +76,7 @@ class ManageKeychainTemplate(object):
         """
         Unlock the defined keychain
         
-        @author: Roy Nielsen
+        
         """
         success = False
         self.logger.log("lockKeychain method not yet implemented.")
@@ -86,7 +86,7 @@ class ManageKeychainTemplate(object):
         """
         Unlock the defined keychain
         
-        @author: Roy Nielsen
+        
         """
         success = False
         self.logger.log("unlockKeychain method not yet implemented.")
@@ -96,7 +96,7 @@ class ManageKeychainTemplate(object):
         """
         Change a keychain password
         
-        @author: Roy Nielsen
+        
         """
         success = False
         self.logger.log("changeKeychainPassword method not yet implemented.")
@@ -106,7 +106,7 @@ class ManageKeychainTemplate(object):
         '''
         Show the settings for a keychain.
 
-        @author: Roy Nielsen
+        
         '''
         success = False
         self.logger.log("showKeychainInfo method not yet implemented.")
@@ -116,7 +116,7 @@ class ManageKeychainTemplate(object):
         '''
         Dump the contents of one or more keychains.
 
-        @author: Roy Nielsen
+        
         '''
         success = False
         self.logger.log("dumpKeychain method not yet implemented.")
@@ -126,7 +126,7 @@ class ManageKeychainTemplate(object):
         '''
         Find a certificate item.
 
-        @author: Roy Nielsen
+        
         '''
         success = False
         self.logger.log("findCertificate method not yet implemented.")
@@ -136,7 +136,7 @@ class ManageKeychainTemplate(object):
         '''
         Find an identity (certificate + private key).
 
-        @author: Roy Nielsen
+        
         '''
         success = False
         self.logger.log("findIdentity method not yet implemented.")
@@ -146,7 +146,7 @@ class ManageKeychainTemplate(object):
         '''
         Display descrip6tive message for the given error code(s).
 
-        @author: Roy Nielsen
+        
         '''
         success = False
         self.logger.log("error method not yet implemented.")

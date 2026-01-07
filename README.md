@@ -1,11 +1,13 @@
 
-Runs on both macOS and Linux.
+Runs on macOS, Linux and Windows.
 
-Python 3.9+
+This software is covered by the [unlicense](https://unlicense.org)
+
+This software is at version 2
 
 # ramdisk
 
-Interface to use, eventually for cross-platform setup and maintenance of ramdisk, primarily for build pipelines and unittesting, for DevOps purposes.
+Interface to use, eventually for cross-platform setup and maintenance of ramdisk, primarily for build pipelines and unittesting, for DevOps purposes.  This interface is the same across platforms, so you don't need to know how ramdisks work on every platform.  One interface, multiple OS platforms.
 
 * faster builds
 * get around corrupt build cache problems (cache poisoning)
@@ -31,13 +33,14 @@ Unmounting a ramdisk is much faster than removing or erasing a potentially large
 
 
 ## NOTE:
-The code has two branches, master (hopefully stable) and dev (not necessarily stable).  The goal is to only merge to develop when functionality is stable and tests have been written for that functionality.
+
+The code has two branches, ux (hopefully stable) and dev (not necessarily stable).  The goal is to only merge to develop when functionality is stable and tests have been written for that functionality.
 
 Initially developed for python 2.6, but code has since been migrated to 3.9+.  Not believed to work on the python 2 branch any longer.
 
 ### Mac Note
 
-Instanciating the RamDisk class will create a ramdisk that you can use - in chunks of 1Mb.
+Instantiating the RamDisk class will create a ramdisk that you can use - in chunks of 1Mb.
 
 ramdisks do not need to be managed by root on macOS.   Tests & DevOps creating and managing ramdisks can be run as a user.
 
@@ -49,7 +52,7 @@ Ramdisk class that can use either current method for creating a ramdisk on Linux
 
 ### macRamdisk
 
-tested on macOS Sierra
+tested on macOS Sequoia, Sierra, Ventura, Sonoma and Sequoia
 
 ## Only developed for Linux
 
@@ -57,75 +60,73 @@ tested on macOS Sierra
 
 ### linuxLoopRamdisk
 
-### linuxTmpfsRamdisk
+Not currently implemented.  A stub has been placed for intended implementation.
 
-tested on Rocky 9, 10 and Ubuntu 24.04
+### linuxTmpfsRamdisk - working
 
-## Only developed for macOS and Linux
+tested on Rocky 9, 10 and Ubuntu 24.04 & 25.04 as well as Debian 12.  
+
+## Developed for macOS, Linux and Windows
 
 ### ramdisk
 
 Will correctly inherit either a macRamdisk on macOS or a linuxTmpfsRamdisk (by default) on Linux, depending on which OS kernel one is running on.
 
-## Only developed for Windows
+## Developed for Windows
 
-### Looking at working with ImDisk - so far - nothing yet
+### Looking at working with the 
 
-## Developed for macOS, Linux and Windows
+AIMtk - whose predecessor is ImDisk. Dropping the work so far with ImDisk since it is EOL and doesn't officially support Windows 11.  The AIM Toolkit must be installed and set up prior to using this project.
 
-Windows ramdisk is a prototype in flux, may or may not work.
+NOTE: the AIMtk software must be acquired/purchased from [Arsenal Recon](https://arsenalrecon.com/products/arsenal-image-mounter)
 
 ## Example code
 
-This directory provides examples on how to use various libraries, even beyond the ramdisk libraries in this code base.  Some are used for testing the ramdisk code base.  Any user creation or manipulation example code is in an alpha state, and macOS only at this time.
+The examples directory provides examples on how to use various libraries, even beyond the ramdisk libraries in this code base.  Currently in flux.  Some are used for testing the ramdisk code base.  Any user creation or manipulation example code is in an alpha state, and some are macOS only at this time.
 
 Unionfs related code is in an alpha state and also macOS only.
 
 The ramdisk example code is cross platform in an alpha state.
 
-The menu code is cross platform, in an alpha state.
+The menu code is cross platform, in an alpha state, uses the Composite model.
 
 # Future work:
 
 ## Windows
 
-Will call a currently available ramdisk executable, like ImDisk, to create a ramdisk.
-
-Prototype in flux, may or may not work.
+Calls a currently available ramdisk creator, [AIM Toolkit](https://sourceforge.net/projects/aim-toolkit/files/20250818/) - whose predecessor is ImDisk. Dropping the work so far with ImDisk since it is EOL and doesn't support Windows 11.  The AIM Toolkit must be installed prior to using this project.  The AIM toolkit only supports 16 ramdisks at a time currently.
 
 ## Languages
 
-Currently written/tested in only python v3.9+
+Currently written/tested in only python v3.9+, but examples do not work (specifically ramdisk-setup.py) with the latest version of python
 
-Future plans to duplicate libraries, tests and examples in other languages as well.
+Future plans to duplicate libraries, tests and examples in other languages as well.  Potential next language targets are Go and Rust.
 
 ## Tracking
 
-Table tracking supported combinations of:
-
-OS's, OS versions, their kernel versions (maybe), python versions, with tagged versions of ramdisk.
-
-Very greatful for any contributions/pull requests to help with the table!
+Very greatful for any contributions/pull requests to help with the project!
 
 ## Python Libraries to include, and how to include them for running the UI, the Environment.py, etc.
 
 
-### Cross Platform
+### Cross Platform *ramdisk.py*
 
 pyside6
 pyinstaller
 packaging
+(pywin32 - for windows)
+(psutil)
 
 
-PySide6 cross platform library for the Graphical User Interface
+PySide6 cross platform library for the Graphical User Interface.  PySide6 rarely works with the latest release of Python.
 
-Pyinstaller cross platform library to create the installer to bundle the GUI into a windows app package
+Pyinstaller cross platform library to create the installer to bundle the GUI into a windows and linux executable, and a macOS app.
 
-packaging.version.parse is to replace distutils.version.LooseVersion, for comparing versions of operating systems in CheckApplicable.  As of 4/13/25, CheckApplicable is entirely distutils, and needs to be refactored to packaging for python 3.10+.
+packaging.version.parse is to replace distutils.version.LooseVersion, for comparing versions of operating systems in CheckApplicable.
 
-#### Macos Specific
+pywin32 is needed for reading/configuring hardware specifics.
 
-##### None need currently
+psutil is used for figuring out memory limits and determining if there is enough memory to create a ramdisk.
 
 ##### How to install non-native python libraries on Macos
 
@@ -141,6 +142,7 @@ if [ ! -d "$directory" ] || [ ! -f "$actfile" ] ; then
 
   pip3 install PySide6 PyInstaller
   pip3 install --upgrade PyInstaller pyinstaller-hooks-contrib
+  pip3 install psutil
   pip3 install packaging
 else
   source packenv/bin/activate
@@ -148,8 +150,6 @@ fi
 ```
 
 ### Linux Specific
-
-##### None need currently
 
 ##### How to install non-native python libraries on Linux
 
@@ -180,3 +180,13 @@ pywin32 windows library to add windows functionality for the Environment.py to m
 ##### How to to install non-native python libraries in windows
 
 
+# Eisenban - Kanban board for the project
+
+Kanban based project management of the ramdisk project.
+
+eisenban package can be found at:  https://github.com/clockworksspheres/eisenban
+
+```
+cd <root of the ramdisk project>/src
+eisenban -t ramdiskBoard
+```

@@ -26,11 +26,11 @@ def getLibc( ):
     @returns: python reference to the C libc object, or False, if it can't
               find libc on the system.
 
-    @author: Roy Nielsen
+    
     """
     # libc = True
 
-    if sys.platform is "win32":
+    if sys.platform.startswith("win32"):
         return(0)
     else:
         import ctypes
@@ -49,7 +49,8 @@ def getLibc( ):
                           "/usr/lib64/libc.so.6",
                           "/usr/lib/libc.so.6",
                           "/lib64/libc.so.6",
-                          "/lib/libc.so.6"]
+                          "/lib/libc.so.6",
+                          "/lib/aarch64-linux-gnu/libc.so.6"]
         for path in possible_paths:
 
                 break

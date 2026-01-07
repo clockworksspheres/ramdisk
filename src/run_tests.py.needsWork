@@ -2,7 +2,6 @@
 """
 Test harness creating a test suite, and running it.
 
-@author: Roy Nielsen
 @note Initial working model: 1/15/2015
 """
 #--- Native python libraries
@@ -31,7 +30,6 @@ class TestResultsErrors(BaseException):
     Meant for being thrown when an action/class being run/instanciated is not
     applicable for the running operating system.
 
-    @author: Roy Nielsen
     """
     def __init__(self, *args, **kwargs):
         BaseException.__init__(self, *args, **kwargs)
@@ -67,7 +65,6 @@ class BuildAndRunSuite(object):
         """
         Collect all available tests using the test prefix(s)
 
-        @author: Roy Nielsen
         """
         test_list = []
         if not self.modules:
@@ -93,7 +90,6 @@ class BuildAndRunSuite(object):
         """
         Gather all the tests from this module in a test suite.
 
-        @author: Roy Nielsen
         """
         self.test_dir_name = testdir.split("/")[1]
         self.modules = modules

@@ -15,11 +15,11 @@ class ManageUsers(object):
     """
     Class for managing groups of users
     
-    @author: Roy Nielsen
+    
     """
     def __init__(self, logger):
         """
-        @author: Roy Nielsen
+        
         """
         #####
         # Set up logging
@@ -40,41 +40,41 @@ class ManageUsers(object):
         
     def getAllUsers(self):
         """
-        @author: Roy Nielsen
+        
         """
         pass
 
     def getUsers(self):
         """
-        @author: Roy Nielsen
+        
         """
         pass
 
     def getUser(self):
         """
-        @author: Roy Nielsen
+        
         """
         pass
     def getUserProperty(self):
         """
-        @author: Roy Nielsen
+        
         """
         pass
 
     def getUserProperties(self):
         """
-        @author: Roy Nielsen
+        
         """
         pass
 
     def getUsersProperty(self):
         """
-        @author: Roy Nielsen
+        
         """
         pass
 
     def getUsersProperties(self):
         """
-        @author: Roy Nielsen
+        
         """
         pass

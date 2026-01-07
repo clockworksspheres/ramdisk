@@ -2,7 +2,7 @@
 
 
 """
-@author: Roy Nielsen
+
 
 This script must be run with sudo to work....
 
@@ -52,7 +52,7 @@ else:
     print("'" + str(sys.platform) + "' platform not supported...")
     raise(UnsupportedOSError)
 
-parser = OptionParser(usage="\n\n%prog [options]\n\n", version="0.8.6")
+parser = OptionParser(usage="\n\n%prog [options]\n\n", version="2.8.6")
 
 user=""
 parser.add_option("-u", "--user", dest="user",

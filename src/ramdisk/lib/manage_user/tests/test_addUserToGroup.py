@@ -2,7 +2,7 @@
 """
 CommonRamdiskTemplate test.
 
-@author: Roy Nielsen
+
 """
 
 #--- Native python libraries
@@ -54,7 +54,7 @@ class test_addUserToGroup(unittest.TestCase):
         """
         This method runs before each test run.
 
-        @author: Roy Nielsen
+        
         """
         pass
 

@@ -1,24 +1,20 @@
 {
   "main": {
-    "id": "bee2cd69510d6449",
+    "id": "3df3afa1515fa4ee",
     "type": "split",
     "children": [
       {
-        "id": "997769b2ddd2b281",
+        "id": "bc9cbf1c60e76fd5",
         "type": "tabs",
         "children": [
           {
-            "id": "c52fe03ac0d1d93f",
+            "id": "6f3f738b28966d2a",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "src/Docs/startingPlantumlForRenderingLocallyInObsidian.md",
-                "mode": "source",
-                "source": true
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "startingPlantumlForRenderingLocallyInObsidian"
+              "title": "New tab"
             }
           }
         ]
@@ -27,15 +23,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "5e8c29d44dc38d96",
+    "id": "efad0f7fb58a0889",
     "type": "split",
     "children": [
       {
-        "id": "6404d1f75144d892",
+        "id": "bfd095cbcea06afc",
         "type": "tabs",
         "children": [
           {
-            "id": "bbf6f525b9ee596d",
+            "id": "6f005ef2126c29bf",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -48,7 +44,7 @@
             }
           },
           {
-            "id": "28f7c04993a2caee",
+            "id": "f70253708758b98e",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -65,7 +61,7 @@
             }
           },
           {
-            "id": "d9a78b1512df0e42",
+            "id": "e16b46b7e64ea59d",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -78,23 +74,23 @@
       }
     ],
     "direction": "horizontal",
-    "width": 422.5
+    "width": 263.50271224975586
   },
   "right": {
-    "id": "085a5f030fb6d370",
+    "id": "21c13539383b9736",
     "type": "split",
     "children": [
       {
-        "id": "42d2e628a0a41a83",
+        "id": "02fc9c1d0097e24d",
         "type": "tabs",
         "children": [
           {
-            "id": "102d73371c032b6e",
+            "id": "54d1694f3ce76ee1",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "src/ramdisk/lib/CheckApplicableRelated.md",
+                "file": "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,25 +100,25 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for CheckApplicableRelated"
+              "title": "Backlinks for RamdiskSoftwareSettingUpForWindows11"
             }
           },
           {
-            "id": "0bd37e3972deeceb",
+            "id": "230e2d81a6fc4cb9",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "src/ramdisk/lib/CheckApplicableRelated.md",
+                "file": "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from CheckApplicableRelated"
+              "title": "Outgoing links from RamdiskSoftwareSettingUpForWindows11"
             }
           },
           {
-            "id": "8f070a2d1a0741bc",
+            "id": "3b0f296d6eacd136",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -137,18 +133,18 @@
             }
           },
           {
-            "id": "5bd2f687b0af2864",
+            "id": "dca26403e9fcd9a2",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "src/ramdisk/lib/CheckApplicableRelated.md",
+                "file": "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of CheckApplicableRelated"
+              "title": "Outline of RamdiskSoftwareSettingUpForWindows11"
             }
           }
         ]
@@ -166,50 +162,52 @@
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
+      "bases:Create new base": false,
       "vscode-editor:Create Code File": false
     }
   },
-  "active": "c52fe03ac0d1d93f",
+  "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
-    "src/tests/testmntpnt/testfile999",
-    "src/tests/testmntpnt/testfile998",
-    "src/tests/testmntpnt/testfile997",
-    "src/tests/testmntpnt/testfile996",
-    "src/tests/testmntpnt/testfile995",
-    "src/tests/testmntpnt/testfile994",
-    "src/tests/testmntpnt/testfile993",
-    "src/tests/testmntpnt/testfile992",
-    "src/tests/testmntpnt/testfile991",
-    "src/tests/testmntpnt/testfile990",
-    "src/tests/testmntpnt/testfile989",
-    "src/Docs/genericStateMachine.md",
-    "src/Docs/startingPlantumlForRenderingLocallyInObsidian.md",
-    "src/Docs/argsNkwargs.md",
-    "pythonDatetimeForTimestamp.md",
-    "src/Docs/pythonMultipleInteritanceInitializingParents.md",
-    "src/Docs/CreateNRenderPlantumlClassDiagram.md",
-    "src/Docs/HowToAutoGenerateDocumentsFromCode.md",
-    "src/Docs/README.md",
-    "src/Docs/euidVsUsernameInWindows.md",
-    "src/Docs/macosRemount.md",
-    "src/Docs/classes_ramdisk.jpg",
-    "src/Docs/openSourceReverseEngineerToUML.md",
-    "src/Docs/CheckApplicableRelated.md",
-    "src/examples/README.md",
-    "pyenv-notes.md",
-    "src/examples/Untitled.md",
-    "README.md",
-    "src/tests/saved4later/README.md",
-    "src/tests/genericTestUtilities/README.md",
-    "src/tests/TestsReadme/README.md",
-    "src/ramdisk/ui/README.md",
-    "src/ramdisk/lib/manage_user/README.md",
-    "src/ramdisk/lib/manage_keychain/README.md",
-    "src/ramdisk/lib/getLibc/README.md",
-    "src/ramdisk/lib/fsHelper/README.md",
-    "src/ramdisk/lib/dev/README.md",
-    "src/build/html/_static/plus.png",
-    "src/build/html/_static/minus.png",
-    "src/build/html/_static/file.png"
+    "src/resources/img/ram_96.png",
+    "src/resources/img/ram_64.png",
+    "src/resources/icons/E.ico",
+    "src/resources/icons/E.icns",
+    "src/resources/icons/Barkerbaggies-Bag-O-Tiles-E.ico",
+    "src/resources/icons/Barkerbaggies-Bag-O-Tiles-E.icns",
+    "src/resources/icns/ram.icns",
+    "src/resources/font/__init__.py",
+    "src/resources/font/TorusPro.ttf",
+    "src/resources/font/NotoSans.ttf",
+    "src/resources/font/Arimo-Medium.ttf",
+    "src/resources/font/Arimo-LICENCE.txt",
+    "src/ramdisk/resources/img/ram_96.png",
+    "src/ramdisk/resources/img/ram_64.png",
+    "src/Docs/DesignThoughts/userRelated/getCurrentUser.md",
+    "src/Docs/DesignThoughts/userRelated/euidVsUsernameInWindows.md",
+    "src/Docs/DesignThoughts/unittestInheritingAUnittest.md",
+    "src/Docs/DesignThoughts/umlRelated/startingPlantumlForRenderingLocallyInObsidian.md",
+    "src/Docs/DesignThoughts/umlRelated/classes_ramdisk.jpg",
+    "src/Docs/DesignThoughts/umlRelated/HowToAutoGenerateDocumentsFromCode.md",
+    "src/Docs/DesignThoughts/umlRelated/CreateNRenderPlantumlClassDiagram.md",
+    "src/Docs/DesignThoughts/uiRelated/WidgetShadow.md",
+    "src/Docs/DesignThoughts/uiRelated/QFileDialogs.md",
+    "src/Docs/DesignThoughts/pythonMultipleInteritanceInitializingParents.md",
+    "src/Docs/DesignThoughts/pythonDatetimeForTimestamp.md",
+    "src/Docs/DesignThoughts/openSourceReverseEngineerToUML.md",
+    "src/Docs/DesignThoughts/genericStateMachine.md",
+    "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
+    "src/Docs/DesignThoughts/ci-cd/PipelineServers/GithubActions/References.md",
+    "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/References.md",
+    "src/Docs/DesignThoughts/ci-cd/windows/installingJenkinsAgentOnWindows.md",
+    "src/Docs/DesignThoughts/ci-cd/vmWrangling/controllingUTM_VMs.md",
+    "src/Docs/DesignThoughts/ci-cd/macos/installingJenkinsAgentOnMacOS.md",
+    "src/Docs/DesignThoughts/ci-cd/linux/installingJenkinsAgentOnRHBased.md",
+    "src/Docs/DesignThoughts/ci-cd/linux/installingJenkinsAgentOnDebian.md",
+    "src/Docs/DesignThoughts/ci-cd/DocumentationGeneration/WikipediaDocGenComparison.md",
+    "src/Docs/DesignThoughts/ci-cd/CreateLocalUTMmacosVMandVagrantUP/create local UTM macos VM and vagrant up.md",
+    "src/Docs/DesignThoughts/argsNkwargs.md",
+    "src/Docs/DesignThoughts/Users/PythonChownWindows.md",
+    "src/Docs/DesignThoughts/Testing/squish/README.md",
+    "src/Docs/classes_ramdisk.jpg"
   ]
 }

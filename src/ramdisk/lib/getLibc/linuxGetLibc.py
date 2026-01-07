@@ -26,7 +26,7 @@ def getLibc( ):
     @returns: python reference to the C libc object, or False, if it can't
               find libc on the system.
 
-    @author: Roy Nielsen
+    
     """
     libc = True
 
@@ -41,7 +41,8 @@ def getLibc( ):
                       "/usr/lib64/libc.so.6",
                       "/usr/lib/libc.so.6",
                       "/lib64/libc.so.6",
-                      "/lib/libc.so.6"]
+                      "/lib/libc.so.6",
+                      "/lib/aarch64-linux-gnu/libc.so.6"]
     for path in possible_paths:
         if os.path.exists(path):
             libc = ctypes.CDLL(path)

@@ -1,11 +1,13 @@
 # Examples README
 
+*NOTE: the examples directory should be stable.*
+
 Examples for using various libraries that have supported the ramdisk project at some point during it's life since before 2010.
 
 ## User management related examples
 
-chupass.py (macOS)
-getuserinfo.py (macOS)
+macos-chupass.py (macOS)
+macos-getuserinfo.py (macOS)
 
 ## Ramdisk related examples
 

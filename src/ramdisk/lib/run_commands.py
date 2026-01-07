@@ -77,7 +77,7 @@ class RunWith(object):
 
     @WARNING - Known to work on Mac, may or may not work on other platforms
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, logger=None, use_logger=True):
         if use_logger == True:
@@ -113,7 +113,7 @@ class RunWith(object):
         """
         initialize a command to run
 
-        @author: Roy Nielsen
+        
         """
         #####
         # Handle Popen's shell, or "myshell"...
@@ -180,7 +180,7 @@ class RunWith(object):
         """
         Getter for the standard output of the last command.
 
-        @author: Roy Nielsen
+        
         """
         return self.stdout
 
@@ -190,7 +190,7 @@ class RunWith(object):
         """
         Getter for the standard error of the last command.
 
-        @author: Roy Nielsen
+        
         """
         return self.stderr
 
@@ -200,7 +200,7 @@ class RunWith(object):
         """
         Getter for the return code of the last command.
 
-        @author: Roy Nielsen
+        
         """
         return self.retcode
 
@@ -210,7 +210,7 @@ class RunWith(object):
         """
         Getter for the retval, reterr & retcode of the last command.
 
-        @author: Roy Nielsen
+        
         """
         return self.stdout, self.stderr, self.retcode
 
@@ -222,7 +222,7 @@ class RunWith(object):
 
         Will also log the values
 
-        @author: Roy Nielsen
+        
         """
         if nolog == False:
             self.logger.log(lp.INFO, "Output: " + str(self.stdout))
@@ -238,7 +238,7 @@ class RunWith(object):
 
         Will also print the values
 
-        @author: Roy Nielsen
+        
         """
         print("Output: " + str(self.stdout))
         print("Error: " + str(self.stderr))
@@ -257,7 +257,7 @@ class RunWith(object):
                          not print the command being run.  Silent = False
                          to print the command.
 
-        @author: Roy Nielsen
+        
         """
         self.stdout = ''
         self.stderr = ''
@@ -294,11 +294,11 @@ class RunWith(object):
             finally:
                 try:
                     proc.stdout.close()
-                except SubprocessError:
+                except (SubprocessError, UnboundLocalError):
                     pass
                 try:
                     proc.stderr.close()
-                except SubprocessError:
+                except (SubprocessError, UnboundLocalError):
                     pass
                 #####
                 # Lines below could reveal a password if it is passed as an
@@ -326,7 +326,7 @@ class RunWith(object):
         Use subprocess to call a command and wait until it is finished before
         moving on...
 
-        @author: Roy Nielsen
+        
         """
         self.stdout = ''
         self.stderr = ''
@@ -393,7 +393,6 @@ class RunWith(object):
         Use the subprocess module to execute a command, returning
         the output of the command
 
-        Author: Roy Nielsen
         """
         self.stdout = ''
         self.stderr = ''
@@ -580,7 +579,7 @@ class RunWith(object):
         """
         Support function for the "runWithTimeout" function below
 
-        @author: Roy Nielsen
+        
         """
         timeout["value"] = True
         proc.kill()
@@ -596,7 +595,7 @@ class RunWith(object):
         timout - True if the command timed out
                  False if the command completed successfully
 
-        @author: Roy Nielsen
+        
         """
         if self.command:
             try:
@@ -651,7 +650,7 @@ class RunWith(object):
 
         Required parameters: user, password, command
 
-        @author: Roy Nielsen
+        
         """
         self.stdout = ""
         self.stderr = ""
@@ -761,7 +760,7 @@ class RunWith(object):
         @param: user - name of user to run as
         @param: target_dir - directory to run the command from
 
-        @author: Roy Nielsen
+        
         """
         self.stdout = ""
         self.stderr = ""
@@ -814,133 +813,133 @@ class RunWith(object):
         self.command = None
         return self.stdout, self.stderr, self.retcode
 
-        ###########################################################################
+    ###########################################################################
 
     def runWithSudo(self, password="", silent=True, timeout_sec=15):
-            '''
-            Use pty method to run "sudo" to run a command with elevated privilege.
+        '''
+        Use pty method to run "sudo" to run a command with elevated privilege.
 
-            Required parameters: password
+        Required parameters: password
 
-            @author: Roy Nielsen
-            '''
-            self.stdout = ""
-            self.stderr = ""
-            self.retcode = 255
+        
+        '''
+        self.stdout = ""
+        self.stderr = ""
+        self.retcode = 255
 
-            self.logger.log(lp.DEBUG, "Starting runWithSudo: ")
-            self.logger.log(lp.DEBUG, "\tcmd : " + str(self.command))
-            if re.match(r"^\s+$", password) or \
-                    not password or \
-                    not self.command:
-                self.logger.log(lp.WARNING, "Cannot pass in empty parameters...")
-                self.logger.log(lp.WARNING, "check password...")
-                if not silent:
-                    self.logger.log(lp.WARNING, "command: " + str(self.command))
-                return (255)
+        self.logger.log(lp.DEBUG, "Starting runWithSudo: ")
+        self.logger.log(lp.DEBUG, "\tcmd : " + str(self.command))
+        if re.match(r"^\s+$", password) or \
+                not password or \
+                not self.command:
+            self.logger.log(lp.WARNING, "Cannot pass in empty parameters...")
+            self.logger.log(lp.WARNING, "check password...")
+            if not silent:
+                self.logger.log(lp.WARNING, "command: " + str(self.command))
+            return (255)
+        else:
+            output = "".encode()
+            sudocmd = ["/usr/bin/sudo", "-S"]
+
+            if isinstance(self.command, list):
+                # cmd = " ".join(sudocmd) + " " + " ".join(self.command)
+                cmd = sudocmd + self.command
+            elif isinstance(self.command, str):
+                # cmd = " ".join(sudocmd) + " " + self.command
+                cmd = sudocmd + self.command.split()
+
+            # Create a subprocess
+            process = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+            # Set file descriptors to non-blocking
+            os.set_blocking(process.stdin.fileno(), False)
+            os.set_blocking(process.stdout.fileno(), False)
+            os.set_blocking(process.stderr.fileno(), False)
+
+            # Data to send to stdin
+            if isinstance(password, str):
+                input_data = password.encode()
             else:
-                output = "".encode()
-                sudocmd = ["/usr/bin/sudo", "-S"]
+                input_data = password
+            stdin_closed = False
+            stdout_closed = False
+            stderr_closed = False
 
-                if isinstance(self.command, list):
-                    # cmd = " ".join(sudocmd) + " " + " ".join(self.command)
-                    cmd = sudocmd + self.command
-                elif isinstance(self.command, str):
-                    # cmd = " ".join(sudocmd) + " " + self.command
-                    cmd = sudocmd + self.command.split()
+            # Use select to monitor file descriptors and send data to stdin
+            while True:
+                # Wait for data to be ready for reading and writing
+                read_ready, write_ready, _ = select.select(
+                    [process.stdout] if not stdout_closed else [],
+                    [process.stdin] if not stdin_closed else [],
+                    []
+                )
 
-                # Create a subprocess
-                process = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                for stream in read_ready:
+                    if stream is process.stdout:
+                        output = stream.read()
+                        if output:
+                            # print("Output:", output.decode())
+                            self.stdout = output.decode() + "\n"
+                        else:
+                            # No more data to read, mark stdout as closed
+                            stdout_closed = True
+                    elif stream is process.stderr:
+                        error = stream.read()
+                        if error:
+                            # print("Error:", error.decode())
+                            self.stderr = error.decode() + "\n"
+                        else:
+                            # No more data to read, mark stderr as closed
+                            stderr_closed = True
 
-                # Set file descriptors to non-blocking
-                os.set_blocking(process.stdin.fileno(), False)
-                os.set_blocking(process.stdout.fileno(), False)
-                os.set_blocking(process.stderr.fileno(), False)
+                for stream in write_ready:
+                    if stream is process.stdin:
+                        if input_data:
+                            # Write data to stdin
+                            stream.write(input_data)
+                            stream.flush()
+                            input_data = None  # Clear input_data to avoid sending it again
+                        else:
+                            # Close stdin if no more data to send
+                            stream.close()
+                            stdin_closed = True
 
-                # Data to send to stdin
-                if isinstance(password, str):
-                    input_data = password.encode()
-                else:
-                    input_data = password
-                stdin_closed = False
-                stdout_closed = False
-                stderr_closed = False
+                # Check if the process has terminated
+                if process.poll() is not None:
+                    break
 
-                # Use select to monitor file descriptors and send data to stdin
-                while True:
-                    # Wait for data to be ready for reading and writing
-                    read_ready, write_ready, _ = select.select(
-                        [process.stdout] if not stdout_closed else [],
-                        [process.stdin] if not stdin_closed else [],
-                        []
-                    )
+                # Check if all file descriptors are closed
+                #    Looks like stderr behaves badly in this instance,
+                #    and it is likely ok to close the process if stderr
+                #    is hanging like a loose hangnail...  If not, there
+                #    may be bigger problems that need to be solved in
+                #    process.  It is likely that you still want to catch
+                #    and report stderr however.
+                if stdin_closed and stdout_closed:  # and stderr_closed:
+                    break
 
-                    for stream in read_ready:
-                        if stream is process.stdout:
-                            output = stream.read()
-                            if output:
-                                # print("Output:", output.decode())
-                                self.stdout = output.decode() + "\n"
-                            else:
-                                # No more data to read, mark stdout as closed
-                                stdout_closed = True
-                        elif stream is process.stderr:
-                            error = stream.read()
-                            if error:
-                                # print("Error:", error.decode())
-                                self.stderr = error.decode() + "\n"
-                            else:
-                                # No more data to read, mark stderr as closed
-                                stderr_closed = True
+            self.output = process.stdout
+            self.stderr = process.stderr
 
-                    for stream in write_ready:
-                        if stream is process.stdin:
-                            if input_data:
-                                # Write data to stdin
-                                stream.write(input_data)
-                                stream.flush()
-                                input_data = None  # Clear input_data to avoid sending it again
-                            else:
-                                # Close stdin if no more data to send
-                                stream.close()
-                                stdin_closed = True
+            # Clean up
+            if not stdin_closed:
+                process.stdin.close()
+            if not stdout_closed:
+                process.stdout.close()
+            if not stderr_closed:
+                process.stderr.close()
+            self.retcode = process.wait()
 
-                    # Check if the process has terminated
-                    if process.poll() is not None:
-                        break
+            if not silent:
+                #####
+                # ONLY USE WHEN IN DEVELOPMENT AND DEBUGGING OR YOU MAY
+                # REVEAL MORE THAN YOU WANT TO IN THE LOGS!!!
+                self.logger.log(lp.DEBUG, "\n\nLeaving runAs with Sudo: \"" + \
+                                str(output) + "\"\n" + str(self.stdout) + "\n")
+        return self.stdout, self.stderr, self.retcode
 
-                    # Check if all file descriptors are closed
-                    #    Looks like stderr behaves badly in this instance,
-                    #    and it is likely ok to close the process if stderr
-                    #    is hanging like a loose hangnail...  If not, there
-                    #    may be bigger problems that need to be solved in
-                    #    process.  It is likely that you still want to catch
-                    #    and report stderr however.
-                    if stdin_closed and stdout_closed:  # and stderr_closed:
-                        break
+    ############################################################################
 
-                self.output = process.stdout
-                self.stderr = process.stderr
-
-                # Clean up
-                if not stdin_closed:
-                    process.stdin.close()
-                if not stdout_closed:
-                    process.stdout.close()
-                if not stderr_closed:
-                    process.stderr.close()
-                self.retcode = process.wait()
-
-                if not silent:
-                    #####
-                    # ONLY USE WHEN IN DEVELOPMENT AND DEBUGGING OR YOU MAY
-                    # REVEAL MORE THAN YOU WANT TO IN THE LOGS!!!
-                    self.logger.log(lp.DEBUG, "\n\nLeaving runAs with Sudo: \"" + \
-                                    str(output) + "\"\n" + str(self.stdout) + "\n")
-                return self.stdout, self.stderr, self.retcode
-
-    #    ###########################################################################
-    '''
     def runWithSudoRs(self, password="", silent=True, timeout_sec=15) :
         """
         Use pty method to run "sudo-rs" to run a command with elevated privilege.
@@ -949,7 +948,7 @@ class RunWith(object):
 
         Required parameters: password
 
-        @author: Roy Nielsen
+        
         """
         self.stdout = ""
         self.stderr = ""
@@ -1065,7 +1064,7 @@ class RunWith(object):
                 self.logger.log(lp.DEBUG, "\n\nLeaving runAs with Sudo: \"" + \
                                 str(output) + "\"\n" + str(self.stdout) + "\n")
             return self.stdout, self.stderr, self.retcode
-'''
+
 #############################################################################
 
 class RunThread(threading.Thread):
@@ -1079,7 +1078,7 @@ class RunThread(threading.Thread):
     run_thread.join()
     print run_thread.stdout
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, command, logger, myshell=False):
         """
@@ -1143,7 +1142,7 @@ class RunThread(threading.Thread):
         """
         Getter for standard output
 
-        @author: Roy Nielsen
+        
         """
         self.logger.log(lp.INFO, "Getting stdout...")
         return self.retout
@@ -1154,7 +1153,7 @@ class RunThread(threading.Thread):
         """
         Getter for standard err
 
-        @author: Roy Nielsen
+        
         """
         self.logger.log(lp.DEBUG, "Getting stderr...")
         return self.reterr
@@ -1165,7 +1164,7 @@ def runMyThreadCommand(cmd, logger, myshell=False):
     """
     Use the RunThread class to get the stdout and stderr of a command
 
-    @author: Roy Nielsen
+    
     """
     retval = None
     reterr = None

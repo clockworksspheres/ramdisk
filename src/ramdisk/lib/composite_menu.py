@@ -2,7 +2,7 @@
 If this script is run rather than used as a library, it will show how it can
 be used to create a basic menu.
 
-@author: Roy Nielsen
+
 """
 
 # system libraries
@@ -21,7 +21,7 @@ class NotASaneNameError(Exception):
     Meant for being thrown when an action/class being run/instanciated is not
     applicable for the running operating system.
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
@@ -31,7 +31,7 @@ class NotASaneActionError(Exception):
     Meant for being thrown when an action/class being run/instanciated is not
     applicable for the running operating system.
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
@@ -87,7 +87,7 @@ class MenuComponent(object):
         If either of the Unix-specific tty or termios are not found
         we allow the ImportError to proagate..
         
-        @author: unknown
+        
         """
         fd = sys.stdin.fileno()
         original_attributes = termios.tcgetattr(fd)
@@ -104,7 +104,7 @@ class MenuComponent(object):
         Child classes should be able to look up these values, found in the 
         MenuComposite with the Anchor (first MenuComponent)
         
-        @author: Roy Nielsen
+        
         """
         retval = False
         if isinstance(g_key, str):
@@ -126,7 +126,7 @@ class MenuComponent(object):
         equals is the value we want to set to
         type is the type, either string of int
 
-        Author: Roy Nielsen
+        
         """
         success = False
         if isinstance(g_key, str) and \
@@ -179,7 +179,7 @@ class MenuComponent(object):
         """
         Print the name of the MenuItem for the menu.
 
-        Author: Roy Nielsen
+        
         """
         print(self.name)
 
@@ -188,7 +188,7 @@ class MenuItem(MenuComponent) :
     """
     Leaf class - Inherits the MenuComponent class.
 
-    Author: Roy Nielsen
+    
     """
     def __init__(self, name, action=False) :
         """
@@ -216,7 +216,7 @@ class MenuItem(MenuComponent) :
         """
         Node specific action method. -- Run the function that is passed in.
 
-        Author: Roy Nielsen
+        
         """
         success = False
         if self.action:
@@ -232,13 +232,13 @@ class MenuComposite(MenuComponent) :
     """
     Composite method found in the link above.  This controls a menu level.
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, name, action=False):
         """
         Initialization method.
 
-        @author: Roy Nielsen
+        
         """
         MenuComponent.__init__(self, name, action)
         try:
@@ -265,7 +265,7 @@ class MenuComposite(MenuComponent) :
         """
         Go back to the main menu
         
-        @author: rsn
+        
         """
         while not self.anchor:
             self = self.previous
@@ -277,7 +277,7 @@ class MenuComposite(MenuComponent) :
 
         Print each MenuItem of this MenuComposite in order,
 
-        @author: Roy Nielsen
+        
         """
         success = False
 
@@ -415,7 +415,7 @@ class MenuComposite(MenuComponent) :
         
         For this "menu" system, no "remove" method necessary
         
-        Author: Roy Nielsen
+        
         """
         self.child_nodes.append(child)
         child.previous = self
@@ -426,7 +426,7 @@ class MenuComposite(MenuComponent) :
         """
         Set this MenuComposite as the "anchor" or "head" of the tree
         
-        Author: Roy Nielsen
+        
         """
         self.anchor = True
 
@@ -468,7 +468,7 @@ if __name__ == "__main__" :
     """
     Example usage of this library
 
-    @author: Roy Nielsen
+    
     """
     main_menu = MenuComposite("Main")
     basic_choice = MenuItem("Basic Choice", basic)

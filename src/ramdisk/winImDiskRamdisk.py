@@ -1,7 +1,7 @@
 """
 Windows Ramdisk class based on use of ImDisk windows program
 
-@author: Roy Nielsen
+
 """
 #--- Native python libraries
 from tempfile import mkdtemp
@@ -37,20 +37,21 @@ class RamDisk(RamDiskTemplate):
         self.module_version = '2024.10051117'
         #####
         # provided by RamdiskTemplate from commonRamdiskTemplate...
-        # if not isinstance(logger, CyLogger):
-        #     self.logger = CyLogger()
-        #     self.logger.initializeLogs()
-        # else:
-        #     self.logger = logger
+        if not isinstance(logger, CyLogger):
+            self.logger = CyLogger()
+            self.logger.initializeLogs()
+        else:
+            self.logger = logger
         self.runCmd = RunWith(self.logger)
+        self.fsHelper = FsHelper()
         self.logger.log(lp.INFO, "Logger: " + str(self.logger))
-        self.diskSize = fsHelper.getDiskSize(size)
+        self.diskSize = self.fsHelper.getDiskSize(size)
         self.success = False
         self.myRamdiskDev = self.imDiskNumber = None
 
         # Need to have a config file or pass in a location for or hard code or
         # command line pass in the location of the ImDisk binary
-        self.imdisk = "imdisk" 
+        self.imdisk = "imdisk"
         self.mntPoint = ""
         if not mountpoint:
             self.getRandomizedMountpoint()
@@ -86,7 +87,7 @@ class RamDisk(RamDiskTemplate):
         """
         Create a ramdisk device
 
-        @author: Roy Nielsen
+        
         """
         retval = None
         reterr = None
@@ -124,7 +125,7 @@ class RamDisk(RamDiskTemplate):
 
         Does not print or log the data.
 
-        @author: Roy Nielsen
+        
         """
         return (self.success, str(self.mntPoint), str(self.myRamdiskDev))
 
@@ -136,7 +137,7 @@ class RamDisk(RamDiskTemplate):
 
         Also logs the data.
 
-        @author: Roy Nielsen
+        
         """
         self.logger.log(lp.INFO, "Success: " + str(self.success))
         self.logger.log(lp.INFO, "Mount point: " + str(self.mntPoint))
@@ -161,7 +162,7 @@ class RamDisk(RamDiskTemplate):
         Create a randomized (secure) mount point - per python's implementation
         of mkdtemp - a way to make an unguessable directory on the system
 
-        @author: Roy Nielsen
+        
         """
         success = False
         self.mntPoint = ""
@@ -226,7 +227,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         success = False
 
@@ -294,7 +295,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         success = False
         success = self.umount(detach, dForce, rForce, mountpoint, unit)
@@ -307,7 +308,7 @@ class RamDisk(RamDiskTemplate):
         Check to make sure there is plenty of memory of the size passed in
         before creating the ramdisk
 
-        @author: Roy Nielsen
+        
         """
         # Commands with pipes, better off as strings - and with quotes, done as below, with myshell=True in the cmd call
         cmd = 'systeminfo|find "Available Physical Memory"'
@@ -356,7 +357,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         success = False
         return success
@@ -369,7 +370,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         return self.myRamdiskDev
 
@@ -381,7 +382,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         return self.mntPoint
 
@@ -393,7 +394,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         self.myRamdiskDev = device
 
@@ -405,7 +406,7 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        @author: Roy Nielsen
+        
         """
         return self.module_version
 
@@ -433,7 +434,7 @@ def umount(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
 
     Must be over-ridden to provide OS/Method specific functionality
 
-    @author: Roy Nielsen
+    
     """
     success = False
 
@@ -478,3 +479,52 @@ def umount(detach=True, dForce=False, rForce=False, mountpoint=None, unit=None):
 
     return success
 
+
+def getMountData(device):
+    """
+    For macOS, show both mount and diskutil data
+    """
+    print("Entering getMountData")
+    print("Exiting getMountData")
+    return {}
+'''
+    runWith = RunWith()
+
+
+    #####
+    # Set up and run the mount command
+    cmd = ["/sbin/mount"]
+
+    output = ""
+
+    runWith.setCommand(cmd)
+    output, _, _ = runWith.communicate()
+
+    mountInfo = ""
+'''
+
+def getMountDisks():
+    """
+    should return the a dictionary with {device: diskName, ...} that contains
+    every mounted disk
+    """
+    print("Entering getMountedDisks")
+    print("Exiting getMountedDisks")
+    return {}
+"""
+    runWith = RunWith()
+
+    mountedDisks = {}
+
+    devList = []
+    diskDict = {}
+    retval = ""
+    disk = ""
+
+    #####
+    # Diskutil list, then parse for RAMDISK in output, get the device
+    cmd = ["diskutil", "list"]
+    runWith.setCommand(cmd)
+    runWith.communicate()
+    retval, reterr, retcode = runWith.getNlogReturns()
+"""

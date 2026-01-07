@@ -2,7 +2,7 @@
 '''
 Created on Jul 13, 2011 - stonix project
 
-@author: dkennel
+
 @change: 2015/10/23 eball Updated deprecated unit test methods, added dummy
                           PN file creation
 @change: 2016-02-10 roy  adding sys.path.append for both test framework and 
@@ -19,11 +19,20 @@ import tracemalloc
 #####
 # Include the parent project directory in the PYTHONPATH
 appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
+appendDir = ("../")
 sys.path.append(appendDir)
 
 # --- Non-native python libraries in this source tree
 import ramdisk.lib.environment as environment
 from ramdisk import config
+
+if sys.platform.startswith('win32'):
+    import win32api
+    from ramdisk.lib.windows_utilities import is_windows_process_elevated
+
+else:
+    import pwd
+
 
 class test_environment(unittest.TestCase):
 
@@ -36,7 +45,7 @@ class test_environment(unittest.TestCase):
 
     def testGetostype(self):
         tracemalloc.start(10)
-        validtypes = 'Red Hat Enterprise Linux|Debian|Ubuntu|CentOS|Fedora|' + \
+        validtypes = 'Red Hat Enterprise Linux|AlmaLinux|Rocky Linux|Debian|Ubuntu|CentOS|Fedora|' + \
                      'openSUSE|Mac OS X|macOS'
         print('OS Type: ' + str(self.to.getostype()))
         self.assertTrue(re.search(validtypes, self.to.getostype()))

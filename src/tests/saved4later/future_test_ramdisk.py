@@ -2,7 +2,7 @@
 """
 Template for future generic ramdisk test.
 
-@author: Roy Nielsen
+
 """
 #--- Native python libraries
 import re
@@ -94,7 +94,7 @@ class test_ramdisk(GenericRamdiskTest):
         """
         This method runs before each test run.
 
-        @author: Roy Nielsen
+        
         """
         self.libcPath = None # initial initialization
         #####

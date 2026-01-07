@@ -4,7 +4,7 @@ Cross platform user creation and management
 Created for testing cross platform user testing for the ramdisk project, 
 specifically unionfs functionality.
 
-@author: Roy Nielsen
+
 """
 
 import re
@@ -56,7 +56,7 @@ class MacOSUser(ManageUserTemplate):
     @method rmUserHome
     @method rmUserFromGroup
 
-    @author: Roy Nielsen
+    
     """
     def __init__(self, logger, userName="", userShell="/bin/bash",
                  userComment="", userUid=1000, userPriGid=20,
@@ -163,7 +163,7 @@ class MacOSUser(ManageUserTemplate):
         The userComment is left empty.  Primary use is managing a user
         during test automation, when requiring a "user" context.
 
-        @author: Roy Nielsen
+        
         """
         pass
 
@@ -176,7 +176,7 @@ class MacOSUser(ManageUserTemplate):
 
         Only allow usernames with letters and numbers.
 
-        @author: Roy Nielsen
+        
         """
         pass
 
@@ -260,7 +260,7 @@ class MacOSUser(ManageUserTemplate):
         ownership and group of the user's home directory to reflect
         what is in the local directory service.
 
-        @author: Roy Nielsen
+        
         """
         pass
 
@@ -273,7 +273,7 @@ class MacOSUser(ManageUserTemplate):
         Acquire local user data that can be found in /etc/password and 
         /etc/shadow.
         
-        @author: Roy Nielsen
+        
         """
         success = False
         
@@ -328,7 +328,7 @@ class MacOSUser(ManageUserTemplate):
         """
         Acquire user data from /etc/shadow
 
-        @author: Roy Nielsen
+        
         """
         success = False
         #####
@@ -362,7 +362,7 @@ class MacOSUser(ManageUserTemplate):
         """
         Acqure a list of groups each user is in
         
-        @author: Roy Nielsen
+        
         """
         success = False
         grps = "/usr/bin/groups"

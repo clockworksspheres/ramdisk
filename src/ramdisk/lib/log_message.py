@@ -3,7 +3,6 @@ Simple logging mechanism.
 
 Need to convert to using the python "logging" library.
 
-@author Roy Nielsen
 """
 import re
 import sys
@@ -26,7 +25,7 @@ def logMessage(message="", level="normal", priority="debug", syslog_level=None) 
     
     syslog_level - the syslog level to log with
 
-    Author: Roy Nielsen
+    
     """
     if syslog_level is None :
         syslog_level = ""
