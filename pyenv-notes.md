@@ -71,11 +71,7 @@ Linux
 
 
 ### Additional, some what related tools
-* venv, pyenv, pypi, pip, pipenv, py
-* WTF? https://www.youtube.com/watch?v=-C8uVImkTQg
-
-
-
+* [venv, pyenv, pypi, pip, pipenv](https://www.youtube.com/watch?v=-C8uVImkTQg)
 
  
 
