@@ -34,5 +34,5 @@ rm build.ubuntu2024.py312.onefile.spec
 
 popd
 
-../dist/ramdisk-setup
+#../dist/ramdisk-setup
 
