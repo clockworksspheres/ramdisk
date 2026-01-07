@@ -23,16 +23,16 @@ pipeline {
                                 dir('src/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
                                     sh 'ls -l'
-                                    // sh '/Users/jenkins/Library/Python/3.9/bin/py.test --junit-xml test-reports/results.xml test_run_commands.py'
-                                    sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
+                                    sh '/Users/jenkins/Library/Python/3.9/bin/py.test --junit-xml test-reports/results.xml test_run_commands.py'
+                                    // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
                                     echo '----------=====### Finished Tests ###=====----------'
                                 }
                             }
-                            // post {
-                            //    always {
-                            //        junit 'test-reports/results.xml' 
-                            //    }
-                            // }
+                            post {
+                                always {
+                                    junit 'test-reports/results.xml' 
+                                }
+                            }
                         }
                     }
                 }
