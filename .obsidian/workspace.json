@@ -172,6 +172,7 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
+    "Jenkinsfile",
     "src/Docs/DesignThoughts/ci-cd/macos/installingJenkinsAgentOnMacOS.md",
     "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/References.md",
     "src/Docs/DesignThoughts/ci-cd/linux/installingJenkinsAgentOnRHBased.md",
@@ -206,7 +207,6 @@
     "src/proto/README.md",
     "src/Docs/DesignThoughts/Users/PythonChownWindows.md",
     "src/Docs/DesignThoughts/ci-cd/DocumentationGeneration/WikipediaDocGenComparison.md",
-    "pyenv-notes.md",
-    "README.md"
+    "pyenv-notes.md"
   ]
 }
