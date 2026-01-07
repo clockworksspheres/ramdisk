@@ -26,7 +26,7 @@ pipeline {
                         stage('Build') { 
                             steps {
                                 dir('src/BuildScripts') {
-                                    sh './build.ubuntu2404.sh' 
+                                    sh './build.ubuntu2404.sh'
                                 } 
                             }
                         }
