@@ -5,6 +5,10 @@
 # amoung others... including
 # https://pyinstaller.org/en/stable/
 
+
+echo "----------===== ### ======----------"
+echo "  ### Starting macOS Build ###"
+
 #if doesn't the packenv directory doesn't exist...
 pushd ..
 directory="./packenv"

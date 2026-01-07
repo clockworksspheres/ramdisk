@@ -5,6 +5,9 @@
 # amoung others... including
 # https://pyinstaller.org/en/stable/
 
+echo "----------===== ### =====----------"
+echo " ### starting Debian based build ###"
+
 pushd ..
 
 #if doesn't the packenv directory doesn't exist...
