@@ -37,7 +37,7 @@ echo "."
 echo "."
 echo "."
 
-pushd ramdisk/ui; ./compile_uifiles.py; popd
+#pushd ramdisk/ui; ./compile_uifiles.py; popd
 
 echo "."
 echo "."
