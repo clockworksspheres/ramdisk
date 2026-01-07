@@ -22,7 +22,7 @@ pipeline {
                             steps {
                                 dir('src/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
-                                    sh 'ls -l
+                                    sh 'ls -l'
                                     sh '/Users/jenkins/Library/Python/3.9/bin/py.test --junit-xml test-reports/results.xml test_run_commands.py'
                                     echo '----------=====### Finished Tests ###=====----------'
                                 }
