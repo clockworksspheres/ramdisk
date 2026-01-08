@@ -1,0 +1,82 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.0.3 Chrome/140.0.7339.249 Electron/38.7.0 Safari/537.36" version="29.0.3">
+  <diagram name="Page-1" id="HFL-DxrQ3KLQqcOIj1vD">
+    <mxGraphModel dx="1106" dy="977" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="AzerK5BP3IojpNPvze7_-1" value="Install OS" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="320" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-2" value="Installs" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="430" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-3" value="Configure" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="530" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-4" value="deploy" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="740" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-5" value="Dev" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="45" y="250" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-6" value="Test" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="245" y="250" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-7" value="Prod" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="445" y="250" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-8" value="Base&lt;div&gt;Developer&lt;div&gt;machine&lt;/div&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="660" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-9" value="base&lt;div&gt;Test&lt;/div&gt;&lt;div&gt;machine&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="660" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-10" value="base&lt;div&gt;Prod&lt;/div&gt;&lt;div&gt;machine&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="660" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-12" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="35" y="810" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-13" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="45" y="820" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-11" value="base&lt;div&gt;project&lt;/div&gt;&lt;div&gt;layer&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="55" y="830" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-14" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="235" y="810" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-15" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="245" y="820" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-16" value="base&lt;div&gt;project&lt;/div&gt;&lt;div&gt;layer&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="255" y="830" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-20" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="435" y="810" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-21" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="445" y="820" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-22" value="base&lt;div&gt;project&lt;/div&gt;&lt;div&gt;layer&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="455" y="830" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-26" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;Environments&lt;/h1&gt;&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&lt;/p&gt;" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="205" y="60" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-27" value="Base&lt;div&gt;Machine&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="580" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-29" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;Machine Layers&lt;/h1&gt;&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&lt;/p&gt;" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="215" y="410" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-30" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;Infrastructure As Code&lt;/h1&gt;&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&lt;/p&gt;" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="650" y="160" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="AzerK5BP3IojpNPvze7_-31" value="Secure" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="630" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
