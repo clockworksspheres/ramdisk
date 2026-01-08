@@ -11,10 +11,14 @@
             "id": "6f3f738b28966d2a",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "src/Docs/DesignThoughts/ci-cd/linux/sshWithSshKey.md",
+                "mode": "source",
+                "source": true
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "sshWithSshKey"
             }
           }
         ]
@@ -168,6 +172,7 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
+    "src/Docs/DesignThoughts/ci-cd/linux/sshWithSshKey.md",
     "src/BuildScripts/build.ubuntu2404.py312.onefile.spec",
     "src/BuildScripts/build.ubuntu2404.sh",
     "src/BuildScripts/build.ubuntu2024.sh",
@@ -180,7 +185,6 @@
     "src/resources/icons/Barkerbaggies-Bag-O-Tiles-E.icns",
     "src/resources/icns/ram.icns",
     "src/resources/font/__init__.py",
-    "src/resources/font/TorusPro.ttf",
     "src/ramdisk/resources/img/ram_96.png",
     "src/ramdisk/resources/img/ram_64.png",
     "src/Docs/DesignThoughts/userRelated/getCurrentUser.md",
