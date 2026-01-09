@@ -172,6 +172,7 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
+    "Untitled.md",
     "src/Docs/DesignThoughts/ci-cd/linux/sshWithSshKey.md",
     "src/BuildScripts/build.ubuntu2404.py312.onefile.spec",
     "src/BuildScripts/build.ubuntu2404.sh",
@@ -212,7 +213,6 @@
     "src/Docs/DesignThoughts/ci-cd/CreateLocalUTMmacosVMandVagrantUP/create local UTM macos VM and vagrant up.md",
     "src/Docs/DesignThoughts/argsNkwargs.md",
     "src/Docs/DesignThoughts/Users/PythonChownWindows.md",
-    "src/Docs/DesignThoughts/Testing/squish/README.md",
     "src/Docs/classes_ramdisk.jpg"
   ]
 }
