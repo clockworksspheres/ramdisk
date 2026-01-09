@@ -11,10 +11,14 @@
             "id": "6f3f738b28966d2a",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/AddingNewTestNode.md",
+                "mode": "source",
+                "source": true
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "AddingNewTestNode"
             }
           }
         ]
@@ -168,6 +172,7 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
+    "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/AddingNewTestNode.md",
     "src/Docs/DesignThoughts/ci-cd/linux/sshWithSshKey.md",
     "src/Docs/DesignThoughts/ci-cd/SystemsSetup40Kview.drawio",
     "src/build.macos.sh",
