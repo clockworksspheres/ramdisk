@@ -8,6 +8,8 @@
 
 4 - in Web UI add the new test node to the "Build Executor Status" node list
 
-5 - do a test run to see if all is good.
+5 - add node to project Jenkinsfile
+
+6 - do a test run to see if all is good.
 
 
