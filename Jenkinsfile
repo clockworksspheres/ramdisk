@@ -36,6 +36,34 @@ pipeline {
                         }
                     }
                 }
+                stage('Rocky 10 Pipeline') {
+                    agent { label 'rocky10' }
+                    stages {
+                        stage('Build') { 
+                            steps {
+                                dir('src/BuildScripts') {
+                                    sh './build.ubuntu2404.sh' 
+                                } 
+                            }
+                        }
+                        stage('Test') { 
+                            steps {
+                                dir('src/tests') {
+                                    echo '----------=====### Starting Tests ###=====----------'
+                                    sh 'ls -l'
+                                    sh 'sudo -E /usr/bin/py.test --junit-xml test-reports/results.xml test_*.py'
+                                    // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
+                                    echo '----------=====### Finished Tests ###=====----------'
+                                }
+                            }
+                            post {
+                                always {
+                                    junit 'src/tests/test-reports/results.xml' 
+                                }
+                            }
+                        }
+                    }
+                }
                 stage('Debian Pipeline') {
                     agent { label 'debian' }
                     stages {
