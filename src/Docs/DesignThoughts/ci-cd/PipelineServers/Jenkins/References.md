@@ -46,3 +46,4 @@ Youtube: [Jenkins Tutorial - Create a Pipeline job to build a Python application
 Jenkins Pipeline [Steps](https://www.jenkins.io/doc/pipeline/steps/)
 
 
+Jenkins [Python API](https://github.com/pycontribs/jenkinsapi)

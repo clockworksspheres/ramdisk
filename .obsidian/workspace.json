@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/AddingNewTestNode.md",
+                "file": "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/References.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "AddingNewTestNode"
+              "title": "References"
             }
           }
         ]
@@ -172,9 +172,9 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
-    "src/build.macos.sh",
-    "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/AddingNewTestNode.md",
     "src/Docs/DesignThoughts/ci-cd/linux/sshWithSshKey.md",
+    "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/AddingNewTestNode.md",
+    "src/build.macos.sh",
     "src/Docs/DesignThoughts/ci-cd/SystemsSetup40Kview.drawio",
     "Untitled.md",
     "src/BuildScripts/build.ubuntu2404.py312.onefile.spec",
