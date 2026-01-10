@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/References.md",
-                "mode": "source",
+                "file": "src/Docs/DesignThoughts/ci-cd/ci-cdReferences.md",
+                "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "References"
+              "title": "ci-cdReferences"
             }
           }
         ]
@@ -172,6 +172,9 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
+    "Pasted image 20260110110111.png",
+    "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/References.md",
+    "src/Docs/DesignThoughts/ci-cd/ci-cdReferences.md",
     "src/Docs/DesignThoughts/ci-cd/linux/sshWithSshKey.md",
     "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/AddingNewTestNode.md",
     "src/build.macos.sh",
@@ -204,14 +207,12 @@
     "src/Docs/DesignThoughts/genericStateMachine.md",
     "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
     "src/Docs/DesignThoughts/ci-cd/PipelineServers/GithubActions/References.md",
-    "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/References.md",
     "src/Docs/DesignThoughts/ci-cd/windows/installingJenkinsAgentOnWindows.md",
     "src/Docs/DesignThoughts/ci-cd/vmWrangling/controllingUTM_VMs.md",
     "src/Docs/DesignThoughts/ci-cd/macos/installingJenkinsAgentOnMacOS.md",
     "src/Docs/DesignThoughts/ci-cd/linux/installingJenkinsAgentOnRHBased.md",
     "src/Docs/DesignThoughts/ci-cd/linux/installingJenkinsAgentOnDebian.md",
     "src/Docs/DesignThoughts/ci-cd/DocumentationGeneration/WikipediaDocGenComparison.md",
-    "src/Docs/DesignThoughts/ci-cd/CreateLocalUTMmacosVMandVagrantUP/create local UTM macos VM and vagrant up.md",
     "src/Docs/classes_ramdisk.jpg"
   ]
 }
