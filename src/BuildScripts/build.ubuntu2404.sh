@@ -23,6 +23,7 @@ if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
    pip3 install PySide6 PyInstaller
    pip3 install --upgrade PyInstaller pyinstaller-hooks-contrib
    pip3 install packaging
+   pip3 install requests
 else
    source packenv/bin/activate
 fi

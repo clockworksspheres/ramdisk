@@ -6,6 +6,8 @@ sys.path.append("../../..")
 import jenkinstokens.jenkinstoken as token
 
 """
+requires the requests library to be installed vi pip...
+
 To create an api token
 1 : Log in to Jenkins.
 2 : Go to User > Configure > API Token.

@@ -22,6 +22,7 @@ if (!(Test-Path -Path ".\packenv" -PathType Container)) {
    pip install --upgrade PyInstaller pyinstaller-hooks-contrib
    pip install psutil
    pip install packaging
+   pip install requests
 } else {
     .\packenv\Scripts\Activate.ps1
 }
