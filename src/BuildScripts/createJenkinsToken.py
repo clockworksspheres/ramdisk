@@ -1,3 +1,4 @@
+#!/usr/bin/env -S python -u
 """
 
 Must already have an existing token for this to work.

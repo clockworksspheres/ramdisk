@@ -1,3 +1,5 @@
+#!/usr/bin/env -S python -u
+
 import argparse
 import requests
 import sys

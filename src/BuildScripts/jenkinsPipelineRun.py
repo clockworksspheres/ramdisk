@@ -1,6 +1,10 @@
+#!/usr/bin/env -S python -u
+
 import argparse
 import time
 import jenkins
+# python-jenkins library - currently better supported
+# than jenkinsapi.
 
 import sys
 
