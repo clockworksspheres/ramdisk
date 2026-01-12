@@ -35,6 +35,8 @@ def generate_ssh_key(key_type="RSA", key_size=2048, filename="id_key"):
         format=serialization.PrivateFormat.OpenSSH,
         encryption_algorithm=serialization.NoEncryption()
     )
+    # format changed to OpenSSH above per brave AI, it's
+    # a more modern approach to the previous code.
 
     # Serialize public key in OpenSSH format
     public_key = private_key.public_key()
@@ -79,6 +81,6 @@ if __name__ == '__main__':
     edFilename = f"id_{args.token_name}_ed"
     # Examples:
     generate_ssh_key("RSA", 2048, f"id_{args.token_name}_rsa")       # RSA 4096-bit
-    generate_ssh_key("ed25519", 0, filename=edFilename)                 # Ed25519
+    generate_ssh_key("ed25519", filename=edFilename)                 # Ed25519
     generate_ssh_key("ECDSA", 384, f"id_{args.token_name}_ecdsa")    # ECDSA with 384-bit curve
 
