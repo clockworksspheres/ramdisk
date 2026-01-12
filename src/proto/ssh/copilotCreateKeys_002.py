@@ -32,7 +32,7 @@ def generate_ssh_key(key_type="RSA", key_size=2048, filename="id_key"):
     # Serialize private key
     private_pem = private_key.private_bytes(
         encoding=serialization.Encoding.PEM,
-        format=serialization.PrivateFormat.TraditionalOpenSSL,
+        format=serialization.PrivateFormat.OpenSSH,
         encryption_algorithm=serialization.NoEncryption()
     )
 
@@ -79,6 +79,6 @@ if __name__ == '__main__':
     edFilename = f"id_{args.token_name}_ed"
     # Examples:
     generate_ssh_key("RSA", 2048, f"id_{args.token_name}_rsa")       # RSA 4096-bit
-    # generate_ssh_key("ed25519", filename=edFilename)                 # Ed25519
+    generate_ssh_key("ed25519", 0, filename=edFilename)                 # Ed25519
     generate_ssh_key("ECDSA", 384, f"id_{args.token_name}_ecdsa")    # ECDSA with 384-bit curve
 
