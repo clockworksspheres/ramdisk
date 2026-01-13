@@ -57,10 +57,6 @@ pipeline {
                                     sh '/opt/homebrew/bin/py.test --junit-xml test-reports/results.xml test_*.py'
                                     // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
                                     echo '----------=====### Finished Tests ###=====----------'
-                                }
-                            }
-                            post {
-                                always {
                                     junit 'src/tests/test-reports/results.xml' 
                                 }
                             }
@@ -78,10 +74,6 @@ pipeline {
                                     sh 'sudo /usr/bin/py.test --junit-xml test-reports/results.xml test_*.py'
                                     // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
                                     echo '----------=====### Finished Tests ###=====----------'
-                                }
-                            }
-                            post {
-                                always {
                                     junit 'src/tests/test-reports/results.xml' 
                                 }
                             }
@@ -99,10 +91,6 @@ pipeline {
                                     sh 'sudo -E /usr/bin/py.test --junit-xml test-reports/results.xml test_*.py'
                                     // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
                                     echo '----------=====### Finished Tests ###=====----------'
-                                }
-                            }
-                            post {
-                                always {
                                     junit 'src/tests/test-reports/results.xml' 
                                 }
                             }
