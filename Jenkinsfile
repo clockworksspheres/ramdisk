@@ -60,7 +60,7 @@ pipeline {
                                     // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
                                     //sleep 15
                                     echo '----------=====### Finished Tests ###=====----------'
-                                    //junit 'src/tests/test-reports/results.xml' 
+                                    junit 'test-reports/results.xml' 
                                 }
                             }
                         }
@@ -78,7 +78,7 @@ pipeline {
                                     // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
                                     //sleep 15
                                     echo '----------=====### Finished Tests ###=====----------'
-                                    //junit 'src/tests/test-reports/results.xml' 
+                                    junit 'test-reports/results.xml' 
                                 }
                             }
                         }
@@ -96,7 +96,7 @@ pipeline {
                                     // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
                                     //sleep 15
                                     echo '----------=====### Finished Tests ###=====----------'
-                                    //junit 'src/tests/test-reports/results.xml' 
+                                    junit 'test-reports/results.xml' 
                                 }
                             }
                         }
