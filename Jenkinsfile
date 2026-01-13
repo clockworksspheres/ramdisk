@@ -63,8 +63,6 @@ pipeline {
                                     //junit 'src/tests/test-reports/results.xml' 
                                 }
                             }
-                            post {
-
                         }
                     }
                 }
