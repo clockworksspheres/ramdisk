@@ -100,7 +100,7 @@ def add_ssh_private_key_credential(
 
     response = requests.post(
         f"{server.server}/credentials/store/system/domain/_/createCredentials",
-        auth=(server.user, server.password),
+        auth=(server.username, server.password),
         headers={"Content-Type": "application/xml"},
         data=xml_payload,
     )
@@ -121,22 +121,35 @@ def main():
         description="Create or update Jenkins SSH agent with proper credential handling"
     )
 
+    parser.add_argument("--url", required=True, help="Jenkins URL (e.g. http://localhost:8080)")
+    parser.add_argument("--user", required=True, help="Jenkins username")
+    parser.add_argument("--password", required=True, help="Jenkins password or API token")
+
+    parser.add_argument("--node-name", required=True, help="Name of the Jenkins node")
+    parser.add_argument("--host", required=True, help="Agent host IP or hostname")
+    parser.add_argument("--port", type=int, default=22, help="SSH port (default: 22)")
+    parser.add_argument("--remote-fs", default="/home/jenkins", help="Remote root directory on agent")
+    parser.add_argument("--labels", default="linux", help="Labels for the node")
+    parser.add_argument("--executors", type=int, default=1, help="Number of executors")
+    parser.add_argument("--exclusive", action="store_true", help="Restrict node to jobs with matching labels only")
+
+
     # Jenkins auth
-    parser.add_argument("--url", required=True)
-    parser.add_argument("--user", required=True)
+    parser.add_argument("--url", required=True, help="Jenkins URL (e.g. http://localhost:8080)")
+    parser.add_argument("--user", required=True, help="Jenkins username")
     parser.add_argument("--password", required=True, help="Jenkins password or API token")
 
     # Node
-    parser.add_argument("--node-name", required=True)
-    parser.add_argument("--host", required=True)
-    parser.add_argument("--port", type=int, default=22)
-    parser.add_argument("--remote-fs", default="/home/jenkins")
-    parser.add_argument("--labels", default="linux")
-    parser.add_argument("--executors", type=int, default=1)
-    parser.add_argument("--exclusive", action="store_true")
+    parser.add_argument("--node-name", required=True, help="Name of the Jenkins node")
+    parser.add_argument("--host", required=True, help="Agent host IP or hostname")
+    parser.add_argument("--port", type=int, default=22, help="SSH port (default: 22)")
+    parser.add_argument("--remote-fs", default="/home/jenkins", help="Remote root directory on agent")
+    parser.add_argument("--labels", default="linux", help="Labels for the node")
+    parser.add_argument("--executors", type=int, default=1, help="Number of executors")
+    parser.add_argument("--exclusive", action="store_true", help="Restrict node to jobs with matching labels only")
 
-    # SSH
-    parser.add_argument("--ssh-user", default="jenkins")
+    # SSH user, launcher, kind, credentials
+    parser.add_argument("--ssh-user", default="jenkins", help="SSH username for connecting to the agent")
 
     # Credentials / keys
     parser.add_argument("--credential-id", required=True)
