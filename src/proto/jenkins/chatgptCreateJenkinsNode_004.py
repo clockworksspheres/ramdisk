@@ -100,7 +100,7 @@ def add_ssh_private_key_credential(
 
     response = requests.post(
         f"{server.server}/credentials/store/system/domain/_/createCredentials",
-        auth=(server.username, server.password),
+        auth=(server.user, server.password),
         headers={"Content-Type": "application/xml"},
         data=xml_payload,
     )

@@ -11,7 +11,7 @@ pipeline {
                 stage('macOS Pipeline') {
                     agent { label 'macos' }
                     stages {
-                        stage('Build') { 
+                        stage('macOS Build') { 
                             steps {
                                 dir('src/BuildScripts') {
                                     sh './build.macos.sh' 
@@ -23,7 +23,7 @@ pipeline {
                 stage('Rocky 10 Pipeline') {
                     agent { label 'rocky10' }
                     stages {
-                        stage('Build') { 
+                        stage('rocky10 Build') { 
                             steps {
                                 dir('src/BuildScripts') {
                                     sh './build.ubuntu2404.sh' 
@@ -35,7 +35,7 @@ pipeline {
                 stage('Debian Pipeline') {
                     agent { label 'debian' }
                     stages {
-                        stage('Build') { 
+                        stage('debian Build') { 
                             steps {
                                 dir('src/BuildScripts') {
                                     sh './build.ubuntu2404.sh' 
@@ -51,7 +51,7 @@ pipeline {
                 stage('macOS Pipeline') {
                     agent { label 'macos' }
                     stages {
-                        stage('Test') { 
+                        stage('macOS Test') { 
                             steps {
                                 dir('src/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
@@ -69,7 +69,7 @@ pipeline {
                 stage('Rocky 10 Pipeline') {
                     agent { label 'rocky10' }
                     stages {
-                        stage('Test') { 
+                        stage('Rocky10 Test') { 
                             steps {
                                 dir('src/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
@@ -87,7 +87,7 @@ pipeline {
                 stage('Debian Pipeline') {
                     agent { label 'debian' }
                     stages {
-                        stage('Test') { 
+                        stage('Debian Test') { 
                             steps {
                                 dir('src/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
