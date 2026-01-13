@@ -58,11 +58,13 @@ pipeline {
                                     sh 'ls -l'
                                     sh '/opt/homebrew/bin/py.test --junit-xml test-reports/results.xml test_*.py'
                                     // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
-                                    sleep 15
+                                    //sleep 15
                                     echo '----------=====### Finished Tests ###=====----------'
-                                    junit 'src/tests/test-reports/results.xml' 
+                                    //junit 'src/tests/test-reports/results.xml' 
                                 }
                             }
+                            post {
+
                         }
                     }
                 }
@@ -76,9 +78,9 @@ pipeline {
                                     sh 'ls -l'
                                     sh 'sudo /usr/bin/py.test --junit-xml test-reports/results.xml test_*.py'
                                     // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
-                                    sleep 15
+                                    //sleep 15
                                     echo '----------=====### Finished Tests ###=====----------'
-                                    junit 'src/tests/test-reports/results.xml' 
+                                    //junit 'src/tests/test-reports/results.xml' 
                                 }
                             }
                         }
@@ -94,9 +96,9 @@ pipeline {
                                     sh 'ls -l'
                                     sh 'sudo -E /usr/bin/py.test --junit-xml test-reports/results.xml test_*.py'
                                     // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
-                                    sleep 15
+                                    //sleep 15
                                     echo '----------=====### Finished Tests ###=====----------'
-                                    junit 'src/tests/test-reports/results.xml' 
+                                    //junit 'src/tests/test-reports/results.xml' 
                                 }
                             }
                         }
