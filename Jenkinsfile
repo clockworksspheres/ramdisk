@@ -6,7 +6,7 @@ pipeline {
                 echo 'Running pre-parallel stage'
             }
         }
-        stage('Parallel Pipelines') {
+        stage('Parallel build Pipelines') {
             parallel {
                 stage('macOS Pipeline') {
                     agent { label 'macos' }
@@ -45,6 +45,8 @@ pipeline {
                     }
                 }
             }
+        }
+        stage('Parallel test pipelines') {
             parallel {
                 stage('macOS Pipeline') {
                     agent { label 'macos' }
