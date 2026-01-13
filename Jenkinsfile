@@ -18,6 +18,37 @@ pipeline {
                                 }
                             }
                         }
+                    }
+                }
+                stage('Rocky 10 Pipeline') {
+                    agent { label 'rocky10' }
+                    stages {
+                        stage('Build') { 
+                            steps {
+                                dir('src/BuildScripts') {
+                                    sh './build.ubuntu2404.sh' 
+                                } 
+                            }
+                        }
+                    }
+                }
+                stage('Debian Pipeline') {
+                    agent { label 'debian' }
+                    stages {
+                        stage('Build') { 
+                            steps {
+                                dir('src/BuildScripts') {
+                                    sh './build.ubuntu2404.sh' 
+                                } 
+                            }
+                        }
+                    }
+                }
+            }
+            parallel {
+                stage('macOS Pipeline') {
+                    agent { label 'macos' }
+                    stages {
                         stage('Test') { 
                             steps {
                                 dir('src/tests') {
@@ -39,13 +70,6 @@ pipeline {
                 stage('Rocky 10 Pipeline') {
                     agent { label 'rocky10' }
                     stages {
-                        stage('Build') { 
-                            steps {
-                                dir('src/BuildScripts') {
-                                    sh './build.ubuntu2404.sh' 
-                                } 
-                            }
-                        }
                         stage('Test') { 
                             steps {
                                 dir('src/tests') {
@@ -67,13 +91,6 @@ pipeline {
                 stage('Debian Pipeline') {
                     agent { label 'debian' }
                     stages {
-                        stage('Build') { 
-                            steps {
-                                dir('src/BuildScripts') {
-                                    sh './build.ubuntu2404.sh' 
-                                } 
-                            }
-                        }
                         stage('Test') { 
                             steps {
                                 dir('src/tests') {
@@ -101,6 +118,3 @@ pipeline {
         }
     }
 }
-
-
-
