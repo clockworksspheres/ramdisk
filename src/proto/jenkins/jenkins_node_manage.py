@@ -62,6 +62,8 @@ def load_existing_key(filename):
 # ------------------------------------------------------------
 def add_ssh_private_key_credential(
     server,
+    jenkinsUser,
+    jenkinsPassword,
     credential_id,
     username,
     private_key,
@@ -96,7 +98,7 @@ def add_ssh_private_key_credential(
 
     response = requests.post(
         f"{server.server}/credentials/store/system/domain/_/createCredentials",
-        auth=(server.username, server.password),
+        auth=(jenkinsUser, jenkinsPassword),
         headers={"Content-Type": "application/xml"},
         data=xml_payload,
     )
@@ -324,6 +326,8 @@ python jenkins_node_manage.py \\
 
         add_ssh_private_key_credential(
             server,
+            args.user,
+            args.password,
             args.credential_id,
             args.ssh_user,
             private_pem,
@@ -392,6 +396,8 @@ python jenkins_node_manage.py \\
     if args.launcher == "ssh":
         add_ssh_private_key_credential(
             server,
+            args.user,
+            args.password,
             args.credential_id,
             args.ssh_user,
             private_pem,

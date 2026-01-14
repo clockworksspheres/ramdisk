@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/Docs/DesignThoughts/ci-cd/ci-cdReferences.md",
+                "file": "src/Docs/DesignThoughts/ci-cd/linux/sshWithSshKey.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "ci-cdReferences"
+              "title": "sshWithSshKey"
             }
           }
         ]
@@ -172,6 +172,7 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
+    "src/Docs/DesignThoughts/ci-cd/ci-cdReferences.md",
     "src/BuildScripts/cookies.txt",
     "src/BuildScripts/gentoken.sh",
     "src/packenv/lib/python3.13/site-packages/urllib3/contrib/__pycache__/socks.cpython-313.pyc",
@@ -182,10 +183,8 @@
     "src/packenv/lib/python3.13/site-packages/requests/__pycache__/models.cpython-313.pyc",
     "src/packenv/lib/python3.13/site-packages/requests/__pycache__/auth.cpython-313.pyc",
     "src/packenv/lib/python3.13/site-packages/requests/__pycache__/adapters.cpython-313.pyc",
-    "src/packenv/lib/python3.13/site-packages/requests/__pycache__/sessions.cpython-313.pyc",
     "Pasted image 20260110110111.png",
     "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/References.md",
-    "src/Docs/DesignThoughts/ci-cd/ci-cdReferences.md",
     "src/Docs/DesignThoughts/ci-cd/linux/sshWithSshKey.md",
     "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/AddingNewTestNode.md",
     "Untitled.md",
