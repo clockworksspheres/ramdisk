@@ -37,3 +37,17 @@ sudo systemctl enable ssh
 sudo systemctl restart ssh
 ```
 
+## Set up Sudoers to allow for py.test to run
+
+### Rocky10, Alma10, Debian13 systems
+```
+vim /etc/sudoers.d/<username>
+```
+
+File should look like:
+
+```
+<username> ALL=(ALL) NOPASSWD:/usr/bin/py.test
+```
+
+
