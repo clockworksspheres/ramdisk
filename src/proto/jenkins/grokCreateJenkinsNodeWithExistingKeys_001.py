@@ -9,11 +9,11 @@ Usage example:
     --jenkins-user admin \\
     --jenkins-token your-api-token \\
     --credential-id macos-agent-key \\
-    --private-key-file /var/jenkins_home/.ssh/jenkins_macos_agent \\
-    --ssh-username amrobot \\
+    --private-key-file /var/jenkins_home/.ssh/id_macos_agent \\
+    --ssh-username <user> \\
     --node-name macos-builder \\
-    --host 192.168.172.136 \\
-    --remote-fs /Users/amrobot/jenkins-agent \\
+    --host 192.168.10.10 \\
+    --remote-fs /Users/<user>/jenkins-agent \\
     --labels "macos arm64"
 """
 

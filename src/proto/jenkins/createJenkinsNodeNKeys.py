@@ -31,7 +31,7 @@ LABELS = "linux docker medium build"
 EXCLUSIVE = True
 
 # SSH connection details for the target agent machine
-AGENT_HOST = "192.168.172.136"           # ← CHANGE THIS!
+AGENT_HOST = "192.168.10.110"           # ← CHANGE THIS!
 AGENT_USERNAME = "jenkins"             # user that will run builds on agent
 AGENT_SSH_PORT = 22
 
