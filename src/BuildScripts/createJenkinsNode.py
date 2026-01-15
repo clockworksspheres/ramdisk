@@ -1,9 +1,39 @@
 #!/usr/bin/env python3
 import argparse
 import jenkins
+import textwrap
 
 def main():
-    parser = argparse.ArgumentParser(description="Create Jenkins node without SSH credentials")
+    parser = argparse.ArgumentParser(
+        description="Create Jenkins node without SSH credentials",
+        epilog=textwrap.dedent('''\
+Examples: 
+
+  Create a node named 'agent1' on localhost: 
+    python3 createJenkinsNode.py \\
+            --url http://localhost:8080 \\
+            --user admin \\
+            --token 12345 \\
+            --node-name agent1 
+
+  Create a node with custom labels and executors: 
+    python3 createJenkinsNode.py \\
+            --url http://jenkins.example.com \\
+            --user admin \\
+            --token abcdef \\
+            --node-name build-node \\
+            --labels 'docker linux' \\
+            --executors 4 
+
+  Specify a different remote FS root: 
+    python3 createJenkinsNode.py \\
+            --url http://jenkins.example.com \\
+            --user admin \\
+            --token abcdef \\
+            --node-name test-node \\
+            --remote-fs /opt/jenkins 
+'''), formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     parser.add_argument("--url", required=True, help="Jenkins URL")
     parser.add_argument("--user", required=True, help="Jenkins username")
     parser.add_argument("--token", required=True, help="Jenkins API token")
