@@ -11,6 +11,7 @@ sudo dnf-install net-tools
 sudo dnf install python3
 sudo dnf install python3-pip
 sudo dnf install python3-tkinter
+sudo dnf install junit.noarch
 pip install pytest
 ```
 
