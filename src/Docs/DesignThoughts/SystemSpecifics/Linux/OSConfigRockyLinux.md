@@ -25,3 +25,32 @@
         
 
 **Do not edit `/etc/resolv.conf` directly**; it's managed by NetworkManager.
+
+## Upping idle timeout time for GUI lockscreen
+
+**Increase Lock Screen Timeout on Rocky Linux 9**
+
+For the default GNOME desktop:
+
+1. **Graphical Method**:
+    
+    - Open **Settings**.
+        
+    - Go to **Privacy** > **Screen Lock**.
+        
+    - Set **Automatic Screen Lock Delay** to your desired time (e.g., 30 minutes, 1 hour) or turn it **Off**. 
+        
+2. **Command Line Method**:
+    
+    - Use `gsettings` to change the idle delay (time before the system is considered idle and can be locked). For example, to set it to 1 hour (3600 seconds):
+        
+        ```
+        gsettings set org.gnome.desktop.session idle-delay 3600
+        ```
+        
+    - To disable automatic locking entirely:
+        
+        ```
+        gsettings set org.gnome.desktop.screensaver lock-enabled false
+        ```
+
