@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/Docs/DesignThoughts/SystemSpecifics/Linux/OSConfigRockyLinux.md",
+                "file": "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuildingOnRockyLinux.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "OSConfigRockyLinux"
+              "title": "setUpForBuildingOnRockyLinux"
             }
           }
         ]
@@ -172,8 +172,8 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
-    "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuildingOnRockyLinux.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Linux/OSConfigRockyLinux.md",
+    "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuildingOnRockyLinux.md",
     "src/Docs/DesignThoughts/ci-cd/linux/installingJenkinsAgentOnRHBased.md",
     "src/proto/jenkins/grokCreateJenkinsNodeWithExistingKeys_001.py",
     "src/Docs/DesignThoughts/ci-cd/linux/sshWithSshKey.md",
