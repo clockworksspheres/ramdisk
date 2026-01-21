@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/Docs/DesignThoughts/ci-cd/linux/installingJenkinsAgentOnRHBased.md",
+                "file": "src/Docs/DesignThoughts/SystemSpecifics/Linux/OSConfigRockyLinux.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "installingJenkinsAgentOnRHBased"
+              "title": "OSConfigRockyLinux"
             }
           }
         ]
@@ -172,9 +172,11 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
+    "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuildingOnRockyLinux.md",
+    "src/Docs/DesignThoughts/SystemSpecifics/Linux/OSConfigRockyLinux.md",
+    "src/Docs/DesignThoughts/ci-cd/linux/installingJenkinsAgentOnRHBased.md",
     "src/proto/jenkins/grokCreateJenkinsNodeWithExistingKeys_001.py",
     "src/Docs/DesignThoughts/ci-cd/linux/sshWithSshKey.md",
-    "src/Docs/DesignThoughts/ci-cd/linux/installingJenkinsAgentOnRHBased.md",
     "src/Docs/DesignThoughts/ci-cd/linux/installingJenkinsAgentOnDebian.md",
     "src/Docs/DesignThoughts/ci-cd/ci-cdReferences.md",
     "src/BuildScripts/cookies.txt",
@@ -186,7 +188,6 @@
     "src/packenv/lib/python3.13/site-packages/requests/__pycache__/hooks.cpython-313.pyc",
     "src/packenv/lib/python3.13/site-packages/requests/__pycache__/models.cpython-313.pyc",
     "src/packenv/lib/python3.13/site-packages/requests/__pycache__/auth.cpython-313.pyc",
-    "src/packenv/lib/python3.13/site-packages/requests/__pycache__/adapters.cpython-313.pyc",
     "Pasted image 20260110110111.png",
     "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/References.md",
     "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/AddingNewTestNode.md",
@@ -213,7 +214,6 @@
     "src/Docs/DesignThoughts/ci-cd/windows/installingJenkinsAgentOnWindows.md",
     "src/Docs/DesignThoughts/ci-cd/vmWrangling/controllingUTM_VMs.md",
     "src/Docs/DesignThoughts/ci-cd/macos/installingJenkinsAgentOnMacOS.md",
-    "src/Docs/DesignThoughts/ci-cd/DocumentationGeneration/WikipediaDocGenComparison.md",
     "src/Docs/classes_ramdisk.jpg"
   ]
 }
