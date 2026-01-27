@@ -13,7 +13,10 @@ sudo dnf install python3-pip
 sudo dnf install python3-tkinter
 sudo dnf install junit.noarch
 sudo dnf install minizip-ng-compat
-sudo dnf install xcb-util-wm   
+sudo dnf install xcb-util-wm
+sudo dnf install libxcb-cursor.aarch64
+sudo dnf install xcb-util-cursor.aarch64
+sudo dnf install xcb-util-keysyms.aarch64
 sudo dnf install open-vm-tools
 sudo dnf install open-vm-tools-desktop
 pip install pytest
