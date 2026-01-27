@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/Docs/DesignThoughts/SystemSpecifics/Linux/OSConfigRockyLinux.md",
+                "file": "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuildingOnRockyLinux.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "OSConfigRockyLinux"
+              "title": "setUpForBuildingOnRockyLinux"
             }
           }
         ]
@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 263.50271224975586
+    "width": 382.50271224975586
   },
   "right": {
     "id": "21c13539383b9736",
@@ -172,11 +172,11 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
+    "src/Docs/DesignThoughts/SystemSpecifics/Linux/OSConfigRockyLinux.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuildingOnRockyLinux.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuilding.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Linux/linuxVirtualMachineMouseAcrossVmNHost.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RunningVMsOnHyperV.md",
-    "src/Docs/DesignThoughts/SystemSpecifics/Linux/OSConfigRockyLinux.md",
     "src/Docs/DesignThoughts/ci-cd/linux/installingJenkinsAgentOnRHBased.md",
     "src/proto/jenkins/grokCreateJenkinsNodeWithExistingKeys_001.py",
     "src/Docs/DesignThoughts/ci-cd/linux/sshWithSshKey.md",
