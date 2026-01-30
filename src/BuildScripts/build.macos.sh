@@ -23,6 +23,7 @@ if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
    pip install psutil
    pip install sphynx  # documentation tool
    pip install myst-parser # supports markdown for sphynx
+   pip install requests
 else
    source packenv/bin/activate
 fi

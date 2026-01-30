@@ -14,6 +14,7 @@ sudo apt install python3-pip
 sudo apt install python3-pytest
 sudo apt install python3-venv
 sudo ln -s /usr/bin/python3 /usr/local/bin/python
+sudo apt install junit
 ```
 
 # Installing useful apps with apt

@@ -8,18 +8,6 @@ pipeline {
         }
         stage('Parallel build Pipelines') {
             parallel {
-                stage('macOS Pipeline') {
-                    agent { label 'macos' }
-                    stages {
-                        stage('macOS Build') { 
-                            steps {
-                                dir('src/BuildScripts') {
-                                    sh './build.macos.sh' 
-                                }
-                            }
-                        }
-                    }
-                }
                 stage('Rocky 10 Pipeline') {
                     agent { label 'rocky10' }
                     stages {
@@ -32,10 +20,10 @@ pipeline {
                         }
                     }
                 }
-                stage('Debian Pipeline') {
-                    agent { label 'debian' }
+                stage('Alma Pipeline') {
+                    agent { label 'alma' }
                     stages {
-                        stage('debian Build') { 
+                        stage('Alma Build') { 
                             steps {
                                 dir('src/BuildScripts') {
                                     sh './build.ubuntu2404.sh' 
@@ -48,24 +36,6 @@ pipeline {
         }
         stage('Parallel test pipelines') {
             parallel {
-                stage('macOS Pipeline') {
-                    agent { label 'macos' }
-                    stages {
-                        stage('macOS Test') { 
-                            steps {
-                                dir('src/tests') {
-                                    echo '----------=====### Starting Tests ###=====----------'
-                                    sh 'ls -l'
-                                    sh '/opt/homebrew/bin/py.test --junit-xml test-reports/results.xml test_*.py'
-                                    // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
-                                    //sleep 15
-                                    echo '----------=====### Finished Tests ###=====----------'
-                                    junit 'test-reports/results.xml' 
-                                }
-                            }
-                        }
-                    }
-                }
                 stage('Rocky 10 Pipeline') {
                     agent { label 'rocky10' }
                     stages {
@@ -74,29 +44,26 @@ pipeline {
                                 dir('src/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
                                     sh 'ls -l'
-                                    sh 'sudo /usr/bin/py.test --junit-xml test-reports/results.xml test_*.py'
+                                    sh 'sudo /usr/bin/py.test --junit-xml rhel-test-reports/rhel-results.xml test_*.py'
                                     // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
                                     //sleep 15
                                     echo '----------=====### Finished Tests ###=====----------'
-                                    junit 'test-reports/results.xml' 
+                                    junit 'rhel-test-reports/rhel-results.xml'
                                 }
                             }
                         }
                     }
                 }
-                stage('Debian Pipeline') {
-                    agent { label 'debian' }
+                stage('Alma Pipeline') {
+                    agent { label 'alma' }
                     stages {
-                        stage('Debian Test') { 
+                        stage('alma Test') { 
                             steps {
                                 dir('src/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
                                     sh 'ls -l'
-                                    sh 'sudo -E /usr/bin/py.test --junit-xml test-reports/results.xml test_*.py'
-                                    // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
-                                    //sleep 15
-                                    echo '----------=====### Finished Tests ###=====----------'
-                                    junit 'test-reports/results.xml' 
+                                    sh 'sudo /usr/bin/py.test --junit-xml rhel-test-reports/rhel-results.xml test_*.py'
+                                    junit 'rhel-test-reports/rhel-results.xml'
                                 }
                             }
                         }
