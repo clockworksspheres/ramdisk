@@ -145,3 +145,14 @@ Get-WmiObject -Class Win32_LogicalDisk | Select-Object DeviceID
 
 ```
 
+
+
+
+
+
+
+
+Reference Number for this conversation 7096836570
+
+
+
