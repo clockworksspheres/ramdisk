@@ -51,3 +51,52 @@ Some SELINUX errors of needing a newer version than the mirror provides for inst
 ```
 ```
 
+# Installing Rocky in WSL
+
+``` powershell
+# -----------------------------  
+# Rocky Linux WSL Install Script  
+# Downloads Rocky 8 & 9 WSL images and installs them into WSL2  
+# -----------------------------  
+  
+# Create a working directory  
+mkdir C:\WSL\Rocky -Force  
+cd C:\WSL\Rocky  
+  
+# -----------------------------  
+# Download Rocky Linux 8 WSL image  
+# -----------------------------  
+Invoke-WebRequest `  
+-Uri "[https://dl.rockylinux.org/pub/rocky/8/images/Rocky-8-WSL-Base.latest.x86_64.wsl](https://dl.rockylinux.org/pub/rocky/8/images/Rocky-8-WSL-Base.latest.x86_64.wsl)" `  
+-OutFile "Rocky-8.wsl"  
+  
+# Create install directory for Rocky 8  
+mkdir C:\WSL\Rocky8 -Force  
+  
+# Install Rocky Linux 8 into WSL2  
+wsl --install --from-file .\Rocky-8.wsl --name Rocky8  
+  
+# -----------------------------  
+# Download Rocky Linux 9 WSL image  
+# -----------------------------  
+Invoke-WebRequest `  
+-Uri "[https://dl.rockylinux.org/pub/rocky/9/images/Rocky-9-WSL-Base.latest.x86_64.wsl](https://dl.rockylinux.org/pub/rocky/9/images/Rocky-9-WSL-Base.latest.x86_64.wsl)" `  
+-OutFile "Rocky-9.wsl"  
+  
+# Create install directory for Rocky 9  
+mkdir C:\WSL\Rocky9 -Force  
+  
+# Install Rocky Linux 9 into WSL2  
+wsl --install --from-file .\Rocky-9.wsl --name Rocky9  
+  
+# -----------------------------  
+# Optional: Set Rocky 9 as default  
+# -----------------------------  
+wsl --set-default Rocky9  
+  
+# -----------------------------  
+# Launch both distros once to initialize  
+# -----------------------------  
+wsl -d Rocky8  
+wsl -d Rocky9
+```
