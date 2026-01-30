@@ -100,3 +100,39 @@ wsl --set-default Rocky9
 wsl -d Rocky8  
 wsl -d Rocky9
 ```
+
+another powershell script - rocky 10:
+
+``` powershell
+# 1. Make sure WSL is enabled (skip if you already have WSL installed)
+wsl --install
+# → If already installed, this does nothing harmful.
+# → If not installed, it enables WSL + Virtual Machine platform + installs Ubuntu by default (you can ignore Ubuntu later).
+
+# 2. (Optional but recommended) Set WSL 2 as default
+wsl --set-default-version 2
+
+# 3. Create a folder where the virtual disk will live
+#    → Change the path if you prefer (e.g. D:\WSL\Rocky)
+New-Item -ItemType Directory -Path "$HOME\WSL\Rocky" -Force
+
+# 4. Download the latest Rocky Linux 10 WSL image (x86_64 / AMD64 / Intel)
+#    → For ARM64 devices use the aarch64 link instead
+Invoke-WebRequest -Uri "https://dl.rockylinux.org/pub/rocky/10/images/x86_64/Rocky-10-WSL-Base.latest.x86_64.wsl" `
+                  -OutFile "$HOME\Downloads\Rocky-10-WSL-Base.latest.x86_64.wsl"
+
+# Alternative: If you prefer Rocky 9 (still widely used)
+# Invoke-WebRequest -Uri "https://dl.rockylinux.org/pub/rocky/9/images/x86_64/Rocky-9-WSL-Base.latest.x86_64.wsl" `
+#                   -OutFile "$HOME\Downloads\Rocky-9-WSL-Base.latest.x86_64.wsl"
+
+# 5. Install / import it as a WSL distribution
+#    → Name it whatever you want (e.g. Rocky10, rocky, etc.)
+wsl --install --from-file "$HOME\Downloads\Rocky-10-WSL-Base.latest.x86_64.wsl" --name Rocky10
+
+# 6. (Optional) Set it as your default distro
+wsl --set-default Rocky10
+
+# 7. Launch it (first start will ask for a UNIX username + password)
+wsl -d Rocky10
+# or just type: rocky10    (if you named it Rocky10)
+```
