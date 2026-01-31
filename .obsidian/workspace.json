@@ -172,10 +172,11 @@
   },
   "active": "6f3f738b28966d2a",
   "lastOpenFiles": [
+    "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/SettingUpJenkinsContainer.md",
+    "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuildingOnRockyLinux.md",
     "src/Docs/DesignThoughts/ci-cd/linux/installingJenkinsAgentOnRHBased.md",
     "src/Docs/DesignThoughts/ci-cd/linux/installingJenkinsAgentOnDebian.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Linux/OSConfigRockyLinux.md",
-    "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuildingOnRockyLinux.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Linux/setUpForBuilding.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Linux/linuxVirtualMachineMouseAcrossVmNHost.md",
     "src/Docs/DesignThoughts/SystemSpecifics/Windows/RunningVMsOnHyperV.md",
@@ -213,7 +214,6 @@
     "src/Docs/DesignThoughts/openSourceReverseEngineerToUML.md",
     "src/Docs/DesignThoughts/genericStateMachine.md",
     "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
-    "src/Docs/DesignThoughts/ci-cd/PipelineServers/GithubActions/References.md",
     "src/Docs/classes_ramdisk.jpg"
   ]
 }
