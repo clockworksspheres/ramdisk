@@ -45,6 +45,15 @@ docker images | grep jenkins
 ```
 
 ### Step 3: Run Jenkins (most common / recommended way)
+
+#### To start the container:
+
+```
+docker start jenkins
+```
+
+#### To Download and run the container:  
+
 This command gives you persistence + the two important ports:
 
 ```bash
@@ -66,6 +75,8 @@ What each part means:
 - `-v jenkins_home:/var/jenkins_home` → **very important** — saves all jobs, plugins, config outside the container
 - `--restart unless-stopped` → auto-restart on boot/crash (except manual stop)
 - You can swap `:lts-jdk21` for whichever tag you pulled
+
+This downloads as well as running the container.  
 
 ### Step 4: Initial setup (very important!)
 1. Wait ~30–90 seconds for startup
