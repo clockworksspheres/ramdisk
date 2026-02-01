@@ -1,6 +1,14 @@
 # Configuring SSH on the Jenkins Server Container
 
-## ~/.ssh/config
+## copy node .ssh keys to ~/.ssh on the server
 
-## copy node .ssh keys to ~/.ssh/config (creating them in a separate doc)
+## ssh-add the key on the server
 
+```
+eval $(ssh-agent)
+ssh-add <key-name>
+```
+
+## ssh to node from server command line
+
+Need to get over the "accept" prompt (answer "yes"). this will put the machine in the server's known_hosts file.
