@@ -47,3 +47,12 @@ Jenkins Pipeline [Steps](https://www.jenkins.io/doc/pipeline/steps/)
 
 
 Jenkins [Python API](https://github.com/pycontribs/jenkinsapi)
+
+### Useful Jenkins plugins 
+
+
+pipeline: stage view 
+* https://plugins.jenkins.io/pipeline-stage-view/
+
+To get the "Test Result Trend" section working, you need the following plugin:
+"Junit" or "Junit Plugin" - should be installed and enabled by default.  Must run at least two pipeline test runs before the graph will start working.

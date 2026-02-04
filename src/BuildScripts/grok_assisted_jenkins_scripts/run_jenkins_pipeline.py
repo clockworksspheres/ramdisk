@@ -34,7 +34,7 @@ Examples (note: always include http:// or https:// in --url):
     --job nightly-tests
 
   # 2. With parameters + real-time console output
-  python %(prog)s --url http://jenkins:8080 --user roy --token your-token-here \\
+  python %(prog)s --url http://jenkins:8080 --user <username> --token your-token-here \\
     --job deploy-service --follow \\
     --param ENVIRONMENT=staging --param VERSION=2.5.0 --param DRY_RUN=true
 

@@ -26,7 +26,7 @@ Examples:
     --job nightly-tests
 
   # 2. Job inside folder + more details
-  python %(prog)s --url https://jenkins.company.com --user roy --token your-token \\
+  python %(prog)s --url https://jenkins.company.com --user <username> --token your-token \\
     --job "DevTeam/Projects/Web/build-and-deploy" --verbose
 
   # 3. Using IP address (common for local network Jenkins)

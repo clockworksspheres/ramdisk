@@ -39,7 +39,7 @@ def parse_arguments():
                 --description "Ubuntu 24.04 LTS test VM – Idaho lab"
 
               # 2. JNLP agent with custom remote FS root and JVM options
-              %(prog)s --url http://192.168.1.150:8080 --user roy --token your-api-token \\
+              %(prog)s --url http://192.168.1.150:8080 --user <username> --token your-api-token \\
                 --name windows-test-03 --executors 2 \\
                 --remote-fs "C:\\Jenkins\\agent" --labels "windows test dotnet" \\
                 --jvm-options "-Xmx768m -XX:+UseG1GC" \\
@@ -54,7 +54,7 @@ def parse_arguments():
 
               # 4. Minimal JNLP agent with only required fields
               %(prog)s --url http://ci.local:8080 --user ci-admin --token xyz789... \\
-                --name laptop-test-roy --executors 1 --labels "local test roy"
+                --name laptop-test --executors 1 --labels "local test_machine"
 
               # Show this help again
               %(prog)s --help
