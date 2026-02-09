@@ -6,7 +6,6 @@ Created on Jul 13, 2011 - stonix project
 
 import os
 import re
-import pwd
 import sys
 import unittest
 import traceback
