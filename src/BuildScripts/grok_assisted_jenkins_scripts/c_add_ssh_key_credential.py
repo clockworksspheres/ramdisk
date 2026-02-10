@@ -12,7 +12,7 @@ class SshKeyWrangling():
     def __init__(self):
         """
         """
-        print("entered SshKeyWrangling init")
+        print(f"Initializing {self.__class__.__name__} class")
 
     def load_private_key(self, path):
         """
