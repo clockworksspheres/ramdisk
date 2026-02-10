@@ -19,7 +19,7 @@ if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
 
    source packenv/bin/activate
 
-   pip install --upgrade pip
+   # pip3 install --upgrade pip
    pip3 install PySide6 PyInstaller
    pip3 install --upgrade PyInstaller pyinstaller-hooks-contrib
    pip3 install packaging

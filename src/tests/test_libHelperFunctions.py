@@ -3,11 +3,12 @@
 Test for testing the libHelperFunctions library.
 '''
 import sys
+import unittest
 
 sys.path.append("..")
-import ramdisk.lib.environment as environment
 
-import unittest
+# import ramdisk.lib.environment as environment
+
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 
