@@ -1,0 +1,80 @@
+pipeline {
+    agent none 
+    stages {
+        stage('pre-parallel') {
+            steps{
+                echo 'Running pre-parallel stage'
+            }
+        }
+        stage('Parallel build Pipelines') {
+            parallel {
+                stage('Debian 13 Pipeline') {
+                    agent { label 'debian' }
+                    stages {
+                        stage('debian 13 Build') { 
+                            steps {
+                                dir('src/BuildScripts') {
+                                    sh './build.ubuntu2404.sh' 
+                                } 
+                            }
+                        }
+                    }
+                }
+                stage('ubuntu 2404 Pipeline') {
+                    agent { label 'ubuntu' }
+                    stages {
+                        stage('Ubuntu 2404 Build') { 
+                            steps {
+                                dir('src/BuildScripts') {
+                                    sh './build.ubuntu2404.sh' 
+                                } 
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        stage('Parallel test pipelines') {
+            parallel {
+                stage('Debian 13 Pipeline') {
+                    agent { label 'debian' }
+                    stages {
+                        stage('debian 13 Test') { 
+                            steps {
+                                dir('src/tests') {
+                                    echo '----------=====### Starting Tests ###=====----------'
+                                    sh 'ls -l'
+                                    sh 'sudo /usr/bin/py.test --junit-xml rhel-test-reports/rhel-results.xml test_*.py'
+                                    // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
+                                    //sleep 15
+                                    echo '----------=====### Finished Tests ###=====----------'
+                                    junit 'rhel-test-reports/rhel-results.xml'
+                                }
+                            }
+                        }
+                    }
+                }
+                stage('Ubuntu 2404 Pipeline') {
+                    agent { label 'ubuntu' }
+                    stages {
+                        stage('Ubuntu 2404 Test') { 
+                            steps {
+                                dir('src/tests') {
+                                    echo '----------=====### Starting Tests ###=====----------'
+                                    sh 'ls -l'
+                                    sh 'sudo /usr/bin/py.test --junit-xml rhel-test-reports/rhel-results.xml test_*.py'
+                                    junit 'rhel-test-reports/rhel-results.xml'
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        stage('post-parallel') {
+            steps {
+                echo 'Running post-parallel stage'
+            }
+        }
+    }
+}
