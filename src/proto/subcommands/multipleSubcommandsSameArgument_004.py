@@ -7,6 +7,14 @@ parent_parser.add_argument(
     "--url", required=True, help="Target resource URL"
 )
 
+parent_parser.add_argument(
+    "--user", required=True, help="User to access the Jenkins server"
+)
+
+parent_parser.add_argument(
+    "--token", required=True, help="User's token to access the Jenkins server"
+)
+
 parser = argparse.ArgumentParser(prog="webtool")
 subparsers = parser.add_subparsers(dest="command")
 
