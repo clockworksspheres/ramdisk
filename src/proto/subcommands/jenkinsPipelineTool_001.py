@@ -103,13 +103,64 @@ def parse_arguments():
                 """
         )
     )
-    parser_run.add_argument("--job", help="Pipeline name to run")
+    #parser_run.add_argument("--job", help="Pipeline name to run")
+    '''
+    conn = parser.add_argument_group("Jenkins connection (required)")
+    conn.add_argument("--url", required=True,
+                      help="Jenkins URL – MUST include scheme: http://localhost:8080 or https://ci.company.com")
+    conn.add_argument("--user", required=True, help="Jenkins username")
+    conn.add_argument("--token", required=True, help="Jenkins API token (from User → Configure → API Token)")
+    '''
+    job_group = parser_run.add_argument_group("Job to trigger (required)")
+    job_group.add_argument("--job", required=True,
+                           help="Job name (supports folders: folder/subfolder/job-name)")
+    job_group.add_argument("--token-build", dest="build_token", default=None,
+                           help="Optional: 'Trigger builds remotely' auth token (if enabled on job)")
+
+    opts = parser_run.add_argument_group("Build & output options")
+    opts.add_argument("--param", action="append", metavar="KEY=VALUE",
+                      help="Build parameter KEY=VALUE (repeatable)")
+    opts.add_argument("--follow", action="store_true",
+                      help="Stream console output until build finishes")
+    opts.add_argument("--timeout", type=int, default=3600,
+                      help="Max wait time (seconds) when --follow (default: 3600)")
+
 
     # Subcommand: check
     parser_check = subparsers.add_parser(
-        "check", parents=[parent_parser], help="Check the status of a Jenkins pipeline"
+        "check", parents=[parent_parser], help="Show status of the last (most recent) build of a Jenkins job",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=textwrap.dedent("""\
+            Examples:
+
+            # 1. Basic – check last build of a job
+            python %(prog)s --url http://localhost:8080 --user admin --token 116b8f2a... \\
+                --job nightly-tests
+
+            # 2. Job inside folder + more details
+            python %(prog)s --url https://jenkins.company.com --user <username> --token your-token \\
+                --job "DevTeam/Projects/Web/build-and-deploy" --verbose
+
+            # 3. Using IP address (common for local network Jenkins)
+            python %(prog)s --url http://192.168.1.150:8080 --user admin --token 11abcdef... \\
+                --job smoke-test-pipeline --verbose
+
+            # 4. Show this help
+            python %(prog)s --help
+        """
+        )
     )
-    parser_check.add_argument("--job", help="Pipeline name to run")
+
+    # Job
+    job_group = parser_check.add_argument_group("Job selection (required)")
+    #job_group.add_argument("--job", dest="job_name", required=True,
+    job_group.add_argument("--job", required=True,
+                           help="Job name (supports folders: folder/subfolder/job-name)")
+
+    # Output style
+    parser_check.add_argument("--verbose", "-v", action="store_true",
+                        help="Show more details (triggered by, description, duration in seconds)")
+
 
     args = parser.parse_args()
 
@@ -129,9 +180,16 @@ if __name__=="__main__":
         if args.output:
             print(f"Saving to {args.output}")
 
+    elif args.command == "create":
+        print(f"Creating {args.url} for pipeline <{args.job_name}>...")
+
+    elif args.command == "run":
+        print(f"Running {args.url} for pipeline <{args.job}>...")
+
     elif args.command == "check":
-        print(f"Checking reachability of {args.url}...")
+        print(f"Checking {args.url} for pipeline <{args.job}>...")
 
-    elif args.command == "parse":
-        print(f"Parsing {args.url} for tag <{args.tag}>...")
-
+    print("\n")
+    print(f"command: {args.command}")
+    print(f"args: {vars(args)}")
+  

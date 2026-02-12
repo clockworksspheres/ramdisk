@@ -178,3 +178,6 @@ if __name__ == "__main__":
     args = parse_arguments()
     run_pipeline.controller(args)
 
+    print("\n")
+    print(f"command: {args.command}")
+    print(f"args: {vars(args)}")
