@@ -72,7 +72,7 @@ def parse_arguments():
     # SCM mode
     scm = parser_create.add_argument_group("SCM Pipeline options (used when --type=scm)")
     scm.add_argument("--repo", help="Git repository URL")
-    scm.add_argument("--branch", default="main", help="Branch name (default: main)")
+    scm.add_argument("--branch", default="master", help="Branch name (default: main)")
     scm.add_argument("--jenkinsfile", default="Jenkinsfile", help="Path to Jenkinsfile in repo")
     scm.add_argument("--credentials-id", default="", help="Jenkins credentials ID for Git (optional)")
 
@@ -186,21 +186,21 @@ if __name__=="__main__":
 
     elif args.command == "create":
         print(f"Creating {args.url} for pipeline <{args.job_name}>...")
-        import CreateJenkinsPipeline.CreateJenkinsPipeline as createPipeline
+        from CreateJenkinsPipeline import CreateJenkinsPipeline as createPipeline
 
         cjp = createPipeline()
         cjp.create_jenkins_pipeline(args)
 
     elif args.command == "run":
         print(f"Running {args.url} for pipeline <{args.job}>...")
-        import RunJenkinsPipeline.RunJenkinsPipeline as runPipeline
+        from RunJenkinsPipeline import RunJenkinsPipeline as runPipeline
 
         rpipeline = runPipeline()
         rpipeline.controller(args)
 
     elif args.command == "check":
         print(f"Checking {args.url} for pipeline <{args.job}>...")
-        import CheckJenkinsPipeline.CheckJenkinsPipeline as checkPipeline
+        from CheckJenkinsPipelineRun import CheckJenkinsPipelineRun as checkPipeline
 
         ckpipeline = checkPipeline()
         ckpipeline.check_run(args)
