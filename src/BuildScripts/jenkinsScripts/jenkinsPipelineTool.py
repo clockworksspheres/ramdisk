@@ -178,29 +178,23 @@ def parse_arguments():
 if __name__=="__main__":
     args = parse_arguments()
 
-    # Example logic
-    if args.command == "fetch":
-        print(f"Fetching {args.url}...")
-        if args.output:
-            print(f"Saving to {args.output}")
-
-    elif args.command == "create":
+    if args.command == "create":
         print(f"Creating {args.url} for pipeline <{args.job_name}>...")
-        from CreateJenkinsPipeline import CreateJenkinsPipeline as createPipeline
+        from JenkinsTools.CreateJenkinsPipeline import CreateJenkinsPipeline as createPipeline
 
         cjp = createPipeline()
         cjp.create_jenkins_pipeline(args)
 
     elif args.command == "run":
         print(f"Running {args.url} for pipeline <{args.job}>...")
-        from RunJenkinsPipeline import RunJenkinsPipeline as runPipeline
+        from JenkinsTools.RunJenkinsPipeline import RunJenkinsPipeline as runPipeline
 
         rpipeline = runPipeline()
         rpipeline.controller(args)
 
     elif args.command == "check":
         print(f"Checking {args.url} for pipeline <{args.job}>...")
-        from CheckJenkinsPipelineRun import CheckJenkinsPipelineRun as checkPipeline
+        from JenkinsTools.CheckJenkinsPipelineRun import CheckJenkinsPipelineRun as checkPipeline
 
         ckpipeline = checkPipeline()
         ckpipeline.check_run(args)
