@@ -6,6 +6,8 @@ Once the server is installed:
 sudo apt upgrade
 sudo apt install kde-standard
 sudo apt install net-tools
+sudo apt install open-vm-tools open-vm-tools-desktop
+sudo apt install openjdk-21-jdk
 ```
 
 Installing "kde-standard" will take some time.
@@ -119,7 +121,7 @@ HOST github.com
 run:
 
 ```
-ssh-add ~/.ssh/<privatekey>
+ssh-add ~/.ssh/<githubprivatekey>
 cd <clockworksspheres-dir-root>
 ```
 
@@ -128,3 +130,19 @@ Now you should be able to download via ssh your github project, that you have ri
 ```
 git clone git@github.com:clockworksspheres/ramdisk
 ```
+
+# Jenkins setup
+
+On the Jenkins server, copy the public jenkins user key to the jenkins user on the VM/Machine:
+
+```
+ssh-copy-id -i <key-name>.pub user@remote_host
+```
+
+On the Ubuntu machine, create an /etc/sudoers.d/<jenkins-user> file with the following content:
+
+```
+<jenkins-user> ALL=(ALL) NOPASSWD:/usr/bin/py.test
+```
+
+You should now be able to add this machine as a node to the Jenkins server.
