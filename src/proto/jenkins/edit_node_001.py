@@ -9,6 +9,10 @@ parser.add_argument('--url', required=True)
 parser.add_argument('--user', required=True)
 parser.add_argument('--token', required=True)
 parser.add_argument('--new_label', default="", help='New label to set')
+parser.add_argument('--new_remoteFS', default="", help='New remoteFS to set')
+parser.add_argument('--new_numExecutors', default="", help='New numExecutors to set')
+parser.add_argument('--new_host', default="", help='New host to set')
+parser.add_argument('--new_port', default="", help='New port to set')
 parser.add_argument('--new_credentialsId', default="", help='New credentials ID to set')
 
 args = parser.parse_args()
@@ -22,9 +26,24 @@ print("\n")
 print(config_xml)
 print("\n")
 
-
 root = ET.fromstring(config_xml)
 
+#####
+# remoteFS
+if args.new_remoteFS:
+    remoteFS_elem = root.find('remoteFS')
+    if remoteFS_elem is not None:
+        remoteFS_elem.text = args.new_remoteFS
+
+#####
+# numExecutors
+if args.new_numExecutors:
+    numExecutors_elem = root.find('numExecutors')
+    if numExecutors_elem is not None:
+        numExecutors_elem.text = args.new_numExecutors
+
+#####
+# label
 if args.new_label:
     # Modify specific element: <label>
     label_elem = root.find('label')
@@ -33,33 +52,39 @@ if args.new_label:
     else:
         label_elem = ET.SubElement(root, 'label')
         label_elem.text = args.new_label
-"""
-launcher = root.find('launcher')
-if launcher is not None:
 
-    credsID = launcher.find('credentialsId')
+#####
+# launcher related variables
 
-    print(f"{credsID.text}")
+#####
+# Host
+if args.new_host:
+    host = root.find('.//host')
+    if host is not None:
+        port.text = args.new_host
+    # else:
+    #     port = ET.SubElement(root, 'port')
+    #     port.text = args.new_credentialsId
 
-    if credsID is not None:
-        credsID.text = args.new_label
-    else:
-        credsID = ET.SubElement(root, 'credentialsId')
-        credsID.text = args.new_credentialsID
+#####
+# Port
+if args.new_port:
+    port = root.find('.//port')
+    if port is not None:
+        port.text = args.new_port
+    # else:
+    #     port = ET.SubElement(root, 'port')
+    #     port.text = args.new_credentialsId
 
-"""
-
-
+#####
+# credentialsId
 if args.new_credentialsId:
     credsID = root.find('.//credentialsId')
     if credsID is not None:
         credsID.text = args.new_credentialsId
-    else:
-        credsID = ET.SubElement(root, 'credentialsId')
-        credsID.text = args.new_credentialsId
-        #credsID.text = "fred"
-
-
+    # else:
+    #    credsID = ET.SubElement(root, 'credentialsId')
+    #    credsID.text = args.new_credentialsId
 
 # Convert back to string
 new_config = ET.tostring(root, encoding='unicode')
