@@ -33,37 +33,40 @@ def parse_arguments():
         epilog=textwrap.dedent("""\
             Examples:
               # 1. Quick JNLP/inbound agent (easiest – agent connects to controller)
-              %(prog)s --url http://localhost:8080 --user admin --token 116b8f... \\
-                --name test-ubuntu-01 --executors 4 \\
+              %(prog)s test-ubuntu-01 \\
+                --url http://localhost:8080 --user admin --token 116b8f... \\
+                --executors 4 \\
                 --labels "test linux docker python ubuntu" \\
                 --description "Ubuntu 24.04 LTS test VM – Idaho lab"
 
               # 2. JNLP agent with custom remote FS root and JVM options
-              %(prog)s --url http://192.168.1.150:8080 --user <username> --token your-api-token \\
-                --name windows-test-03 --executors 2 \\
+              %(prog)s windows-test-03 --url http://192.168.1.150:8080 \\
+                --user <username> --token your-api-token \\
+                --executors 2 \\
                 --remote-fs "C:\\Jenkins\\agent" --labels "windows test dotnet" \\
                 --jvm-options "-Xmx768m -XX:+UseG1GC" \\
                 --description "Windows 11 test machine"
 
               # 3. SSH-launched agent (controller connects outbound to the node)
-              %(prog)s --url https://jenkins.company.com --user admin --token 11abcdef... \\
-                --name build-agent-07 --method ssh \\
+              %(prog)s build-agent-07 --url https://jenkins.company.com --user admin --token 11abcdef... \\
+                --method ssh \\
                 --host 10.20.30.45 --port 22 --credentials-id ssh-jenkins@agent07 \\
                 --executors 8 --labels "fast linux amd64 heavy build" \\
                 --remote-fs /home/jenkins --description "Dedicated build server – rack 4"
 
               # 4. Minimal JNLP agent with only required fields
-              %(prog)s --url http://ci.local:8080 --user ci-admin --token xyz789... \\
-                --name laptop-test --executors 1 --labels "local test_machine"
+              %(prog)s laptop-test --url http://ci.local:8080 --user ci-admin --token xyz789... \\
+                --executors 1 --labels "local test_machine"
 
               # Show this help again
-              %(prog)s --help
+              %(prog)s add --help
         """)
     )
 
     # ─── Node basics (required) ─────────────────────────────────────────────
     node = parser_add.add_argument_group("Node basics (required)")
-    node.add_argument("--name", required=True, help="Unique node name (e.g. test-ubuntu-01, build-agent-05)")
+    node.add_argument('name', help="Unique node name (e.g. test-ubuntu-01, build-agent-05)")
+
     node.add_argument("--description", default="", help="Human-readable description of the node")
     node.add_argument("--executors", type=int, default=2, help="Number of concurrent builds (default: 2)")
     node.add_argument("--remote-fs", default="/home/jenkins/agent",
@@ -91,19 +94,22 @@ def parse_arguments():
             Examples:
 
               # Update only the label
-              script.py update-node my-node \\
+              script.py update my-node \\
                   --url http://jenkins:8080 --user admin --token 12345 \\
                   --new_label "linux docker"
 
               # Update remoteFS and executors
-              script.py update-node my-node \\
+              script.py update my-node \\
                   --url http://jenkins:8080 --user admin --token 12345 \\
                   --new_remoteFS /var/jenkins --new_numExecutors 4
 
               # Update SSH launcher settings
-              script.py update-node my-node \\
+              script.py update my-node \\
                   --url http://jenkins:8080 --user admin --token 12345 \\
                   --new_host build01.example.com --new_port 22 --new_credentialsId ssh-creds
+
+              # Show this help again
+              %(prog)s update --help
             """
         )
     )
