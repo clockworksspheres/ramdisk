@@ -82,11 +82,43 @@ def parse_arguments():
     ssh.add_argument("--credentials-id", help="Existing Jenkins credential ID for SSH login")
     ssh.add_argument("--jvm-options", default="", help="JVM options for the agent JVM (e.g. '-Xmx2g')")
 
+    # --- update-node subcommand ---
+    update = subparsers.add_parser(
+        "update",
+        help="Update Jenkins node configuration",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=textwrap.dedent("""\
+            Examples:
 
+              # Update only the label
+              script.py update-node my-node \\
+                  --url http://jenkins:8080 --user admin --token 12345 \\
+                  --new_label "linux docker"
 
+              # Update remoteFS and executors
+              script.py update-node my-node \\
+                  --url http://jenkins:8080 --user admin --token 12345 \\
+                  --new_remoteFS /var/jenkins --new_numExecutors 4
 
+              # Update SSH launcher settings
+              script.py update-node my-node \\
+                  --url http://jenkins:8080 --user admin --token 12345 \\
+                  --new_host build01.example.com --new_port 22 --new_credentialsId ssh-creds
+            """
+        )
+    )
 
+    update.add_argument('name', help='Jenkins node name')
+    update.add_argument('--url', required=True)
+    update.add_argument('--user', required=True)
+    update.add_argument('--token', required=True)
 
+    update.add_argument('--new_label', default="", help='New label to set')
+    update.add_argument('--new_remoteFS', default="", help='New remoteFS to set')
+    update.add_argument('--new_numExecutors', default="", help='New numExecutors to set')
+    update.add_argument('--new_host', default="", help='New host to set')
+    update.add_argument('--new_port', default="", help='New port to set')
+    update.add_argument('--new_credentialsId', default="", help='New credentials ID to set')
 
 
 
@@ -107,14 +139,13 @@ if __name__=="__main__":
         add_node = addNode(args)
         add_node.add_jenkins_node()
 
+    elif args.command == "update":
+        print(f"Running {args.url} for pipeline <{args.name}>...")
+        from JenkinsTools.update_node import cmd_update_node
+
+        cmd_update_node(args)
+
     """
-    elif args.command == "run":
-        print(f"Running {args.url} for pipeline <{args.job}>...")
-        from JenkinsTools.RunJenkinsPipeline import RunJenkinsPipeline as runPipeline
-
-        rpipeline = runPipeline()
-        rpipeline.controller(args)
-
     elif args.command == "check":
         print(f"Checking {args.url} for pipeline <{args.job}>...")
         from JenkinsTools.CheckJenkinsPipelineRun import CheckJenkinsPipelineRun as checkPipeline
