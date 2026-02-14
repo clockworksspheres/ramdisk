@@ -89,7 +89,20 @@ class CreateJenkinsPipeline():
 
         try:
             server = jenkins.Jenkins(args.url, username=args.user, password=args.token)
-            
+
+            # Quick connectivity check
+            try:
+                server.get_whoami()
+            except Exception as e:
+                print("\nCannot connect to Jenkins!", file=sys.stderr)
+                print("Common causes:", file=sys.stderr)
+                print("  • Wrong --url (must be real address – not jenkins.example.com)", file=sys.stderr)
+                print("  • Jenkins not running / wrong port", file=sys.stderr)
+                print("  • Firewall / network issue", file=sys.stderr)
+                print("  • Invalid --user or --token", file=sys.stderr)
+                print(f"\nError detail: {e}", file=sys.stderr)
+                sys.exit(1)
+
             if server.job_exists(args.job_name):
                 print(f"Job '{args.job_name}' already exists → skipping creation.")
                 return

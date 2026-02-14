@@ -19,7 +19,7 @@ import jenkins
 from jenkins import JenkinsException
 
 
-class Add_Jenkins_Node():
+class AddJenkinsNode():
     def __init__(self, args):
         """
         """
@@ -218,7 +218,7 @@ def parse_arguments():
 def main():
     args = parse_arguments()
 
-    addNode = Add_Jenkins_Node(args)
+    addNode = AddJenkinsNode(args)
     addNode.add_jenkins_node()
 
 if __name__ == "__main__":
