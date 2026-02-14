@@ -95,7 +95,7 @@ Examples:
 
     # --- update-node subcommand ---
     update = subparsers.add_parser(
-        "update-node",
+        "update",
         help="Update Jenkins node configuration",
         epilog=epilog_text,
         formatter_class=argparse.RawDescriptionHelpFormatter
