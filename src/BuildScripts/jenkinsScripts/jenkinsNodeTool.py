@@ -82,6 +82,14 @@ def parse_arguments():
     ssh.add_argument("--credentials-id", help="Existing Jenkins credential ID for SSH login")
     ssh.add_argument("--jvm-options", default="", help="JVM options for the agent JVM (e.g. '-Xmx2g')")
 
+
+
+
+
+
+
+
+
     args = parser.parse_args()
 
     print("Just before returning args...")
