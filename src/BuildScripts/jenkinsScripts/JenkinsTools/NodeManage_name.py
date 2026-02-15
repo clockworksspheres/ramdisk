@@ -88,37 +88,35 @@ Examples:
     parser = argparse.ArgumentParser(
         description="Manage Jenkins nodes via CLI",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog=epilog, add_help=False
+        epilog=epilog
     )
 
     # Global arguments
-    # Parent parser for global options (shared by all subcommands)
-    parent = argparse.ArgumentParser(add_help=False)
-    parent.add_argument("--url", required=True, help="Jenkins base URL")
-    parent.add_argument("--user", required=True, help="Jenkins username")
-    parent.add_argument("--token", required=True, help="Jenkins API token")
-
-    #parser.add_argument("--url", required=True, help="Jenkins URL")
-    #parser.add_argument("--user", required=True, help="Jenkins username")
-    #parser.add_argument("--token", required=True, help="Jenkins API token")
+    parser.add_argument("--url", required=True, help="Jenkins URL")
+    parser.add_argument("--user", required=True, help="Jenkins username")
+    parser.add_argument("--token", required=True, help="Jenkins API token")
 
     subparsers = parser.add_subparsers(dest="command", required=True)
 
+    # Shared node name argument
+    def add_name_arg(p):
+        p.add_argument("name", required=True, help="Node name")
+
     # Subcommands
     add_parser = subparsers.add_parser("add", help="Add a Jenkins node")
-    add_parser.add_argument("name", help="Node name")
+    add_name_arg(add_parser)
 
-    delete_parser = subparsers.add_parser("delete", parents=[parent], help="Delete a Jenkins node")
-    delete_parser.add_argument("name", help="Node name")
+    delete_parser = subparsers.add_parser("delete", help="Delete a Jenkins node")
+    add_name_arg(delete_parser)
 
-    disable_parser = subparsers.add_parser("disable", parents=[parent], help="Disable a Jenkins node")
-    disable_parser.add_argument("name", help="Node name")
+    disable_parser = subparsers.add_parser("disable", help="Disable a Jenkins node")
+    add_name_arg(disable_parser)
 
-    enable_parser = subparsers.add_parser("enable", parents=[parent], help="Enable a Jenkins node")
-    enable_parser.add_argument("name", help="Node name")
+    enable_parser = subparsers.add_parser("enable", help="Enable a Jenkins node")
+    add_name_arg(enable_parser)
 
-    update_parser = subparsers.add_parser("update", parents=[parent], help="Update a Jenkins node")
-    update_parser.add_argument("name", help="Node name")
+    update_parser = subparsers.add_parser("update", help="Update a Jenkins node")
+    add_name_arg(update_parser)
 
     return parser
 
