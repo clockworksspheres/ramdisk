@@ -126,6 +126,37 @@ def parse_arguments():
     update.add_argument('--new_port', default="", help='New port to set')
     update.add_argument('--new_credentialsId', default="", help='New credentials ID to set')
 
+    # get-nodes
+    subparsers.add_parser(
+        "get-nodes",
+        parents=[parent_parser],
+        help="List all Jenkins nodes"
+    )
+
+    # get-node-info
+    p_info = subparsers.add_parser(
+        "get-node-info",
+        parents=[parent_parser],
+        help="Show detailed info for a node"
+    )
+    p_info.add_argument("name")
+
+    # get-node-config
+    p_cfg = subparsers.add_parser(
+        "get-node-config",
+        parents=[parent_parser],
+        help="Show XML config for a node"
+    )
+    p_cfg.add_argument("name")
+
+    # node-exists
+    p_exists = subparsers.add_parser(
+        "node-exists",
+        parents=[parent_parser],
+        help="Check if a node exists"
+    )
+    p_exists.add_argument("name")
+
 
 
     args = parser.parse_args()
@@ -150,6 +181,27 @@ if __name__=="__main__":
         from JenkinsTools.update_node import cmd_update_node
 
         cmd_update_node(args)
+
+    elif args.command == "get-nodes":
+        from JenkinsTools.NodeStatus import NodeStatus
+        ns = NodeStatus(args)
+        print(ns.get_nodes())
+
+    elif args.command == "get-node-info":
+        from JenkinsTools.NodeStatus import NodeStatus
+        ns = NodeStatus(args)
+        print(ns.get_node_info())
+
+    elif args.command == "get-node-config":
+        from JenkinsTools.NodeStatus import NodeStatus
+        ns = NodeStatus(args)
+        print(ns.get_node_config())
+
+    elif args.command == "node-exists":
+        from JenkinsTools.NodeStatus import NodeStatus
+        ns = NodeStatus(args)
+        print(ns.node_exists())
+
 
     """
     elif args.command == "check":
