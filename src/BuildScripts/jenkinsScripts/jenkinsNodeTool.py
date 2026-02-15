@@ -59,7 +59,7 @@ def parse_arguments():
                 --executors 1 --labels "local test_machine"
 
               # Show this help again
-              %(prog)s add --help
+              %(prog)s --help
         """)
     )
 
