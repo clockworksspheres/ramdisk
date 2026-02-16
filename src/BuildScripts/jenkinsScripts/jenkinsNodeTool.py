@@ -157,6 +157,15 @@ def parse_arguments():
     )
     p_exists.add_argument("name")
 
+    # Subcommands
+    delete_parser = subparsers.add_parser("delete", parents=[parent_parser], help="Delete a Jenkins node")
+    delete_parser.add_argument("name", help="Node name")
+
+    disable_parser = subparsers.add_parser("disable", parents=[parent_parser], help="Disable a Jenkins node")
+    disable_parser.add_argument("name", help="Node name")
+
+    enable_parser = subparsers.add_parser("enable", parents=[parent_parser], help="Enable a Jenkins node")
+    enable_parser.add_argument("name", help="Node name")
 
 
     args = parser.parse_args()
@@ -202,15 +211,21 @@ if __name__=="__main__":
         ns = NodeStatus(args)
         print(ns.node_exists())
 
+    elif args.command == "delete":
+        from JenkinsTools.NodeManage import NodeManage
+        nm = NodeManage(args)
+        print(nm.node_exists())
 
-    """
-    elif args.command == "check":
-        print(f"Checking {args.url} for pipeline <{args.job}>...")
-        from JenkinsTools.CheckJenkinsPipelineRun import CheckJenkinsPipelineRun as checkPipeline
+    elif args.command == "disable":
+        from JenkinsTools.NodeManage import NodeManage
+        nm = NodeManage(args)
+        print(nm.node_exists())
 
-        ckpipeline = checkPipeline()
-        ckpipeline.check_run(args)
-    """
+    elif args.command == "enable":
+        from JenkinsTools.NodeManage import NodeManage
+        nm = NodeManage(args)
+        print(nm.node_exists())
+
 
     print("\n")
     print(f"command: {args.command}")
