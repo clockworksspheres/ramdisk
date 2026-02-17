@@ -214,17 +214,17 @@ if __name__=="__main__":
     elif args.command == "delete":
         from JenkinsTools.NodeManage import NodeManage
         nm = NodeManage(args)
-        print(nm.node_exists())
+        print(nm.delete_node())
 
     elif args.command == "disable":
         from JenkinsTools.NodeManage import NodeManage
         nm = NodeManage(args)
-        print(nm.node_exists())
+        print(nm.disable_node())
 
     elif args.command == "enable":
         from JenkinsTools.NodeManage import NodeManage
         nm = NodeManage(args)
-        print(nm.node_exists())
+        print(nm.enable_node())
 
 
     print("\n")
