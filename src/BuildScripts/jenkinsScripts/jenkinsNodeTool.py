@@ -94,22 +94,22 @@ def parse_arguments():
             Examples:
 
               # Update only the label
-              script.py update my-node \\
+              %(prog)s my-node \\
                   --url http://jenkins:8080 --user admin --token 12345 \\
                   --new_label "linux docker"
 
               # Update remoteFS and executors
-              script.py update my-node \\
+              %(prog)s my-node \\
                   --url http://jenkins:8080 --user admin --token 12345 \\
                   --new_remoteFS /var/jenkins --new_numExecutors 4
 
               # Update SSH launcher settings
-              script.py update my-node \\
+              %(prog)s my-node \\
                   --url http://jenkins:8080 --user admin --token 12345 \\
                   --new_host build01.example.com --new_port 22 --new_credentialsId ssh-creds
 
               # Show this help again
-              %(prog)s update --help
+              %(prog)s --help
             """
         )
     )

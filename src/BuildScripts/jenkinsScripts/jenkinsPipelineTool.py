@@ -85,25 +85,25 @@ def parse_arguments():
         Examples (note: always include http:// or https:// in --url):
 
         # 1. Basic trigger
-        python %(prog)s --url http://localhost:8080 --user admin --token 116b8f2a... \\
+        %(prog)s --url http://localhost:8080 --user admin --token 116b8f2a... \\
             --job nightly-tests
 
         # 2. With parameters + real-time console output
-        python %(prog)s --url http://jenkins:8080 --user <username> --token your-token-here \\
+        %(prog)s --url http://jenkins:8080 --user <username> --token your-token-here \\
             --job deploy-service --follow \\
             --param ENVIRONMENT=staging --param VERSION=2.5.0 --param DRY_RUN=true
 
         # 3. Job inside folder + remote trigger token
-        python %(prog)s --url https://ci.company.com --user admin --token abc123... \\
+        %(prog)s --url https://ci.company.com --user admin --token abc123... \\
             --job "DevTeam/Mobile/Android/build" \\
             --token-build REMOTE_TRIGGER_KEY_2026 --follow
 
         # 4. Using IP address (common for local network Jenkins)
-        python %(prog)s --url http://192.168.1.150:8080 --user admin --token 11abcdef... \\
+        %(prog)s --url http://192.168.1.150:8080 --user admin --token 11abcdef... \\
             --job smoke-test
 
         # 5. Show this help
-        python %(prog)s --help
+        %(prog)s --help
                 """
         )
     )
@@ -138,19 +138,19 @@ def parse_arguments():
             Examples:
 
             # 1. Basic – check last build of a job
-            python %(prog)s --url http://localhost:8080 --user admin --token 116b8f2a... \\
+            %(prog)s --url http://localhost:8080 --user admin --token 116b8f2a... \\
                 --job nightly-tests
 
             # 2. Job inside folder + more details
-            python %(prog)s --url https://jenkins.company.com --user <username> --token your-token \\
+            %(prog)s --url https://jenkins.company.com --user <username> --token your-token \\
                 --job "DevTeam/Projects/Web/build-and-deploy" --verbose
 
             # 3. Using IP address (common for local network Jenkins)
-            python %(prog)s --url http://192.168.1.150:8080 --user admin --token 11abcdef... \\
+            %(prog)s --url http://192.168.1.150:8080 --user admin --token 11abcdef... \\
                 --job smoke-test-pipeline --verbose
 
             # 4. Show this help
-            python %(prog)s --help
+            %(prog)s --help
         """
         )
     )
