@@ -21,7 +21,7 @@ sudo apt install python3-pip
 sudo apt install python3-pytest
 sudo apt install python3-venv
 sudo apt install vim
-sudo apt install gitd
+sudo apt install git
 sudo apt install dia dia-common dia-shapes dia2code
 sudo apt install slack
 sudo apt install vym
