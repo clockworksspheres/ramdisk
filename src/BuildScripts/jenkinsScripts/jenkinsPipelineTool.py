@@ -107,14 +107,7 @@ def parse_arguments():
                 """
         )
     )
-    #parser_run.add_argument("--job", help="Pipeline name to run")
-    '''
-    conn = parser.add_argument_group("Jenkins connection (required)")
-    conn.add_argument("--url", required=True,
-                      help="Jenkins URL – MUST include scheme: http://localhost:8080 or https://ci.company.com")
-    conn.add_argument("--user", required=True, help="Jenkins username")
-    conn.add_argument("--token", required=True, help="Jenkins API token (from User → Configure → API Token)")
-    '''
+
     job_group = parser_run.add_argument_group("Job to trigger (required)")
     job_group.add_argument("--job", required=True,
                            help="Job name (supports folders: folder/subfolder/job-name)")
