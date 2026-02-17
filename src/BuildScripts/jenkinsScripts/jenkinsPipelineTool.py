@@ -165,6 +165,34 @@ def parse_arguments():
     parser_check.add_argument("--verbose", "-v", action="store_true",
                         help="Show more details (triggered by, description, duration in seconds)")
 
+    # get-config
+    p_get = subparsers.add_parser(
+        "get-config",
+        parents=[parent_parser],
+        help="Download job config XML",
+        epilog=textwrap.dedent(""" \
+            Example:
+              %(prog)s MyJob --url http://jenkins:8080 --user jenkins-user --token 12345
+
+            """
+        )
+    )
+    p_get.add_argument("job", help="Job name")
+
+    # set-config
+    p_set = subparsers.add_parser(
+        "set-config",
+        parents=[parent_parser],
+        help="Upload job config XML",
+        epilog=textwrap.dedent(""" \
+            Example:
+              %(prog)s MyJob config.xml --url http://jenkins:8080 --user jenkins-user --token 12345
+
+            """
+        )
+    )
+    p_set.add_argument("job", help="Job name")
+    p_set.add_argument("file", help="XML file to upload")
 
     args = parser.parse_args()
 
@@ -198,6 +226,20 @@ if __name__=="__main__":
 
         ckpipeline = checkPipeline()
         ckpipeline.check_run(args)
+
+    elif args.command == "get-config":
+        print(f"Getting {args.url} for pipeline <{args.job}> config...")
+        from JenkinsTools.ConfigJob import ConfigJob
+
+        config_job = ConfigJob(args)
+        config_job.cmd_get_config()
+
+    elif args.command == "set-config":
+        print(f"Setting {args.url} for pipeline <{args.job}> config...")
+        from JenkinsTools.ConfigJob import ConfigJob
+
+        config_job = ConfigJob(args)
+        config_job.cmd_set_config()
 
 
     print("\n")

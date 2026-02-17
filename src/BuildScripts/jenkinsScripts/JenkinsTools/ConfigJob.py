@@ -2,6 +2,7 @@
 import argparse
 import jenkins
 import sys
+import textwrap
 
 class ConfigJob():
     def __init__(self, args):
@@ -90,20 +91,32 @@ def main():
     p_get = sub.add_parser(
         "get-config",
         parents=[parent],
-        help="Download job config XML"
+        help="Download job config XML",
+        epilog=textwrap.dedent("""
+            Example:
+              %(prog)s MyJob --url http://jenkins:8080 --user jenkins-user --token 12345
+
+            """
+        ),
+        formatter_class=argparse.RawDescriptionHelpFormatter
     )
     p_get.add_argument("job", help="Job name")
-    #p_get.set_defaults(func=cmd_get_config)
 
     # set-config
     p_set = sub.add_parser(
         "set-config",
         parents=[parent],
-        help="Upload job config XML"
+        help="Upload job config XML",
+        epilog=textwrap.dedent("""
+            Example:
+              %(prog)s MyJob config.xml --url http://jenkins:8080 --user jenkins-user --token 12345
+
+            """
+        ),
+        formatter_class=argparse.RawDescriptionHelpFormatter
     )
     p_set.add_argument("job", help="Job name")
     p_set.add_argument("file", help="XML file to upload")
-    #p_set.set_defaults(func=cmd_set_config)
 
     args = parser.parse_args()
 
