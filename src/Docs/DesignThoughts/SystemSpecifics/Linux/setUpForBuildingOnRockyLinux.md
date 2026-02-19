@@ -5,19 +5,22 @@ Setup *DOES NOT WORK* on aarch64 Rocky 10.
 ```
 sudo dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm
 sudo dnf upgrade
+sudo dnf install open-vm-tools open-vm-tools-desktop   # to as a Test VM
+sudo dnf install java-21-openjdk java-21-openjdk-devel # for Jenkins support
 sudo dnf install vim
 sudo dnf install git
 sudo dnf-install net-tools
 sudo dnf install python3
 sudo dnf install python3-pip
 sudo dnf install python3-tkinter
-pip install pytest
+sudo dnf install python3-pytest
 ```
 
 # Installing useful apps with dnf
 
 ```
-dnf install meld
+sudo dnf install epel-release
+sudo dnf install meld
 ```
 ---
 

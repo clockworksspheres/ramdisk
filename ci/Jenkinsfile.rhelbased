@@ -8,6 +8,18 @@ pipeline {
         }
         stage('Parallel build Pipelines') {
             parallel {
+                stage('Rocky 9 Pipeline') {
+                    agent { label 'rocky9' }
+                    stages {
+                        stage('rocky9 Build') { 
+                            steps {
+                                dir('src/BuildScripts') {
+                                    sh './build.ubuntu2404.sh' 
+                                } 
+                            }
+                        }
+                    }
+                }
                 stage('Rocky 10 Pipeline') {
                     agent { label 'rocky10' }
                     stages {
@@ -36,6 +48,24 @@ pipeline {
         }
         stage('Parallel test pipelines') {
             parallel {
+                stage('Rocky 9 Pipeline') {
+                    agent { label 'rockycw910' }
+                    stages {
+                        stage('Rockycw910 Test') { 
+                            steps {
+                                dir('src/tests') {
+                                    echo '----------=====### Starting Tests ###=====----------'
+                                    sh 'ls -l'
+                                    sh 'sudo /usr/bin/py.test --junit-xml rhel-test-reports/rhel-results.xml test_*.py'
+                                    // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
+                                    //sleep 15
+                                    echo '----------=====### Finished Tests ###=====----------'
+                                    junit 'rhel-test-reports/rhel-results.xml'
+                                }
+                            }
+                        }
+                    }
+                }
                 stage('Rocky 10 Pipeline') {
                     agent { label 'rocky10' }
                     stages {
