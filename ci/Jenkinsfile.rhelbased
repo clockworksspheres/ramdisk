@@ -49,9 +49,9 @@ pipeline {
         stage('Parallel test pipelines') {
             parallel {
                 stage('Rocky 9 Pipeline') {
-                    agent { label 'rockycw910' }
+                    agent { label 'rocky9' }
                     stages {
-                        stage('Rockycw910 Test') { 
+                        stage('Rocky9 Test') { 
                             steps {
                                 dir('src/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
