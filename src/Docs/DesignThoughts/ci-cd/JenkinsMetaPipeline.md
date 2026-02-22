@@ -97,6 +97,8 @@ __Windows supported VMs and pipeline not yet implemented.__
 
 ## Collect Pipeline Run Output
 
+Data or some subset of the data needs to be posted somewhere, or some way to track the status of each of the pipeline runs.  Successful run or otherwise.
+
 ```
 rheloutput = jenkinsPipelineTools check ramdisk-redhat -user <jenkinsUsername> --url http://localhost:8080 --token 123abc456... --verbose --get-full-run
 deboutput = jenkinsPipelineTools check ramdisk-debbased -user <jenkinsUsername> --url http://localhost:8080 --token 123abc456... --verbose --get-full-run
