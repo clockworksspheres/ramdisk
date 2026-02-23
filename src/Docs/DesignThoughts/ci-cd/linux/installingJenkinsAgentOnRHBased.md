@@ -3,10 +3,13 @@
 # Package(s) to install
 
 ```
-sudo dnf install java-21-openjdk java-21-openjdk-devel   
+sudo dnf install java-21-openjdk java-21-openjdk-devel
+sudo dnf install openssh-server
 ```
 
-# Prepare ssh on the source side (Jenkins Server)
+# Create SSH keys for use by the Jenkins Server-Agent interaction
+
+On the Jenkins server
 
 ```
 ssh-keygen -t ed25519 -C "your_email@example.com" -f <key-name>
@@ -15,22 +18,38 @@ eval $(ssh-agent)
 ssh-add <key-name>
 ```
 
+## Install the private key to the Jenkins web service:
+
+ Examples:
+
+* Add ~/.ssh/id_rsa as a Jenkins credential:
+
+``` bash
+     ./jenkinsTools/JenkinsTools/AddSshKeyCredential.py \
+      --url http://localhost:8080 \
+      --jenkins-user admin \
+      --jenkins-token API_TOKEN \
+      --credential-id linux-agent-key \
+      --ssh-user jenkins \
+      --private-key ~/.ssh/id_rsa
+```
+  
+ * Add an encrypted SSH key:
+
+``` bash
+    ./jenkinsTools/JenkinsTools/AddSshKeyCredential.py \
+      --url http://jenkins:8080 \
+      --jenkins-user admin \
+      --jenkins-token API_TOKEN \
+      --credential-id secure-key \
+      --ssh-user jenkins \
+      --private-key ~/.ssh/id_rsa_secure \
+      --key-passphrase "mySecretPassphrase"
+```
+
 # Prepare SSHD on the destination side (Jenkins Agent)
 
-```
-vim /etc/ssh/sshd_config
-```
-
-Check the /etc/ssh/sshd_config for the following directives before taking the above steps:
-
-```
-Port 22                  # Default SSH port
-PermitRootLogin no       # Disable root login for security
-PasswordAuthentication yes  # Allow password login (or set to 'no' if using keys only)
-PubkeyAuthentication yes # Enable public key authentication
-```
-
-Then run:
+## Enabled and Start sshd on the Jenkins Agent 
 
 ```
 sudo systemctl enable ssh
@@ -39,7 +58,8 @@ sudo systemctl restart ssh
 
 ## Set up Sudoers to allow for py.test to run
 
-### Rocky10, Alma10, Debian13 systems
+### Systemd systems
+
 ```
 vim /etc/sudoers.d/<username>
 ```
@@ -49,5 +69,4 @@ File should look like:
 ```
 <username> ALL=(ALL) NOPASSWD:/usr/bin/py.test
 ```
-
 
