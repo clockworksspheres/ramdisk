@@ -85,7 +85,7 @@ class Environment(object):
         self.systemtype = ''
         self.numrules = 0
         self.version = VERSION
-        if sys.platform.startswith("win32"):
+        if sys.platform.lower().startswith("win32"):
             self.euid = win32api.GetUserName()
             currpwd = os.environ['USERPROFILE']
         else:

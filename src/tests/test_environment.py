@@ -70,7 +70,13 @@ class test_environment(unittest.TestCase):
                                   self.to.getmacaddr()))
 
     def testGeteuid(self):
-        uid = os.geteuid()
+        if sys.platform.lower().startswith("win32"):
+            uid = win32api.GetUserName()
+        #    currpwd = os.environ['USERPROFILE']
+        else:
+             uid = os.geteuid()
+        #     currpwd = pwd.getpwuid(self.euid)
+        #uid = os.geteuid()
         tracemalloc.start(10)
         self.assertTrue(self.to.geteuid() == uid)
 
@@ -97,7 +103,8 @@ class test_environment(unittest.TestCase):
 
     def testGetEuidHome(self):
         tracemalloc.start(10)
-        self.assertEqual(self.to.geteuidhome(),
+        if not sys.platform.startswith("win32"):
+            self.assertEqual(self.to.geteuidhome(),
                              pwd.getpwuid(os.geteuid())[5])
 
     def testGetSysSerNo(self):
