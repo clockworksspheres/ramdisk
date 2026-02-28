@@ -132,15 +132,15 @@ class Environment(object):
         cmd = ""
         self.systemtype = ""
 
-        # buld the command
+        # build the command
         for cl in cmdlocs:
             if os.path.exists(cl):
                 cmdbase = cl
         if cmdbase:
             cmd = cmdbase + " -p1"
         elif not cmdbase:
-            if  sys.platform.startswith('win32'):
-                self.sytemtype = 'windows'
+            if  sys.platform.lower().startswith('win32'):
+                self.systemtype = 'windows'
                 if self.systemtype not in validtypes and DEFAULT_LOG_LEVEL >= LogPriority["VERBOSE"]:
                     print(str(__name__) + ":This system is based on an unknown architecture")
                 elif DEFAULT_LOG_LEVEL >= LogPriority["VERBOSE"]:
@@ -163,7 +163,6 @@ class Environment(object):
                         if re.search(vt, line, re.IGNORECASE):
                             self.systemtype = vt
                             # print("type: " + str(vt))
-
             else:
                 print(str(__name__) + ":Unable to determine systemtype. Required utility 'ps' does not exist on this system")
         except OSError:
@@ -481,11 +480,13 @@ class Environment(object):
 
         elif re.match(r'win32$', sys.platform):
             try:
-                platform_data = platform.system()
-                description = platform_data[0]
-                release = platform_data[2]
-                build = platform_data[3]
-                opsys = str(description).strip() + ' ' + str(release) + ' ' + str(build) 
+                description = platform.system()
+                self.operatingsystem = description
+                platform_data = platform.win32_ver()
+                self.release = platform_data[0]
+                self.osversion = self.release
+                self.build = platform_data[1]
+                opsys = str(description).strip() + ' ' + str(self.release) + ' ' + str(self.build) 
             except Exception as err:
                 print(traceback.format_exc())
                 raise()
