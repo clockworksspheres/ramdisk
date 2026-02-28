@@ -23,6 +23,8 @@ if (!(Test-Path -Path ".\packenv" -PathType Container)) {
    pip install psutil
    pip install packaging
    pip install requests
+   pip install pywin32
+   pip install pytest
 } else {
     .\packenv\Scripts\Activate.ps1
 }
