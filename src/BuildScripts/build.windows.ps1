@@ -5,10 +5,9 @@
 
 # before script is run:
 # Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-# powershell -File ".\eisenban.windows.ps1"
+# powershell -File ".\build.windows.ps1"
 
-#if doesn't exist...
-# cd to the eisenban source root
+pushd ..
 
 #$FolderPath = ".\packenv"
 #if (!(Test-Path -Path $FolderPath -PathType Container)) {
@@ -34,8 +33,13 @@ if (!(Test-Path -Path ".\packenv" -PathType Container)) {
 # proper license can be found
 # cp .\resources\icons\Barkerbaggies-Bag-O-Tiles-E.ico .\resources\icons\E.ico
 
+cp BuildScripts/build.windows11.onefile.spec .
+
 pyinstaller --clean -y  build.windows11.onefile.spec
 pyinstaller -y  build.windows11.onefile.spec
 
+rm build.windows11.onefile.spec
+
+popd
 
 
