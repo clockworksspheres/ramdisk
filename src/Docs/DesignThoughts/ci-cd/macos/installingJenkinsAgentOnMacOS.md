@@ -27,14 +27,14 @@ java -version
 If not installed, install via Homebrew:
 
 ```bash
-brew install openjdk@17
+brew install openjdk@21
 ```
 
 Link it:
 
 ```bash
 sudo ln -sfn /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk \
-  /Library/Java/JavaVirtualMachines/openjdk-17.jdk
+  /Library/Java/JavaVirtualMachines/openjdk-21.jdk
 ```
 
 Verify:

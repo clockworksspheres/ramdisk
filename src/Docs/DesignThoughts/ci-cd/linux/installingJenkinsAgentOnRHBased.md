@@ -4,7 +4,6 @@
 
 ```
 sudo dnf install java-21-openjdk java-21-openjdk-devel
-sudo dnf install openssh-server
 ```
 
 # Create SSH keys for use by the Jenkins Server-Agent interaction
@@ -49,9 +48,10 @@ ssh-add <key-name>
 
 # Prepare SSHD on the destination side (Jenkins Agent)
 
-## Enabled and Start sshd on the Jenkins Agent 
+## Install, Enable and Start sshd on the Jenkins Agent 
 
 ```
+sudo dnf install openssh-server
 sudo systemctl enable ssh
 sudo systemctl restart ssh
 ```
@@ -70,3 +70,16 @@ File should look like:
 <username> ALL=(ALL) NOPASSWD:/usr/bin/py.test
 ```
 
+Any packages that are installed with pip on Linux, should also be installed on the system.
+
+For Redhat, Rocky and Alma linux, do the following for this project:
+
+``` bash
+sudo dnf install python3-pyside6
+sudo dnf install python3-pyside6-devel
+sudo dnf install python3-pytest
+sudo dnf install python3-virtualenv
+sudo dnf install python3-pip
+sudo dnf install python3-psutil
+sudo dnf install python3-packaging
+```

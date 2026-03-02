@@ -1,17 +1,16 @@
 # Preparing RHEL based systems for the Jenkins agent
 
-# Package(s) to install
+# Package(s) to install on the Jenkins Agent
 
-```
+``` bash
 sudo apt install java-21-openjdk java-21-openjdk-devel
-sudo aptd install openssh-server
 ```
 
 # Create SSH keys for use by the Jenkins Server-Agent interaction
 
 On the Jenkins server
 
-```
+``` bash
 ssh-keygen -t ed25519 -C "your_email@example.com" -f <key-name>
 ssh-copy-id -i <key-name>.pub user@jenkins_agent_remote_host
 eval $(ssh-agent)
@@ -49,9 +48,10 @@ ssh-add <key-name>
 
 # Prepare SSHD on the destination side (Jenkins Agent)
 
-## Enabled and Start sshd on the Jenkins Agent 
+## Install, Enable and Start sshd on the Jenkins Agent 
 
-```
+``` bash
+sudo apt install openssh-server
 sudo systemctl enable ssh
 sudo systemctl restart ssh
 ```
@@ -70,3 +70,17 @@ File should look like:
 <username> ALL=(ALL) NOPASSWD:/usr/bin/py.test
 ```
 
+Any packages that are installed with pip on Linux, should also be installed on the system.
+
+For Debian and Ubuntu, do the following for this project:
+
+``` bash
+sudo apt install python3-pyside6
+sudo apt install python3-pytest
+sudo apt install python3-venv
+sudo apt install python3-pip
+sudo apt install python3-psutil
+sudo apt install python3-pyinstaller
+sudo apt install python3-packaging
+sudo apt install python-is-python3
+```
