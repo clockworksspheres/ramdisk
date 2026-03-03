@@ -5,7 +5,7 @@ This software is covered by the [unlicense](https://unlicense.org)
 
 This software is at version 2
 
-A [clockworksspheres](https://clockworksspheres.github.io/) project
+A [clockworksspheres](https://clockworksspheres.github.io/) project.
 
 # ramdisk
 
