@@ -9,8 +9,8 @@ sys.path.append("..")
 
 # import ramdisk.lib.environment as environment
 
-from ramdisk.lib.loggers import CyLogger
-from ramdisk.lib.loggers import LogPriority as lp
+from lib.loggers import CyLogger
+from lib.loggers import LogPriority as lp
 
 
 class test_libHelperFunctions(unittest.TestCase):

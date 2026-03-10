@@ -18,16 +18,16 @@ if not sys.platform.startswith('darwin'):
 '''
 #####
 # Include the parent project directory in the PYTHONPATH
-appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
-sys.path.append(appendDir)
-
+#appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
+#sys.path.append(appendDir)
+sys.path.append("..")
 #--- non-native python libraries in this source tree
-from ramdisk.lib.loggers import CyLogger
-from ramdisk.lib.loggers import LogPriority as lp
-from ramdisk.lib.run_commands import RunWith
-from ramdisk.lib.environment import Environment
-from ramdisk.lib.CheckApplicable import CheckApplicable
-from ramdisk.lib.fsHelper.macosFsHelper import FsHelper
+from lib.loggers import CyLogger
+from lib.loggers import LogPriority as lp
+from lib.run_commands import RunWith
+from lib.environment import Environment
+from lib.CheckApplicable import CheckApplicable
+from lib.fsHelper.macosFsHelper import FsHelper
 
 LOGGER = CyLogger()
 #LOGGER.setInitialLoggingLevel(30)

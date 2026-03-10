@@ -163,6 +163,7 @@ class Environment(object):
                         if re.search(vt, line, re.IGNORECASE):
                             self.systemtype = vt
                             # print("type: " + str(vt))
+
             else:
                 print(str(__name__) + ":Unable to determine systemtype. Required utility 'ps' does not exist on this system")
         except OSError:

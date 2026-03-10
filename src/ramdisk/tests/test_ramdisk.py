@@ -25,9 +25,9 @@ else:
 sys.path.append(appendDir)
 
 #--- non-native python libraries in this source tree
-from ramdisk.lib.loggers import CyLogger
-from ramdisk.lib.loggers import LogPriority as lp
-from ramdisk.lib.environment import Environment
+from lib.loggers import CyLogger
+from lib.loggers import LogPriority as lp
+from lib.environment import Environment
 from tests.genericTestUtilities.genericTestUtilities import GenericTestUtilities
 
 
@@ -36,26 +36,26 @@ from tests.genericTestUtilities.genericTestUtilities import GenericTestUtilities
 if sys.platform.startswith("darwin"):
     #####
     # For Mac
-    from ramdisk.lib.getLibc.macGetLibc import getLibc
-    from ramdisk.macRamdisk import RamDisk
-#    from ramdisk.macRamdisk import detach
-#    from ramdisk.macRamdisk import umount
-    from ramdisk.lib.fsHelper.macosFsHelper import FsHelper
+    from lib.getLibc.macGetLibc import getLibc
+    from macRamdisk import RamDisk
+#    from macRamdisk import detach
+#    from macRamdisk import umount
+    from lib.fsHelper.macosFsHelper import FsHelper
 elif sys.platform.startswith("linux"):
     #####
     # For Linux
-    from ramdisk.lib.getLibc.linuxGetLibc import getLibc
-    from ramdisk.linuxTmpfsRamdisk import RamDisk
-#    from ramdisk.linuxTmpfsRamdisk import umount
-    from ramdisk.lib.fsHelper.linuxFsHelper import FsHelper
-    from ramdisk.lib.libHelperExceptions import UserMustBeRootError
+    from lib.getLibc.linuxGetLibc import getLibc
+    from fsRamdisk import RamDisk
+#    from linuxTmpfsRamdisk import umount
+    from lib.fsHelper.linuxFsHelper import FsHelper
+    from lib.libHelperExceptions import UserMustBeRootError
 elif sys.platform.startswith("win32"):
     #####
     # For ImDisk for Windows
-    from ramdisk.lib.getLibc.winGetLibc import getLibc
-    from ramdisk.winAIMtkRamdisk import RamDisk
-#    from ramdisk.winImDiskRamdisk import umount
-    from ramdisk.lib.fsHelper.ntfsFsHelper import FsHelper
+    from lib.getLibc.winGetLibc import getLibc
+    from winAIMtkRamdisk import RamDisk
+#    from winImDiskRamdisk import umount
+    from lib.fsHelper.ntfsFsHelper import FsHelper
 else:
     raise Exception("Damn it Jim!!! What OS is this???")
 

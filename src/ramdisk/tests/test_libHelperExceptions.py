@@ -17,26 +17,28 @@ from datetime import datetime
 
 #####
 # Include the parent project directory in the PYTHONPATH
-appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
-sys.path.append(appendDir)
+#appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
+#sys.path.append(appendDir)
+
+sys.path.append("..")
 
 #--- non-native python libraries in this source tree
-from ramdisk.lib.loggers import CyLogger
-from ramdisk.lib.loggers import LogPriority as lp
-from ramdisk.lib.libHelperExceptions import NotValidForThisOS
+from lib.loggers import CyLogger
+from lib.loggers import LogPriority as lp
+from lib.libHelperExceptions import NotValidForThisOS
 
 #####
 # Load OS specific Ramdisks
 if sys.platform.startswith("darwin"):
     #####
     # For Mac
-    from ramdisk.macRamdisk import RamDisk
-    from ramdisk.macRamdisk import detach
+    from macRamdisk import RamDisk
+    from macRamdisk import detach
 elif sys.platform.startswith("linux"):
     #####
     # For Linux
-    from ramdisk.linuxTmpfsRamdisk import RamDisk
-    from ramdisk.linuxTmpfsRamdisk import umount
+    from linuxTmpfsRamdisk import RamDisk
+    from linuxTmpfsRamdisk import umount
 
 class test_libHelperExceptions(unittest.TestCase):
     """

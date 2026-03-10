@@ -14,8 +14,8 @@ appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
 sys.path.append(appendDir)
 
 #--- non-native python libraries in this source tree
-from ramdisk.lib.loggers import CyLogger
-from ramdisk.lib.loggers import LogPriority as lp
+from lib.loggers import CyLogger
+from lib.loggers import LogPriority as lp
 
 
 class test_libMacOSHelperFunctions(unittest.TestCase):
