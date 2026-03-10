@@ -1,4 +1,4 @@
-# download the jenkins docker container with setup documentation please
+# download the jenkins docker container with setup documentation
 
 (grok solutions in this document not tested)
 

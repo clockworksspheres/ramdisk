@@ -75,12 +75,8 @@ Any packages that are installed with pip on Linux, should also be installed on t
 For Debian and Ubuntu, do the following for this project:
 
 ``` bash
-sudo apt install python3-pyside6
 sudo apt install python3-pytest
 sudo apt install python3-venv
 sudo apt install python3-pip
-sudo apt install python3-psutil
-sudo apt install python3-pyinstaller
-sudo apt install python3-packaging
 sudo apt install python-is-python3
 ```

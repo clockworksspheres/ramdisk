@@ -4,7 +4,7 @@
 
 While this is a great intro to production pipeline of more complicated/enterprise/business applications, here is a simpler pipeline for smaller projects:
 
-![[Pasted image 20260110110111.png]]
+![[basicCiCd.png]]
 
 Where smaller projects, these steps are mostly manual.
 

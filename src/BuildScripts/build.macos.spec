@@ -9,48 +9,46 @@
 
 a = Analysis(
     ['ramdisk-setup.py'],
-    pathex=['.', './lib', './ui', '.packenv/bin', './packenv/include', './packenv/lib/python3.13/site-packages'],
+    pathex=['.', './lib', './ui'],
     binaries=[],
     datas=[("ramdisk/resources/img/*.png",    "./ramdisk/resources/img"), 
            ("ramdisk/resources/icns/*.icns",  "./ramdisk/resources/icns")], 
-    hiddenimports=['python3','python*','PySide6.*'],
+    hiddenimports=[ ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
     excludes=[],
-    noarchive=False,
-    optimize=0,
+    noarchive=True,        # <-- Faster import time
+    optimize=1,            # <-- Bytecode optimization
 )
+
 pyz = PYZ(a.pure)
 
 exe = EXE(
     pyz,
     a.scripts,
-    [], 
-    exclude_binaries=True,
+    a.binaries,
+    a.datas,
+    [],
     name='ramdisk-setup',
-    debug=True,
+    debug=False,
     bootloader_ignore_signals=False,
-    strip=False,
-    upx=True,
-    console=False,
+    strip=True,
+    upx=False,             # <-- No UPX = faster load
+    upx_exclude=[],
+    runtime_tmpdir=None,   # <-- Uses system temp (fastest)
+    console=True,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    onefile=True,          # <-- You requested onefile
+    noarchive=True,
 )
-coll = COLLECT(
-    exe,
-    a.binaries,
-    a.datas,
-    strip=False,
-    upx=True,
-    upx_exclude=[],
-    name='org.clockworksspheres.ramdisk',
-)
+
 app = BUNDLE(
-    coll,
+    exe,
     name='ramdisk-setup.app',
     icon='./ramdisk/resources/icns/ram.icns',
     bundle_identifier='org.clockworksspheres.ramdisk',
