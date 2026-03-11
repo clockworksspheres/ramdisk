@@ -14,11 +14,11 @@ from tempfile import mkdtemp
 from time import time
 
 #--- non-native python libraries in this source tree
-from .lib.run_commands import RunWith
-from .lib.loggers import CyLogger
-from .lib.loggers import LogPriority as lp
-from .commonRamdiskTemplate import RamDiskTemplate, BadRamdiskArguments
-from .lib.libHelperExceptions import NotValidForThisOS, SystemToolNotAvailable, UserMustBeRootError
+from lib.run_commands import RunWith
+from lib.loggers import CyLogger
+from lib.loggers import LogPriority as lp
+from commonRamdiskTemplate import RamDiskTemplate, BadRamdiskArguments
+from lib.libHelperExceptions import NotValidForThisOS, SystemToolNotAvailable, UserMustBeRootError
 
 def UserMustBeRootException(Exception):
     """
