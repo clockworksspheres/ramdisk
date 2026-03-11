@@ -45,7 +45,7 @@ elif sys.platform.startswith("linux"):
     #####
     # For Linux
     from lib.getLibc.linuxGetLibc import getLibc
-    from Ramdisk import RamDisk
+    from linuxTmpfsRamdisk import RamDisk
 #    from linuxTmpfsRamdisk import umount
     from lib.fsHelper.linuxFsHelper import FsHelper
     from lib.libHelperExceptions import UserMustBeRootError
