@@ -1,6 +1,6 @@
 # download the jenkins docker container with setup documentation
 
-(grok solutions in this document not tested)
+(Some grok solutions in this document not tested)
 
 ## The above was the prompt to grok.com, which revealed the following:
 
