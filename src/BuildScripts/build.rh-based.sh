@@ -33,11 +33,11 @@ fi
 
 #pushd ..
 
-cp buildScripts/build.rh-based.py313.onefile.spec .
+cp BuildScripts/build.rh-based.spec .
 
-pyinstaller --clean -y build.rh-based.py313.onefile.spec
-pyinstaller -y build.rh-based.py313.onefile.spec
-rm build.rh-based.py313.onefile.spec
+pyinstaller --clean -y build.rh-based.spec
+pyinstaller -y build.rh-based.spec
+rm build.rh-based.spec
 
 popd
 
