@@ -1,17 +1,24 @@
 
 import sys
+from pathlib import Path
 
-sys.path.append("../../..")
+# Get the parent directory of the current file's parent directory
+#  and add it to sys.path
+parent_dir = Path(__file__).parent.parent.parent
+sys.path.append(str(parent_dir))
+
+parent_dir = Path(__file__).parent
+sys.path.append(str(parent_dir))
 
 #--- non-native python libraries in this source tree
 # from ramdisk.lib.dev.getMemStatusTemplate import GetMemStatusTemplate
 
 if sys.platform.startswith("linux"):
-    from ramdisk.lib.dev.getLinuxMemStatus import GetLinuxMemStatus
+    from lib.dev.getLinuxMemStatus import GetLinuxMemStatus
 elif sys.platform.startswith("darwin"):
-    from ramdisk.lib.dev.getMacosMemStatus import GetMacosMemStatus
+    from lib.dev.getMacosMemStatus import GetMacosMemStatus
 elif sys.platform.startswith("win32"):
-    from ramdisk.lib.dev.getWin32MemStatus import GetWin32MemStatus
+    from lib.dev.getWin32MemStatus import GetWin32MemStatus
 else:
     pass
 

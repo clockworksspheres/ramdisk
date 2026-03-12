@@ -17,11 +17,12 @@ import unittest
 import tempfile
 import ctypes as C
 from datetime import datetime
+from pathlib import Path
 
-#####
-# Include the parent project directory in the PYTHONPATH
-appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
-sys.path.append(appendDir)
+# Get the parent directory of the current file's parent directory
+#  and add it to sys.path
+parent_dir = Path(__file__).parent.parent
+sys.path.append(str(parent_dir))
 
 #--- non-native python libraries in this source tree
 from lib.loggers import CyLogger

@@ -7,20 +7,24 @@ import os
 import sys
 import getpass
 
-if __name__ == "__main__":
-    sys.path.append("../../..")
+from pathlib import Path
+
+# Get the parent directory of the current file's parent directory
+#  and add it to sys.path
+parent_dir = Path(__file__).parent.parent.parent
+sys.path.append(str(parent_dir))
 
 ####
 # import ramdisk libraries
 #--- non-native python libraries in this source tree
-import ramdisk
-from ramdisk.lib.loggers import CyLogger
-from ramdisk.lib.loggers import LogPriority as lp
-from ramdisk.lib.run_commands import RunWith
-from ramdisk.lib.environment import Environment
-from ramdisk.lib.CheckApplicable import CheckApplicable
-from ramdisk.commonRamdiskTemplate import NotValidForThisOS
-from ramdisk.lib.fsHelper.FsHelperTemplate import FsHelperTemplate
+# import ramdisk
+from lib.loggers import CyLogger
+from lib.loggers import LogPriority as lp
+from lib.run_commands import RunWith
+from lib.environment import Environment
+from lib.CheckApplicable import CheckApplicable
+from commonRamdiskTemplate import NotValidForThisOS
+from lib.fsHelper.FsHelperTemplate import FsHelperTemplate
 
 class FsHelper(FsHelperTemplate):
     """

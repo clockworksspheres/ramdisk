@@ -17,6 +17,13 @@ from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea,
 
 
 import sys 
+from pathlib import Path
+
+# Get the parent directory of the current file's parent directory
+#  and add it to sys.path
+parent_dir = Path(__file__).parent.parent
+sys.path.append(str(parent_dir))
+
 '''
 from PySide6.QtCore import Slot, Qt, QEvent
 from PySide6.QtGui import QColor
@@ -24,7 +31,6 @@ from PySide6.QtWidgets import (QApplication, QLabel, QMainWindow, QPushButton,
                                QVBoxLayout, QMessageBox, QDialog, QTableWidget,
                                QTableWidgetItem, QHeaderView, QAbstractItemView)
 '''
-sys.path.append("../..")
 
 # from PySide6.QtWidgets import QApplication, QDialog, QMainWindow, QPushButton, QVBoxLayout, QLabel, QDialogButtonBox
 # from PySide6.QtWidgets import QMessageBox
@@ -32,23 +38,23 @@ from PySide6.QtGui import QIntValidator
 
 
 #--- non-native python libraries in this source tree
-from ramdisk.ui.ui_main_n import Ui_MainWindow
-from ramdisk.ui.ui_not_yet_implemented import Ui_Dialog
+from ui.ui_main_n import Ui_MainWindow
+from ui.ui_not_yet_implemented import Ui_Dialog
 
-from ramdisk.ui.validate import validateMntPntString
-from ramdisk.ui.getValues import getMaxMemSize
+from ui.validate import validateMntPntString
+from ui.getValues import getMaxMemSize
 
-from ramdisk.lib.dev.getMemStatus import GetMemStatus
-from ramdisk.lib.loggers import CyLogger
-from ramdisk.lib.loggers import LogPriority as lp
-from ramdisk.RamDisk import RamDisk, getMountedData, getMountedDisks
-from ramdisk.config import DEFAULT_RAMDISK_SIZE
+from lib.dev.getMemStatus import GetMemStatus
+from lib.loggers import CyLogger
+from lib.loggers import LogPriority as lp
+from RamDisk import RamDisk, getMountedData, getMountedDisks
+from config import DEFAULT_RAMDISK_SIZE
 
 if sys.platform.lower().startswith('linux'):
-    from ramdisk.ui.local_auth_widget import _LocalAuth
-    from ramdisk.linuxTmpfsRamdisk import eject
+    from ui.local_auth_widget import _LocalAuth
+    from linuxTmpfsRamdisk import eject
 else:
-    from ramdisk.RamDisk import eject
+    from RamDisk import eject
 
 class CustomDialog(QDialog):
     def __init__(self, parent=None):

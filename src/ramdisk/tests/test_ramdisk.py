@@ -15,14 +15,20 @@ import traceback
 import unittest
 # import ctypes
 from datetime import datetime
+from pathlib import Path
+
+# Get the parent directory of the current file's parent directory
+#  and add it to sys.path
+parent_dir = Path(__file__).parent.parent
+sys.path.append(str(parent_dir))
 
 #####
 # Include the parent project directory in the PYTHONPATH
-if sys.platform.startswith("win32"):
-    appendDir = "../"
-else:
-    appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
-sys.path.append(appendDir)
+#if sys.platform.startswith("win32"):
+#    appendDir = "../"
+#else:
+#    appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
+#sys.path.append(appendDir)
 
 #--- non-native python libraries in this source tree
 from lib.loggers import CyLogger

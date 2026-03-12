@@ -5,9 +5,14 @@ Test for testing the libHelperFunctions library.
 import sys
 import unittest
 
-sys.path.append("..")
+from pathlib import Path
 
-# import ramdisk.lib.environment as environment
+# Get the parent directory of the current file's parent directory
+#  and add it to sys.path
+parent_dir = Path(__file__).parent.parent
+sys.path.append(str(parent_dir))
+
+# import lib.environment as environment
 
 from lib.loggers import CyLogger
 from lib.loggers import LogPriority as lp

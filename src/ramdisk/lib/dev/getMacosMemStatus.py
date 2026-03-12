@@ -4,11 +4,15 @@
 import subprocess
 import re
 import sys
+from pathlib import Path
 
-sys.path.append("../../..")
+# Get the parent directory of the current file's parent directory
+#  and add it to sys.path
+parent_dir = Path(__file__).parent.parent.parent
+sys.path.append(str(parent_dir))
 
 #--- non-native python libraries in this source tree
-from ramdisk.lib.dev.getMemStatusTemplate import GetMemStatusTemplate
+from lib.dev.getMemStatusTemplate import GetMemStatusTemplate
 
 
 class GetMacosMemStatus(GetMemStatusTemplate):

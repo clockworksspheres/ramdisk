@@ -12,15 +12,13 @@ import sys
 import platform
 import unittest
 from datetime import datetime
-'''
-if not sys.platform.startswith('darwin'):
-    raise unittest.SkipTest("Not valid for this patform: " + sys.platform)
-'''
-#####
-# Include the parent project directory in the PYTHONPATH
-#appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
-#sys.path.append(appendDir)
-sys.path.append("..")
+from pathlib import Path
+
+# Get the parent directory of the current file's parent directory
+#  and add it to sys.path
+parent_dir = Path(__file__).parent.parent
+sys.path.append(str(parent_dir))
+
 #--- non-native python libraries in this source tree
 from lib.loggers import CyLogger
 from lib.loggers import LogPriority as lp

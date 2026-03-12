@@ -26,14 +26,18 @@ Run with:
     python -m unittest test_run_commands -v
 """
 
+import sys
 import subprocess
 import threading
 import unittest
 from subprocess import SubprocessError
 from unittest.mock import MagicMock, Mock, call, patch
+from pathlib import Path
 
-import sys
-sys.path.append("./..")
+# Get the parent directory of the current file's parent directory
+#  and add it to sys.path
+parent_dir = Path(__file__).parent.parent
+sys.path.append(str(parent_dir))
 
 # ── import the module under test ──────────────────────────────────────────────
 # Adjust the import path if your project layout differs.

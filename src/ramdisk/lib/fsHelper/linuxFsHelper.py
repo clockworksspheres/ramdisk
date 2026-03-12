@@ -7,19 +7,21 @@ from subprocess import Popen
 from subprocess import SubprocessError as SubprocessError
 import os
 import sys
+from pathlib import Path
 
-#####
-# Include the parent project directory in the PYTHONPATH
-appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-3])
-sys.path.append(appendDir)
+# Get the parent directory of the current file's parent directory
+#  and add it to sys.path
+parent_dir = Path(__file__).parent.parent.parent
+sys.path.append(str(parent_dir))
 
 #--- non-native python libraries in this source tree
 
-from ramdisk.lib.loggers import CyLogger
-from ramdisk.lib.loggers import LogPriority as lp
-from ramdisk.lib.run_commands import RunWith
-from ramdisk.lib.environment import Environment
-from ramdisk.lib.CheckApplicable import CheckApplicable
+from lib.loggers import CyLogger
+from lib.loggers import LogPriority as lp
+from lib.run_commands import RunWith
+from lib.environment import Environment
+from lib.CheckApplicable import CheckApplicable
+
 
 class FsHelper(object):
     """
