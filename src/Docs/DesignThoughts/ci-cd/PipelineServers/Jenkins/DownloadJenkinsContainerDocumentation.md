@@ -133,3 +133,18 @@ Let me know if you want the docker-compose version, how to run Jenkins with Dock
 
 https://github.com/clockworksspheres/jenkinsTools.git
 
+## For managing local VMs for cross platform projects on macOS and Windows
+
+https://github.com/clockworksspheres/vmm.git
+
+On macOS, works with the following hypervisors currently:
+
+* UTM
+* VMware Fusion
+* Oracle VirtualBox
+
+On Windows, designed for the following hypervisors currently:
+
+* HyperV
+* VMware Workstation
+* Oracle Virtualbox
