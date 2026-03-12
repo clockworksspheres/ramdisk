@@ -14,6 +14,8 @@ sudo dnf install python3
 sudo dnf install python3-pip
 sudo dnf install python3-tkinter
 sudo dnf install python3-pytest
+sudo dnf install pyside6*
+sudo dnf install pytest
 ```
 
 # Installing useful apps with dnf

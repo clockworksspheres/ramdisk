@@ -20,11 +20,13 @@ if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
    source packenv/bin/activate
 
    pip install --upgrade pip
-   pip3 install PySide6 PyInstaller
-   pip3 install PySide6-Addons
-   pip3 install --upgrade PyInstaller pyinstaller-hooks-contrib
-   pip3 install packaging
-   pip3 install requests
+   pip install PySide6 PyInstaller
+   pip install PySide6-Addons
+   pip install --upgrade PyInstaller pyinstaller-hooks-contrib
+   pip intall psutil
+   pip install packaging
+   pip install requests
+   pip install pytest
 else
    source packenv/bin/activate
 fi

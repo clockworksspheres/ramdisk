@@ -12,6 +12,8 @@ sudo apt install python3-pip
 sudo apt install python3-venv
 sudo apt install python-is-python3
 sudo apt install junit
+sudo apt install python3-pyside6
+sudo apt install python3-pytest
 ```
 
 # Installing useful apps with apt
