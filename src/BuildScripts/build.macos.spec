@@ -9,7 +9,7 @@
 
 a = Analysis(
     ['ramdisk-setup.py'],
-    pathex=['.', './lib', './ui'],
+    pathex=['.', 'ramdisk', 'ramdisk/lib', 'ramdisk/ui'],
     binaries=[],
     datas=[("ramdisk/resources/img/*.png",    "./ramdisk/resources/img"), 
            ("ramdisk/resources/icns/*.icns",  "./ramdisk/resources/icns")], 
@@ -36,7 +36,7 @@ exe = EXE(
     strip=True,
     upx=False,             # <-- No UPX = faster load
     upx_exclude=[],
-    runtime_tmpdir=None,   # <-- Uses system temp (fastest)
+    runtime_tmpdir='/tmp',   # <-- Uses system temp (fastest)
     console=True,
     disable_windowed_traceback=False,
     argv_emulation=False,
