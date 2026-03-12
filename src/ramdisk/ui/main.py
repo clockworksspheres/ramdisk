@@ -120,6 +120,7 @@ class _CreateRamdisk(QMainWindow):
         self.logger = CyLogger()
         self.logger.initializeLogs()
 
+        self.passwd = ""
         self.getMemStatus = GetMemStatus()
 
         #####
@@ -330,7 +331,7 @@ class _CreateRamdisk(QMainWindow):
                     if sys.platform.lower().startswith("darwin"):
                         column = 0
                     elif sys.platform.lower().startswith("linux"):
-                        column = 1
+                        column = 0
                     elif sys.platform.lower().startswith("win32"):
                         column = 0
                     item = self.ui.tableWidget.item(current_row_index, column)  # Get first column item
