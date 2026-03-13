@@ -109,11 +109,11 @@ class TestCreateRamdisk(QtTestCase):
         self.key(table, Qt.Key_Tab)
 
         osType = self.environment.getostype().strip()
-        rhBased = 'Red Hat Enterprise Linux|AlmaLinux|Rocky Linux|CentOS|Fedora'
+        linBased = 'Red Hat Enterprise Linux|AlmaLinux|Rocky Linux|CentOS|Fedora|Debian|Ubuntu'
         print("==========================")
         print(str(osType))
         print("==========================")
-        if re.search(rhBased, osType):
+        if re.search(linBased, osType):
             print("==========================")
             print("RH Based")
             print("==========================")
