@@ -41,5 +41,7 @@ rm build.deb-based.spec
 
 popd
 
-../dist/ramdisk-setup
+#####
+# Breaks Jenkins build
+# ../dist/ramdisk-setup
 
