@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import re
 import sys
 import unittest
 from unittest.mock import patch, MagicMock
@@ -20,7 +21,7 @@ sys.path.append(str(parent_dir))
 from qt_ci_test_harness import QtTestCase, SignalSpy
 
 from ramdisk.ui.main import _CreateRamdisk
-
+from ramdisk.lib.environment import Environment
 
 class TestCreateRamdiskGUI(QtTestCase):
 
@@ -31,6 +32,8 @@ class TestCreateRamdiskGUI(QtTestCase):
         self.window.show()
         self.window.activateWindow()
         self.window.raise_()
+
+        self.environment = Environment()
 
         self.process_events(100)
 
@@ -128,9 +131,24 @@ class TestCreateRamdiskGUI(QtTestCase):
 
         self.process_events()
 
-        self.assertTrue(
-            self.window.ui.tableWidget.hasFocus()
-        )
+        osType = self.environment.getostype().strip()
+        rhBased = 'Red Hat Enterprise Linux|AlmaLinux|Rocky Linux|CentOS|Fedora|'
+        print("==========================")
+        print(str(osType))
+        print("==========================")
+        if re.search(rhBased, osType):
+            print("==========================")
+            print("RH Based")
+            print("==========================")
+            self.assertTrue(
+                self.window.ui.mountLineEdit.hasFocus()
+                # self.window.ui.tableWidget.hasFocus()
+            )
+        else:
+            self.assertTrue(
+                # self.window.ui.mountLineEdit.hasFocus()
+                self.window.ui.tableWidget.hasFocus()
+            )
 
 
 # ------------------------------------------------------

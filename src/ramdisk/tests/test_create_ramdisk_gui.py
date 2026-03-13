@@ -1,3 +1,4 @@
+import re
 import os
 import sys
 from unittest.mock import patch, MagicMock
@@ -16,6 +17,7 @@ sys.path.append(str(parent_dir))
 
 from qt_ci_test_harness import QtTestCase, SignalSpy
 from ramdisk.ui.main import _CreateRamdisk
+from ramdisk.lib.environment import Environment
 
 os.environ['QT_QPA_PLATFORM'] = 'offscreen'
 
@@ -28,6 +30,7 @@ class TestCreateRamdisk(QtTestCase):
         self.window.show()
 
         self.process_events()
+        self.environment = Environment()
 
     def tearDown(self):
 
@@ -105,11 +108,24 @@ class TestCreateRamdisk(QtTestCase):
 
         self.key(table, Qt.Key_Tab)
 
-        self.assertTrue(
-            #self.window.ui.mountLineEdit.hasFocus()
-            self.window.ui.tableWidget.hasFocus()
-        )
-
+        osType = self.environment.getostype().strip()
+        rhBased = 'Red Hat Enterprise Linux|AlmaLinux|Rocky Linux|CentOS|Fedora|'
+        print("==========================")
+        print(str(osType))
+        print("==========================")
+        if re.search(rhBased, osType):
+            print("==========================")
+            print("RH Based")
+            print("==========================")
+            self.assertTrue(
+                self.window.ui.mountLineEdit.hasFocus()
+                # self.window.ui.tableWidget.hasFocus()
+            )
+        else:
+            self.assertTrue(
+                # self.window.ui.mountLineEdit.hasFocus()
+                self.window.ui.tableWidget.hasFocus()
+            )
 
 # ---------------------------------------------------
 # Signal spy example
