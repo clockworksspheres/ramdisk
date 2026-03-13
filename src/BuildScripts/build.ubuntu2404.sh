@@ -15,28 +15,31 @@ pushd ..
 directory="./packenv"
 actfile="./packenv/bin/activate"
 if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
+   sudo apt install python-is-python3
    python3 -m venv packenv
 
    source packenv/bin/activate
 
-   # pip3 install --upgrade pip
-   pip3 install PySide6 PyInstaller
-   pip3 install --upgrade PyInstaller pyinstaller-hooks-contrib
-   pip3 install packaging
-   pip3 install requests
+   pip install --upgrade pip
+   pip install PySide6 PyInstaller
+   pip install --upgrade PyInstaller pyinstaller-hooks-contrib
+   pip install psutil
+   pip install packaging
+   pip install requests
+   pip install pytest
 else
    source packenv/bin/activate
 fi
 
 #pushd ..
 
-cp BuildScripts/build.ubuntu2404.py312.onefile.spec .
+cp BuildScripts/build.ubuntu2404.spec .
 
-pyinstaller --clean -y build.ubuntu2404.py312.onefile.spec
-pyinstaller -y build.ubuntu2404.py312.onefile.spec
-rm build.ubuntu2404.py312.onefile.spec
+pyinstaller --clean -y build.ubuntu2404.spec
+pyinstaller -y build.ubuntu2404.spec
+rm build.ubuntu2404.spec
 
 popd
 
-#../dist/ramdisk-setup
+../dist/ramdisk-setup
 

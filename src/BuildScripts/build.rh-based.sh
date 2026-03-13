@@ -23,7 +23,7 @@ if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
    pip install PySide6 PyInstaller
    pip install PySide6-Addons
    pip install --upgrade PyInstaller pyinstaller-hooks-contrib
-   pip intall psutil
+   pip install psutil
    pip install packaging
    pip install requests
    pip install pytest
