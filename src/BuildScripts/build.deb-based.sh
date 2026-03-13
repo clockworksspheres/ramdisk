@@ -24,9 +24,9 @@ if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
    pip install PySide6 PyInstaller
    pip install --upgrade PyInstaller pyinstaller-hooks-contrib
    pip install psutil
+   pip install pytest
    pip install packaging
    pip install requests
-   pip install pytest
 else
    source packenv/bin/activate
 fi

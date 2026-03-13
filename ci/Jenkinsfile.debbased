@@ -69,7 +69,7 @@ pipeline {
                                 dir('src/ramdisk/tests') {
                                     sh """
                                         . ${VENV}/bin/activate
-                                        sudo -E ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml'
+                                        sudo -E ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
                                         sudo chgrp -R sudo test-reports
                                     """
                                     junit 'test-reports/results.xml'
