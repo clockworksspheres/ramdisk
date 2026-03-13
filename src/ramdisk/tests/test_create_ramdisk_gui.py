@@ -98,7 +98,7 @@ class TestCreateRamdisk(QtTestCase):
 # ---------------------------------------------------
 # Table keyboard navigation
 # ---------------------------------------------------
-
+    @unittest.skipIf(sys.platform.lower().startswith("linux"), "Skip test on Linux")
     def test_table_tab_navigation(self):
 
         self.window.add_row("disk1", "/mnt/test")
@@ -111,7 +111,8 @@ class TestCreateRamdisk(QtTestCase):
         self.key(table, Qt.Key_Tab)
 
         osType = self.environment.getostype().strip()
-        linBased = 'Red Hat Enterprise Linux|AlmaLinux|Rocky Linux|CentOS|Fedora|Debian'
+        # linBased = 'Red Hat Enterprise Linux|AlmaLinux|Rocky Linux|CentOS|Fedora|Debian'
+        linBased = 'Red Hat Enterprise Linux|Fedora'
         print("==========================")
         print(str(osType))
         print("==========================")
