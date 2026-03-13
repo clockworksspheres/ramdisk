@@ -132,7 +132,7 @@ class TestCreateRamdiskGUI(QtTestCase):
         self.process_events()
 
         osType = self.environment.getostype().strip()
-        rhBased = 'Red Hat Enterprise Linux|AlmaLinux|Rocky Linux|CentOS|Fedora|'
+        rhBased = 'Red Hat Enterprise Linux|AlmaLinux|Rocky Linux|CentOS|Fedora'
         print("==========================")
         print(str(osType))
         print("==========================")
