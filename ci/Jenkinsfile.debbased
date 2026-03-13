@@ -14,7 +14,7 @@ pipeline {
                         stage('debian 13 Build') { 
                             steps {
                                 dir('src/BuildScripts') {
-                                    sh './build.ubuntu2404.sh' 
+                                    sh './build.deb-based.sh' 
                                 } 
                             }
                         }
@@ -26,7 +26,7 @@ pipeline {
                         stage('Ubuntu 2404 Build') { 
                             steps {
                                 dir('src/BuildScripts') {
-                                    sh './build.ubuntu2404.sh' 
+                                    sh './build.deb-based.sh' 
                                 } 
                             }
                         }

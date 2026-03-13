@@ -14,7 +14,7 @@ pipeline {
                         stage('rocky9 Build') { 
                             steps {
                                 dir('src/BuildScripts') {
-                                    sh './build.ubuntu2404.sh' 
+                                    sh './build.rh-based.sh' 
                                 } 
                             }
                         }
@@ -26,7 +26,7 @@ pipeline {
                         stage('rocky10 Build') { 
                             steps {
                                 dir('src/BuildScripts') {
-                                    sh './build.ubuntu2404.sh' 
+                                    sh './build.rh-based.sh' 
                                 } 
                             }
                         }
