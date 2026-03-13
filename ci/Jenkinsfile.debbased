@@ -48,7 +48,8 @@ pipeline {
                                 dir('src/ramdisk/tests') {
                                     sh """
                                         . ${VENV}/bin/activate
-                                        ${VENV}/bin/python -m pytest -v
+                                        sudo ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
+                                        sudo chgrp -R sudo test-reports
                                     """
                                     junit 'test-reports/results.xml'
                                 }
@@ -68,9 +69,10 @@ pipeline {
                                 dir('src/ramdisk/tests') {
                                     sh """
                                         . ${VENV}/bin/activate
-                                        sudo -E ${VENV}/bin/python -m pytest -v
+                                        sudo -E ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml'
+                                        sudo chgrp -R sudo test-reports
                                     """
-                                    junit 'rhel-test-reports/rhel-results.xml'
+                                    junit 'test-reports/results.xml'
                                 }
                             }
                         }
