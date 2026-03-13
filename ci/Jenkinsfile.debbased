@@ -38,17 +38,19 @@ pipeline {
             parallel {
                 stage('Debian 13 Pipeline') {
                     agent { label 'debian' }
+                    environment {
+                        VENV = "../../packenv"
+                        QT_QPA_PLATFORM = "offscreen"
+                    }
                     stages {
                         stage('debian 13 Test') { 
                             steps {
                                 dir('src/ramdisk/tests') {
-                                    echo '----------=====### Starting Tests ###=====----------'
-                                    sh 'ls -l'
-                                    sh '/usr/bin/py.test --junit-xml rhel-test-reports/rhel-results.xml'
-                                    // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
-                                    //sleep 15
-                                    echo '----------=====### Finished Tests ###=====----------'
-                                    junit 'rhel-test-reports/rhel-results.xml'
+                                    sh """
+                                        . ${VENV}/bin/activate
+                                        ${VENV}/bin/python -m pytest -v
+                                    """
+                                    junit 'test-reports/results.xml'
                                 }
                             }
                         }
@@ -56,13 +58,18 @@ pipeline {
                 }
                 stage('Ubuntu 2404 Pipeline') {
                     agent { label 'ubuntu' }
+                    environment {
+                        VENV = "../../packenv"
+                        QT_QPA_PLATFORM = "offscreen"
+                    }
                     stages {
                         stage('Ubuntu 2404 Test') { 
                             steps {
                                 dir('src/ramdisk/tests') {
-                                    echo '----------=====### Starting Tests ###=====----------'
-                                    sh 'ls -l'
-                                    sh 'sudo /usr/bin/py.test --junit-xml rhel-test-reports/rhel-results.xml'
+                                    sh """
+                                        . ${VENV}/bin/activate
+                                        sudo -E ${VENV}/bin/python -m pytest -v
+                                    """
                                     junit 'rhel-test-reports/rhel-results.xml'
                                 }
                             }
