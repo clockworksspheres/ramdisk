@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 
+import os
 import re
 import sys
 import unittest
 from unittest.mock import patch, MagicMock
 from pathlib import Path
 
-#####
-# This must be set before Pyside6 gets loaded...
-os.environ['QT_QPA_PLATFORM'] = 'offscreen'
+if sys.platform.lower().startswith("linux"):
+    #####
+    # For Linux, this must be set before Pyside6 gets loaded...
+    os.environ['QT_QPA_PLATFORM'] = 'offscreen'
 
 from PySide6.QtCore import Qt, QEvent
 from PySide6.QtGui import QKeyEvent
@@ -147,7 +149,7 @@ class TestCreateRamdiskGUI(QtTestCase):
             print("==========================")
             self.assertTrue(
                 self.window.ui.mountLineEdit.hasFocus()
-                # self.window.ui.tableWidget.hasFocus()
+                #self.window.ui.tableWidget.hasFocus()
             )
         else:
             self.assertTrue(

@@ -4,9 +4,10 @@ import sys
 from unittest.mock import patch, MagicMock
 from pathlib import Path
 
-#####
-# This must be set before Pyside6 gets loaded...
-os.environ['QT_QPA_PLATFORM'] = 'offscreen'
+if sys.platform.lower().startswith("linux"):
+    #####
+    # This must be set before Pyside6 gets loaded...
+    os.environ['QT_QPA_PLATFORM'] = 'offscreen'
 
 from PySide6.QtCore import Qt
 
