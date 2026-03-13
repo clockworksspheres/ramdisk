@@ -63,7 +63,7 @@ pipeline {
                                         . ${VENV}/bin/activate
                                         pip install pytest pyside6
                                         sudo ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
-                                        sudo chgrp -R sudo test-reports
+                                        sudo chgrp -R wheel test-reports
                                     """
                                     echo '----------=====### Finished Tests ###=====----------'
                                     junit 'test-reports/results.xml'
@@ -87,7 +87,7 @@ pipeline {
                                         . ${VENV}/bin/activate
                                         pip install pytest pyside6
                                         sudo ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
-                                        sudo chgrp -R sudo test-reports
+                                        sudo chgrp -R wheel test-reports
                                     """
                                     echo '----------=====### Finished Tests ###=====----------'
                                     junit 'test-reports/results.xml'
@@ -111,7 +111,7 @@ pipeline {
                                         . ${VENV}/bin/activate
                                         pip install pytest pyside6
                                         sudo ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
-                                        sudo chgrp -R sudo test-reports
+                                        sudo chgrp -R wheel test-reports
                                     """
                                     junit 'test-reports/results.xml'
                                 }
