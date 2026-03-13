@@ -33,11 +33,11 @@ fi
 
 #pushd ..
 
-cp BuildScripts/build.ubuntu2404.spec .
+cp BuildScripts/build.deb-based.spec .
 
-pyinstaller --clean -y build.ubuntu2404.spec
-pyinstaller -y build.ubuntu2404.spec
-rm build.ubuntu2404.spec
+pyinstaller --clean -y build.deb-based.spec
+pyinstaller -y build.deb-based.spec
+rm build.deb-based.spec
 
 popd
 
