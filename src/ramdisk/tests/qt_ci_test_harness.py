@@ -22,6 +22,10 @@ import unittest
 import logging
 from unittest.mock import patch
 
+#####
+# This must be set before Pyside6 gets loaded...
+os.environ['QT_QPA_PLATFORM'] = 'offscreen'
+
 from PySide6.QtWidgets import (
     QApplication,
     QMessageBox,
