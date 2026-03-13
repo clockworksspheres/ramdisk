@@ -18,6 +18,22 @@ sudo dnf install pyside6*
 sudo dnf install pytest
 ```
 
+On Rocky 8/9, install the following:
+
+```
+sudo dnf install qt6-qtbase qt6-qtbase-gui
+sudo dnf install python3-pyside6 pyside6-tools   # optional, for PySide6 itself
+```
+
+for the QT_QPA_PLATFORM='offscreen' environment variable to work.
+
+For Rocky 10 to work:
+
+```
+sudo dnf install qt6-qtbase qt6-qtbase-gui
+```
+
+
 # Installing useful apps with dnf
 
 ```

@@ -4,6 +4,9 @@ import sys
 from unittest.mock import patch, MagicMock
 from pathlib import Path
 
+#####
+# This must be set before Pyside6 gets loaded...
+os.environ['QT_QPA_PLATFORM'] = 'offscreen'
 
 from PySide6.QtCore import Qt
 
@@ -18,8 +21,6 @@ sys.path.append(str(parent_dir))
 from qt_ci_test_harness import QtTestCase, SignalSpy
 from ramdisk.ui.main import _CreateRamdisk
 from ramdisk.lib.environment import Environment
-
-os.environ['QT_QPA_PLATFORM'] = 'offscreen'
 
 
 class TestCreateRamdisk(QtTestCase):
