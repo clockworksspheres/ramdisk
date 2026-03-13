@@ -62,7 +62,7 @@ pipeline {
                                 dir('src/ramdisk/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
                                     sh 'ls -l'
-                                    sh 'sudo -E usr/bin/py.test --junit-xml rhel-test-reports/rhel-results.xml'
+                                    sh 'sudo /usr/bin/py.test --junit-xml rhel-test-reports/rhel-results.xml'
                                     junit 'rhel-test-reports/rhel-results.xml'
                                 }
                             }
