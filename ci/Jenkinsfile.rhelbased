@@ -50,17 +50,23 @@ pipeline {
             parallel {
                 stage('Rocky 9 Pipeline') {
                     agent { label 'rocky9' }
+                    environment {
+                        VENV = "../../packenv"
+                        QT_QPA_PLATFORM = "offscreen"
+                    }
                     stages {
                         stage('Rocky9 Test') { 
                             steps {
                                 dir('src/ramdisk/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
-                                    sh 'ls -l'
-                                    sh 'sudo /usr/bin/py.test --junit-xml rhel-test-reports/rhel-results.xml'
-                                    // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
-                                    //sleep 15
+                                    sh """
+                                        . ${VENV}/bin/activate
+                                        pip install pytest pyside6
+                                        sudo ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
+                                        sudo chgrp -R sudo test-reports
+                                    """
                                     echo '----------=====### Finished Tests ###=====----------'
-                                    junit 'rhel-test-reports/rhel-results.xml'
+                                    junit 'test-reports/results.xml'
                                 }
                             }
                         }
@@ -68,17 +74,23 @@ pipeline {
                 }
                 stage('Rocky 10 Pipeline') {
                     agent { label 'rocky10' }
+                    environment {
+                        VENV = "../../packenv"
+                        QT_QPA_PLATFORM = "offscreen"
+                    }
                     stages {
                         stage('Rocky10 Test') { 
                             steps {
                                 dir('src/ramdisk/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
-                                    sh 'ls -l'
-                                    sh 'sudo /usr/bin/py.test --junit-xml rhel-test-reports/rhel-results.xml'
-                                    // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
-                                    //sleep 15
+                                    sh """
+                                        . ${VENV}/bin/activate
+                                        pip install pytest pyside6
+                                        sudo ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
+                                        sudo chgrp -R sudo test-reports
+                                    """
                                     echo '----------=====### Finished Tests ###=====----------'
-                                    junit 'rhel-test-reports/rhel-results.xml'
+                                    junit 'test-reports/results.xml'
                                 }
                             }
                         }
@@ -86,14 +98,22 @@ pipeline {
                 }
                 stage('Alma Pipeline') {
                     agent { label 'alma' }
+                    environment {
+                        VENV = "../../packenv"
+                        QT_QPA_PLATFORM = "offscreen"
+                    }
                     stages {
                         stage('alma Test') { 
                             steps {
                                 dir('src/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
-                                    sh 'ls -l'
-                                    sh 'sudo /usr/bin/py.test --junit-xml rhel-test-reports/rhel-results.xml test_*.py'
-                                    junit 'rhel-test-reports/rhel-results.xml'
+                                    sh """
+                                        . ${VENV}/bin/activate
+                                        pip install pytest pyside6
+                                        sudo ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
+                                        sudo chgrp -R sudo test-reports
+                                    """
+                                    junit 'test-reports/results.xml'
                                 }
                             }
                         }
