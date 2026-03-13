@@ -44,7 +44,7 @@ pipeline {
                                 dir('src/ramdisk/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
                                     sh 'ls -l'
-                                    sh 'sudo . ../../packenv/bin/activate && /usr/bin/py.test --junit-xml rhel-test-reports/rhel-results.xml'
+                                    sh '/usr/bin/py.test --junit-xml rhel-test-reports/rhel-results.xml'
                                     // sh '/Users/jenkins/.pyenv/shims/python ./test_run_commands.py'
                                     //sleep 15
                                     echo '----------=====### Finished Tests ###=====----------'
@@ -62,7 +62,7 @@ pipeline {
                                 dir('src/ramdisk/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
                                     sh 'ls -l'
-                                    sh 'sudo -E usr/bin/py.test --junit-xml rhel-test-reports/rhel-results.xml'
+                                    sh 'sudo /usr/bin/py.test --junit-xml rhel-test-reports/rhel-results.xml'
                                     junit 'rhel-test-reports/rhel-results.xml'
                                 }
                             }
