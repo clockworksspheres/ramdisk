@@ -109,10 +109,12 @@ class TestCreateRamdisk(QtTestCase):
         table.setFocus()
         table.selectRow(0)
 
+        ####
+        # Appears not to work in a Jenkins environment on macOS and Linux
         self.key(table, Qt.Key_Tab)
 
         osType = self.environment.getostype().strip()
-        # linBased = 'Red Hat Enterprise Linux|AlmaLinux|Rocky Linux|CentOS|Fedora|Debian'
+        # linBased = 'Red Hat Enterprise Linux|AlmaLinux|Rocky Linux|CentOS|Fedora|Debian|macOS'
         linBased = 'Red Hat Enterprise Linux|Fedora'
         print("==========================")
         print(str(osType))
