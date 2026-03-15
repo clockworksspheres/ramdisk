@@ -41,13 +41,12 @@ except ImportError or AssertionError:
 
 
 # FISMACAT must be one of ['high', 'medium', 'low']
-FISMACAT = globals().get("FISMACAT", "low")
-'''
+#FISMACAT = globals().get("FISMACAT", "low")
 try:
     from lib.localize import FISMACAT
 except ImportError or AssertionError:
     FISMACAT = 'low'
-'''
+
 euid = 90000000
 process_is_elevated = False
 if sys.platform.startswith("win32"):
