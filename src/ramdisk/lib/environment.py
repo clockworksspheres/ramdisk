@@ -17,10 +17,15 @@ import platform
 import time
 import traceback
 import pathlib
+from pathlib import Path
 
-sys.path.append("../..")
+# Get the parent directory of the current file's parent directory
+#  and add it to sys.path
+parent_dir = Path(__file__).parent.parent
+sys.path.append(str(parent_dir))
 
-from ramdisk.config import DEFAULT_LOG_LEVEL, LogPriority
+
+from config import DEFAULT_LOG_LEVEL, LogPriority
 
 if sys.platform.startswith('win32'):
     import win32api
@@ -30,7 +35,7 @@ else:
     import pwd
 
 try:
-    from ramdisk.lib.localize import VERSION
+    from lib.localize import VERSION
 except ImportError or AssertionError:
     VERSION = '0.0.1'
 
@@ -38,7 +43,7 @@ except ImportError or AssertionError:
 # FISMACAT must be one of ['high', 'medium', 'low']
 
 try:
-    from randisk.lib.localize import FISMACAT
+    from lib.localize import FISMACAT
 except ImportError or AssertionError:
     FISMACAT = 'low'
 
@@ -61,7 +66,7 @@ else:
     DMI = False
 
 # third party libraries
-from ramdisk.lib.run_commands import RunWith as RunWith
+from lib.run_commands import RunWith as RunWith
 
 
 class Environment(object):
