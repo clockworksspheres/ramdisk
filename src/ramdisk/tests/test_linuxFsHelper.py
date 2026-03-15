@@ -15,19 +15,19 @@ class TestFsHelperLinux(unittest.TestCase):
 
     def setUp(self):
         # Patch CyLogger
-        logger_patcher = patch("lib.fsHelper.macosFsHelper.FsHelper.CyLogger")
+        logger_patcher = patch("lib.fsHelper.linuxFsHelper.FsHelper.CyLogger")
         self.addCleanup(logger_patcher.stop)
         MockLogger = logger_patcher.start()
         self.mock_logger = MockLogger.return_value
         self.mock_logger.log = MagicMock()
 
         # Patch Environment
-        env_patcher = patch("lib.fsHelper.macosFsHelper.FsHelper.Environment")
+        env_patcher = patch("lib.fsHelper.linuxFsHelper.FsHelper.Environment")
         self.addCleanup(env_patcher.stop)
         env_patcher.start()
 
         # Patch RunWith
-        run_patcher = patch("lib.fsHelper.macosFsHelper.FsHelper.RunWith")
+        run_patcher = patch("lib.fsHelper.linuxFsHelper.FsHelper.RunWith")
         self.addCleanup(run_patcher.stop)
         MockRunWith = run_patcher.start()
         self.mock_rw = MockRunWith.return_value
@@ -35,7 +35,7 @@ class TestFsHelperLinux(unittest.TestCase):
         self.mock_rw.waitNpassThruStdout = MagicMock()
 
         # Import after patching
-        from lib.fsHelper.macosFsHelper.FsHelper import FsHelper
+        from lib.fsHelper.linuxFsHelper.FsHelper import FsHelper
         self.FsHelper = FsHelper
         self.helper = FsHelper()
 
