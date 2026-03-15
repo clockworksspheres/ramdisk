@@ -1109,10 +1109,12 @@ class Environment(object):
         @return: string - low, med, high
         
         '''
-        if FISMACAT not in ['high', 'med', 'low']:
+        value = globals().get("FISMACAT", "low")
+
+        if value not in ['high', 'med', 'low']:
             raise ValueError('FISMACAT invalid: valid values are low, med, high')
-        else:
-            return FISMACAT
+
+        return FISMACAT
 
     def get_test_mode(self):
         """
