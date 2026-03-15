@@ -1,10 +1,6 @@
-#!/usr/bin/env -S python -u
-'''
-Test for testing the libHelperFunctions library.
-'''
 import sys
 import unittest
-
+from unittest.mock import patch, MagicMock, mock_open
 from pathlib import Path
 
 # Get the parent directory of the current file's parent directory
@@ -12,49 +8,112 @@ from pathlib import Path
 parent_dir = Path(__file__).parent.parent
 sys.path.append(str(parent_dir))
 
-# import lib.environment as environment
-
-from lib.loggers import CyLogger
-from lib.loggers import LogPriority as lp
+from lib import libHelperFunctions as helpers
+from lib.libHelperExceptions import UnsupportedOSError
 
 
-class test_libHelperFunctions(unittest.TestCase):
-    """ 
-    """
+# ---------------------------------------------------------
+# Test Suite for libHelperFunctions
+# ---------------------------------------------------------
+class TestLibHelperFunctions(unittest.TestCase):
 
-    @classmethod
-    def setUpClass(self):
-        """ 
-        """
-        self.logger = CyLogger(debug_mode=True)
-        self.logger.initializeLogs()
-        self.logger.log(lp.DEBUG, "Test " + self.__name__ + " initialized...")
+    # ---------------------------------------------------------
+    # get_console_user
+    # ---------------------------------------------------------
+    @patch("lib.libHelperFunctions.sys.platform", "darwin")
+    @patch("lib.libHelperFunctions.Popen")
+    def test_get_console_user_valid_mac(self, mock_popen):
+        process = MagicMock()
+        process.communicate.return_value = [b"fakeuser"]
+        mock_popen.return_value = process
 
-    @classmethod
-    def tearDownClass(self):
-        """ 
-        """
-        pass
+        user = helpers.get_console_user()
+        self.assertEqual(user, "fakeuser")
 
-    def test_FoundException(self):
-        """ 
-        """
-        pass
+    @patch("lib.libHelperFunctions.sys.platform", "linux")
+    @patch("lib.libHelperFunctions.Popen")
+    def test_get_console_user_valid_linux(self, mock_popen):
+        process = MagicMock()
+        process.communicate.return_value = [b"linuxuser"]
+        mock_popen.return_value = process
 
-    def test_get_os_vers(self):
-        """ 
-        """
-        pass
+        user = helpers.get_console_user()
+        self.assertEqual(user, "linuxuser")
 
-    def test_get_os_minor_vers(self):
-        """ 
-        """
-        pass
+    @patch("lib.libHelperFunctions.sys.platform", "linux")
+    @patch("lib.libHelperFunctions.Popen")
+    def test_get_console_user_invalid(self, mock_popen):
+        process = MagicMock()
+        process.communicate.return_value = [b"bad user!"]
+        mock_popen.return_value = process
 
-###############################################################################
+        user = helpers.get_console_user()
+        self.assertFalse(user)
+
+    @patch("lib.libHelperFunctions.sys.platform", "win32")
+    def test_get_console_user_unsupported_os(self):
+        with self.assertRaises(UnsupportedOSError):
+            helpers.get_console_user()
+
+    @patch("lib.libHelperFunctions.sys.platform", "linux")
+    @patch("lib.libHelperFunctions.logger")
+    @patch("lib.libHelperFunctions.Popen", side_effect=Exception("boom"))
+    def test_get_console_user_exception(self, mock_popen, mock_logger):
+        with self.assertRaises(Exception):
+            helpers.get_console_user()
+
+        # Ensure logging occurred
+        mock_logger.log.assert_called()
+
+    # ---------------------------------------------------------
+    # touch
+    # ---------------------------------------------------------
+    @patch("lib.libHelperFunctions.os.utime")
+    def test_touch_existing_file(self, mock_utime):
+        helpers.touch("file.txt")
+        mock_utime.assert_called_once()
+
+    @patch("lib.libHelperFunctions.open", new_callable=mock_open)
+    @patch("lib.libHelperFunctions.os.utime", side_effect=Exception("fail"))
+    def test_touch_creates_file(self, mock_utime, mock_file):
+        helpers.touch("file.txt")
+        mock_file.assert_called_once_with("file.txt", "a")
+
+    # ---------------------------------------------------------
+    # getecho
+    # ---------------------------------------------------------
+    @patch("lib.libHelperFunctions.termios.tcgetattr")
+    def test_getecho_true(self, mock_tc):
+        mock_tc.return_value = [None, None, None, helpers.termios.ECHO]
+        self.assertTrue(helpers.getecho(0))
+
+    @patch("lib.libHelperFunctions.termios.tcgetattr")
+    def test_getecho_false(self, mock_tc):
+        mock_tc.return_value = [None, None, None, 0]
+        self.assertFalse(helpers.getecho(0))
+
+    # ---------------------------------------------------------
+    # waitnoecho
+    # ---------------------------------------------------------
+    @patch("lib.libHelperFunctions.getecho")
+    def test_waitnoecho_immediate(self, mock_getecho):
+        mock_getecho.return_value = False
+        self.assertTrue(helpers.waitnoecho(0, timeout=1))
+
+    @patch("lib.libHelperFunctions.getecho", side_effect=[True, True, False])
+    def test_waitnoecho_eventually(self, mock_getecho):
+        self.assertTrue(helpers.waitnoecho(0, timeout=1))
+
+    # ---------------------------------------------------------
+    # isSaneFilePath
+    # ---------------------------------------------------------
+    def test_isSaneFilePath_valid(self):
+        self.assertTrue(helpers.isSaneFilePath("/tmp/test-file_01.txt"))
+
+    def test_isSaneFilePath_invalid(self):
+        self.assertFalse(helpers.isSaneFilePath("bad path!"))
 
 
 if __name__ == "__main__":
-
     unittest.main()
 

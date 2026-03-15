@@ -1,19 +1,5 @@
-#!/usr/bin/env -S python -u
-"""
-Test the helper exceptions.
-
-
-"""
-
-#--- Native python libraries
-import re
-import os
 import sys
-import time
 import unittest
-import tempfile
-import ctypes as C
-from datetime import datetime
 from pathlib import Path
 
 # Get the parent directory of the current file's parent directory
@@ -21,133 +7,47 @@ from pathlib import Path
 parent_dir = Path(__file__).parent.parent
 sys.path.append(str(parent_dir))
 
-#--- non-native python libraries in this source tree
-from lib.loggers import CyLogger
-from lib.loggers import LogPriority as lp
-from lib.libHelperExceptions import NotValidForThisOS
+from lib.libHelperExceptions import (
+    MemoryNotAvailableError,
+    UnsupportedOSError,
+    NotValidForThisOS,
+    SystemToolNotAvailable,
+    NotEnoughMemoryError,
+    NotACyLoggerError,
+    UserMustBeRootError,
+)
 
-#####
-# Load OS specific Ramdisks
-if sys.platform.startswith("darwin"):
-    #####
-    # For Mac
-    from macRamdisk import RamDisk
-    from macRamdisk import detach
-elif sys.platform.startswith("linux"):
-    #####
-    # For Linux
-    from linuxTmpfsRamdisk import RamDisk
-    from linuxTmpfsRamdisk import umount
+class TestCustomExceptions(unittest.TestCase):
 
-class test_libHelperExceptions(unittest.TestCase):
-    """
-    """
+    def _test_exception(self, exc_class):
+        """Helper to test basic exception behavior."""
+        msg = "Test message"
+        exc = exc_class(msg)
+        self.assertIsInstance(exc, Exception)
+        self.assertEqual(str(exc), msg)
 
-    @classmethod
-    def setUpClass(self):
-        """
-        Initializer
-        """
-        unittest.SkipTest("Tests need to be written...")
-        # Start timer in miliseconds
-        self.test_start_time = datetime.now()
+    def test_MemoryNotAvailableError(self):
+        self._test_exception(MemoryNotAvailableError)
 
-        self.logger = CyLogger()
-        self.logger.initializeLogs()
+    def test_UnsupportedOSError(self):
+        self._test_exception(UnsupportedOSError)
 
-        self.libcPath = None # initial initialization
+    def test_NotValidForThisOS(self):
+        self._test_exception(NotValidForThisOS)
 
-    def setUp(self):
-        """
-        This method runs before each test run.
+    def test_SystemToolNotAvailable(self):
+        self._test_exception(SystemToolNotAvailable)
 
-        
-        """
-        self.libcPath = None # initial initialization
-        #####
-        # setting up to call ctypes to do a filesystem sync
-        if sys.platform.startswith("darwin"):
-            #####
-            # For Mac
-            self.libc = C.CDLL("/usr/lib/libc.dylib")
-        elif sys.platform.startswith("linux"):
-            #####
-            # For Linux
-            self.findLinuxLibC()
-            self.libc = C.CDLL(self.libcPath)
-        else:
-            self.libc = self._pass()
+    def test_NotEnoughMemoryError(self):
+        self._test_exception(NotEnoughMemoryError)
 
-###############################################################################
-##### Helper Classes
+    def test_NotACyLoggerError(self):
+        self._test_exception(NotACyLoggerError)
 
-    def setMessageLevel(self, msg_lvl="normal"):
-        """
-        Set the logging level to what is passed in.
-        """
-        self.message_level = msg_lvl
-
-    def findLinuxLibC(self):
-        """
-        Find Linux Libc library...
-
-        
-        """
-        possible_paths = ["/lib/x86_64-linux-gnu/libc.so.6",
-                          "/lib/i386-linux-gnu/libc.so.6"]
-        for path in possible_paths:
-
-            if os.path.exists(path):
-                self.libcPath = path
-                break
-
-    def _pass(self):
-        """
-        Filler if a library didn't load properly
-        """
-        pass
-
-###############################################################################
-##### Method Tests
-
-    ##################################
-
-    def test_init(self):
-        """
-        """
-        pass
-
-    ##################################
-
-###############################################################################
-##### Functional Tests
-
-    ##################################
-
-###############################################################################
-##### unittest Tear down
-    @classmethod
-    def tearDownClass(self):
-        """
-        disconnect ramdisk
-        """
-        # self.logger = CyLogger()
-        #####
-        # capture end time
-        test_end_time = datetime.now()
-
-        #####
-        # Calculate and log how long it took...
-        test_time = (test_end_time - self.test_start_time)
-
-        self.logger.log(lp.INFO, self.__module__ + " took " + str(test_time) + \
-                        " time to complete...")
-
-###############################################################################
+    def test_UserMustBeRootError(self):
+        self._test_exception(UserMustBeRootError)
 
 
 if __name__ == "__main__":
-
     unittest.main()
-
 

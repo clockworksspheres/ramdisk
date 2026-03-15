@@ -13,13 +13,15 @@ import ctypes
 import termios
 import traceback
 from subprocess import Popen, STDOUT, PIPE
+from pathlib import Path
 
-sys.path.append("../..")
+sys.path.append(Path(__file__).parent.parent)
 
 #--- non-native python libraries in this source tree
-from ramdisk.lib.loggers import CyLogger
-from ramdisk.lib.loggers import LogPriority as lp
-from ramdisk.lib.run_commands import RunWith
+from lib.loggers import CyLogger
+from lib.loggers import LogPriority as lp
+from lib.run_commands import RunWith
+from lib.libHelperExceptions import UnsupportedOSError
 
 logger = CyLogger()
 run = RunWith(logger)
@@ -43,108 +45,45 @@ class FoundException(Exception) :
 
 def get_console_user():
     """
-    Get the user that owns the console on the Mac.  This user is the user that
-    is logged in to the GUI.
+    Get the user that owns the console on macOS or Linux.
+    Returns False if no valid username is found.
     """
-    user = False
 
-    cmd = ["/usr/bin/stat", "-f", "'%Su'", "/dev/console"]
-
+    if sys.platform.lower().startswith("darwin"):
+        # macOS command
+        cmd = ["/usr/bin/stat", "-f", "%Su", "/dev/console"]
+    elif sys.platform.lower().startswith("linux"):
+        cmd = ["stat", "-c", "%U", "/dev/console"]
+    else:
+        raise UnsupportedOSError("Function not supported on this OS")
+        
     try:
         retval = Popen(cmd, stdout=PIPE, stderr=STDOUT).communicate()[0]
-        space_stripped = str(retval).strip()
-        quote_stripped = str(space_stripped).strip("'")
+
+        # Properly decode bytes
+        decoded = retval.decode("utf-8", errors="ignore").strip()
+
+        # Remove stray quotes if present
+        decoded = decoded.strip("'").strip('"')
 
     except Exception as err:
         logger.log(lp.VERBOSE, "Exception trying to get the console user...")
         logger.log(lp.VERBOSE, "Associated exception: " + str(err))
         logger.log(lp.WARNING, traceback.format_exc())
         logger.log(lp.WARNING, str(err))
-        raise err
-    else:
-        """
-        LANL's environment has chosen the regex below as a valid match for
-        usernames on the network.
-        """
-        if re.match("^[A-Za-z][A-Za-z1-9_]+$", quote_stripped):
-            user = str(quote_stripped)
-    logger.log(lp.VERBOSE, "user: " + str(user))
-    
-    return user
+        raise
+
+    # Accept realistic usernames:
+    # letters, digits, underscore, hyphen, dot
+    if re.match(r"^[A-Za-z][A-Za-z0-9._-]*$", decoded):
+        logger.log(lp.VERBOSE, f"user: {decoded}")
+        return decoded
+
+    logger.log(lp.VERBOSE, "user: False")
+    return False
 
 ###########################################################################
 
-def get_darwin_mac() :
-    """
-    Get the mac address and place it in net_hw_addr
-
-    Future METHOD: Use the "ifconfig" command - look for the "active" interface
-    - collect "interface", "mac", "ipaddr" to return.  PATH to ifconfig may be
-    specific to the Mac.
-
-    Description:   Runs the networksetup -listallhardwareports,
-                   processing the output to get the network interface mac
-                   address.  Specific to the Mac.
-
-    
-    """
-    found = 0
-
-    output = Popen(["/usr/sbin/networksetup", "-listallhardwareports"], stdout=PIPE, stderr=STDOUT).communicate()[0]
-
-    try :
-        for line in output.splitlines() :
-            match_hw_addr = re.compile \
-            ("^Ethernet Address:\s+(\w+:\w+:\w+:\w+:\w+:\w+)\s*$")
-
-            if re.match("^Device:\s+(\w+)\s*$", line) :
-                found = 1
-            if re.match \
-              ("^Ethernet Address:\s+(\w+:\w+:\w+:\w+:\w+:\w+)\s*$", \
-              line) and found == 1 :
-                raise FoundException
-    except FoundException :
-        hw_addr = match_hw_addr.search(line)
-        net_hw_addr = hw_addr.group(1)
-        #  net_hw_addr
-    except Exception as err:
-        logger.log(lp.VERBOSE, "Error attempting to acquire MAC address...")
-        logger.log(lp.VERBOSE, "Exception: " + str(err))
-        raise err
-    else :
-        net_hw_addr = "No MAC addr found"
-        logger.log(lp.VERBOSE, "No MAC address found")
-
-    return net_hw_addr
-
-###########################################################################
-
-def is_laptop():
-    """
-    Determine if the machine this is currently running on is a laptop
-    
-    
-    """
-    isThisALaptop = False
-    
-    cmd = ["/usr/sbin/system_profiler", "SPHardwareDataType"]
-    
-    retval, reterr = Popen(cmd, stdout=PIPE, stderr=PIPE).communicate()
-    
-    if not reterr :
-        if retval :
-            for line in retval.splitlines() :
-                if re.match("^\s+Model Name:", line) :
-                    if re.search("[bB]ook", line) :
-                        isThisALaptop = True
-                        break
-        else :
-            logger.log(lp.VERBOSE, "Error processing system_profiler output...")
-    else :
-        logger.log(lp.VERBOSE, "Error processing system_profiler output: " + str(reterr))
-    return isThisALaptop
-
-###########################################################################
 
 def touch(filename=""):
     """
@@ -161,75 +100,6 @@ def touch(filename=""):
                 open(filename, 'a').close()
             except Exception as err :
                 logger.log(lp.INFO, "Cannot open to touch: " + str(filename))
-
-###########################################################################
-
-def installFdeUser(myusername="", mypassword="") :
-    """
-    Create an input plist for the fdesetup command to enable a user in the 
-    filevault login screen
-
-    
-    """
-    success = False
-    logger.log(lp.DEBUG, "Starting installFdeUser...")
-    
-    if re.match("^\s*$", myusername) :
-        logger.log(lp.INFO, "Empty username: '" + str(myusername) + "'")
-
-    elif re.match("^\s*$", mypassword) :
-        logger.log(lp.INFO, "Empty password: '" + str(mypassword) + "'")
-        
-    if re.match("^\s*$", myusername) or re.match("^\s*$", mypassword) :
-        logger.log(lp.INFO, "in buildInputPlist -- cannot build the plist with an empty username or password...")
-        return success
-
-    plist = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + \
-            "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n" + \
-            "<plist version=\"1.0\">\n" + \
-            "\t<dict>\n" + \
-            "\t\t<key>Username</key>\n" + \
-            "\t\t<string>" + str(myusername) + "</string>\n" + \
-            "\t\t<key>Password</key>\n" + \
-            "\t\t<string>" + str(mypassword) + "</string>\n" + \
-            "\t</dict>\n</plist>"
-
-    #####
-    # Do the fdesetup command
-    cmd = ["/usr/bin/fdesetup", "enable", "-outputplist", "-inputplist"]
-    logger.log(lp.DEBUG, "Command: " + str(cmd))
-
-    proc = Popen(cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    
-    (retval, reterr) = proc.communicate(plist + "\n")
-    
-    logger.log(lp.DEBUG, "retval: " + str(retval))
-    logger.log(lp.DEBUG, "reterr: " + str(reterr))
-
-    if not reterr:
-        success = True
-    
-    logger.log(lp.DEBUG, "Installed an Fde User...")
-    return success
-
-###########################################################################
-
-def removeFdeUser(myusername=""):
-    """
-    Remove a user from the FDE login screen
-    
-    
-    """
-    success = False
-    if re.match("^\s+$", myusername) or not myusername:
-        logger.log(lp.INFO, "Empty username: '" + str(myusername) + "'")
-        return success
-    cmd = ["/usr/bin/fdesetup", "remove", myusername]
-    run.setCommand(cmd)
-    run.communicate()
-    if not run.getStderr():
-        success = True
-    return success
 
 ###########################################################################
 
@@ -284,7 +154,7 @@ def isSaneFilePath(filepath):
     """
     sane = False
     if filepath and isinstance(filepath, str):
-        if re.match("^[A-Za-z0-9_\-/\.]*", filepath):
+        if re.match("^[A-Za-z0-9_\-/\.]+$", filepath):
             sane = True
     return sane
 
