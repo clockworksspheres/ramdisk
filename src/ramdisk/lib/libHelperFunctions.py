@@ -90,7 +90,7 @@ def touch(filename=""):
     Python implementation of the touch command..
     
     """
-    if re.match("^\s*$", filename) :
+    if re.match(r"^\s+$", filename) :
         logger.log(lp.INFO, "Cannot touch a file without a filename....")
     else :
         try:
@@ -154,7 +154,7 @@ def isSaneFilePath(filepath):
     """
     sane = False
     if filepath and isinstance(filepath, str):
-        if re.match("^[A-Za-z0-9_\-/\.]+$", filepath):
+        if re.match(r"^[A-Za-z0-9_\-/\.]+$", filepath):
             sane = True
     return sane
 

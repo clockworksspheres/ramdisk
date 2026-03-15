@@ -61,7 +61,7 @@ class FsHelper(object):
             blockSize = myout
         except SubprocessError as Err:
             self.logger.log(lp.WARNING, traceback.format_exc())
-            self.logger.log(lp.WARNING, "Exception thrown trying to find free space on device: " + dev + " assumed fstype: " + fstype)
+            self.logger.log(lp.WARNING, "Exception thrown trying to find free space on device")
 
         return blockSize
 
@@ -106,7 +106,7 @@ class FsHelper(object):
                     continue 
         except SubprocessError as Err:
             self.logger.log(lp.WARNING, traceback.format_exc())
-            self.logger.log(lp.WARNING, "Exception thrown trying to find free space on device: " + dev + " assumed fstype: " + fstype)
+            self.logger.log(lp.WARNING, "Exception thrown trying to find free space")
 
         return str(int(sectorSize) * 8)
 
