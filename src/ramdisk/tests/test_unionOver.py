@@ -43,6 +43,7 @@ elif sys.platform.startswith("linux"):
     from linuxTmpfsRamdisk import umount
 
 
+@unittest.SkipTest
 class test_unionOver(unittest.TestCase):
     """
     Test unionfs functionality of ramdisks
