@@ -624,9 +624,10 @@ class RunWith(object):
             else:
                 if not silent:
                     self.logger.log(lp.DEBUG, "Done with: " + self.printcmd)
-                self.stdout = proc.stdout
-                self.stderr = proc.stderr
-                self.retcode = proc.returncode
+                # DO NOT overwrite stdout/stderr with file objects
+                # self.stdout = proc.stdout
+                # self.stderr = proc.stderr
+                # self.retcode = proc.returncode
                 # self.libc.sync()
                 proc.stdout.close()
                 proc.stderr.close()
