@@ -289,6 +289,7 @@ class TestDiscoverOs(unittest.TestCase):
         self.assertEqual(self.env.operatingsystem, "Ubuntu")
         self.assertIn("22.04.3", self.env.osversion)
 
+    @unittest.skipUnless(sys.platform.lower().startswith("darwin"), "Only works on macOS")
     @patch("lib.environment.os.path.exists")
     def test_sw_vers_path(self, mock_exists):
         def exists_side(p):
