@@ -13,7 +13,7 @@ from lib.fsHelper.macosFsHelper import FsHelper
 from lib.loggers import CyLogger
 from lib.loggers import LogPriority as lp
 
-
+@unittest.skipUnless(sys.platform.lower().startswith("darwin"), "only works on macOS")
 class TestFsHelper(unittest.TestCase):
 
     def setUp(self):
