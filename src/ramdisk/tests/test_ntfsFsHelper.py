@@ -34,7 +34,7 @@ LOGGER = CyLogger()
 #    SkipTest("This is not valid on this OS")
         
 
-
+@unittest.skipUnless(sys.platform.lower().startswith("win32"), "Only runs on Windows")
 class test_ntfsFsHelper(unittest.TestCase):
     """
     """
