@@ -10,7 +10,10 @@ import os
 import sys
 import time
 import ctypes
-import termios
+if sys.platform.lower().startswith("win32"):
+    print("importing termios not supported on Windows")
+else:
+    import termios
 import traceback
 from subprocess import Popen, STDOUT, PIPE
 from pathlib import Path
