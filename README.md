@@ -79,10 +79,10 @@ Will correctly inherit either a macRamdisk on macOS or a linuxTmpfsRamdisk (by d
 ### Looking at working with the 
 
 AIM - whose predecessor is ImDisk. Dropping the work so far with ImDisk since it
-is EOL and doesn't officially support Windows 11.  The AIM Toolkit must be installed
+is EOL and doesn't officially support Windows 11.  The "aim_ll.exe" must be installed
 and set up prior to using this project.
 
-NOTE: the AIMtk software must be acquired from 
+NOTE: the aim_ll.exe software must be acquired from 
 [Arsenal Recon](https://github.com/ArsenalRecon/Arsenal-Image-Mounter/tree/master/Command%20line%20applications?)
 
 ## Example code
