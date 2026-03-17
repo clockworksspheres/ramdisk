@@ -1,8 +1,27 @@
 # Ramdisk Software: Setting up the ramdisk library and examples for Windows 11
 
-## Installing the AIM toolkit
+## Installing AIM
 
----
+### Installing the Drivers that AIM requires
+
+#### [Driver Setup](https://github.com/ArsenalRecon/Arsenal-Image-Mounter/tree/master/DriverSetup) files
+
+
+
+
+
+
+### Installing AIM
+
+#### [Arsenal Image Mounter](https://github.com/ArsenalRecon/Arsenal-Image-Mounter/tree/master/Command%20line%20applications?) 
+
+
+
+
+
+-----
+
+### Older version of install instructions
 
 Download the Arsenal Image Mounter drivers from: https://github.com/ArsenalRecon/Arsenal-Image-Mounter/tree/master/DriverSetup/DriverSetup.7z and hit the download icon.
 
