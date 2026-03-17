@@ -57,9 +57,9 @@ elif sys.platform.startswith("linux"):
     from lib.libHelperExceptions import UserMustBeRootError
 elif sys.platform.startswith("win32"):
     #####
-    # For ImDisk for Windows
+    # For Windows
     from lib.getLibc.winGetLibc import getLibc
-    from winAIMtkRamdisk import RamDisk
+    from winAIMRamdisk import RamDisk
 #    from winImDiskRamdisk import umount
     from lib.fsHelper.ntfsFsHelper import FsHelper
 else:
