@@ -114,12 +114,13 @@ class TestCreateRamdisk(QtTestCase):
         self.key(table, Qt.Key_Tab)
 
         osType = self.environment.getostype().strip()
-        # linBased = 'Red Hat Enterprise Linux|AlmaLinux|Rocky Linux|CentOS|Fedora|Debian|macOS'
-        linBased = 'Red Hat Enterprise Linux|Fedora'
+        linBased = 'Red Hat Enterprise Linux|AlmaLinux|Rocky Linux|CentOS|Fedora|Debian|macOS'
+        #linBased = 'Red Hat Enterprise Linux|Fedora'
         print("==========================")
         print(str(osType))
         print("==========================")
-        if re.search(linBased, osType):
+        # if re.search(linBased, osType) and os.getenv("QT_QPA_PLATFORM") == "offscreen":
+        if not os.getenv("QT_QPA_PLATFORM") == "offscreen":
             print("==========================")
             print("RH Based")
             print("==========================")
