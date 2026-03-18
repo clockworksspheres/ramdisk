@@ -7,7 +7,7 @@ Installing tools to set up for building the project.  Some help gained from AI, 
 Chocolatey is a package manager for Windows, similar to homebrew for macos, apt for debian linux based systems and yum/dnf for redhat based systems.
 
 To install chocolatey, open an admin powershell, and run the following:
-
+d
 ```
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 ```
@@ -29,10 +29,12 @@ To use chocolatey, close the powershell window, and open a new admin powershell 
 ### With Chocolaty
 
 ```
-choco install python312
+choco install python3
 choco install git
 choco install less
 choco install obsidian
+choco install which
+choco install grep
 ```
 
 Download and install positron from:  https://positron.posit.co/download.html
