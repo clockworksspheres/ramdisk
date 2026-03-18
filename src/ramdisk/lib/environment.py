@@ -375,7 +375,6 @@ class Environment(object):
         self.setosfamily()
         # print 'Environment running guessnetwork'
         self.guessnetwork()
-        self.collectpaths()
         self.determinefismacat()
         self.setsystemtype()
 
@@ -1012,92 +1011,6 @@ class Environment(object):
                     issnitchactive = True
                     break
         return issnitchactive
-
-    def collectpaths(self):
-        """
-        Determine how stonix is run and return appropriate paths for:
-
-        icons
-        rules
-        conf
-        logs
-
-        
-        """
-        try:
-            script_path_zero = sys._MEIPASS
-        except AttributeError:
-            script_path_zero = os.path.realpath(sys.argv[0])
-
-        try:
-            script_path_one = os.path.realpath(sys.argv[1])
-        except IndexError:
-            script_path_one = ""
-
-        self.test_mode = False
-        #####
-        # Check which argv variable has the script name -- required to allow
-        # for using the eclipse debugger.
-        if re.search("stonix.py$", script_path_zero) or \
-           re.search("stonix$", script_path_zero):
-            #####
-            # Run normally
-            self.script_path = os.path.dirname(os.path.realpath(sys.argv[0]))
-        else:
-            #####
-            # Run with Eclipse debugger -- Eclipse debugger will never try
-            # to run the "stonix" binary blob created by pyinstaller,
-            # so don't include here.
-            # print "DEBUG: Environment.collectpaths: unexpected argv[0]" + \
-            #       ": " + str(sys.argv[0])
-            if re.search("stonix.py$", script_path_one) or \
-               re.search("stonixtest.py$", script_path_one):
-                script = script_path_one.split("/")[-1]
-                script_path = "/".join(script_path_one.split("/")[:-1])
-
-                if re.match("^stonixtest.py$", script) and \
-                   os.path.exists(script_path_one) and \
-                   os.path.exists(os.path.join(script_path, "stonixtest.py")) and \
-                   os.path.exists(os.path.join(script_path, "stonix.py")):
-                    self.test_mode = True
-                    self.script_path = os.path.dirname(os.path.realpath(sys.argv[1]))
-                else:
-                    print("ERROR: Cannot run using this method")
-            else:
-                #print "DEBUG: Cannot find appropriate path, building paths for current directory"
-                try:
-                    self.script_path = sys._MEIPASS
-                except AttributeError:
-                    self.script_path = os.path.dirname(os.path.realpath(sys.argv[0]))
-
-        #####
-        # Set the rules & stonix_resources paths
-        # ##
-        # create the self.resources_path
-        self.resources_path = os.path.join(self.script_path,
-                                           "stonix_resources")
-        # ##
-        # create the self.rules_path
-        self.rules_path = os.path.join(self.script_path,
-                                       "stonix_resources",
-                                       "rules")
-        #####
-        # Set the log file path
-        if self.geteuid() == 0:
-            self.log_path = '/var/log'
-        else:
-            userpath = self.geteuidhome()
-            self.log_path = os.path.join(userpath, '.stonix')
-            if userpath == '/dev/null':
-                self.log_path = '/tmp'
-
-        #####
-        # Set the icon path
-        self.icon_path = os.path.join(self.resources_path, 'gfx')
-
-        #####
-        # Set the configuration file path
-        self.conf_path = "/etc/stonix.conf"
 
     def determinefismacat(self):
         '''
