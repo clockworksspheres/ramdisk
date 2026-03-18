@@ -23,7 +23,3 @@ Many shared with other clockworksspheres and other projects.
 
 * directory containing file system related support functionality
 
-## manage_* directories
-
-* currently only macOS functionality
-
