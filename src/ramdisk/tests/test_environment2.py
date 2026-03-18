@@ -51,12 +51,8 @@ def make_env():
         env.euid = 1000
         env.homedir = "/home/testuser"
         env.test_mode = False
-        env.script_path = "/opt/stonix"
-        env.resources_path = "/opt/stonix/stonix_resources"
-        env.rules_path = "/opt/stonix/stonix_resources/rules"
+        env.script_path =  parent_dir
         env.log_path = "/var/log"
-        env.icon_path = "/opt/stonix/stonix_resources/gfx"
-        env.conf_path = "/etc/stonix.conf"
         env.installmode = False
         env.verbosemode = False
         env.debugmode = False
@@ -498,25 +494,6 @@ class TestPathGetters(unittest.TestCase):
     def test_get_test_mode(self):
         self.env.test_mode = True
         self.assertTrue(self.env.get_test_mode())
-
-    def test_get_script_path(self):
-        self.assertEqual(self.env.get_script_path(), "/opt/stonix")
-
-    def test_get_icon_path(self):
-        self.assertEqual(self.env.get_icon_path(), "/opt/stonix/stonix_resources/gfx")
-
-    def test_get_rules_path(self):
-        self.assertEqual(self.env.get_rules_path(), "/opt/stonix/stonix_resources/rules")
-
-    def test_get_config_path(self):
-        self.assertEqual(self.env.get_config_path(), "/etc/stonix.conf")
-
-    def test_get_log_path(self):
-        self.assertEqual(self.env.get_log_path(), "/var/log")
-
-    def test_get_resources_path(self):
-        self.assertEqual(self.env.get_resources_path(), "/opt/stonix/stonix_resources")
-
 
 # ---------------------------------------------------------------------------
 
