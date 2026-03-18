@@ -28,8 +28,7 @@ from lib.run_commands import RunWith
 
 class test_loggers(unittest.TestCase):
     """
-    Test for the CyLogger class, based on the STONIX project's test
-    for it's logdispatcher.
+    Test for the CyLogger class
     """
 
     metaVars = {'setupDone': None,

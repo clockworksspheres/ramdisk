@@ -992,7 +992,7 @@ class Environment(object):
         """
         Returns a bool indicating whether or not the little snitch program is
         active. Little snitch is a firewall utility used on Mac systems and can
-        interfere with STONIX operations.
+        interfere with project operations.
         
         @return: bool - true if little snitch is running
         """
@@ -1079,7 +1079,7 @@ class Environment(object):
 
     def get_resources_path(self):
         """
-        Getter for stonix resources directory
+        Getter for resources directory
 
         
         """

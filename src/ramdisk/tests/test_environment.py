@@ -1,6 +1,5 @@
 #!/usr/bin/env -S python -u
 '''
-Created on Jul 13, 2011 - stonix project
 
 '''
 
