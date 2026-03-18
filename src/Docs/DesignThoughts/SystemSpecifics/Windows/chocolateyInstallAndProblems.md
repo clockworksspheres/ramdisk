@@ -1,4 +1,4 @@
-Now works. After python and git are installed, delete the packenv directory, re-create it with the build script and the python app will now work.
+dNow works. After python and git are installed, delete the packenv directory, re-create it with the build script and the python app will now work.
 
 Had to re-install chocolatey - in administrator's shell:
 
