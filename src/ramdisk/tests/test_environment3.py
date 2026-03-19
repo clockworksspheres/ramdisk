@@ -332,6 +332,7 @@ class TestDiscoverOs(unittest.TestCase):
         self.assertEqual(self.env.operatingsystem, "Ubuntu")
         self.assertIn("22.04.3", self.env.osversion)
 
+    @unittest.skipUnless(sys.platform.lower().startswith("darwin"))
     @patch("lib.environment.os.path.exists")
     def test_sw_vers_path_darwin_mocked(self, mock_exists):
         mock_exists.side_effect = lambda p: p == "/usr/bin/sw_vers"
