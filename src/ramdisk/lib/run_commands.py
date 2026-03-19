@@ -1199,3 +1199,48 @@ def runMyThreadCommand(cmd, logger, myshell=False):
 
     return retval, reterr
 
+
+def start_detached(cmd):
+    """
+    Starts a command completely detached / independent from the parent.
+    The child survives even when Python exits.
+ 
+        # ────────────────────────────────────────────────
+        # Examples
+        # ────────────────────────────────────────────────
+
+        # Simple example - open notepad (Windows) or gedit (Linux/macOS)
+        if sys.platform == "win32":
+            start_detached(["notepad.exe"])
+        else:
+            start_detached(["gedit"])           # or xdg-open, firefox, etc.
+
+        # More realistic example: run a long-running script / server
+        start_detached([sys.executable, "-u", "long_running_server.py"])
+
+        # Or run a shell command
+        start_detached(["bash", "-c", "sleep 600 && echo 'Done!' >> /tmp/detached.log"])
+
+        print("Parent is about to exit — child should keep running")
+    """
+    if sys.platform.lower().startswith("win32"):
+        # Windows: use DETACHED_PROCESS (Python 3.7+)
+        creationflags = subprocess.DETACHED_PROCESS | subprocess.CREATE_NO_WINDOW
+        return subprocess.Popen(
+            cmd,
+            creationflags=creationflags,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            stdin=subprocess.DEVNULL
+        )
+    else:
+        # Linux / macOS / other POSIX
+        return subprocess.Popen(
+            cmd,
+            start_new_session=True,          # crucial: setsid() → new session
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            stdin=subprocess.DEVNULL
+        )
+
+

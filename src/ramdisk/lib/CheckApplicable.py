@@ -80,8 +80,8 @@ class CheckApplicable(object):
     def isApplicable(self, applicableDict={'default': 'default'}):
         """
         This method returns true if the rule applies to the platform on which
-        this project is currently running. The method in this template class will
-        return true by default. The class property applicable will be
+        this project is currently running. The method in this template class
+        will return true by default. The class property applicable will be
         referenced when this method is called and should be set by classes
         inheriting from the rule class including sub-template rules and
         concrete rule implementations.
@@ -139,7 +139,7 @@ class CheckApplicable(object):
         will mask the behavior of the more specific os key.
 
         Note that version comparison is done using the distutils.version
-        module. If the this project environment module returns a 3 place version
+        module. If the project environment module returns a 3 place version
         string then you need to provide a 3 place version string. I.E. in this
         case 10.11 only matches 10.11.0 and does not match 10.11.3 or 10.11.5.
 
