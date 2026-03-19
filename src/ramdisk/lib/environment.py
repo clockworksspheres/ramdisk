@@ -1,11 +1,5 @@
 #!/usr/bin/env -S python3 -u
 
-###############################################################################
-#                                                                             #
-
-#                                                                             #
-###############################################################################
-
 #--- Native python libraries
 import os
 import re
@@ -41,7 +35,8 @@ except ImportError or AssertionError:
 
 
 # FISMACAT must be one of ['high', 'medium', 'low']
-#FISMACAT = globals().get("FISMACAT", "low")
+FISMACAT = globals().get("FISMACAT", "low")
+
 try:
     from lib.localize import FISMACAT
 except ImportError or AssertionError:
@@ -1036,54 +1031,6 @@ class Environment(object):
         
         """
         return self.test_mode
-
-    def get_script_path(self):
-        """
-        Getter for the script path
-
-        
-        """
-        return self.script_path
-
-    def get_icon_path(self):
-        """
-        Getter for the icon path
-
-        
-        """
-        return self.icon_path
-
-    def get_rules_path(self):
-        """
-        Getter for rules path
-
-        
-        """
-        return self.rules_path
-
-    def get_config_path(self):
-        """
-        Getter for conf file path
-
-        
-        """
-        return self.conf_path
-
-    def get_log_path(self):
-        """
-        Getter for log path
-
-        
-        """
-        return self.log_path
-
-    def get_resources_path(self):
-        """
-        Getter for resources directory
-
-        
-        """
-        return self.resources_path
 
     def getruntime(self):
         '''
