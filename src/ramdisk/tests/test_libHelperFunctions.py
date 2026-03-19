@@ -82,11 +82,13 @@ class TestLibHelperFunctions(unittest.TestCase):
     # ---------------------------------------------------------
     # getecho
     # ---------------------------------------------------------
+    @unittest.skipIf(sys.platform.lower().startswith("win"), "doesn't work on Windows")
     @patch("lib.libHelperFunctions.termios.tcgetattr")
     def test_getecho_true(self, mock_tc):
         mock_tc.return_value = [None, None, None, helpers.termios.ECHO]
         self.assertTrue(helpers.getecho(0))
 
+    @unittest.skipIf(sys.platform.lower().startswith("win"), "doesn't work on Windows")
     @patch("lib.libHelperFunctions.termios.tcgetattr")
     def test_getecho_false(self, mock_tc):
         mock_tc.return_value = [None, None, None, 0]

@@ -59,7 +59,8 @@ class test_run_commands(unittest.TestCase):
         command = ['/bin/ls', 1, '.']
         self.assertRaises(SetCommandTypeError,
                           self.rw.setCommand, [command])
-
+    
+    @unittest.skipIf(sys.platform.lower().startswith("win"), "doesn't work on Windows, need to write windows specific tests")
     def test_communicate(self):
         """
         """
@@ -79,6 +80,7 @@ class test_run_commands(unittest.TestCase):
 
         self.logger.log(lp.DEBUG, "=============== Ending test_communicate...")
 
+    @unittest.skipIf(sys.platform.lower().startswith("win"), "doesn't work on Windows, need to write windows specific tests")
     def test_wait(self):
         """
         """
@@ -160,6 +162,7 @@ class test_run_commands(unittest.TestCase):
 
         self.logger.log(lp.DEBUG, "=============== Completed test_wait...")
 
+    @unittest.skipIf(sys.platform.lower().startswith("win"), "needs to be re=writtent to work on windows as well")
     def test_timeout(self):
         """
         """
