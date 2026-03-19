@@ -1,18 +1,32 @@
 #!/usr/bin/env python3
 """
-Full unittest suite for lib/environment.py
-Rewritten to use unittest.mock: patch, MagicMock, PropertyMock, call
-No sys.modules or sys.modules.setdefault usage.
+Cross‑platform unittest suite for lib/environment.py
+
+- No pwd module usage in tests (only a fake module injected for import)
+- No os.geteuid / os.getuid usage
+- All OS‑specific behavior mocked
+- Runs on Windows, macOS, Linux, Solaris
 """
 
 import os
 import sys
 import socket
+import types
+import time
 import unittest
-from unittest.mock import (
-    MagicMock, patch, PropertyMock, call, mock_open
-)
+from contextlib import ExitStack
+from unittest.mock import MagicMock, patch, mock_open
 from pathlib import Path
+
+# ---------------------------------------------------------------------------
+# Ensure lib.environment imports cleanly on all platforms
+# ---------------------------------------------------------------------------
+
+# Provide a fake pwd module so lib.environment can import it even on Windows
+fake_pwd_module = types.SimpleNamespace(
+    getpwuid=lambda uid: ("u", "x", uid, uid, "User", "/home/u", "/bin/bash")
+)
+sys.modules.setdefault("pwd", fake_pwd_module)
 
 # Ensure project root is on sys.path so lib.environment can be imported
 parent_dir = Path(__file__).parent.parent
@@ -23,16 +37,29 @@ Environment = env_module.Environment
 
 
 # ---------------------------------------------------------------------------
-# Helpers
+# Helper: Create Environment instance without running __init__
 # ---------------------------------------------------------------------------
 
 def make_env():
     """Return an Environment instance with __init__ side-effects suppressed."""
-    with patch.object(Environment, "collectinfo", return_value=None), \
-         patch.object(Environment, "determinefismacat", return_value="low"), \
-         patch("lib.environment.os.geteuid", return_value=1000), \
-         patch("lib.environment.pwd.getpwuid", return_value=(
-             "u", "x", 1000, 1000, "U", "/home/u", "/bin/bash")):
+    fake_os = types.SimpleNamespace(
+        path=os.path,
+        sep=os.sep,
+        environ={},
+    )
+
+    fake_pwd = types.SimpleNamespace(
+        getpwuid=lambda uid: ("u", "x", uid, uid, "User", "/home/u", "/bin/bash")
+    )
+
+    with ExitStack() as stack:
+        stack.enter_context(patch.object(Environment, "collectinfo", return_value=None))
+        stack.enter_context(patch.object(Environment, "determinefismacat", return_value="low"))
+        stack.enter_context(patch("lib.environment.os", fake_os))
+
+        if hasattr(env_module, "pwd"):
+            stack.enter_context(patch("lib.environment.pwd", fake_pwd))
+
         env = Environment.__new__(Environment)
         env.rw = MagicMock()
         env.operatingsystem = ""
@@ -51,8 +78,12 @@ def make_env():
         env.euid = 1000
         env.homedir = "/home/testuser"
         env.test_mode = False
-        env.script_path =  parent_dir
+        env.script_path = parent_dir
+        env.resources_path = ""
+        env.rules_path = ""
         env.log_path = "/var/log"
+        env.icon_path = ""
+        env.conf_path = ""
         env.installmode = False
         env.verbosemode = False
         env.debugmode = False
@@ -62,39 +93,52 @@ def make_env():
 
 
 # ===========================================================================
-# Test Cases
+# 1. Environment construction (__init__)
 # ===========================================================================
-@unittest.skipIf(sys.platform.lower().startswith("win32"), "Tests not applicable to Windows")
-class TestEnvironmentInit(unittest.TestCase):
-    """Tests for __init__ wiring."""
 
-    @unittest.SkipTest
-    @patch("lib.environment.os.geteuid", return_value=500)
-    @patch("lib.environment.pwd.getpwuid", return_value=(
-        "alice", "x", 500, 500, "Alice", "/home/alice", "/bin/bash"
-    ))
+class TestEnvironmentConstruction(unittest.TestCase):
+    """Tests for Environment.__init__ with OS-specific behavior fully mocked."""
+
+    @unittest.skipIf(sys.platform.lower().startswith("win"), "Does not work on Windows")
     @patch.object(Environment, "collectinfo", return_value=None)
-    @patch.object(Environment, "determinefismacat", return_value="low")
-    def test_init_sets_euid(self, _dc, _ci, mock_getpw, mock_geteuid):
-        env = Environment()
-        self.assertEqual(env.euid, 500)
+    @patch.object(Environment, "determinefismacat", return_value=None)
+    def test_init_posix_sets_euid_and_homedir(self, _det_fisma, _collectinfo):
+        fake_pwd = types.SimpleNamespace(
+            getpwuid=lambda uid: ("u", "x", uid, uid, "User", "/home/posixuser", "/bin/bash")
+        )
 
-    @unittest.SkipTest
-    @patch("lib.environment.os.geteuid", return_value=500)
-    @patch("lib.environment.pwd.getpwuid", return_value=(
-        "alice", "x", 500, 500, "Alice", "/home/alice", "/bin/bash"
-    ))
+        with ExitStack() as stack:
+            stack.enter_context(patch("lib.environment.sys.platform", "linux"))
+            stack.enter_context(patch("lib.environment.os.geteuid", return_value=1000))
+            stack.enter_context(patch.object(env_module, "pwd", fake_pwd))
+
+            env = Environment()
+
+        self.assertEqual(env.euid, 1000)
+        self.assertEqual(env.homedir, "/home/posixuser")
+        self.assertEqual(env.systemfismacat, "low")
+
+    @unittest.skipUnless(sys.platform.lower().startswith("win"), "works only on windows")
     @patch.object(Environment, "collectinfo", return_value=None)
-    @patch.object(Environment, "determinefismacat", return_value="low")
-    def test_init_sets_homedir(self, _dc, _ci, mock_getpw, mock_geteuid):
-        env = Environment()
-        self.assertEqual(env.homedir, "/home/alice")
+    @patch.object(Environment, "determinefismacat", return_value=None)
+    def test_init_windows_sets_euid_and_homedir(self, _det_fisma, _collectinfo):
+        with ExitStack() as stack:
+            stack.enter_context(patch("lib.environment.sys.platform", "win32"))
+            stack.enter_context(patch("lib.environment.win32api.GetUserName", return_value="winuser"))
+            stack.enter_context(patch.dict("lib.environment.os.environ", {"USERPROFILE": r"C:\Users\WinUser"}, clear=True))
+
+            env = Environment()
+
+        self.assertEqual(env.euid, "winuser")
+        self.assertEqual(env.homedir, r"C:\Users\WinUser")
+        self.assertEqual(env.systemfismacat, "low")
 
 
-# ---------------------------------------------------------------------------
+# ===========================================================================
+# 2. Mode flags (install, verbose, debug)
+# ===========================================================================
 
-@unittest.skipIf(sys.platform.lower().startswith("win32"), "Tests not applicable to Windows")
-class TestModeSettersGetters(unittest.TestCase):
+class TestModeFlags(unittest.TestCase):
 
     def setUp(self):
         self.env = make_env()
@@ -109,7 +153,7 @@ class TestModeSettersGetters(unittest.TestCase):
 
     def test_setinstallmode_ignores_non_bool(self):
         self.env.setinstallmode(True)
-        self.env.setinstallmode("yes")          # should be ignored
+        self.env.setinstallmode("yes")
         self.assertTrue(self.env.getinstallmode())
 
     def test_setverbosemode_true(self):
@@ -129,9 +173,10 @@ class TestModeSettersGetters(unittest.TestCase):
         self.assertFalse(self.env.getdebugmode())
 
 
-# ---------------------------------------------------------------------------
+# ===========================================================================
+# 3. Simple getters
+# ===========================================================================
 
-@unittest.skipIf(sys.platform.lower().startswith("win32"), "Tests not applicable to Windows")
 class TestSimpleGetters(unittest.TestCase):
 
     def setUp(self):
@@ -181,9 +226,10 @@ class TestSimpleGetters(unittest.TestCase):
         self.assertEqual(self.env.getruntime(), "2024-06-01 12:00:00")
 
 
-# ---------------------------------------------------------------------------
+# ===========================================================================
+# 4. OS version parsing
+# ===========================================================================
 
-@unittest.skipIf(sys.platform.lower().startswith("win32"), "Tests not applicable to Windows")
 class TestOsVersionParsing(unittest.TestCase):
 
     def setUp(self):
@@ -214,10 +260,11 @@ class TestOsVersionParsing(unittest.TestCase):
         self.assertEqual(self.env.getostrivialver(), "22.04")
 
 
-# ---------------------------------------------------------------------------
+# ===========================================================================
+# 5. OS family detection
+# ===========================================================================
 
-@unittest.skipIf(sys.platform.lower().startswith("win32"), "Tests not applicable to Windows")
-class TestSetOsFamily(unittest.TestCase):
+class TestOsFamily(unittest.TestCase):
 
     def setUp(self):
         self.env = make_env()
@@ -247,9 +294,10 @@ class TestSetOsFamily(unittest.TestCase):
         self.assertEqual(self.env.osfamily, "windows")
 
 
-# ---------------------------------------------------------------------------
+# ===========================================================================
+# 6. OS discovery
+# ===========================================================================
 
-@unittest.skipIf(sys.platform.lower().startswith("win32"), "Tests not applicable to Windows")
 class TestDiscoverOs(unittest.TestCase):
 
     def setUp(self):
@@ -257,11 +305,7 @@ class TestDiscoverOs(unittest.TestCase):
 
     @patch("lib.environment.os.path.exists")
     def test_lsb_release_path(self, mock_exists):
-        # Only lsb_release exists
-        def exists_side(p):
-            return p == "/usr/bin/lsb_release"
-        mock_exists.side_effect = exists_side
-
+        mock_exists.side_effect = lambda p: p == "/usr/bin/lsb_release"
         self.env.rw.communicate.return_value = (
             "Description:\tUbuntu 22.04.3 LTS\nRelease:\t22.04",
             "", ""
@@ -273,9 +317,7 @@ class TestDiscoverOs(unittest.TestCase):
     @patch("lib.environment.os.path.exists")
     @patch("builtins.open", mock_open(read_data="Red Hat Enterprise Linux release 8.7 (Ootpa)\n"))
     def test_redhat_release_path(self, mock_exists):
-        def exists_side(p):
-            return p == "/etc/redhat-release"
-        mock_exists.side_effect = exists_side
+        mock_exists.side_effect = lambda p: p == "/etc/redhat-release"
         self.env.discoveros()
         self.assertIn("Red Hat", self.env.operatingsystem)
 
@@ -290,12 +332,9 @@ class TestDiscoverOs(unittest.TestCase):
         self.assertEqual(self.env.operatingsystem, "Ubuntu")
         self.assertIn("22.04.3", self.env.osversion)
 
-    @unittest.skipUnless(sys.platform.lower().startswith("darwin"), "Only works on macOS")
     @patch("lib.environment.os.path.exists")
-    def test_sw_vers_path(self, mock_exists):
-        def exists_side(p):
-            return p == "/usr/bin/sw_vers"
-        mock_exists.side_effect = exists_side
+    def test_sw_vers_path_darwin_mocked(self, mock_exists):
+        mock_exists.side_effect = lambda p: p == "/usr/bin/sw_vers"
 
         responses = iter([
             ("macOS", "", ""),
@@ -306,14 +345,16 @@ class TestDiscoverOs(unittest.TestCase):
 
         with patch("lib.environment.sys.platform", "darwin"):
             self.env.discoveros()
+
         self.assertEqual(self.env.operatingsystem, "macOS")
         self.assertEqual(self.env.osversion, "14.1.1")
 
 
-# ---------------------------------------------------------------------------
+# ===========================================================================
+# 7. System type detection
+# ===========================================================================
 
-@unittest.skipIf(sys.platform.lower().startswith("win32"), "Tests not applicable to Windows")
-class TestSetSystemType(unittest.TestCase):
+class TestSystemType(unittest.TestCase):
 
     def setUp(self):
         self.env = make_env()
@@ -321,24 +362,19 @@ class TestSetSystemType(unittest.TestCase):
     @patch("lib.environment.os.path.exists")
     def test_detects_systemd(self, mock_exists):
         mock_exists.side_effect = lambda p: p == "/usr/bin/ps"
-        self.env.rw.communicate.return_value = (
-            "/lib/systemd/systemd\n", "", ""
-        )
+        self.env.rw.communicate.return_value = ("/lib/systemd/systemd\n", "", "")
         self.env.setsystemtype()
         self.assertEqual(self.env.systemtype, "systemd")
 
     @patch("lib.environment.os.path.exists")
     def test_detects_launchd(self, mock_exists):
         mock_exists.side_effect = lambda p: p == "/usr/bin/ps"
-        self.env.rw.communicate.return_value = (
-            "  1 ??  Ss   0:00.01 /sbin/launchd\n", "", ""
-        )
+        self.env.rw.communicate.return_value = ("  1 ??  Ss   0:00.01 /sbin/launchd\n", "", "")
         self.env.setsystemtype()
         self.assertEqual(self.env.systemtype, "launchd")
 
-    @unittest.skipUnless(sys.platform.lower().startswith("win32"), "only works on Windows")
     @patch("lib.environment.os.path.exists", return_value=False)
-    def test_windows_fallback(self, mock_exists):
+    def test_windows_fallback_mocked(self, _):
         with patch("lib.environment.sys.platform", "win32"):
             self.env.setsystemtype()
         self.assertEqual(self.env.systemtype, "windows")
@@ -348,16 +384,17 @@ class TestSetSystemType(unittest.TestCase):
         self.assertEqual(self.env.getsystemtype(), "systemd")
 
 
-# ---------------------------------------------------------------------------
+# ===========================================================================
+# 8. Networking (guessnetwork + default IP)
+# ===========================================================================
 
-@unittest.skipIf(sys.platform.lower().startswith("win32"), "Tests not applicable to Windows")
-class TestGuessNetwork(unittest.TestCase):
+class TestNetworking(unittest.TestCase):
 
     def setUp(self):
         self.env = make_env()
 
     @patch("lib.environment.sys.platform", "darwin")
-    def test_darwin_returns_early(self):
+    def test_darwin_guessnetwork_returns_early(self):
         self.env.guessnetwork()
         self.assertEqual(self.env.hostname, "")
         self.assertEqual(self.env.ipaddress, "")
@@ -367,17 +404,44 @@ class TestGuessNetwork(unittest.TestCase):
     @patch("lib.environment.socket.getfqdn", return_value="badhost")
     @patch("lib.environment.socket.gethostbyname_ex", side_effect=socket.gaierror)
     @patch("lib.environment.os.path.exists", return_value=False)
-    def test_gaierror_uses_getdefaultip(self, _exists, _byname, _fqdn):
+    def test_gaierror_uses_getdefaultip(self, *_):
         self.env.rw.communicate.return_value = ("", "", "")
         with patch.object(self.env, "getdefaultip", return_value="192.168.0.1"):
             self.env.guessnetwork()
         self.assertEqual(self.env.ipaddress, "192.168.0.1")
 
 
-# ---------------------------------------------------------------------------
+class TestDefaultIp(unittest.TestCase):
 
-@unittest.skipIf(sys.platform.lower().startswith("win32"), "Tests not applicable to Windows")
-class TestMatchIp(unittest.TestCase):
+    def setUp(self):
+        self.env = make_env()
+
+    @patch("lib.environment.sys.platform", "darwin")
+    def test_darwin_returns_empty(self):
+        result = self.env.getdefaultip()
+        self.assertEqual(result, "")
+
+    @patch("lib.environment.sys.platform", "linux")
+    @patch("lib.environment.os.path.exists")
+    @patch("lib.environment.subprocess.Popen")
+    def test_linux_lsb_release_path(self, mock_popen, mock_exists):
+        mock_exists.side_effect = lambda p: p == "/usr/bin/lsb_release"
+        proc = MagicMock()
+        proc.stdout.readlines.return_value = [
+            "default  10.0.0.1  0.0.0.0  255.255.255.0  eth0\n"
+        ]
+        mock_popen.return_value = proc
+        with patch.object(self.env, "getallips", return_value=["10.0.0.5"]), \
+             patch.object(self.env, "matchip", return_value=["10.0.0.5"]):
+            result = self.env.getdefaultip()
+        self.assertEqual(result, "10.0.0.5")
+
+
+# ===========================================================================
+# 9. IP matching
+# ===========================================================================
+
+class TestIPMatching(unittest.TestCase):
 
     def setUp(self):
         self.env = make_env()
@@ -403,10 +467,11 @@ class TestMatchIp(unittest.TestCase):
         self.assertEqual(result, ["127.0.0.1"])
 
 
-# ---------------------------------------------------------------------------
+# ===========================================================================
+# 10. IP discovery (getallips)
+# ===========================================================================
 
-@unittest.skipIf(sys.platform.lower().startswith("win32"), "Tests not applicable to Windows")
-class TestGetAllIps(unittest.TestCase):
+class TestIPDiscovery(unittest.TestCase):
 
     def setUp(self):
         self.env = make_env()
@@ -424,10 +489,11 @@ class TestGetAllIps(unittest.TestCase):
         self.assertIn("192.168.1.100", ips)
 
 
-# ---------------------------------------------------------------------------
+# ===========================================================================
+# 11. FISMA category
+# ===========================================================================
 
-@unittest.skipIf(sys.platform.lower().startswith("win32"), "Tests not applicable to Windows")
-class TestFismaCat(unittest.TestCase):
+class TestFisma(unittest.TestCase):
 
     def setUp(self):
         self.env = make_env()
@@ -471,9 +537,10 @@ class TestFismaCat(unittest.TestCase):
         self.assertEqual(self.env.systemfismacat, "high")
 
 
-# ---------------------------------------------------------------------------
+# ===========================================================================
+# 12. Number of rules
+# ===========================================================================
 
-@unittest.skipIf(sys.platform.lower().startswith("win32"), "Tests not applicable to Windows")
 class TestNumRules(unittest.TestCase):
 
     def setUp(self):
@@ -496,10 +563,11 @@ class TestNumRules(unittest.TestCase):
             self.env.setnumrules("five")
 
 
-# ---------------------------------------------------------------------------
+# ===========================================================================
+# 13. Paths and test mode
+# ===========================================================================
 
-@unittest.skipIf(sys.platform.lower().startswith("win32"), "Tests not applicable to Windows")
-class TestPathGetters(unittest.TestCase):
+class TestPaths(unittest.TestCase):
 
     def setUp(self):
         self.env = make_env()
@@ -508,11 +576,12 @@ class TestPathGetters(unittest.TestCase):
         self.env.test_mode = True
         self.assertTrue(self.env.get_test_mode())
 
-# ---------------------------------------------------------------------------
 
-@unittest.skipIf(sys.platform.lower().startswith("win32"), "Tests not applicable to Windows")
+# ===========================================================================
+# 14. collectinfo orchestration
+# ===========================================================================
+
 class TestCollectInfo(unittest.TestCase):
-    """collectinfo() should call each discovery method in order."""
 
     def test_collectinfo_calls_all_methods(self):
         env = make_env()
@@ -527,10 +596,11 @@ class TestCollectInfo(unittest.TestCase):
             mocks[m].assert_called_once()
 
 
-# ---------------------------------------------------------------------------
+# ===========================================================================
+# 15. Mobile detection
+# ===========================================================================
 
-@unittest.skipIf(sys.platform.lower().startswith("win32"), "Tests not applicable to Windows")
-class TestIsmobile(unittest.TestCase):
+class TestMobileDetection(unittest.TestCase):
 
     def setUp(self):
         self.env = make_env()
@@ -553,16 +623,17 @@ class TestIsmobile(unittest.TestCase):
         self.assertFalse(result)
 
 
-# ---------------------------------------------------------------------------
+# ===========================================================================
+# 16. Snitch detection
+# ===========================================================================
 
-@unittest.skipIf(sys.platform.lower().startswith("win32"), "Tests not applicable to Windows")
-class TestIssnitchActive(unittest.TestCase):
+class TestSnitch(unittest.TestCase):
 
     def setUp(self):
         self.env = make_env()
 
     @patch("lib.environment.subprocess.Popen")
-    def test_snitch_detected_on_darwin(self, mock_popen):
+    def test_snitch_detected_on_darwin_mocked(self, mock_popen):
         self.env.osfamily = "darwin"
         proc = MagicMock()
         proc.stdout.readlines.return_value = ["lsd\n"]
@@ -574,7 +645,7 @@ class TestIssnitchActive(unittest.TestCase):
         self.assertFalse(self.env.issnitchactive())
 
     @patch("lib.environment.subprocess.Popen")
-    def test_snitch_not_found_on_darwin(self, mock_popen):
+    def test_snitch_not_found_on_darwin_mocked(self, mock_popen):
         self.env.osfamily = "darwin"
         proc = MagicMock()
         proc.stdout.readlines.return_value = ["com.apple.notificationd\n"]
@@ -582,10 +653,11 @@ class TestIssnitchActive(unittest.TestCase):
         self.assertFalse(self.env.issnitchactive())
 
 
-# ---------------------------------------------------------------------------
+# ===========================================================================
+# 17. System serial number
+# ===========================================================================
 
-@unittest.skipIf(sys.platform.lower().startswith("win32"), "Tests not applicable to Windows")
-class TestGetSystemSerialNumber(unittest.TestCase):
+class TestSerialNumber(unittest.TestCase):
 
     def setUp(self):
         self.env = make_env()
@@ -598,7 +670,6 @@ class TestGetSystemSerialNumber(unittest.TestCase):
             "      Serial Number (system): C02XG1JYJGH7\n", "", ""
         )
         serial = self.env.get_system_serial_number()
-        # Default return is '0' unless the regex matches; test the call is made
         self.env.rw.setCommand.assert_called()
         self.assertIsNotNone(serial)
 
@@ -608,10 +679,11 @@ class TestGetSystemSerialNumber(unittest.TestCase):
         self.assertEqual(result, "0")
 
 
-# ---------------------------------------------------------------------------
+# ===========================================================================
+# 18. System UUID
+# ===========================================================================
 
-@unittest.skipIf(sys.platform.lower().startswith("win32"), "Tests not applicable to Windows")
-class TestGetSysUuid(unittest.TestCase):
+class TestUUID(unittest.TestCase):
 
     def setUp(self):
         self.env = make_env()
@@ -625,38 +697,10 @@ class TestGetSysUuid(unittest.TestCase):
         self.assertEqual(uuid, "SOME-UUID-1234\n")
 
 
-# ---------------------------------------------------------------------------
+# ===========================================================================
+# 19. RunWith integration
+# ===========================================================================
 
-@unittest.skipIf(sys.platform.lower().startswith("win32"), "Tests not applicable to Windows")
-class TestGetDefaultIp(unittest.TestCase):
-
-    def setUp(self):
-        self.env = make_env()
-
-    @patch("lib.environment.sys.platform", "darwin")
-    def test_darwin_returns_empty(self):
-        result = self.env.getdefaultip()
-        self.assertEqual(result, "")
-
-    @patch("lib.environment.sys.platform", "linux")
-    @patch("lib.environment.os.path.exists")
-    @patch("lib.environment.subprocess.Popen")
-    def test_linux_lsb_release_path(self, mock_popen, mock_exists):
-        mock_exists.side_effect = lambda p: p == "/usr/bin/lsb_release"
-        proc = MagicMock()
-        proc.stdout.readlines.return_value = [
-            "default  10.0.0.1  0.0.0.0  255.255.255.0  eth0\n"
-        ]
-        mock_popen.return_value = proc
-        with patch.object(self.env, "getallips", return_value=["10.0.0.5"]), \
-             patch.object(self.env, "matchip", return_value=["10.0.0.5"]):
-            result = self.env.getdefaultip()
-        self.assertEqual(result, "10.0.0.5")
-
-
-# ---------------------------------------------------------------------------
-
-@unittest.skipIf(sys.platform.lower().startswith("win32"), "Tests not applicable to Windows")
 class TestRunWithIntegration(unittest.TestCase):
     """
     Verify Environment delegates commands to RunWith correctly,
