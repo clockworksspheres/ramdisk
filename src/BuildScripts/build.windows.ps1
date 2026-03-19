@@ -20,6 +20,7 @@ if (!(Test-Path -Path ".\packenv" -PathType Container)) {
    pip install PySide6 PyInstaller packaging pywin32
    pip install --upgrade PyInstaller pyinstaller-hooks-contrib
    pip install psutil
+   pip install wmi
    pip install packaging
    pip install requests
    pip install pywin32

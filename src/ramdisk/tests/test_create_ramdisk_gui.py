@@ -99,7 +99,7 @@ class TestCreateRamdisk(QtTestCase):
 # ---------------------------------------------------
 # Table keyboard navigation
 # ---------------------------------------------------
-    @unittest.skipIf(sys.platform.lower().startswith("linux"), "Skip test on Linux")
+    #@unittest.skipIf(sys.platform.lower().startswith("linux"), "Skip test on Linux")
     @unittest.skipIf(sys.platform.lower().startswith("win"), "Skip test on Linux")
     def test_table_tab_navigation(self):
 

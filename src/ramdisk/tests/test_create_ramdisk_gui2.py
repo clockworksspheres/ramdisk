@@ -118,8 +118,8 @@ class TestCreateRamdiskGUI(QtTestCase):
 # ------------------------------------------------------
 # Test TAB navigation from table back to mount field
 # ------------------------------------------------------
+    #@unittest.skipIf(sys.platform.lower().startswith("linux"), "Skip test on Linux")
     @unittest.skipIf(sys.platform.lower().startswith("win"), "Skip test on Linux")
-    @unittest.skipIf(sys.platform.lower().startswith("linux"), "Skip test on Linux")
     def test_table_tab_navigation(self):
 
         self.window.add_row("disk1", "/mnt/test")
@@ -144,7 +144,8 @@ class TestCreateRamdiskGUI(QtTestCase):
         print("==========================")
         print(str(osType))
         print("==========================")
-        if re.search(linBased, osType):
+        #if re.search(linBased, osType):
+        if not os.getenv("QT_QPA_PLATFORM") == "offscreen":
             print("==========================")
             print("RH Based")
             print("==========================")

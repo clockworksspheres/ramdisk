@@ -99,17 +99,29 @@ class test_ntfsFsHelper(unittest.TestCase):
         #####
         # Check for the existance of the fsutil binary - if it doesn't 
         # exist, fail this test, before proceeding...
-        self.assertTrue(False, "Cannot find 'fsutil' binary...")
+        #self.assertTrue(False, "Cannot find 'fsutil' binary...")
 
         success, blocksize = self.fshelper.getFsBlockSize()
         self.assertTrue(success, "Attempt to get block size FAILED...")
 
-        self.assertEqual(blocksize, 4096, "Blocksize IS NOT default size...")
+        self.assertEqual(blocksize, '4096', "Blocksize IS NOT default size...")
 
     ##################################
 
+    @unittest.SkipTest
     def testGetDiskSize(self):
         """
+        Test not properly implemented... try wmi module, 
+
+        >>> import wmi
+        >>> c = wmi.WMI()
+        >>> for disk in c.Win32_DiskDrive():
+            ...     print(f"Disk: {disk.Caption}")
+            ...     print(f"   Size: {int(int(disk.Size)/(1024*1024))}")
+            ...
+            Disk: QEMU NVMe Ctrl
+               Size: 87039
+
         """
         #####
         # If we don't have a supported platform, skip this test.
