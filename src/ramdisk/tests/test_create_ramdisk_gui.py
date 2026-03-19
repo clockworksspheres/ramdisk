@@ -121,7 +121,7 @@ class TestCreateRamdisk(QtTestCase):
         print(str(osType))
         print("==========================")
         # if re.search(linBased, osType) and os.getenv("QT_QPA_PLATFORM") == "offscreen":
-        if os.getenv("QT_QPA_PLATFORM") == "offscreen":
+        if not os.getenv("QT_QPA_PLATFORM") == "offscreen":
             print("==========================")
             print("RH Based")
             print("==========================")
