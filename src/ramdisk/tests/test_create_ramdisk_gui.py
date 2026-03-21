@@ -97,10 +97,11 @@ class TestCreateRamdisk(QtTestCase):
 
 
 # ---------------------------------------------------
-# Table keyboard navigation
+# Table keyboard navigation - not currently working
+# in both Jenkins and cmdline environments
 # ---------------------------------------------------
     #@unittest.skipIf(sys.platform.lower().startswith("linux"), "Skip test on Linux")
-    @unittest.skipIf(sys.platform.lower().startswith("win"), "Skip test on Linux")
+    @unittest.skipIf(sys.platform.lower().startswith("win"), "Skip test on Windows")
     def test_table_tab_navigation(self):
 
         self.window.add_row("disk1", "/mnt/test")
