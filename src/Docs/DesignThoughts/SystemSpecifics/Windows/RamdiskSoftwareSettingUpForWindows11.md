@@ -2,20 +2,41 @@
 
 ## Installing AIM
 
-### Installing the Drivers that AIM requires
 
-#### [Driver Setup](https://github.com/ArsenalRecon/Arsenal-Image-Mounter/tree/master/DriverSetup) files
+### Installing AIM with the DriverSetup
 
+Download the following two 7zip files:
 
+* [Driver Setup](https://github.ds/ArsenalRecon/Arsenal-Image-Mounter/tree/master/DriverSetup)
 
-
-
-
-### Installing AIM
-
-#### [Arsenal Image Mounter](https://github.com/ArsenalRecon/Arsenal-Image-Mounter/tree/master/Command%20line%20applications?) 
+* [Arsenal Image Mounter](https://github.com/ArsenalRecon/Arsenal-Image-Mounter/tree/master/Command%20line%20applications?) 
 
 
+Uncompress the files, then do the following, in an administrator powershell window.
+
+``` powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force
+mkdir "c:\Program Files\Arsenal Image Mounter"
+mkdir "c:\Probram Files\Arsenal Image Mounter\DriverSetup"
+robocopy "<root of DriverSetup>\DriverSetup" "c:\Program Files\Arsenal Image Mounter\DriverSetup" /E /COPYALL /R:3 /W:5
+robocopy "<root of aim_ll>" "C:\Program Files\Arsenal Image Mounter" /E /COPYALL /R:3 /W:5
+cd "C:\Program Files\Arsenal Image Mounter\<hw-type>"
+.\aim_ll.exe --install "C:\Program Files\Arsenal Image Mounter\DriverSetup"
+```
+
+Now reboot the system.
+
+``` powershell
+[Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Program Files\Arsenal Image Mounter\DriverSetup\cli\x64", [EnvironmentVariableTarget]::User)
+```
+
+Now that aim_ll.exe is in the path, close all your powershell, terminal, etc shells, and open new ones, and aim_ll.exe should now be available at the command line.
+
+``` powershell
+aim_ll.exe -l
+```
+
+the "aim_ll -l" command should return the ramdisks that are installed.  If none are installed, it should return "No virtual disks".
 
 
 
@@ -25,15 +46,15 @@
 
 Download the Arsenal Image Mounter drivers from: https://github.com/ArsenalRecon/Arsenal-Image-Mounter/tree/master/DriverSetup/DriverSetup.7z and hit the download icon.
 
-Uncompress the file, then do the following, in an administrator powershell window.
+Uncompress the files, then do the following, in an administrator powershell window.
 
 ``` powershell
 Set-ExecutionPolicy Bypass -Scope Process -Force
 mkdir "c:\Program Files\Arsenal Image Mounter"
 mkdir "c:\Probram Files\Arsenal Image Mounter\DriverSetup"
 robocopy "<root of DriverSetup>\DriverSetup" "c:\Program Files\Arsenal Image Mounter\DriverSetup" /E /COPYALL /R:3 /W:5
-pnputil /add-driver "C:\Program Files\Arsenal Image Mounter\*.inf"
-cd "C:\Program Files\Arsenal Image Mounter\DriverSetup\cli\x64"
+robocopy "<root of aim_ll>" "C:\Program Files\Arsenal Image Mounter" /E /COPYALL /R:3 /W:5
+cd "C:\Program Files\Arsenal Image Mounter\<hw-type>"
 .\aim_ll.exe --install "C:\Program Files\Arsenal Image Mounter\DriverSetup"
 ```
 
