@@ -7,20 +7,21 @@
 
 a = Analysis(
     ['ramdisk-setup.py'],
-    pathex=['.', '.\\ui', '.\\ui\\bkp', '.\\resources\\font', '.\\resources\\img', '.\\resources\\icons', '.\\packenv\\bin', '.\\packenv\\include', '.\\packenv\\lib\\python3.12\\site-packages'],
+    pathex=['.', 'ramdisk', 'ramdisk/lib', 'ramdisk/ui'],
     binaries=[],
     datas=[("resources/font/*.ttf",   "./resources/font"), 
            ("resources/font/*.txt",   "./resources/font"), 
            ("resources/img/*.png",    "./resources/img"), 
            ("resources/icons/*.ico",  "./resources/icons")], 
-    hiddenimports=['python3','python*','PySide6'],
+    hiddenimports=[ ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
     excludes=[],
-    noarchive=False,
-    optimize=0,
+    noarchive=True,        # <-- Faster import time
+    optimize=1,            # <-- Bytecode optimization
 )
+
 pyz = PYZ(a.pure)
 
 exe = EXE(
@@ -32,14 +33,16 @@ exe = EXE(
     name='ramdisk-setup',
     debug=False,
     bootloader_ignore_signals=False,
-    strip=False,
-    upx=True,
+    strip=True,
+    upx=False,             # <-- No UPX = faster load
     upx_exclude=[],
-    runtime_tmpdir=None,
-    console=False,
+    runtime_tmpdir="%TEMP%",
+    console=True,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    onefile=True,          # <-- You requested onefile
+    noarchive=True,
 )
