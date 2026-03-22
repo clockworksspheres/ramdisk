@@ -1,3 +1,4 @@
+import subprocess
 
 #####
 # come from the external library pywin32
@@ -29,5 +30,14 @@ def is_windows_process_elevated():
             win32api.CloseHandle(hToken)
     except Exception as e:
         print(f"Error opening process token: {e}")
+        return False
+
+def is_hyper_v_enabled():
+    ps_command = "Get-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V-ALL"
+    try:
+        output = subprocess.check_output(["powershell", "-Command", ps_command], stderr=subprocess.STDOUT, text=True)
+        return "State : Enabled" in output
+    except subprocess.CalledProcessError as e:
+        print(f"Error checking Hyper-V status: {e.output}")
         return False
 
