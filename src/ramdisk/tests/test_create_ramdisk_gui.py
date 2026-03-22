@@ -5,7 +5,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 from pathlib import Path
 
-if sys.platform.lower().startswith("linux"):
+if sys.platform.lower().startswith("linux") or sys.platform.lower().startswith("darwin"):
     #####
     # This must be set before Pyside6 gets loaded...
     os.environ['QT_QPA_PLATFORM'] = 'offscreen'
@@ -23,6 +23,8 @@ sys.path.append(str(parent_dir))
 from qt_ci_test_harness import QtTestCase, SignalSpy
 from ramdisk.ui.main import _CreateRamdisk
 from ramdisk.lib.environment import Environment
+
+
 
 
 class TestCreateRamdisk(QtTestCase):
