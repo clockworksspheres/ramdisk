@@ -23,6 +23,8 @@ Orchestrating the meta-pipeline of macOS host and Windows host from one machine 
 
 ### Start Redhat based VM's
 
+This section assumes that the VMs in the example are all in VMware Fusion.
+
 ``` bash
 vmm/vmctl.py start vmware "/Users/<username>/Virtual Machines.localized/Rocky10-aarm64.vmwarevm/Rocky10-aarm64.vmx"
 vmm/vmctl.py start vmware "/Users/<username>/Virtual Machines.localized/Rocky Linux 9-7 64-bit Arm.vmwarevm/Rocky Linux 9-7 64-bit Arm.vmx"
@@ -37,6 +39,8 @@ jenkinsTools/jenkinsPipelineTool.py run --job ramdisk_redhat --user <jenkinsUser
 
 ### Stop Redhat based VM's
 
+This section assumes that the VMs in the example are all in VMware Fusion.
+
 ``` bash
 vmm/vmctl.py stop vmware "/Users/<username>/Virtual Machines.localized/Rocky10-aarm64.vmwarevm/Rocky10-aarm64.vmx"
 vmm/vmctl.py stop vmware "/Users/<username>/Virtual Machines.localized/Rocky Linux 9-7 64-bit Arm.vmwarevm/Rocky Linux 9-7 64-bit Arm.vmx"
@@ -46,6 +50,8 @@ vmm/vmctl.py stop vmware "/Users/<username>/Virtual Machines.localized/AlmaLinux
 ---
 
 ### Start Debian based VM's
+
+This section assumes that the VMs in the example are all in VMware Fusion.
 
 ``` bash
 vmm/vmctl.py start vmware "/Users/<username>/Virtual Machines.localized/Debian 12.x 64-bit Arm.vmwarevm/Debian 12.x 64-bit Arm.vmx"
@@ -59,6 +65,8 @@ jenkinsTools/jenkinsPipelineTool.py run --job ramdisk-deb --user <jenkinsUsernam
 ```
 
 ### Stop Debian based VMs
+
+This section assumes that the VMs in the example are all in VMware Fusion.
 
 ``` bash
 vmm/vmctl.py start vmware "/Users/<username>/Virtual Machines.localized/Debian 12.x 64-bit Arm.vmwarevm/Debian 12.x 64-bit Arm.vmx"
@@ -78,6 +86,9 @@ vmm/vmctl.py start utm macOS
 __macos pipeline not yet implemented__
 
 ### Stop macOS based VM's
+
+This assumes that macOS VM's are all in UTM.
+
 
 ```
 vmm/vmctl.py stop utm macOS

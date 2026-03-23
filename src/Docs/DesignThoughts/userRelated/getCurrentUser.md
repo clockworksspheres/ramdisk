@@ -1,5 +1,7 @@
 # Get Current Username in Python
 
+(AI generated response (multiple engines))
+
 ### Cross Platform:
 
 To get the current username in Python, you can use the `getpass` module or the `os` module depending on your needs and the operating system you are using.
@@ -8,8 +10,13 @@ Using the `getpass` module is generally recommended due to its reliability and
 
 ```
 import getpass
-print(getpass.getuser())
+try:
+    username = getpass.getuser()
+except OSError:
+    username = "unknown"   
 ```
+
+### *nix
 
 Alternatively, you can use the `os` module, but note that `os.getlogin()` is only available on Unix-based systems and not on Windows for Python 3.x versions:
 
@@ -24,6 +31,8 @@ However, `os.getlogin()` is not recommended for security reasons, as it relies
 import os
 print(os.environ.get('USER', os.environ.get('USERNAME')))
 ```
+
+### Windows Specific
 
 For Windows-specific solutions, you can use the `win32api` and `win32net` modules from the `pywin32` package:
 
