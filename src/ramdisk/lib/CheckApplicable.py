@@ -4,10 +4,8 @@
 import re
 import sys
 import traceback
-try:
-    from distutils.version import LooseVersion
-except ModuleNotFoundError as err:
-    from packaging.version import parse as LooseVersion
+
+from packaging.version import parse as LooseVersion
 
 from pathlib import Path
 
