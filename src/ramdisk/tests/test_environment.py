@@ -19,7 +19,7 @@ sys.path.append(str(parent_dir))
 
 # --- Non-native python libraries in this source tree
 import lib.environment as environment
-from ramdisk import config
+from lib import config
 
 if sys.platform.startswith('win32'):
     import win32api
