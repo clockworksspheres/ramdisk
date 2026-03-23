@@ -5,7 +5,7 @@
 
 http://github.com/clockworksspheres/jenkinsTools.git
 
-## For managing local VMs for cross platform projects on macOS and Windows
+## For managing local guest VMs for cross platform projects on macOS and Windows hypervisors
 
 https://github.com/clockworksspheres/vmm.git
 
