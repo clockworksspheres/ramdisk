@@ -39,7 +39,7 @@ from tests.genericTestUtilities.genericTestUtilities import GenericTestUtilities
 
 #####
 # Load OS specific Ramdisks
-if sys.platform.startswith("darwin"):
+if sys.platform.lower().startswith("darwin"):
     #####
     # For Mac
     from lib.getLibc.macGetLibc import getLibc
@@ -47,7 +47,7 @@ if sys.platform.startswith("darwin"):
 #    from macRamdisk import detach
 #    from macRamdisk import umount
     from lib.fsHelper.macosFsHelper import FsHelper
-elif sys.platform.startswith("linux"):
+elif sys.platform.lower().startswith("linux"):
     #####
     # For Linux
     from lib.getLibc.linuxGetLibc import getLibc
@@ -55,7 +55,7 @@ elif sys.platform.startswith("linux"):
 #    from linuxTmpfsRamdisk import umount
     from lib.fsHelper.linuxFsHelper import FsHelper
     from lib.libHelperExceptions import UserMustBeRootError
-elif sys.platform.startswith("win32"):
+elif sys.platform.lower().startswith("win32"):
     #####
     # For Windows
     from lib.getLibc.winGetLibc import getLibc
@@ -83,7 +83,10 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
         super(GenericTestUtilities, self).__init__(self)
         # super(GenericTestUtilities, self).commonSetUp()
         # self.commonSetUp()
-        self.libc = getLibc()
+        try:
+            self.libc = getLibc()
+        except Exception as e:
+            self.logger.log(lp.ERROR, "Failed to get libc: " + str(e))
         self.environ = Environment()
         self.subdirs = ["two", "three" "one/four"]
         self.logger = CyLogger()
@@ -110,7 +113,7 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
         size_in_mb = 0
         mntpnt = ""
         mylogger = self.logger
-        if sys.platform.startswith("darwin"):
+        if sys.platform.lower().startswith("darwin"):
 			#Calculate size of ramdisk to make for this unit test.
             # size_in_mb = int((1024 * 1024 * 512) / 512)
             size_in_mb = 512
@@ -118,7 +121,7 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
             self.ramdisk_size = size_in_mb
             self.mnt_pnt_requested = "testmntpnt"
             mntpnt = self.mnt_pnt_requested
-        elif sys.platform.startswith("linux") and self.target == 'linux':
+        elif sys.platform.lower().startswith("linux"):
             # if not root, raise an error
             #if not os.geteuid():
             #    raise UserMustBeRootError("Please run this with sudo...")
@@ -128,9 +131,10 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
             size_in_mb = 512
             self.ramdisk_size = size_in_mb
             self.mnt_pnt_requested = "/tmp/testmntpnt"
-        elif sys.platform.startswith("win32") and self.target == 'win32':
+        elif sys.platform.lower().startswith("win"):
             #Calculate size of ramdisk to make for this unit test.
             #self.ramdisk_size = size = size_in_mb
+            size_in_mb = 512
             self.ramdisk_size = size_in_mb
             self.mnt_pnt_requested = "testmntpnt"
         else:
