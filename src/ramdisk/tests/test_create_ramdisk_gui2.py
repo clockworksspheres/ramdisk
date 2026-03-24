@@ -12,9 +12,11 @@ if sys.platform.lower().startswith("linux") or sys.platform.lower().startswith("
     # For Linux, this must be set before Pyside6 gets loaded...
     os.environ['QT_QPA_PLATFORM'] = 'offscreen'
 
-from PySide6.QtCore import Qt, QEvent
+from PySide6.QtCore import Qt, QEvent, QTimer
 from PySide6.QtGui import QKeyEvent
 from PySide6.QtWidgets import QApplication
+from PySide6.QtTest import QTest
+
 
 # Get the parent directory of the current file's parent directory
 #  and add it to sys.path
@@ -35,6 +37,11 @@ class TestCreateRamdiskGUI(QtTestCase):
     def setUp(self):
 
         self.window = _CreateRamdisk()
+
+        if sys.platform.lower().startswith("linux") or sys.platform.lower().startswith("darwin"):
+            #####
+            # For Linux, this must be set before Pyside6 gets loaded...
+            os.environ['QT_QPA_PLATFORM'] = 'offscreen'
 
         self.window.show()
         self.window.activateWindow()
@@ -118,16 +125,9 @@ class TestCreateRamdiskGUI(QtTestCase):
 # ------------------------------------------------------
 # Test TAB navigation from table back to mount field
 # ------------------------------------------------------
-    #@unittest.skipIf(sys.platform.lower().startswith("linux"), "Skip test on Linux")
-    @unittest.skipIf(sys.platform.lower().startswith("win"), "Skip test on Windows")
-    def test_table_tab_navigation(self):
-
-        self.window.add_row("disk1", "/mnt/test")
-
-        table = self.window.ui.tableWidget
-
-        table.setFocus()
-        table.setCurrentCell(0, 0)
+    # @unittest.skipIf(sys.platform.lower().startswith("linux"), "Skip test on Linux")
+    #@unittest.skipIf(sys.platform.lower().startswith("win"), "Skip test on Windows")
+    def test_tab_navigation(self):
 
         event = QKeyEvent(
             QEvent.KeyPress,
@@ -135,30 +135,33 @@ class TestCreateRamdiskGUI(QtTestCase):
             Qt.NoModifier
         )
 
-        QApplication.sendEvent(table, event)
+        # QApplication.sendEvent(table, event)
+        QApplication.sendEvent(self.window, event)
 
         self.process_events()
 
-        osType = self.environment.getostype().strip()
-        linBased = 'Red Hat Enterprise Linux|AlmaLinux|Rocky Linux|CentOS|Fedora|Debian'
-        print("==========================")
-        print(str(osType))
-        print("==========================")
-        #if re.search(linBased, osType):
-        if not os.getenv("QT_QPA_PLATFORM") == "offscreen":
-            print("==========================")
-            print("RH Based")
-            print("==========================")
-            self.assertTrue(
-                self.window.ui.mountLineEdit.hasFocus()
-                #self.window.ui.tableWidget.hasFocus()
-            )
-        else:
-            self.assertTrue(
-                # self.window.ui.mountLineEdit.hasFocus()
-                self.window.ui.tableWidget.hasFocus()
-            )
+        self.assertTrue(
+            self.window.ui.createPushButton.hasFocus()
+            #self.window.ui.tableWidget.hasFocus()
+        )
 
+    def test_shift_tab_navigation(self):
+
+        event = QKeyEvent(
+            QEvent.KeyPress,
+            Qt.Key_Tab,
+            Qt.ShiftModifier
+        )
+
+        # QApplication.sendEvent(table, event)
+        QApplication.sendEvent(self.window, event)
+
+        self.process_events()
+
+        self.assertTrue(
+            self.window.ui.tableWidget.hasFocus()
+            #self.window.ui.tableWidget.hasFocus()
+        )
 
 # ------------------------------------------------------
 # Test ENTER on table row opens dialog

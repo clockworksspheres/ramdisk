@@ -10,7 +10,10 @@ if sys.platform.lower().startswith("linux") or sys.platform.lower().startswith("
     # This must be set before Pyside6 gets loaded...
     os.environ['QT_QPA_PLATFORM'] = 'offscreen'
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer, QEvent
+from PySide6.QtTest import QTest
+from PySide6.QtWidgets import QApplication
+from PySide6.QtGui import QKeyEvent
 
 # Get the parent directory of the current file's parent directory
 #  and add it to sys.path
@@ -25,13 +28,17 @@ from ramdisk.ui.main import _CreateRamdisk
 from ramdisk.lib.environment import Environment
 
 
-
-
 class TestCreateRamdisk(QtTestCase):
 
     def setUp(self):
 
         self.window = _CreateRamdisk()
+
+        if sys.platform.lower().startswith("linux") or sys.platform.lower().startswith("darwin"):
+            #####
+            # For Linux, this must be set before Pyside6 gets loaded...
+            os.environ['QT_QPA_PLATFORM'] = 'offscreen'
+
         self.window.show()
 
         self.process_events()
@@ -41,7 +48,6 @@ class TestCreateRamdisk(QtTestCase):
 
         self.window.close()
         self.process_events()
-
 
 # ---------------------------------------------------
 # Button click test
@@ -62,7 +68,6 @@ class TestCreateRamdisk(QtTestCase):
 
         mock_ramdisk.assert_called()
 
-
 # ---------------------------------------------------
 # Enter key triggers create
 # ---------------------------------------------------
@@ -81,7 +86,6 @@ class TestCreateRamdisk(QtTestCase):
 
         mock_ramdisk.assert_called()
 
-
 # ---------------------------------------------------
 # Table row add
 # ---------------------------------------------------
@@ -97,46 +101,47 @@ class TestCreateRamdisk(QtTestCase):
             rows + 1
         )
 
-
 # ---------------------------------------------------
 # Table keyboard navigation - not currently working
 # in both Jenkins and cmdline environments
 # ---------------------------------------------------
     #@unittest.skipIf(sys.platform.lower().startswith("linux"), "Skip test on Linux")
-    @unittest.skipIf(sys.platform.lower().startswith("win"), "Skip test on Windows")
-    def test_table_tab_navigation(self):
+    #@unittest.skipIf(sys.platform.lower().startswith("win"), "Skip test on Windows")
+    def test_tab_navigation(self):
 
-        self.window.add_row("disk1", "/mnt/test")
+        event = QKeyEvent(
+            QEvent.KeyPress,
+            Qt.Key_Tab,
+            Qt.NoModifier
+        )
 
-        table = self.window.ui.tableWidget
+        # QApplication.sendEvent(table, event)
+        QApplication.sendEvent(self.window, event)
 
-        table.setFocus()
-        table.selectRow(0)
+        self.process_events()
 
-        ####
-        # Appears not to work in a Jenkins environment on macOS and Linux
-        self.key(table, Qt.Key_Tab)
+        self.assertTrue(
+            self.window.ui.createPushButton.hasFocus()
+            #self.window.ui.tableWidget.hasFocus()
+        )
 
-        osType = self.environment.getostype().strip()
-        linBased = 'Red Hat Enterprise Linux|AlmaLinux|Rocky Linux|CentOS|Fedora|Debian|macOS'
-        #linBased = 'Red Hat Enterprise Linux|Fedora'
-        print("==========================")
-        print(str(osType))
-        print("==========================")
-        # if re.search(linBased, osType) and os.getenv("QT_QPA_PLATFORM") == "offscreen":
-        if not os.getenv("QT_QPA_PLATFORM") == "offscreen":
-            print("==========================")
-            print("RH Based")
-            print("==========================")
-            self.assertTrue(
-                self.window.ui.mountLineEdit.hasFocus()
-                # self.window.ui.tableWidget.hasFocus()
-            )
-        else:
-            self.assertTrue(
-                # self.window.ui.mountLineEdit.hasFocus()
-                self.window.ui.tableWidget.hasFocus()
-            )
+    def test_shift_tab_navigation(self):
+
+        event = QKeyEvent(
+            QEvent.KeyPress,
+            Qt.Key_Tab,
+            Qt.ShiftModifier
+        )
+
+        # QApplication.sendEvent(table, event)
+        QApplication.sendEvent(self.window, event)
+
+        self.process_events()
+
+        self.assertTrue(
+            self.window.ui.tableWidget.hasFocus()
+            #self.window.ui.tableWidget.hasFocus()
+        )
 
 # ---------------------------------------------------
 # Signal spy example
@@ -154,7 +159,6 @@ class TestCreateRamdisk(QtTestCase):
 
         self.assertGreater(spy.count(), 0)
 
-
 # ---------------------------------------------------
 # Screenshot on failure example
 # ---------------------------------------------------
@@ -168,5 +172,4 @@ class TestCreateRamdisk(QtTestCase):
         except AssertionError:
 
             self.fail_with_screenshot(self.window, "visibility_failure")
-
 

@@ -187,6 +187,7 @@ class RamDisk(RamDiskTemplate):
             if os.path.exists(possibleFullPath):
                 self.mountPath = possibleFullPath
                 mountFound = True
+                break
 
         if not mountFound:
             raise SystemToolNotAvailable("Cannot find mount command...")
@@ -199,6 +200,7 @@ class RamDisk(RamDiskTemplate):
             if os.path.exists(possibleFullPath):
                 self.umountPath = possibleFullPath
                 umountFound = True
+                break
 
         if not umountFound:
             raise SystemToolNotAvailable("Cannot find umount command...")
