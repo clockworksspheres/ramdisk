@@ -34,20 +34,15 @@ import shutil
 import traceback
 from subprocess import Popen, PIPE
 
-#####
-# Include the parent project directory in the PYTHONPATH
-# appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
-# sys.path.append(appendDir)
-sys.path.append("../")
 
 #--- non-native python libraries in this source tree
-from ramdisk.lib.run_commands import RunWith
-from ramdisk.lib.loggers import CyLogger
-from ramdisk.lib.loggers import LogPriority as lp
-from ramdisk.lib.environment import Environment
-from ramdisk.lib.libHelperExceptions import NotValidForThisOS, MemoryNotAvailableError
-from ramdisk.lib.fsHelper.macosFsHelper import FsHelper
-from ramdisk.commonRamdiskTemplate import RamDiskTemplate
+from lib.run_commands import RunWith
+from lib.loggers import CyLogger
+from lib.loggers import LogPriority as lp
+from lib.environment import Environment
+from lib.libHelperExceptions import NotValidForThisOS, MemoryNotAvailableError
+from lib.fsHelper.macosFsHelper import FsHelper
+from commonRamdiskTemplate import RamDiskTemplate
 
 ###############################################################################
 
@@ -694,6 +689,17 @@ class RamDisk(RamDiskTemplate):
             success = True
         return success
 
+    ###########################################################################
+
+    def umount(self) :
+        """
+        Standard interface across ramdisks
+        """
+        success = False
+        if self.eject():
+            success = True
+        return success
+            
     ###########################################################################
 
     def eject(self) :

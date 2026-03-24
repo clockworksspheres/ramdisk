@@ -343,39 +343,21 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
     ##################################
 
     @classmethod
-    def tearDownInstanceSpecifics(self):
-        """
-        Skeleton method in case a child class wants/needs to override it.
-
-        
-        """
-        pass
-
-    @classmethod
-    def intermediateTearDownClass(self):
+    def tearDownClass(self):
         """
         """
-        pass
-
-        # self.tearDownInstanceSpecifics(self)
-
         try:
             self.my_ramdisk.umount()
             self.logger.log(lp.INFO, r"Successfully detached disk: " + \
                        str(self.my_ramdisk.mntPoint).strip())
         except Exception:
-            #message = r"Couldn't detach disk: " + \
-            #           str(self.my_ramdisk.myRamdiskDev).strip() + \
-            #           " : mntpnt: " + str(self.my_ramdisk.mntPoint)
             ex_message = traceback.format_exc()
-            #self.logger.log(lp.WARNING, message)
             self.logger.log(lp.WARNING, ex_message)
-            # raise Exception(ex_message)
-
 
 
 ###############################################################################
 
 if __name__ == "__main__":
     unittest.main()
+
 
