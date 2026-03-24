@@ -21,7 +21,7 @@ from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.run_commands import RunWith
 from ramdisk.lib.fsHelper.ntfsFsHelper import FsHelper
 from ramdisk.commonRamdiskTemplate import RamDiskTemplate
-from ramdisk.lib.fsHelper.winDriveTools import findDrive, cleanTrailingSlashes, cleanDrivePath, findMountName
+from ramdisk.lib.fsHelper.winDriveTools import cleanTrailingSlashes, cleanDrivePath, findMountName
 
 ###########################################################################
 
@@ -89,16 +89,14 @@ class RamDisk(RamDiskTemplate):
         self.fsType = "ntfs"
         self.driveType = "hd"
         self.writeMode = "rw"
-        success = False
         #####
         # Get an AIMTk Ram Disk
         if(self.__isMemoryAvailable()):
-            success = self.__createRamdisk()
+            self.__createRamdisk()
 
         self.logger.log(lp.DEBUG, "disk size: " + str(self.diskSize))
         self.logger.log(lp.DEBUG, "volume name: " + str(self.mntPoint))
-        # return success
-
+ 
     ###########################################################################
 
     def __createRamdisk(self):
@@ -330,14 +328,10 @@ class RamDisk(RamDiskTemplate):
         freemem = mem.free / (1024**2)
         # totalmem = mem.total / (1024**2)
 
-        # self.logger.log(lp.ERROR, "mem: {0}  lvl: {1} ...".format(mem, lvl))
-        
         print(f"     diskSize: {self.diskSize}")
         # self.diskSize = self.diskSize[1].strip('mMgG')
         if int(self.diskSize) < int(freemem) and re.match(r"^\d+$", str(int(freemem))):
             success = True
-        elif re.match("^kb$", lvl):
-            self.logger.log(lp.ERROR, "NOT ENOUGH PHYSICAL MEMORY............................................")
         else:
             self.logger.log(lp.ERROR, "NOT ENOUGH PHYSICAL MEMORY............................................")
                 
@@ -545,7 +539,7 @@ def getMountData(device):
 
     runCmd.setCommand(cmd, creationflags=True)
     runCmd.communicate()
-    retval, reterr, retcode = self.runCmd.getNlogReturns()
+    retval, reterr, retcode = runCmd.getNlogReturns()
 
     if retcode == '':
         raise Exception("Error trying to create ramdisk(" + str(reterr).strip() + ")")
