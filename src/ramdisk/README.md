@@ -1,6 +1,5 @@
-# Root of the code of the project
 
-## Project subdirectories will contain their own README's
+## Ramdisk interface
 
 Interface to Ramdisk, provided by the RamDisk.py:
 
@@ -10,7 +9,7 @@ ramdisk = Ramdisk(size, mountpoint, logger)
 
 Creates a ramdisk with the above parameters.
 
-* If no CyLogger is given, a new one will be created for this class. 
+* If no logger(lib.CyLogger) is given, a new one will be created for this class. 
 
 * If no mountpoint is given, it will create a random mountpoint
 
@@ -30,6 +29,7 @@ Getter for mount data, and if the mounting of a ramdisk was successful.
 Also logs data.
 
 Returns: (self.success, str(self.mntPoint), str(self.myRamdiskDev))
+
 #### ramdisk.umount()
 
 Unmount the disk.
