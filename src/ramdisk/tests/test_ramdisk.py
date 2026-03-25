@@ -246,7 +246,7 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
 
             assert_message = "Problem with " + str(file_size) + "mb ramdisk..."
             self.logger.log(lp.DEBUG, assert_message)
-            self.logger.log(lp.INFO, "Smaller file sizes will fail this test on systems with SSD's...")
+            self.logger.log(lp.INFO, "Smaller file sizes may fail this test on systems with SSD's...")
 
             self.assertTrue((fs_time - ram_time).days > -1, assert_message)
         except Exception as err:
