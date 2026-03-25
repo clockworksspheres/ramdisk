@@ -184,25 +184,6 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
         """
         Test file creation of various sizes, ramdisk vs. filesystem
         """
-        """
-        try:
-            #####
-            # Clean up the ramdisk
-            self.my_ramdisk._format()
-        except AttributeError:
-            # get a ramdisk of appropriate size, with a secure random mountpoint
-            self.my_ramdisk = RamDisk(str(self.ramdisk_size), self.mnt_pnt_requested, logger=self.logger)
-            self.logger.log(self.WARNING, "::::: ramdisk: " + str(self.my_ramdisk + " :::::"))
-            self.success, self.mountPoint, self.ramdiskDev = self.my_ramdisk.getData()
-            self.logger.log(lp.WARNING, str(self.success) + " : " + str(self.mountPoint) + " : " + str(self.ramdiskDev))
-            self.mount = self.mountPoint
-
-            self.logger.log(lp.INFO, "::::::::Ramdisk Mount Point: " + str(self.mountPoint))
-            self.logger.log(lp.INFO, "::::::::Ramdisk Device     : " + str(self.ramdiskDev))
-
-            if not self.my_ramdisk.success:
-                raise IOError("Cannot get a ramdisk in setupClass for some reason. . .")
-        """
         #####
         # 10Mb file size
         ten = 10
