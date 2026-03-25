@@ -96,7 +96,6 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
         self.fsHelper = FsHelper()
         self.target = ""
 
-        #self.intermediateSetUpClass(self)
         """
         Set up a ramdisk and use that random location as a root to test the
         filesystem functionality of what is being tested.
@@ -105,79 +104,26 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
         self.success = False
         self.mountPoint = ""
         self.ramdiskDev = False
-        self.mnt_pnt_requested = False
-        self.ramdisk_size = 0
 
-        # self.setUpInstanceSpecifics()
-
-        size_in_mb = 0
-        mntpnt = ""
-        mylogger = self.logger
-        if sys.platform.lower().startswith("darwin"):
-			#Calculate size of ramdisk to make for this unit test.
-            # size_in_mb = int((1024 * 1024 * 512) / 512)
-            size_in_mb = 512
-            # self.ramdisk_size = size = size_in_mb
-            self.ramdisk_size = size_in_mb
-            self.mnt_pnt_requested = "testmntpnt"
-            mntpnt = self.mnt_pnt_requested
-        elif sys.platform.lower().startswith("linux"):
-            # if not root, raise an error
-            #if not os.geteuid():
-            #    raise UserMustBeRootError("Please run this with sudo...")
-            #Calculate size of ramdisk to make for this unit test.
-            # linux ramdisks are made in terms of 1 mb at a time... not
-            # bits or bytes...
-            size_in_mb = 512
-            self.ramdisk_size = size_in_mb
-            self.mnt_pnt_requested = "/tmp/testmntpnt"
-        elif sys.platform.lower().startswith("win"):
-            #Calculate size of ramdisk to make for this unit test.
-            #self.ramdisk_size = size = size_in_mb
-            size_in_mb = 512
-            self.ramdisk_size = size_in_mb
-            self.mnt_pnt_requested = "testmntpnt"
-        else:
-            self.ramdisk_size = 512
-            self.mnt_pnt_requested = "/tmp/testmntpnt"
-            mntpnt = self.mnt_pnt_requested
-        #    raise unittest.SkipTest("Not applicable here...")
+        self.ramdisk_size = 512
+        self.mnt_pnt_requested = "testmntpnt"
 
         # get a ramdisk of appropriate size, with a secure random mountpoint
-        #self.my_ramdisk = RamDisk(size_in_mb, mntpnt, mylogger)
-        self.my_ramdisk = RamDisk(size_in_mb, mntpnt, mylogger)
-        # super(RamDisk, self).__init__(self, size_in_mb, mntpnt, mylogger)
+        self.my_ramdisk = RamDisk(self.ramdisk_size, self.mnt_pnt_requested, self.logger)
         self.logger.log(lp.WARNING, "::::: ramdisk: " + str(self.my_ramdisk) + " :::::")
         self.success, self.mountPoint, self.ramdiskDev = self.my_ramdisk.getData()
         self.logger.log(lp.WARNING, str(self.success) + " : " + str(self.mountPoint) + " : " + str(self.ramdiskDev))
-        self.mount = self.mountPoint
 
         self.logger.log(lp.INFO, "::::::::Ramdisk Mount Point: " + str(self.mountPoint))
         self.logger.log(lp.INFO, "::::::::Ramdisk Device     : " + str(self.ramdiskDev))
 
-        #if not self.my_ramdisk.success:
-        #    raise IOError("Cannot get a ramdisk in setupClass for some reason. . .")
-
-
         #####
         # Create a temp location on disk to run benchmark tests against
-        self.fs_dir = tempfile.mkdtemp()
+        # self.fs_dir = tempfile.mkdtemp()
 
         # Start timer in miliseconds
         self.test_start_time = datetime.now()
 
-        '''
-        @classmethod
-        def setUpInstanceSpecifics(self):
-            ""
-            Call the child class setUpClass initializer, if possible..
-    
-            Here to be over-ridden by a child class.
-    
-            
-            ""
-            pass
-        '''
     ################################################
     ##### Helper Methods
 
@@ -333,7 +279,7 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
 
         fs_starttime = datetime.now()
         for i in range(1000):
-            self.mkfile(os.path.join(self.fs_dir, "testfile" + str(i)), 1)
+            self.mkfile(os.path.join(self.mountPoint, "testfile" + str(i)), 1)
         fs_endtime = datetime.now()
 
         fstime = fs_endtime - fs_starttime
@@ -359,5 +305,4 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
 
 if __name__ == "__main__":
     unittest.main()
-
 
