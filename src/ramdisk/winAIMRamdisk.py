@@ -260,16 +260,17 @@ class RamDisk(RamDiskTemplate):
     def umount(self, **kwargs):
         """
         Unmount the disk - same functionality as __eject on the mac
-
-        Must be over-ridden to provide OS/Method specific functionality
-
-        
+ 
         """
+
+        eject(self.myRamdiskDev, self.logger)
+        return
+        
         success = False
 
         umountCmd = [ self.aim_ll, "-R", "-u", self.myRamdiskDev ]
 
-        self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(umountCmd))
+        self.logger.log(lp.WARNING, "Running command to un-mount ramdisk: \n\t" + str(umountCmd))
         self.runCmd.setCommand(umountCmd)
         self.runCmd.communicate()
         retval, reterr, retcode = self.runCmd.getNlogReturns()
