@@ -44,15 +44,12 @@ if sys.platform.lower().startswith("darwin"):
     # For Mac
     from lib.getLibc.macGetLibc import getLibc
     from macRamdisk import RamDisk
-#    from macRamdisk import detach
-#    from macRamdisk import umount
     from lib.fsHelper.macosFsHelper import FsHelper
 elif sys.platform.lower().startswith("linux"):
     #####
     # For Linux
     from lib.getLibc.linuxGetLibc import getLibc
     from linuxTmpfsRamdisk import RamDisk
-#    from linuxTmpfsRamdisk import umount
     from lib.fsHelper.linuxFsHelper import FsHelper
     from lib.libHelperExceptions import UserMustBeRootError
 elif sys.platform.lower().startswith("win32"):
@@ -60,7 +57,6 @@ elif sys.platform.lower().startswith("win32"):
     # For Windows
     from lib.getLibc.winGetLibc import getLibc
     from winAIMRamdisk import RamDisk
-#    from winImDiskRamdisk import umount
     from lib.fsHelper.ntfsFsHelper import FsHelper
 else:
     raise Exception("Damn it Jim!!! What OS is this???")
@@ -73,7 +69,6 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
     Inspiration for using classmethod:
     http://simeonfranklin.com/testing2.pdf
 
-    
     """
     @classmethod
     def setUpClass(self):
@@ -119,7 +114,7 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
 
         #####
         # Create a temp location on disk to run benchmark tests against
-        # self.fs_dir = tempfile.mkdtemp()
+        self.fs_dir = tempfile.mkdtemp()
 
         # Start timer in miliseconds
         self.test_start_time = datetime.now()
@@ -229,7 +224,7 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
                 self.logger.log(lp.INFO, "testfile size: " + str(file_size))
                 #####
                 # Create filesystem file and capture the time it takes...
-                self.mkfile(os.path.join(self.mountPoint, "testfile"), file_size)
+                self.mkfile(os.path.join(self.fs, "testfile"), file_size)
                 self.logger.log(lp.INFO, "file_size: " + str(file_size) + " fs_time: " + str(datetime.now()))
             fs_endtime = datetime.now()
     
@@ -244,7 +239,7 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
                 self.logger.log(lp.INFO, "ram_time: " + str(datetime.now()))
             ram_endtime = datetime.now()
 
-            ram_time = ram_starttime - ram_endtime
+            ram_time =  ram_endtime - ram_starttime
 
             speed = fs_time - ram_time
             self.logger.log(lp.INFO, "ramdisk: " + str(speed) + " faster...")
@@ -279,12 +274,12 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
 
         fs_starttime = datetime.now()
         for i in range(1000):
-            self.mkfile(os.path.join(self.mountPoint, "testfile" + str(i)), 1)
+            self.mkfile(os.path.join(self.fs_dir, "testfile" + str(i)), 1)
         fs_endtime = datetime.now()
 
         fstime = fs_endtime - fs_starttime
 
-        self.assertTrue(fs_starttime < fs_endtime, "Problem with ramdisk...")
+        self.assertTrue(rtime < fstime, "Problem with ramdisk...")
 
     ##################################
 
