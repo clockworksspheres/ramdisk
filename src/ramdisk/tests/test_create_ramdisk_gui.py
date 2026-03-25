@@ -102,11 +102,8 @@ class TestCreateRamdisk(QtTestCase):
         )
 
 # ---------------------------------------------------
-# Table keyboard navigation - not currently working
-# in both Jenkins and cmdline environments
+# Tab keyboard navigation
 # ---------------------------------------------------
-    #@unittest.skipIf(sys.platform.lower().startswith("linux"), "Skip test on Linux")
-    #@unittest.skipIf(sys.platform.lower().startswith("win"), "Skip test on Windows")
     def test_tab_navigation(self):
 
         event = QKeyEvent(
@@ -125,6 +122,67 @@ class TestCreateRamdisk(QtTestCase):
             #self.window.ui.tableWidget.hasFocus()
         )
 
+        event = QKeyEvent(
+            QEvent.KeyPress,
+            Qt.Key_Tab,
+            Qt.NoModifier
+        )
+
+        # QApplication.sendEvent(table, event)
+        QApplication.sendEvent(self.window, event)
+
+        self.process_events()
+
+        self.assertTrue(
+            self.window.ui.ejectPushButton.hasFocus()
+        )
+        event = QKeyEvent(
+            QEvent.KeyPress,
+            Qt.Key_Tab,
+            Qt.NoModifier
+        )
+
+        # QApplication.sendEvent(table, event)
+        QApplication.sendEvent(self.window, event)
+
+        self.process_events()
+
+        self.assertTrue(
+            self.window.ui.quitPushButton.hasFocus()
+        )
+        event = QKeyEvent(
+            QEvent.KeyPress,
+            Qt.Key_Tab,
+            Qt.NoModifier
+        )
+
+        # QApplication.sendEvent(table, event)
+        QApplication.sendEvent(self.window, event)
+
+        self.process_events()
+
+        self.assertTrue(
+            self.window.ui.tableWidget.hasFocus()
+        )
+
+        event = QKeyEvent(
+            QEvent.KeyPress,
+            Qt.Key_Tab,
+            Qt.NoModifier
+        )
+
+        # QApplication.sendEvent(table, event)
+        QApplication.sendEvent(self.window, event)
+
+        self.process_events()
+
+        self.assertTrue(
+            self.window.ui.mountLineEdit.hasFocus()
+        )
+
+# ---------------------------------------------------
+# Shift Tab keyboard navigation
+# ---------------------------------------------------
     def test_shift_tab_navigation(self):
 
         event = QKeyEvent(

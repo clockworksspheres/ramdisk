@@ -9,18 +9,14 @@ import sys
 from tempfile import mkdtemp
 import platform
 
-#####
-# Include the parent project directory in the PYTHONPATH
-appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
-sys.path.append(appendDir)
-#sys.path.append("../")
-
 #--- non-native python libraries in this source tree
-from ramdisk.lib.loggers import LogPriority as lp
-from ramdisk.lib.loggers import CyLogger
-from ramdisk.lib.environment import Environment
-from ramdisk.lib.CheckApplicable import CheckApplicable
-from ramdisk.commonRamdiskTemplate import RamDiskTemplate, BadRamdiskArguments, NotValidForThisOS
+from lib.loggers import LogPriority as lp
+from lib.loggers import CyLogger
+from lib.environment import Environment
+from lib.CheckApplicable import CheckApplicable
+from commonRamdiskTemplate import RamDiskTemplate, BadRamdiskArguments, NotValidForThisOS
+from lib.libHelperExceptions import SizeInvalidError
+
 ###############################################################################
 
 if sys.platform.startswith("linux"):
@@ -45,7 +41,7 @@ class RamDisk(RamDiskTemplate):
     """
     Factory class for spawning concrete instances of a ramdisk.
     """
-    def __init__(self, size=0, mountpoint=False, logger=False, **kwargs):
+    def __init__(self, size=512, mountpoint=False, logger=False, **kwargs):
         """
         """
         #####
@@ -63,20 +59,10 @@ class RamDisk(RamDiskTemplate):
         else:
             self.environ = Environment()
             self.chkApp = CheckApplicable(self.environ, self.logger)
-        '''
-        #####
-        # Check applicability to the current OS
-        macApplicable = {'type': 'white',
-                         'family': ['darwin']}
-        macApplicableHere = self.chkApp.isApplicable(macApplicable)
 
-        linuxApplicable = {'type': 'white',
-                           'family': ['linux']}
+        if size <= 0:
+            raise SizeInvalidError(f"Cannot create ramdisk of {size} size.")
 
-        windowsApplicableHere = self.chkApp.isApplicable(linuxApplicable)        
-        windowsApplicable = {'type': 'white',
-                           'family': ['win32']}
-        '''
         if sys.platform.startswith("linux"):
             from ramdisk.linuxTmpfsRamdisk import RamDisk
             self.ramdisk = RamDisk(size, mountpoint, logger, **kwargs)

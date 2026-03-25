@@ -76,3 +76,11 @@ class UserMustBeRootError(Exception):
     """
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
+
+class SizeInvalidError(Exception):
+    """
+    Custom Exception
+    """
+    def __init__(self, *args, **kwargs):
+        Exception.__init__(self, *args, **kwargs)
+
