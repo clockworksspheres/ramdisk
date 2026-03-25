@@ -265,24 +265,6 @@ class RamDisk(RamDiskTemplate):
 
         eject(self.myRamdiskDev, self.logger)
         return
-        
-        success = False
-
-        umountCmd = [ self.aim_ll, "-R", "-u", self.myRamdiskDev ]
-
-        self.logger.log(lp.WARNING, "Running command to un-mount ramdisk: \n\t" + str(umountCmd))
-        self.runCmd.setCommand(umountCmd)
-        self.runCmd.communicate()
-        retval, reterr, retcode = self.runCmd.getNlogReturns()
-
-        if retcode == '':
-            success = False
-            raise Exception("Error trying to unmount drive : (" + str(reterr).strip() + ")")
-        else:
-            success = True
-            self.logger.log(lp.INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
-
-        return success
 
     ###########################################################################
 
@@ -292,26 +274,9 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-        
         """
-        success = False
-        success = False
-
-        umountCmd = [ self.aim_ll, "-R", "-u", self.myRamdiskDev ]
-
-        self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(umountCmd))
-        self.runCmd.setCommand(umountCmd)
-        self.runCmd.communicate()
-        retval, reterr, retcode = self.runCmd.getNlogReturns()
-
-        if retcode == '':
-            success = False
-            raise Exception("Error trying to unmount drive : (" + str(reterr).strip() + ")")
-        else:
-            success = True
-            self.logger.log(lp.INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
-
-        return success
+        eject(self.myRamdiskDev, self.logger)
+        return
 
     ###########################################################################
 
