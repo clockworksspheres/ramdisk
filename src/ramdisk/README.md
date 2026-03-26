@@ -40,3 +40,16 @@ Returns: True/False, whether the disk was unmounted or not.
 
    Eject the ramdisk.
 
+## Types of Ramdisk
+
+### linuxTmpfsRamdisk
+
+in memory ramdisk for Linux
+
+### macRamdisk
+
+in memory ramdisk for macOS
+
+### winAIMRamdisk
+
+The in memory ramdisk for Windows.
