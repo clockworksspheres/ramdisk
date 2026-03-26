@@ -7,7 +7,7 @@
 
 Download the following two 7zip files:
 
-* [Driver Setup](https://github.ds/ArsenalRecon/Arsenal-Image-Mounter/tree/master/DriverSetup)
+* [Driver Setup](https://github.com/ArsenalRecon/Arsenal-Image-Mounter/tree/master/DriverSetup)
 
 * [Arsenal Image Mounter](https://github.com/ArsenalRecon/Arsenal-Image-Mounter/tree/master/Command%20line%20applications?) 
 
