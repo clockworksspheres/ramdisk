@@ -6,7 +6,6 @@
 
 #--- Native python libraries
 import sys
-import time
 from optparse import OptionParser
 
 from PySide6.QtWidgets import QApplication
