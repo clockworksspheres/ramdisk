@@ -1,19 +1,12 @@
 #!/usr/bin/env -S python -u
-
-# ! /usr/bin/python -u
 """
 CommonRamdiskTemplate test.
-
-
 """
 
 #--- Native python libraries
-import re
 import os
 import sys
-import time
 import unittest
-import tempfile 
 from datetime import datetime
 from pathlib import Path
 
@@ -25,9 +18,7 @@ sys.path.append(str(parent_dir))
 #--- non-native python libraries in this source tree
 from lib.loggers import CyLogger
 from lib.loggers import LogPriority as lp
-from commonRamdiskTemplate import (RamDiskTemplate,
-                                  BadRamdiskArguments,
-                                  NotValidForThisOS)
+from commonRamdiskTemplate import RamDiskTemplate
 
 LOGGER = CyLogger()
 
@@ -65,7 +56,7 @@ class test_commonRamdiskTemplate(unittest.TestCase):
         rdt = RamDiskTemplate(100, "/tmp/tmptest")
         self.assertTrue(rdt.diskSize == 100, "Sizes don't match...")
         self.assertTrue(rdt.mntPoint == "/tmp/tmptest", "Mountpoints don't match...")
-        # self.assertTrue(isinstance(rdt.logger, CyLogger), "Logger shouldn't be initialized...")
+        #self.assertTrue(isinstance(rdt.logger, type(CyLogger)), "Logger shouldn't be initialized...")
 
     ##################################
 

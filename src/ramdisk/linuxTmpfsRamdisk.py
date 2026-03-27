@@ -7,9 +7,7 @@ Linux tmpfs ramdisk implementation
 import os
 import re
 import getpass
-import pwd
 import sys
-import traceback
 from tempfile import mkdtemp
 from time import time
 
@@ -289,14 +287,7 @@ class RamDisk(RamDiskTemplate):
         command = self.buildCommand()
         self.logger.log(lp.WARNING, "Command: " + str(command))
         self.runWith.setCommand(command)
-        """
-        if not self.passwd:
-            # output, error, returncode = self.runWith.communicate()
-            #####
-            # Need password, cannot create ramdisk as a user
-            raise UserMustBeRootException("User Must Be Root (use sudo) to Create a Ramdisk.")
-        elif self.passwd:
-        """
+
         # self.logger.log(lp.WARNING, "p: " + self.passwd)
         if not os.geteuid() == 0 and self.passwd:
             output, error, returncode = self.runWith.runWithSudo(self.passwd)
@@ -478,9 +469,9 @@ def umount(mnt_point="", logger=False, password=""):
         command = [umountPath, mnt_point]
         runWith.setCommand(command)
         #runWith.communicate()
-        retval, reterr, retcode = self.runWith.runWithSudo(password.strip())
+        retval, reterr, retcode = runWith.runWithSudo(password.strip())
         #retval, reterr, retcode = runWith.getNlogReturns()
-        self.logger.log(lp.INFO, "RETURNS: " + retval)
+        #logger.log(lp.INFO, "RETURNS: " + retval)
         #if not reterr:
         if retval:
             success = True
@@ -517,10 +508,10 @@ def  unmount(mnt_point="", logger=False, password=""):
         command = [umountPath, mnt_point]
         runWith.setCommand(command)
         #runWith.communicate()
-        retval, reterr, retcode = self.runWith.runWithSudo(password.strip())
+        retval, reterr, retcode = runWith.runWithSudo(password.strip())
         #retval, reterr, retcode = runWith.getNlogReturns()
         print("RETURNS: " + retval)
-        self.logger.log(lp.INFO, "RETURNS: " + retval)
+        #self.logger.log(lp.INFO, "RETURNS: " + retval)
         #if not reterr:
         if retval:
             success = True
@@ -611,13 +602,8 @@ def getMountDisks():
     print("Entering getMountedDisks")
 
     runWith = RunWith()
-
-    mountedDisks = {}
-
-    devList = []
     diskDict = {}
     retval = ""
-    disk = ""
 
     #####
     # mount, to use device to get mount name
@@ -634,7 +620,6 @@ def getMountDisks():
     for line in retval.splitlines():
         if line:
             # print("Parsing mount command output...")
-            dev = ""
             name = line.split()[2].strip()
             #print(str(name))
             if not "tmpfs" == line.split()[0].strip():
@@ -645,7 +630,7 @@ def getMountDisks():
                 continue
             if re.search("/var/snap", name):
                 continue
-            if not name in systemDisks:
+            if name not in systemDisks:
                 print(name)
                 diskDict[name] = "/dev/tmpfs"
                 continue

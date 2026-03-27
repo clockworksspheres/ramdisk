@@ -19,8 +19,6 @@ class NotValidForThisOS(Exception):
     """
     Meant for being thrown when an action/class being run/instanciated is not
     applicable for the running operating system.
-
-    
     """
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
@@ -31,8 +29,6 @@ class BadRamdiskArguments(Exception):
     """
     Meant for being thrown when an invalid values are passed in as arguments
     to class instanciation or class methods.
-
-    
     """
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
@@ -56,7 +52,10 @@ class RamDiskTemplate(object):
         mytime = '%Y-%m--%d-%H-%S--%f'
         logname = sys.argv[0].split("/")[-1] + mytime
 
-        if not logger and not isinstance(logger, CyLogger):
+        if not logger and not isinstance(logger, type(CyLogger)):
+            self.logger = CyLogger()
+            self.logger.initializeLogs("/tmp", logname)
+        elif not isinstance(logger, type(CyLogger)):
             self.logger = CyLogger()
             self.logger.initializeLogs("/tmp", logname)
         else:
@@ -147,8 +146,6 @@ class RamDiskTemplate(object):
         Unmount the disk - same functionality as __eject on the mac
 
         Must be over-ridden to provide OS/Method specific functionality
-
-        
         """
         success = False
         return success
@@ -160,8 +157,6 @@ class RamDiskTemplate(object):
         Unmount the disk - same functionality as __eject on the mac
 
         Must be over-ridden to provide OS/Method specific functionality
-
-        
         """
         success = False
         return success
@@ -172,8 +167,6 @@ class RamDiskTemplate(object):
         """
         Check to make sure there is plenty of memory of the size passed in
         before creating the ramdisk
-
-        
         """
         success = False
         return success
@@ -185,8 +178,6 @@ class RamDiskTemplate(object):
         Format the ramdisk
 
         Must be over-ridden to provide OS/Method specific functionality
-
-        
         """
         success = False
         return success
@@ -210,8 +201,6 @@ class RamDiskTemplate(object):
         Getter for the mount point name the ramdisk is using
 
         Must be over-ridden to provide OS/Method specific functionality
-
-        
         """
         return self.mntPoint
 
@@ -222,8 +211,6 @@ class RamDiskTemplate(object):
         Setter for the device so it can be ejected.
 
         Must be over-ridden to provide OS/Method specific functionality
-
-        
         """
         self.myRamdiskDev = device
 
@@ -234,8 +221,6 @@ class RamDiskTemplate(object):
         Getter for the version of the ramdisk
 
         Must be over-ridden to provide OS/Method specific functionality
-
-        
         """
         return self.module_version
 
@@ -247,8 +232,6 @@ def detach(device=None, **kwargs):
     Eject the ramdisk
 
     Must be over-ridden to provide OS/Method specific functionality
-
-    
     """
     success = False
     return success

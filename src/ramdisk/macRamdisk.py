@@ -28,12 +28,9 @@ Maybe function, method  or other module
 #--- Native python libraries
 import os
 import re
-import sys
 import getpass
 import shutil
-import traceback
 from subprocess import Popen, PIPE
-
 
 #--- non-native python libraries in this source tree
 from lib.run_commands import RunWith
@@ -209,43 +206,40 @@ class RamDisk(RamDiskTemplate):
     def __create(self):
         """
         Create a ramdisk device
-
-        Create the RAM disk:
-            disk=$(hdiutil attach -nomount ram://<size>)
-        Format the RAM disk with APFS and name it:
-            diskutil erasevolume APFS "MyRAMDiskName" /dev/$disk
-        Disable journaling on the RAM disk:
-            diskutil apfs disableJournal /dev/$disk
-        Rename the RAM disk using diskutil:
-            diskutil rename /dev/$disk "RAMDiskNameReplacement"
-                ....Replace RAMDiskNameReplacement with the desired 
-                    name for your RAM disk.
+        """
+        #Create the RAM disk:
+        #    disk=$(hdiutil attach -nomount ram://<size>)
+        #Format the RAM disk with APFS and name it:
+        #    diskutil erasevolume APFS "MyRAMDiskName" /dev/$disk
+        #Disable journaling on the RAM disk:
+        #    diskutil apfs disableJournal /dev/$disk
+        #Rename the RAM disk using diskutil:
+        #    diskutil rename /dev/$disk "RAMDiskNameReplacement"
+        #        ....Replace RAMDiskNameReplacement with the desired 
+        #            name for your RAM disk.
         #####
         # THIS should be the process:
-        hdiutil attach -nomount ram://1048576
+        #hdiutil attach -nomount ram://1048576
         # the above command returns the <ramdisk device> - /dev/diskXs1
-        diskutil partitionDisk $(/dev/diskXs1) 1 GPTFormat APFS 'RAMDisk' '100%'
-        diskutil umount /dev/diskXs1
-        newfs_apfs -v RAMDisk /dev/diskXs1
-        mkdir -P <mountpoint>
-        mount_apfs /dev/diskXs1 /<mountpoint>
-        chown -R <user> /<mountpoint>
-
+        #diskutil partitionDisk $(/dev/diskXs1) 1 GPTFormat APFS 'RAMDisk' '100%'
+        #diskutil umount /dev/diskXs1
+        #newfs_apfs -v RAMDisk /dev/diskXs1
+        #mkdir -P <mountpoint>
+        #mount_apfs /dev/diskXs1 /<mountpoint>
+        #chown -R <user> /<mountpoint>
         #####
 
-        cmd = [self.hdiutil, "attach", "-nomount", "ram://" + self.diskSize]
-        cmd = ["/usr/sbin/diskutil", "partitionDisk", self.myRamdiskDev, "1", "GPTFormat", "APFS", "'RAMDisk'", f"{hundred}"]
-        cmd = [self.diskutil, "unmount", self.myRamdiskDev]
-        cmd = ["/sbin/newfs_apfs", "-v", "RAMDISK", self.myRamdiskDev]
-        self.fsHelper.mkdirs(self.mntPoint)
-        cmd = "/sbin/mount_apfs " + self.myRamdiskDev + " " + self.mntPoint
-        self.fsHelper.chown(self.mntPoint, user)
+        #cmd = [self.hdiutil, "attach", "-nomount", "ram://" + self.diskSize]
+        #cmd = ["/usr/sbin/diskutil", "partitionDisk", self.myRamdiskDev, "1", "GPTFormat", "APFS", "'RAMDisk'", f"{hundred}"]
+        #cmd = [self.diskutil, "unmount", self.myRamdiskDev]
+        #cmd = ["/sbin/newfs_apfs", "-v", "RAMDISK", self.myRamdiskDev]
+        #self.fsHelper.mkdirs(self.mntPoint)
+        #cmd = "/sbin/mount_apfs " + self.myRamdiskDev + " " + self.mntPoint
+        #self.fsHelper.chown(self.mntPoint, user)
 
-        
-        """
         retval = None
         reterr = None
-        # success = False
+        #success = False
         #####
         # Create the ramdisk and attach it to a device.
         # disk=$(hdiutil attach -nomount ram://<size>)
@@ -257,11 +251,12 @@ class RamDisk(RamDiskTemplate):
         # retval, reterr, retcode = self.runWith.getNlogReturns()
         
         if retcode == '':
-            success = False
+            pass
+            #success = False
         else:
             self.myRamdiskDev = retval.strip()
             # self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
-            success = True
+            #success = True
         
         self.myRamdiskDev = retval.strip()
         self.logger.log(lp.DEBUG, "Device: \"" + str(self.myRamdiskDev) + "\"")
@@ -281,7 +276,7 @@ class RamDisk(RamDiskTemplate):
         # diskutil partitionDisk self.myRamdiskDev 1 GPTFormat APFS 'RAMDisk' '100%'
         tmpmntpnt = self.mntPoint.split('/')[-1]
         print("testmntpnt: " + tmpmntpnt)
-        hundred = f"'100%'"
+        hundred = "'100%'"
         try:
             cmd = ["/usr/sbin/diskutil", "partitionDisk", self.myRamdiskDev, "1", "GPTFormat", "APFS", "'RAMDisk'", f"{hundred}"]
             self.logger.log(lp.WARNING, "Running command to create ramdisk: " + str(cmd))
@@ -311,7 +306,6 @@ class RamDisk(RamDiskTemplate):
             self.runWith.communicate()
         except:
             raise
-
 
         tmpNum = ""
         tmpDev = ""
@@ -453,10 +447,7 @@ class RamDisk(RamDiskTemplate):
                         continue
             dev = ""
 
-        try:
-            mountedDisks = diskDict
-        except:
-            pass
+        mountedDisks = diskDict
         print("MountedDisks: " + str(mountedDisks))
         return mountedDisks
 
@@ -800,7 +791,7 @@ class RamDisk(RamDiskTemplate):
         line = ""
         self.free = 0
         freeNumber = 0
-        freeMagnitute = ""
+        freeMagnitude = ""
         tmpFree = ""
 
         #####
@@ -817,8 +808,8 @@ class RamDisk(RamDiskTemplate):
             try:
                 lastWord = tmpData[-1]
                 nextWord = tmpData[-2]
-            except IndexError as err:
-                pass # self.logger.log(self.lp.DEBUG, )
+            except IndexError:
+                # pass # self.logger.log(self.lp.DEBUG, )
                 continue
 
             print("words: {}, {}", lastWord, nextWord)
@@ -959,7 +950,7 @@ class RamDisk(RamDiskTemplate):
         # Set up and run the mount command
         cmd = ["/sbin/mount"]
 
-        output == ""
+        output = ""
 
         self.runWith.setCommand(cmd)
         output, _, _ = self.runWith.communicate()
@@ -984,7 +975,7 @@ class RamDisk(RamDiskTemplate):
         if output:
             diskutilInfo = output
 
-        message = f"mountLine:\n{mountLine}\n\ndiskutil info:\n{diskutilInfo}"
+        message = f"mountInfo:\n{mountInfo}\n\ndiskutil info:\n{diskutilInfo}"
 
         return message, mountInfo, diskutilInfo
 
@@ -1123,8 +1114,6 @@ def getMountDisks():
     print("Entering getMountedDisks")
 
     runWith = RunWith()
-
-    mountedDisks = {}
 
     devList = []
     diskDict = {}
