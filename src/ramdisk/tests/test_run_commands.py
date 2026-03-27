@@ -7,17 +7,14 @@ import os
 import traceback
 import tracemalloc
 from datetime import datetime
+from pathlib import Path
 
-#####
-# Include the parent project directory in the PYTHONPATH
-#appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
-#sys.path.append(appendDir)
-sys.path.append("..")
+# Get the parent directory of the current file's parent directory
+#  and add it to sys.path
+parent_dir = Path(__file__).parent.parent
+sys.path.append(str(parent_dir))
+
 #--- non-native python libraries in this source tree
-#from ramdisk.lib.loggers import CyLogger
-#from ramdisk.lib.loggers import LogPriority as lp
-#from ramdisk.lib.run_commands import RunWith, SetCommandTypeError
-
 from lib.loggers import CyLogger
 from lib.loggers import LogPriority as lp
 from lib.run_commands import RunWith, SetCommandTypeError
@@ -67,14 +64,16 @@ class test_run_commands(unittest.TestCase):
         self.rw.__init__(self.logger)
         self.logger.log(lp.DEBUG, "=============== Starting test_communicate...")
 
-        self.rw.setCommand('/bin/ls /var/spool', myshell=True)
-        _, _, retval = self.rw.communicate(silent=False)
-        self.assertEqual(retval, 0,
-                          "Valid [] command execution failed: " +
-                          '/bin/ls /var/spool --- retval: ' + str(retval))
-        self.rw.setCommand(['/bin/ls', '-l', '/usr/local'])
-        _, _, retval = self.rw.communicate(silent=False)
-        self.assertEqual(retval, 0,
+        if not sys.platform.lower().startswith("win32"):
+            self.rw.setCommand('/bin/ls /var/spool', myshell=True)
+            _, _, retval = self.rw.communicate(silent=False)
+            self.assertEqual(retval, 0,
+                              "Valid [] command execution failed: " +
+                              '/bin/ls /var/spool --- retval: ' + str(retval))
+
+            self.rw.setCommand(['/bin/ls', '-l', '/usr/local'])
+            _, _, retval = self.rw.communicate(silent=False)
+            self.assertEqual(retval, 0,
                           "Valid [] command execution failed: " +
                           '/bin/ls /var/spool --- retval: ' + str(retval))
 
@@ -162,7 +161,6 @@ class test_run_commands(unittest.TestCase):
 
         self.logger.log(lp.DEBUG, "=============== Completed test_wait...")
 
-    @unittest.skipIf(sys.platform.lower().startswith("win"), "needs to be re=writtent to work on windows as well")
     def test_timeout(self):
         """
         """
@@ -174,6 +172,8 @@ class test_run_commands(unittest.TestCase):
             ping = "/sbin/ping"
         elif os.path.exists('/bin/ping'):
             ping = "/bin/ping"
+        elif os.path.exists("C:\\WINDOWS\\system32\\PING.EXE"):
+            ping = "C:\\WINDOWS\\system32\\PING.EXE"
 
         self.rw.setCommand([ping, '-c', '12', '8.8.8.8'])
         try:

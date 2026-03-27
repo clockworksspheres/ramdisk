@@ -26,12 +26,13 @@ Run with:
     python -m unittest test_run_commands -v
 """
 
-import sys
 import subprocess
 import threading
 import unittest
 from subprocess import SubprocessError
 from unittest.mock import MagicMock, Mock, call, patch
+
+import sys
 from pathlib import Path
 
 # Get the parent directory of the current file's parent directory

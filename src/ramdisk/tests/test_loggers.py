@@ -2,8 +2,8 @@
 """
 Testing logging functionality via CyLogger
 
-
 """
+
 # --- Native python libraries
 import unittest
 import time
@@ -12,6 +12,7 @@ import os
 import traceback
 import tracemalloc
 from datetime import datetime
+
 from pathlib import Path
 
 # Get the parent directory of the current file's parent directory
