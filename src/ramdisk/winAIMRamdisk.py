@@ -284,8 +284,6 @@ class RamDisk(RamDiskTemplate):
         """
         Check to make sure there is plenty of memory of the size passed in
         before creating the ramdisk
-
-        
         """
         success = False
 
@@ -310,8 +308,6 @@ class RamDisk(RamDiskTemplate):
         Format the ramdisk
 
         Must be over-ridden to provide OS/Method specific functionality
-
-        
         """
         success = False
         return success
@@ -323,8 +319,6 @@ class RamDisk(RamDiskTemplate):
         Getter for the device name the ramdisk is using
 
         Must be over-ridden to provide OS/Method specific functionality
-
-        
         """
         return self.myRamdiskDev
 
@@ -335,8 +329,6 @@ class RamDisk(RamDiskTemplate):
         Getter for the mount point name the ramdisk is using
 
         Must be over-ridden to provide OS/Method specific functionality
-
-        
         """
         return self.mntPoint
 
@@ -347,8 +339,6 @@ class RamDisk(RamDiskTemplate):
         Setter for the device so it can be ejected.
 
         Must be over-ridden to provide OS/Method specific functionality
-
-        
         """
         self.myRamdiskDev = device
 
@@ -359,8 +349,6 @@ class RamDisk(RamDiskTemplate):
         Getter for the version of the ramdisk
 
         Must be over-ridden to provide OS/Method specific functionality
-
-        
         """
         return self.module_version
 
@@ -379,7 +367,6 @@ def detach(device, logger=False):
 
     print(f"umount {device}")
 
-    #logger.log(lp.WARNING, "Running command to unmount ramdisk: \n\t" + str(umountCmd))
     runCmd.setCommand(umountCmd)
     runCmd.communicate()
     retval, reterr, retcode = runCmd.getNlogReturns()
@@ -389,10 +376,8 @@ def detach(device, logger=False):
         raise Exception("Error trying to unmount drive : (" + str(reterr).strip() + ")")
     else:
         success = True
-        #logger.log(lp.INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
 
     return success
-
 
 def unmount(device, logger=False):
     success = False
@@ -407,7 +392,6 @@ def umount(device, logger=False):
     Eject the ramdisk
 
     Must be over-ridden to provide OS/Method specific functionality
-    
     """
     success = False
 
@@ -453,7 +437,6 @@ def eject(device, logger=False):
     Eject the ramdisk
 
     Overriding with OS/Method specific functionality
-    
     """
     success = False
 
@@ -494,7 +477,7 @@ def eject(device, logger=False):
 
 def getMountData(device):
     """
-    For macOS, show both mount and diskutil data
+    For Windows, show both mount and device data
     """
     print("Entering getMountData")
     cmd = f"aim_ll -l -u {device}"
