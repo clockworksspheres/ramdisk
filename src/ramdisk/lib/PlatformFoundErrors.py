@@ -10,7 +10,6 @@ Providing an example exeption for the macOS platform.
 
 Child exceptions could be created for speceific versions of OS's that 
 inherit these exceptions.
-
 '''
 
 ###
@@ -23,7 +22,6 @@ class Win32PlatformFoundError(BaseException):
     def __init__(self, *args, **kwargs):
         BaseException.__init__(self, *args, **kwargs)
 
-
 ###
 # macOS platform exception
 
@@ -33,6 +31,4 @@ class DarwinPlatformFoundError(BaseException):
     """
     def __init__(self, *args, **kwargs):
         BaseException.__init__(self, *args, **kwargs)
-
-
 

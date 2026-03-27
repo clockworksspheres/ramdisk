@@ -187,10 +187,7 @@ class CyLogger(Singleton):
         """
         Input validation for the logging level
 
-        
-
-        @param level:  (Default value = 30)
- 
+        @param level:  (Default value = 30) 
         """
         
         success = False
@@ -208,10 +205,7 @@ class CyLogger(Singleton):
         If there is a RotatingFileHandler attached to the active logger,
         rotate the log.
         
-        
-
         @param rothandler: 
-
         """
         if self.rotate:
             try:
@@ -357,8 +351,6 @@ class CyLogger(Singleton):
 
         @param *args: 
         @param **kwargs: 
-
-        
         """
         pass
 
@@ -369,8 +361,6 @@ class CyLogger(Singleton):
         Template/interface for setting up a logger
 
         One may add several handlers to one logger.
-
-        
         """
         pass
 
@@ -380,9 +370,7 @@ class CyLogger(Singleton):
         """
 
         @param priority:  (Default value = 0)
-        @param msg:  (Default value = "")
-
-        
+        @param msg:  (Default value = "")        
         """
         pri = str(priority)
         if re.match(r"^\d\d$", pri) and self.validateLevel():

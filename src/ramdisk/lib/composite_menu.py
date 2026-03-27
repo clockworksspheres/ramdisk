@@ -1,8 +1,6 @@
 """
 If this script is run rather than used as a library, it will show how it can
 be used to create a basic menu.
-
-
 """
 
 # system libraries
@@ -10,18 +8,18 @@ import re
 import sys
 import tty
 import termios
+from pathlib import Path
 
-sys.path.append("..")
-from ..lib.loggers import CyLogger
-from ..lib.loggers import LogPriority as lp
-from ..lib.run_commands import RunWith, runMyThreadCommand
+#sys.path.append("..")
+
+from loggers import CyLogger
+from loggers import LogPriority as lp
+from run_commands import RunWith, runMyThreadCommand
 
 class NotASaneNameError(Exception):
     """
     Meant for being thrown when an action/class being run/instanciated is not
     applicable for the running operating system.
-
-    
     """
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
@@ -29,9 +27,7 @@ class NotASaneNameError(Exception):
 class NotASaneActionError(Exception):
     """
     Meant for being thrown when an action/class being run/instanciated is not
-    applicable for the running operating system.
-
-    
+    applicable for the running operating system.    
     """
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
@@ -86,8 +82,6 @@ class MenuComponent(object):
 
         If either of the Unix-specific tty or termios are not found
         we allow the ImportError to proagate..
-        
-        
         """
         fd = sys.stdin.fileno()
         original_attributes = termios.tcgetattr(fd)
@@ -102,9 +96,7 @@ class MenuComponent(object):
         """
         Get the value of a psudo-global value.  Not using python globals.
         Child classes should be able to look up these values, found in the 
-        MenuComposite with the Anchor (first MenuComponent)
-        
-        
+        MenuComposite with the Anchor (first MenuComponent)        
         """
         retval = False
         if isinstance(g_key, str):
@@ -125,8 +117,6 @@ class MenuComponent(object):
                 that variable.
         equals is the value we want to set to
         type is the type, either string of int
-
-        
         """
         success = False
         if isinstance(g_key, str) and \
@@ -178,8 +168,6 @@ class MenuComponent(object):
     def printName(self) :
         """
         Print the name of the MenuItem for the menu.
-
-        
         """
         print(self.name)
 
@@ -187,8 +175,6 @@ class MenuComponent(object):
 class MenuItem(MenuComponent) :
     """
     Leaf class - Inherits the MenuComponent class.
-
-    
     """
     def __init__(self, name, action=False) :
         """
@@ -215,8 +201,6 @@ class MenuItem(MenuComponent) :
     def menuAction(self, *args, **kwargs):
         """
         Node specific action method. -- Run the function that is passed in.
-
-        
         """
         success = False
         if self.action:
@@ -231,8 +215,6 @@ class MenuItem(MenuComponent) :
 class MenuComposite(MenuComponent) :
     """
     Composite method found in the link above.  This controls a menu level.
-
-    
     """
     def __init__(self, name, action=False):
         """
@@ -264,8 +246,6 @@ class MenuComposite(MenuComponent) :
     def goToMainMenu(self):
         """
         Go back to the main menu
-        
-        
         """
         while not self.anchor:
             self = self.previous
@@ -276,8 +256,6 @@ class MenuComposite(MenuComponent) :
         Create the menu - execute the exec string first if it's not empty.
 
         Print each MenuItem of this MenuComposite in order,
-
-        
         """
         success = False
 
@@ -414,8 +392,6 @@ class MenuComposite(MenuComponent) :
         to the current MenuComposite
         
         For this "menu" system, no "remove" method necessary
-        
-        
         """
         self.child_nodes.append(child)
         child.previous = self
@@ -425,8 +401,6 @@ class MenuComposite(MenuComponent) :
     def setAnchor(self) :
         """
         Set this MenuComposite as the "anchor" or "head" of the tree
-        
-        
         """
         self.anchor = True
 
@@ -467,8 +441,6 @@ def advanced3():
 if __name__ == "__main__" :
     """
     Example usage of this library
-
-    
     """
     main_menu = MenuComposite("Main")
     basic_choice = MenuItem("Basic Choice", basic)
@@ -496,5 +468,3 @@ if __name__ == "__main__" :
     print("### Ready To Work...                ###")
     print("=======================================")
     print("---------------------------------------")
-
-

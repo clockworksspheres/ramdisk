@@ -2,8 +2,6 @@
 Library for running executables from the command line in different ways
 
 Inspiration for some of the below found on the internet.
-
-
 """
 
 # TODO: BUG - Class needs to return either byte streams or strings.  Check return, error and retcode values to see if they are strings, byte streams or int and treat accordingly
@@ -87,8 +85,6 @@ class RunWith(object):
     @method runWithSudo(self, user="", password="")
 
     @WARNING - Known to work on Mac, may or may not work on other platforms
-
-    
     """
     def __init__(self, logger=None, use_logger=True):
         if use_logger == True:
@@ -123,9 +119,7 @@ class RunWith(object):
 
     def setCommand(self, command, env=None, myshell=None, close_fds=None, text=True, creationflags=None):
         """
-        initialize a command to run
-
-        
+        initialize a command to run        
         """
         #####
         # Handle Popen's shell, or "myshell"...
@@ -190,9 +184,7 @@ class RunWith(object):
 
     def getStdout(self):
         """
-        Getter for the standard output of the last command.
-
-        
+        Getter for the standard output of the last command.        
         """
         return self.stdout
 
@@ -201,8 +193,6 @@ class RunWith(object):
     def getStderr(self):
         """
         Getter for the standard error of the last command.
-
-        
         """
         return self.stderr
 
@@ -210,9 +200,7 @@ class RunWith(object):
 
     def getReturnCode(self):
         """
-        Getter for the return code of the last command.
-
-        
+        Getter for the return code of the last command.        
         """
         return self.retcode
 
@@ -220,9 +208,7 @@ class RunWith(object):
 
     def getReturns(self):
         """
-        Getter for the retval, reterr & retcode of the last command.
-
-        
+        Getter for the retval, reterr & retcode of the last command.        
         """
         return self.stdout, self.stderr, self.retcode
 
@@ -233,8 +219,6 @@ class RunWith(object):
         Getter for the retval, reterr & retcode of the last command.
 
         Will also log the values
-
-        
         """
         if nolog == False:
             self.logger.log(lp.INFO, "Output: " + str(self.stdout))
@@ -249,8 +233,6 @@ class RunWith(object):
         Getter for the retval, reterr & retcode of the last command.
 
         Will also print the values
-
-        
         """
         print("Output: " + str(self.stdout))
         print("Error: " + str(self.stderr))
@@ -268,8 +250,6 @@ class RunWith(object):
                          standard logging practices.  Silent = True to
                          not print the command being run.  Silent = False
                          to print the command.
-
-        
         """
         self.stdout = ''
         self.stderr = ''
@@ -337,8 +317,6 @@ class RunWith(object):
         """
         Use subprocess to call a command and wait until it is finished before
         moving on...
-
-        
         """
         self.stdout = ''
         self.stderr = ''
@@ -404,7 +382,6 @@ class RunWith(object):
         """
         Use the subprocess module to execute a command, returning
         the output of the command
-
         """
         self.stdout = ''
         self.stderr = ''
@@ -590,8 +567,6 @@ class RunWith(object):
     def killProc(self, proc, timeout):
         """
         Support function for the "runWithTimeout" function below
-
-        
         """
         timeout["value"] = True
         proc.kill()
@@ -606,8 +581,6 @@ class RunWith(object):
         stderr of the process
         timout - True if the command timed out
                  False if the command completed successfully
-
-        
         """
         if self.command:
             try:
@@ -661,8 +634,6 @@ class RunWith(object):
         Use pexpect to run "su" to run a command as another user...
 
         Required parameters: user, password, command
-
-        
         """
         self.stdout = ""
         self.stderr = ""
@@ -771,8 +742,6 @@ class RunWith(object):
 
         @param: user - name of user to run as
         @param: target_dir - directory to run the command from
-
-        
         """
         self.stdout = ""
         self.stderr = ""
@@ -875,8 +844,6 @@ class RunWith(object):
         Use pty method to run "su" to run a command as another user...
 
         Required parameters: user, password, command
-
-        
         """
         self.logger.log(lp.DEBUG, "Starting runAsWithSudo: ")
         self.logger.log(lp.DEBUG, "\tuser: \"" + str(user) + "\"")
@@ -1010,8 +977,6 @@ class RunWith(object):
         Use pty method to run "sudo" to run a command with elevated privilege.
 
         Required parameters: user, password, command
-
-        
         """
         self.logger.log(lp.DEBUG, "Starting runWithSudo: ")
         self.logger.log(lp.DEBUG, "\tcmd : " + str(self.command))
@@ -1032,7 +997,6 @@ class RunWith(object):
 
             elif isinstance(self.command, str):
                 cmd = cmd + [self.command]
-
 
             try:
                 (master, slave) = pty.openpty()
@@ -1122,8 +1086,6 @@ class RunThread(threading.Thread):
     run_thread.start()
     run_thread.join()
     print run_thread.stdout
-
-    
     """
     def __init__(self, command, logger, myshell=False):
         """
@@ -1186,8 +1148,6 @@ class RunThread(threading.Thread):
     def getStdout(self):
         """
         Getter for standard output
-
-        
         """
         self.logger.log(lp.INFO, "Getting stdout...")
         return self.retout
@@ -1197,8 +1157,6 @@ class RunThread(threading.Thread):
     def getStderr(self):
         """
         Getter for standard err
-
-        
         """
         self.logger.log(lp.DEBUG, "Getting stderr...")
         return self.reterr
@@ -1208,8 +1166,6 @@ class RunThread(threading.Thread):
 def runMyThreadCommand(cmd, logger, myshell=False):
     """
     Use the RunThread class to get the stdout and stderr of a command
-
-    
     """
     retval = None
     reterr = None

@@ -24,8 +24,6 @@ def logMessage(message="", level="normal", priority="debug", syslog_level=None) 
                the message will be printed to stdout and via logger
     
     syslog_level - the syslog level to log with
-
-    
     """
     if syslog_level is None :
         syslog_level = ""
@@ -63,5 +61,3 @@ def logMessage(message="", level="normal", priority="debug", syslog_level=None) 
                      str(cmd_string) + \
                      " failed: ", \
                      err, file=sys.stderr)        
-
-
