@@ -1,7 +1,5 @@
 #!/usr/bin/env -S python -u
 """
-
-
 """
 
 #--- Native python libraries
@@ -95,8 +93,3 @@ else:
     ramdisk.getNlogData()
     ramdisk.getNprintData()
 
-#if not ramdisk.success:
-#    raise Exception("Ramdisk setup failed..")
-
-#print(ramdisk.getDevice())
-#time.sleep(9000)
