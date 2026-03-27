@@ -8,7 +8,7 @@ sys.path.append("..")
 LogPriority = { "SUBCRIT": 5, "CRITICAL":10, "ERROR":20, "WARNING":30, "VERBOSE":40, "INFO":20, "DEBUG":50 }
 
 # DEFAULT_LOG_LEVEL=LogPriority["DEBUG"]
-DEFAULT_LOG_LEVEL=LogPriority["CRITICAL"]
+DEFAULT_LOG_LEVEL=LogPriority["INFO"]
 #                              ^^^^^ Input log level here...
 #####
 # Default Ramdisk Size in Mb
