@@ -17,22 +17,6 @@ from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.ui.main import _CreateRamdisk
 
-#####
-# Load OS specific Ramdisks
-#if sys.platform.startswith("darwin"):
-    #####
-    # For Mac
-#    from ramdisk.macRamdisk import RamDisk
-#elif sys.platform.startswith("linux"):
-    #####
-    # For Linux
-#    from ramdisk.linuxTmpfsRamdisk import RamDisk
-#elif sys.platform.startswith("win32"):
-    #####
-    # For Linux
-#    from ramdisk.winImDiskRamdisk import RamDisk
-#else:
-#    print("'" + str(sys.platform) + "' platform not supported...")
 from ramdisk.RamDisk import RamDisk
 
 

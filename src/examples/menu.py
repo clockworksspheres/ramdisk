@@ -4,40 +4,14 @@
 """
 #--- Native python libraries
 import sys
-from optparse import OptionParser, SUPPRESS_HELP
+from pathlib import Path
 
-sys.path.append("../")
+parent_dir = Path(__file__).parent.parent
+sys.path.append(str(parent_dir))
+
 #--- non-native python libraries in this source tree
-import ramdisk
-from ramdisk.lib.run_commands import RunWith
-from ramdisk.lib.loggers import CyLogger
-from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.composite_menu import MenuComposite, MenuItem 
-"""
-parser = OptionParser(usage="\n\n%prog [options]\n\n", version="2.7.2")
 
-parser.add_option("-D", "--detach", dest="device", default="",
-                  help="Name of the device to detach")
-parser.add_option("-d", "--debug", action="store_true", dest="debug", 
-                  default=0, help="Print debug messages")
-parser.add_option("-v", "--verbose", action="store_true", 
-                  dest="verbose", default=0, 
-                  help="Print status messages")
-
-(opts, args) = parser.parse_args()
-
-if opts.verbose != 0:
-    level = CyLogger(level=lp.INFO)
-elif opts.debug != 0:
-    level = CyLogger(level=lp.DEBUG)
-else:
-    level=lp.WARNING
-
-if opts.device == 0:
-    raise Exception("Cannot detach a device with no name..")
-else:
-    device = opts.device
-"""
 def basic():
     """ 
     """
