@@ -8,8 +8,8 @@ Library for running executables from the command line in different ways
 import os
 import re
 import sys
-import time
-import types
+#import time
+#import types
 import select
 import threading
 import traceback
@@ -79,7 +79,7 @@ class RunWith(object):
     @WARNING - Known to work on Mac, may or may not work on other platforms
     """
     def __init__(self, logger=None, use_logger=True):
-        if use_logger == True:
+        if use_logger:
 
             if isinstance(logger, type(CyLogger)):
                 self.logger = logger
@@ -87,7 +87,7 @@ class RunWith(object):
                 self.logger = MockLogger
                 # raise NotACyLoggerError("Passed in value for logger" +
                 #                        " is invalid, try again.")
-        elif use_logger == False:
+        elif not use_logger:
             self.logger = MockLogger
         self.command = None
         self.stdout = None
@@ -636,6 +636,11 @@ class RunWith(object):
 
         Required parameters: user, password, command
         """
+        if sys.platform.lower().startswith("win"):
+            return "Cannot perform this in Windows", "Cannot perform this in Windows", 127
+
+        import pty
+ 
         self.stdout = ""
         self.stderr = ""
         self.retcode = 999
