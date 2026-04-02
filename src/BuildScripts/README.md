@@ -8,8 +8,8 @@ Using these two tools, do the following:
 Start jenkins server container
 Start hypervisors
 
-vmm start VM's
-jenkinsPipelineTool run ramdisk-redhat
+start VM's
+jenkinsPipelineTool run ramdisk-redhat pipeline
 
 poll jenkinsPipelineTools check ramdisk-redhat 'till done
 
@@ -19,7 +19,7 @@ start next set of VM's
 
 jenkinsPipelineTool run ramdisk-debbased
 
-poll jenkinsPipelineTools check ramdisk-redhat 'till done
+poll jenkinsPipelineTools check ramdisk-debbased 'till done
 
 stop VM's
 
@@ -27,7 +27,7 @@ start next set of VM's
 
 jenkinsPipelineTool run ramdisk-macos
 
-poll jenkinsPipelineTools check ramdisk-redhat 'till done
+poll jenkinsPipelineTools check ramdisk-macos 'till done
 
 stop VM's
 
@@ -48,7 +48,7 @@ win32output = jenkinsPipelineTools check ramdisk-windows --get-full-run
 
 report the four json reports somewhere?
 
-Collect reports and post???? - need website or 
+Possibly collect reports and post???? - need website or 
 something to view or cmdline report
 
 possibly stop jenkins server container

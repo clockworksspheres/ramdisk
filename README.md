@@ -33,7 +33,7 @@ Unmounting a ramdisk is much faster than removing or erasing a potentially large
 
 ## NOTE:
 
-The code has two branches, ux (not necessarily stable) and master (stable).  The goal is to only merge to ux to master when functionality is stable and tests have passed.
+The code has two active branches, ux (not necessarily stable) and master (stable).  The goal is to only merge to ux to master when functionality is stable and tests have passed.
 
 Initially developed for python 2.6, but code has since been migrated to 3.9+.  Not believed to work on the python 2 branch any longer.
 
@@ -48,10 +48,6 @@ Instantiating the RamDisk class will create a ramdisk that you can use - in chun
 ramdisks do not need to be managed by root on macOS.   Tests & DevOps creating and managing ramdisks can be run as a user.
 
 ### Linux
-
-#### linuxLoopRamdisk
-
-Not currently implemented.  A stub has been placed for intended implementation.
 
 #### linuxTmpfsRamdisk
 
@@ -80,8 +76,6 @@ Will correctly generate either a macRamdisk on macOS or a linuxTmpfsRamdisk (by 
 
 The examples directory provides examples on how to use various libraries, even beyond the ramdisk libraries in this code base.  Currently in flux.  Some are used for testing the ramdisk code base.  Any user creation or manipulation example code is in an alpha state, and some are macOS only at this time.
 
-Unionfs related code is in an alpha state and also macOS only.
-
 The ramdisk example code is cross platform in an beta state.
 
 In the parent directory of the examples directory is ramdisk-setup.py, which is an example of using a pyside6 interface for the ramdisk library.
@@ -101,7 +95,7 @@ Very greatful for any contributions/pull requests to help with the project!
 
 # Eisenban - Kanban board for the project
 
-Kanban based project management of the ramdisk project.
+src/ramdiskBoard is a Kanban based project management board created by and managed by eisenban.
 
 eisenban package can be found at:  https://github.com/clockworksspheres/eisenban
 
@@ -109,3 +103,4 @@ eisenban package can be found at:  https://github.com/clockworksspheres/eisenban
 cd <root of the ramdisk project>/src
 eisenban -t ramdiskBoard
 ```
+
