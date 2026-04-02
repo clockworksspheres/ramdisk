@@ -1,5 +1,10 @@
 # Meta Pipeline
 
+https://github.com/clockworksspheres/vmm.git
+https://github.com/clockworksspheres/jenkinsTools.git
+
+Using these two tools, do the following:
+
 Start jenkins server container
 Start hypervisors
 
