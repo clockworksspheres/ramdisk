@@ -188,7 +188,7 @@ class GenericTestUtilities(object):
                 tmpfile_fd.tell() < file_size
                 tmpfile_fd.write(str(os.urandom(1024)))
 
-    def mkfile(self, file_path="", file_size=0, pattern="rand", block_size=512, mode=0o777):
+    def mkfile(self, file_path="", file_size=0, pattern="rand", block_size=512, mode=0o777, small=False):
         """
         Create a file with "file_path" and "file_size".  To be used in
         file creation benchmarking - filesystem vs ramdisk.
@@ -199,6 +199,7 @@ class GenericTestUtilities(object):
                               "0xXX": where XX is a hex value for a byte
         @parameter: block_size - size of blocks to write in bytes
         @parameter: mode - file mode, default 0o777
+        @parameter: small - create file in kilobytes instead of megabytes
 
         @returns: time in miliseconds the write took
 
@@ -207,7 +208,10 @@ class GenericTestUtilities(object):
         total_time = 0
         if file_path and file_size:
             self.libc.sync()
-            file_size = file_size * 1024 * 1024
+            if not small:
+                file_size = file_size * 1024 * 1024
+            elif small:
+                file_size = file_size * 1024
             if os.path.isdir(file_path):
                 tmpfile_path = os.path.join(file_path, "testfile")
             else:
@@ -241,6 +245,7 @@ class GenericTestUtilities(object):
                     tmp_buffer = os.urandom(block_size)
                     os.write(tmpfile, tmp_buffer)
                     os.fsync(tmpfile)
+                '''
                 time.sleep(.01)
                 self.libc.sync()
                 os.close(tmpfile)
@@ -250,7 +255,7 @@ class GenericTestUtilities(object):
                 os.unlink(tmpfile_path)
                 time.sleep(.01)
                 self.libc.sync()
-
+                '''
                 # capture end time
                 end_time = datetime.now()
             except Exception as err:
