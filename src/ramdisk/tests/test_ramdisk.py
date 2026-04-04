@@ -270,6 +270,7 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
         #
         ramdisk_starttime = datetime.now()
         for i in range(1000):
+            self.logger.log(lp.INFO, "creating file...")
             self.mkfile(os.path.join(self.mountPoint, "testfile" + str(i)), 1, small=True)
         ramdisk_endtime = datetime.now()
 
@@ -279,6 +280,7 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
 
         fs_starttime = datetime.now()
         for i in range(1000):
+            self.logger.log(lp.INFO, "creating file...")
             self.mkfile(os.path.join(self.fs_dir, "testfile" + str(i)), 1, small=True)
         fs_endtime = datetime.now()
 
