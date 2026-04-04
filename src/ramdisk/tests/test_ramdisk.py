@@ -286,7 +286,7 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
 
         fstime = fs_endtime - fs_starttime
 
-        self.assertTrue(fstime > rtime, "Problem with ramdisk...")
+        self.assertTrue(fstime.microseconds > rtime.microseconds, "Problem with ramdisk...")
 
     ##################################
 
