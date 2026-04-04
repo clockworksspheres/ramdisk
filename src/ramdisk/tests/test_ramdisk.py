@@ -83,7 +83,10 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
         except Exception as e:
             self.logger.log(lp.ERROR, "Failed to get libc: " + str(e))
         self.environ = Environment()
-        self.subdirs = ["two", "three" "one/four"]
+        if sys.platform.lower().startswith("win"):
+            self.subdirs = ["two", "three" "one\\four"]
+        else:
+            self.subdirs = ["two", "three" "one/four"]
         self.logger = CyLogger()
         time.sleep(3)
         self.logger.initializeLogs()
@@ -205,7 +208,7 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
                 self.logger.log(lp.INFO, "testfile size: " + str(file_size))
                 #####
                 # Create filesystem file and capture the time it takes...
-                self.mkfile(os.path.join(self.fs, "testfile"), file_size)
+                self.mkfile(os.path.join(self.fs_dir, "testfile"), file_size)
                 self.logger.log(lp.INFO, "file_size: " + str(file_size) + " fs_time: " + str(datetime.now()))
             fs_endtime = datetime.now()
     
