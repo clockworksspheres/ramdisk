@@ -169,18 +169,18 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
         """
         # Do file setup for this test
         if sys.platform.lower().startswith("win"):
-        for subdir in self.subdirs:
-            dirpath = self.mountPoint + "\\" + subdir
-            self.logger.log(lp.DEBUG, "DIRPATH: : " + str(dirpath))
-            self.mkdirs(dirpath)
-            self.touch(dirpath + "\\" + "test")
+            for subdir in self.subdirs:
+                dirpath = self.mountPoint + "\\" + subdir
+                self.logger.log(lp.DEBUG, "DIRPATH: : " + str(dirpath))
+                self.mkdirs(dirpath)
+                self.touch(dirpath + "\\" + "test")
 
         else:
-        for subdir in self.subdirs:
-            dirpath = self.mountPoint + "/" + subdir
-            self.logger.log(lp.DEBUG, "DIRPATH: : " + str(dirpath))
-            self.mkdirs(dirpath)
-            self.touch(dirpath + "/" + "test")
+            for subdir in self.subdirs:
+                dirpath = self.mountPoint + "/" + subdir
+                self.logger.log(lp.DEBUG, "DIRPATH: : " + str(dirpath))
+                self.mkdirs(dirpath)
+                self.touch(dirpath + "/" + "test")
 
         # Do the tests
         for subdir in self.subdirs:
