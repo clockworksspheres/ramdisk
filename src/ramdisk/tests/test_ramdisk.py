@@ -35,7 +35,7 @@ sys.path.append(str(parent_dir))
 from lib.loggers import CyLogger
 from lib.loggers import LogPriority as lp
 from lib.environment import Environment
-from tests.genericTestUtilities.genericTestUtilities import GenericTestUtilities
+from genericTestUtilities.genericTestUtilities import GenericTestUtilities
 
 
 #####
@@ -275,14 +275,18 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
 
         rtime = ramdisk_endtime - ramdisk_starttime
 
+        self.assertTrue(ramdisk_endtime > ramdisk_starttime, "Start time greater than end time?")
+
         fs_starttime = datetime.now()
         for i in range(1000):
             self.mkfile(os.path.join(self.fs_dir, "testfile" + str(i)), 1, small=True)
         fs_endtime = datetime.now()
 
+        self.assertTrue(fs_endtime > fs_starttime, "Start time greater than end time?")
+
         fstime = fs_endtime - fs_starttime
 
-        self.assertTrue(rtime < fstime, "Problem with ramdisk...")
+        self.assertTrue(fstime > rtime, "Problem with ramdisk...")
 
     ##################################
 
