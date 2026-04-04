@@ -168,6 +168,14 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
         Should work when files exist in ramdisk.
         """
         # Do file setup for this test
+        if sys.platform.lower().startswith("win"):
+        for subdir in self.subdirs:
+            dirpath = self.mountPoint + "\\" + subdir
+            self.logger.log(lp.DEBUG, "DIRPATH: : " + str(dirpath))
+            self.mkdirs(dirpath)
+            self.touch(dirpath + "\\" + "test")
+
+        else:
         for subdir in self.subdirs:
             dirpath = self.mountPoint + "/" + subdir
             self.logger.log(lp.DEBUG, "DIRPATH: : " + str(dirpath))
@@ -179,7 +187,10 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
             # CANNOT use os.path.join this way.  os.path.join cannot deal with
             # absolute directories.  May work with mounting ramdisk in local
             # relative directories.
-            self.assertTrue(os.path.exists(self.mountPoint + "/" + subdir + "/" +  "test"), "Problem with ramdisk...")
+            if sys.platform.lower().startswith("win"):
+                self.assertTrue(os.path.exists(self.mountPoint + "\\" + subdir + "\\" +  "test"), "Problem with ramdisk...")
+            else:
+                self.assertTrue(os.path.exists(self.mountPoint + "/" + subdir + "/" +  "test"), "Problem with ramdisk...")
 
     ##################################
 
