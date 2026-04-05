@@ -238,13 +238,15 @@ class GenericTestUtilities(object):
                 self.libc.sync()
                 """
                 
-                tmpfile = os.open(tmpfile_path, os.O_WRONLY | os.O_CREAT, mode)
+                # tmpfile = os.open(tmpfile_path, os.O_WRONLY | os.O_CREAT, mode)
 
-                # do file writes...
-                for i in range(blocks):
-                    tmp_buffer = os.urandom(block_size)
-                    os.write(tmpfile, tmp_buffer)
-                    os.fsync(tmpfile)
+                with open(tmpfile_path, "w") as tmpfile:
+                
+                    # do file writes...
+                    for i in range(blocks):
+                        tmp_buffer = str(os.urandom(block_size))
+                        tmpfile.write(tmp_buffer)
+                        os.fsync(tmpfile)
                 '''
                 time.sleep(.01)
                 self.libc.sync()
