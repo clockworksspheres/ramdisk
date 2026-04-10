@@ -75,8 +75,6 @@ class RunWith(object):
     @method waitnoecho(self)
     @method runAsWithSudo(self, user="", password="")
     @method runWithSudo(self, user="", password="")
-
-    @WARNING - Known to work on Mac, may or may not work on other platforms
     """
     def __init__(self, logger=None, use_logger=True):
         if use_logger:
