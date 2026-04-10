@@ -541,7 +541,7 @@ class RunWith(object):
                 if not silent:
                     self.logger.log(lp.DEBUG, "Done with: " + self.printcmd)
             finally:
-                print(self.retcode)
+                #print(self.retcode)
                 # self.retcode = self.retcode
                 if not silent:
                     self.logger.log(lp.DEBUG, "Done with command: " + self.printcmd)
@@ -639,7 +639,8 @@ class RunWith(object):
         if sys.platform.lower().startswith("win"):
             return "Cannot perform this in Windows", "Cannot perform this in Windows", 127
 
-        import pty
+        if 'pty' not in sys.modules:
+            import pty
  
         self.stdout = ""
         self.stderr = ""
@@ -804,7 +805,7 @@ class RunWith(object):
 
     def runWithSudo(self, password="", silent=True, timeout_sec=15):
         '''
-        Use pty method to run "sudo" to run a command with elevated privilege.
+        Run "sudo" to run a command with elevated privilege.
 
         Required parameters: password
         '''
@@ -815,13 +816,13 @@ class RunWith(object):
         self.logger.log(lp.DEBUG, "Starting runWithSudo: ")
         self.logger.log(lp.DEBUG, "\tcmd : " + str(self.command))
         if re.match(r"^\s+$", password) or \
-                not password or \
-                not self.command:
+           not password or \
+           not self.command:
             self.logger.log(lp.WARNING, "Cannot pass in empty parameters...")
             self.logger.log(lp.WARNING, "check password...")
             if not silent:
                 self.logger.log(lp.WARNING, "command: " + str(self.command))
-            return (255)
+            return 255
         else:
             output = "".encode()
             sudocmd = ["/usr/bin/sudo", "-S"]
@@ -927,7 +928,7 @@ class RunWith(object):
 
     def runWithSudoRs(self, password="", silent=True, timeout_sec=15) :
         """
-        Use pty method to run "sudo-rs" to run a command with elevated privilege.
+        Run "sudo-rs" to run a command with elevated privilege.
 
         sudo-rs is the rust version of sudo being integrated into the Ubuntu platform.
 
@@ -936,6 +937,9 @@ class RunWith(object):
         self.stdout = ""
         self.stderr = ""
         self.retcode = 255
+
+        if sys.platform.lower().startswith("win"):
+            return "Cannot perform this in Windows", "Cannot perform this in Windows", 127
 
         self.logger.log(lp.DEBUG, "Starting runWithSudo: ")
         self.logger.log(lp.DEBUG, "\tcmd : " + str(self.command))
@@ -1048,7 +1052,103 @@ class RunWith(object):
                                 str(output) + "\"\n" + str(self.stdout) + "\n")
             return self.stdout, self.stderr, self.retcode
 
+    ##########################################################################
+
+    def runCommand2check(self, check_string="", get_my_pass=None):
+        found_prompt = False
+
+        output = ""
+
+        if sys.platform.lower().startswith("win"):
+            return None, "Cannot perform this in Windows"
+
+        else:
+            import pty
+ 
+        # Create a pseudo-terminal
+        master, slave = pty.openpty()
+
+        # Start the process with the slave side of the pty as its stdout/stderr
+        proc = subprocess.Popen(
+            self.command,
+            stdin=slave,
+            stdout=slave,
+            stderr=slave,
+            close_fds=True
+        )
+        try:
+            # Close the slave fd in the parent process
+            os.close(slave)
+        except OSError:
+            pass
+
+        found_prompt = False
+
+        # Monitor the master fd for output
+        output = ""
+        while proc.poll() is None:
+            ready, _, _ = select.select([master], [], [], 0.1)
+            if ready:
+                try:
+                    data = os.read(master, 1024).decode('utf-8')
+                    if not data:
+                        continue
+                    #    break
+                    output += data.strip()
+                    #sys.stdout.write(data)
+                    sys.stdout.flush()
+
+                    # Check for the prompt in the accumulated output
+                    if check_string in output:
+                        found_prompt = True
+                        # passwd = getpass.getpass("VM password: ")
+
+                        try:
+                            # Use the passed in function call to get
+                            # the password instead of getpass.getpass()
+                            passwd = get_my_pass()
+                            #break
+                            # Send the password
+                            #os.write(master, b"your_password\n")
+                            os.write(master, f"{passwd}\n".encode())
+                        except Exception as err:
+                            raise("can't acquire the password, and input it to the command")
+                    # Clear the output buffer to avoid re-matching the prompt
+                    output = ""
+
+                except OSError:
+                    break
+
+        if found_prompt:
+            try:
+                os.close(master)
+            except OSError:
+                pass
+            found_prompt = True
+            # print("FOUND PROMPT")
+
+        else:
+            # Read any remaining output
+            try:
+                while True:
+                    data = os.read(master, 1024).decode('utf-8')
+                    if not data:
+                        break
+                    sys.stdout.write(data)
+                    sys.stdout.flush()
+            except OSError:
+                pass
+                try:
+                    # Close the master fd
+                    os.close(master)
+                except OSError:
+                    pass   
+
+        return found_prompt, output
+
+
 #############################################################################
+
 
 class RunThread(threading.Thread):
     """
@@ -1122,8 +1222,6 @@ class RunThread(threading.Thread):
     def getStdout(self):
         """
         Getter for standard output
-
-        
         """
         self.logger.log(lp.INFO, "Getting stdout...")
         return self.retout
@@ -1133,8 +1231,6 @@ class RunThread(threading.Thread):
     def getStderr(self):
         """
         Getter for standard err
-
-        
         """
         self.logger.log(lp.DEBUG, "Getting stderr...")
         return self.reterr
