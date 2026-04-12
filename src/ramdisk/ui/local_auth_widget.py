@@ -13,7 +13,6 @@ from ramdisk.lib.run_commands import RunWith
 from ramdisk.lib.environment import Environment
 
 
-
 class InvalidInitParameterError(BaseException):
     """
     Custom Exception
