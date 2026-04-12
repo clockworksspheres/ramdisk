@@ -1,24 +1,20 @@
 {
   "main": {
-    "id": "3ef22ae764e7c113",
+    "id": "8774b445791acbb7",
     "type": "split",
     "children": [
       {
-        "id": "187e644f5bfae3e5",
+        "id": "7b6231d8e67f1f97",
         "type": "tabs",
         "children": [
           {
-            "id": "9468089d5e2a1d4a",
+            "id": "47b83bd06ba7346b",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "src/Docs/DesignThoughts/pythonMultipleInteritanceInitializingParents.md",
-                "mode": "source",
-                "source": true
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "pythonMultipleInteritanceInitializingParents"
+              "title": "New tab"
             }
           }
         ]
@@ -27,15 +23,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "c025543d45b471b6",
+    "id": "accbbdf0ebd64558",
     "type": "split",
     "children": [
       {
-        "id": "2506d144b58a01c5",
+        "id": "e4ef54797a178015",
         "type": "tabs",
         "children": [
           {
-            "id": "dd579139b9625eca",
+            "id": "223e5d63e1443f6e",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -48,7 +44,7 @@
             }
           },
           {
-            "id": "0b75cafb047bf1f9",
+            "id": "e7f405f43bbc8c16",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -65,7 +61,7 @@
             }
           },
           {
-            "id": "a1073b147d7153ec",
+            "id": "8f379aad3fa66cc8",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -78,23 +74,23 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 319.50271224975586
   },
   "right": {
-    "id": "b7d5736bab340197",
+    "id": "d9fe5a1b614372ab",
     "type": "split",
     "children": [
       {
-        "id": "4b138171eeea08fa",
+        "id": "f7d4f2b3f1097b98",
         "type": "tabs",
         "children": [
           {
-            "id": "1ad22ffd4be50b84",
+            "id": "a959adaa17cd2649",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "src/Docs/uiRelated/WidgetShadow.md",
+                "file": "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/ConfiguringSSH_OnTheJenkinsServerContainer.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,25 +100,25 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for WidgetShadow"
+              "title": "Backlinks for ConfiguringSSH_OnTheJenkinsServerContainer"
             }
           },
           {
-            "id": "611e3e97b5e80022",
+            "id": "462bb5359dbf625e",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "src/Docs/uiRelated/WidgetShadow.md",
+                "file": "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/ConfiguringSSH_OnTheJenkinsServerContainer.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from WidgetShadow"
+              "title": "Outgoing links from ConfiguringSSH_OnTheJenkinsServerContainer"
             }
           },
           {
-            "id": "e48e22fc978db8bf",
+            "id": "595b3351b5892793",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -137,18 +133,18 @@
             }
           },
           {
-            "id": "433d6a28b114289d",
+            "id": "553a49907401b423",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "src/Docs/uiRelated/WidgetShadow.md",
+                "file": "src/Docs/DesignThoughts/ci-cd/PipelineServers/Jenkins/ConfiguringSSH_OnTheJenkinsServerContainer.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of WidgetShadow"
+              "title": "Outline of ConfiguringSSH_OnTheJenkinsServerContainer"
             }
           }
         ]
@@ -166,33 +162,57 @@
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
+      "bases:Create new base": false,
       "vscode-editor:Create Code File": false
     }
   },
-  "active": "dd579139b9625eca",
+  "active": "47b83bd06ba7346b",
   "lastOpenFiles": [
-    "src/Docs/DesignThoughts/pythonDatetimeForTimestamp.md",
-    "src/Docs/DesignThoughts/openSourceReverseEngineerToUML.md",
-    "src/Docs/README.md",
+    "src/tests/saved4later/test_with_pylint.py.savedForLater",
+    "src/tests/saved4later/future_test_ramdisk.py",
+    "src/tests/saved4later/README.md",
+    "src/tests/saved4later/PylintIface.py",
+    "src/tests/invalid_tests/test_run_commands_linux.py",
+    "src/tests/genericTestUtilities/win32GenericTestUtilities.py",
+    "src/tests/genericTestUtilities/macOSGenericTestUtilities.py",
+    "src/tests/genericTestUtilities/README.md",
+    "src/tests/genericTestUtilities/genericTestUtilities.py",
+    "src/tests/genericTestUtilities/genericRamdiskTest.py",
+    "src/tests/TestsReadme/README.md",
+    "src/tests/genericTestUtilities/__init__.py",
+    "src/tests/test_unionOver.py",
+    "src/tests/test_run_commands.py",
+    "src/ramdisk/lib/manage_user/README.md",
+    "src/ramdisk/lib/manage_keychain/README.md",
     "src/Docs/unittestInheritingAUnittest.md",
-    "src/Docs/DesignThoughts/uiRelated/WidgetShadow.md",
-    "src/Docs/DesignThoughts/Users/PythonChownWindows.md",
-    "src/packenv/lib/python3.10/site-packages/setuptools/_distutils/__pycache__/version.cpython-310.pyc",
-    "src/packenv/lib/python3.10/site-packages/setuptools/__pycache__/msvc.cpython-310.pyc",
-    "src/packenv/lib/python3.10/site-packages/setuptools/__pycache__/logging.cpython-310.pyc",
-    "src/packenv/lib/python3.10/site-packages/setuptools/__pycache__/py34compat.cpython-310.pyc",
-    "src/packenv/lib/python3.10/site-packages/setuptools/__pycache__/_imp.cpython-310.pyc",
-    "src/packenv/lib/python3.10/site-packages/setuptools/__pycache__/depends.cpython-310.pyc",
-    "src/packenv/lib/python3.10/site-packages/setuptools/__pycache__/_itertools.cpython-310.pyc",
-    "src/packenv/lib/python3.10/site-packages/setuptools/__pycache__/_entry_points.cpython-310.pyc",
-    "src/packenv/lib/python3.10/site-packages/setuptools/_vendor/jaraco/text/__pycache__/__init__.cpython-310.pyc",
-    "src/packenv/lib/python3.10/site-packages/setuptools/_vendor/jaraco/text/__pycache__",
-    "src/Docs/DesignThoughts/umlRelated/classes_ramdisk.jpg",
-    "src/Docs/DesignThoughts/umlRelated/startingPlantumlForRenderingLocallyInObsidian.md",
-    "src/Docs/DesignThoughts/umlRelated/HowToAutoGenerateDocumentsFromCode.md",
-    "src/Docs/DesignThoughts/umlRelated/CreateNRenderPlantumlClassDiagram.md",
-    "src/Docs/DesignThoughts/fileOwnershipNmanagement.md",
+    "src/Docs/DesignThoughts/macosRemount.md",
+    "src/Docs/DesignThoughts/ci-cd/CreateLocalUTMmacosVMandVagrantUP/create local UTM macos VM and vagrant up.md",
     "src/Docs/DesignThoughts/ci-cd/CreateLocalUTMmacosVMandVagrantUP/Welcome.md",
-    "src/Docs/DesignThoughts/ci-cd/CreateLocalUTMmacosVMandVagrantUP/create local UTM macos VM and vagrant up.md"
+    "pyenv-notes.md",
+    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RunningHypervisorsOnWindows.md",
+    "src/Docs/DesignThoughts/SystemSpecifics/Linux/linuxVirtualMachineMouseAcrossVmNHost.md",
+    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftwareSettingUpForWindows11.md",
+    "docs/build/html/_static/github-banner.svg",
+    "docs/build/html/_static/plus.png",
+    "docs/build/html/_static/minus.png",
+    "docs/build/html/_static/file.png",
+    "src/Docs/DesignThoughts/SystemSpecifics/Windows/RamdiskSoftware.md",
+    "src/Docs/Interfaces/Project interfaces.md",
+    "src/packenv/lib/python3.13/site-packages/sphinx_rtd_theme/static/css/fonts/fontawesome-webfont.svg",
+    "src/Docs/build/html/_static/github-banner.svg",
+    "src/Docs/build/html/_static/minus.png",
+    "src/Docs/build/html/_static/file.png",
+    "src/Docs/build/html/_static/plus.png",
+    "src/Docs/README.md",
+    "src/Docs/DesignThoughts/ci-cd/linux/installingJenkinsAgentOnRHBased.md",
+    "src/dist/ramdisk-setup.app/Contents/ramdisk/tests/saved4later/README.md",
+    "src/dist/ramdisk-setup.app/Contents/ramdisk/tests/genericTestUtilities/README.md",
+    "src/dist/ramdisk-setup.app/Contents/ramdisk/resources/img/ram_96.png",
+    "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/getLibc/README.md",
+    "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/fsHelper/README.md",
+    "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/dev/README.md",
+    "src/dist/ramdisk-setup.app/Contents/ramdisk/ui/README.md",
+    "src/dist/ramdisk-setup.app/Contents/ramdisk/tests/README.md",
+    "src/dist/ramdisk-setup.app/Contents/ramdisk/lib/README.md"
   ]
 }
