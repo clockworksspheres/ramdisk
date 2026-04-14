@@ -88,6 +88,10 @@ Currently written/tested in only python v3.9+, but examples do not work (specifi
 
 Future plans to duplicate libraries, tests and examples in other languages as well.  Potential next language targets are Go and Rust.
 
+## Nested virtualization
+
+Currently done by the project for cross platform testing, as the project doesn't have enough hardware for all OS's to have direct testing support.   Some setup documentation is provided.
+
 ## Tracking
 
 Very greatful for any contributions/pull requests to help with the project!
