@@ -99,8 +99,4 @@ src/ramdiskBoard is a Kanban based project management board created by and manag
 
 eisenban package can be found at:  https://github.com/clockworksspheres/eisenban
 
-```
-cd <root of the ramdisk project>/src
-eisenban -t ramdiskBoard
-```
 
