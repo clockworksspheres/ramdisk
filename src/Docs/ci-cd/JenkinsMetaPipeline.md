@@ -7,6 +7,8 @@ Virtual Machine Manage - (vmm): https://github.com/clockworksspheres/vmm.git
 
 ### Start jenkins server container
 
+__not yet implemented__
+
 At this time, the Jenkins server is run in Docker on a macOS host, with Docker Desktop.  This will be automated in the future.
 
 ### Start hypervisors
@@ -16,6 +18,8 @@ This document is built on the Linux VM's being built on VMware Fusion, macOS VM'
 The Window OS's are built on x86_64 Windows machine, as aarm64 Windows isn't as well supported.
 
 Orchestrating the meta-pipeline of macOS host and Windows host from one machine has yet to be developed.
+
+Automation of starting level 2 hypervisors is a future possible option.
 
 ## Run each of the pipelines
 
@@ -81,7 +85,8 @@ vmm/vmctl.py start vmware "/Users/<username>/Virtual Machines.localized/Ubuntu 6
 vmm/vmctl.py start utm macOS
 ```
 
-### Run Redhat OS Based Pipeline
+### Run macOS OS Based Pipeline
+
 
 __macos pipeline not yet implemented__
 
@@ -119,3 +124,8 @@ win32output = jenkinsPipelineTools check ramdisk-windows -user <jenkinsUsername>
 
 ## Possibly stop Infrastructure
 
+__not yet implemented__
+
+At this time, the Jenkins server is run in Docker on a macOS host, with Docker Desktop.  Stopping this will be automated in the future.
+
+Automation of stopping level 2 hypervisors is a future possible option.
