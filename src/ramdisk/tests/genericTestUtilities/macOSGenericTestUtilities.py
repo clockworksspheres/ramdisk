@@ -200,8 +200,6 @@ class GenericTestUtilities(object):
         @parameter: mode - file mode, default 0o777
 
         @returns: time in miliseconds the write took
-
-        
         """
         total_time = 0
         if file_path and file_size:
@@ -218,19 +216,6 @@ class GenericTestUtilities(object):
 
                 # Start timer in miliseconds
                 start_time = datetime.now()
-                """
-                # do low level file access...
-                with os.fdopen(os.open(tmpfile_path, os.O_WRONLY | os.O_CREAT), 'w') as tmpfile_fd:
-
-                    # do file writes...
-                    for i in range(blocks):
-                        tmp_buffer = os.urandom(block_size)
-                        tmpfile_fd.write(str(tmp_buffer))
-                        # tmpfile_fd.fsync()
-                    self.libc.sync()
-                os.unlink(tmpfile_path)
-                self.libc.sync()
-                """
                 tmpfile = os.open(tmpfile_path, os.O_WRONLY | os.O_CREAT, mode)
 
                 # do file writes...

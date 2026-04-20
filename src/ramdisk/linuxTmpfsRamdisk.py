@@ -228,16 +228,6 @@ class RamDisk(RamDiskTemplate):
             options.append("uid=" + str(self.uid))
             options.append("gid=" + str(self.gid))
             options.append("mode=" + str(self.mode))
-            """
-            try:
-                options.append(self.nr_inodes)
-            except AttributeError:
-                pass
-            try:
-                options.append("nr_blocks=" + str(self.nr_blocks))
-            except AttributeError:
-                pass
-            """
 
             command = [self.mountPath, "-t", "tmpfs", "-o",
                        ",".join(options), "tmpfs", self.mntPoint]

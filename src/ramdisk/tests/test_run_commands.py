@@ -107,23 +107,6 @@ class test_run_commands(unittest.TestCase):
         self.assertEqual(retval, 0,
                           "Valid [] command execution failed: " +
                           '/bin/ls -l /usr/local --- retval: ' + str(retval))
-        '''
-        temporarily commented out may not work the same on python 3.10.x
-        self.rw.setCommand(['/bin/ls', '/1', '/'])
-        tracemalloc.start(25)
-        try:
-            _, _, retcode = self.rw.wait()
-        except Exception as err:
-            self.logger.log(lp.ERROR, traceback.format_exc())
-            retcode = 99999
-            # raise err
-
-        self.logger.log(lp.WARNING, "retcode: " + str(retcode))
-        if sys.platform == 'darwin':
-            self.assertEqual(retcode, 1, "Returncode Test failed...")
-        else:
-            self.assertEqual(retcode, 2, "Returncode Test failed...")
-        '''
         self.logger.log(lp.DEBUG, "=============== Completed test_wait...")
 
     @unittest.skip("temporary skip to determine if split stdout/stderr could be the problem...")

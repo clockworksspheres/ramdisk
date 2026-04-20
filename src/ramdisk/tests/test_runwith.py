@@ -354,10 +354,6 @@ class TestAdvanced(unittest.TestCase):
         self.assertTrue(timed_out)
 
 
-
-
-
-
 if __name__ == "__main__":
     unittest.main()
 

@@ -207,35 +207,6 @@ class RamDisk(RamDiskTemplate):
         """
         Create a ramdisk device
         """
-        #Create the RAM disk:
-        #    disk=$(hdiutil attach -nomount ram://<size>)
-        #Format the RAM disk with APFS and name it:
-        #    diskutil erasevolume APFS "MyRAMDiskName" /dev/$disk
-        #Disable journaling on the RAM disk:
-        #    diskutil apfs disableJournal /dev/$disk
-        #Rename the RAM disk using diskutil:
-        #    diskutil rename /dev/$disk "RAMDiskNameReplacement"
-        #        ....Replace RAMDiskNameReplacement with the desired 
-        #            name for your RAM disk.
-        #####
-        # THIS should be the process:
-        #hdiutil attach -nomount ram://1048576
-        # the above command returns the <ramdisk device> - /dev/diskXs1
-        #diskutil partitionDisk $(/dev/diskXs1) 1 GPTFormat APFS 'RAMDisk' '100%'
-        #diskutil umount /dev/diskXs1
-        #newfs_apfs -v RAMDisk /dev/diskXs1
-        #mkdir -P <mountpoint>
-        #mount_apfs /dev/diskXs1 /<mountpoint>
-        #chown -R <user> /<mountpoint>
-        #####
-
-        #cmd = [self.hdiutil, "attach", "-nomount", "ram://" + self.diskSize]
-        #cmd = ["/usr/sbin/diskutil", "partitionDisk", self.myRamdiskDev, "1", "GPTFormat", "APFS", "'RAMDisk'", f"{hundred}"]
-        #cmd = [self.diskutil, "unmount", self.myRamdiskDev]
-        #cmd = ["/sbin/newfs_apfs", "-v", "RAMDISK", self.myRamdiskDev]
-        #self.fsHelper.mkdirs(self.mntPoint)
-        #cmd = "/sbin/mount_apfs " + self.myRamdiskDev + " " + self.mntPoint
-        #self.fsHelper.chown(self.mntPoint, user)
 
         retval = None
         reterr = None
@@ -337,7 +308,6 @@ class RamDisk(RamDiskTemplate):
             self.runWith.communicate()
         except:
             raise
-        # retval, reterr, retcode = self.runWith.getNlogReturns()
 
         """
         # MAY make the ramdisk go faster...  
