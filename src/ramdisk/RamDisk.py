@@ -216,35 +216,3 @@ def getMountedData(device=""):
     print("Exiting getMountedData...")
     return data
 
-'''
-if __name__=="__main__":
-
-    app = QApplication(sys.argv)
-    """
-    # Set up event logger
-    init_event_logger(
-        os.path.join(get_current_directory(), "event.log"),
-        "%(asctime)s - %(levelname)s - %(message)s",
-        stdout=True,
-        debug=True if "--debug" in sys.argv else False,
-    )
-    """
-    print("started app...")
-    window = _CreateRamdisk()
-    print("initiated window")
-    window.show()
-    print("showing window...")
-    window.raise_()
-    print("raising_ window")
-    sys.exit(app.exec())
-else:
-    mntpnt = "foobar"
-
-    logger = CyLogger()
-    logger.initializeLogs()
-
-    ramdisk = RamDisk("512", "foobar", logger)
-    ramdisk.getNlogData()
-    ramdisk.getNprintData()
-
-'''

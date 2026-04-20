@@ -102,8 +102,6 @@ class RamDisk(RamDiskTemplate):
     def __createRamdisk(self):
         """
         Create a ramdisk device
-
-        
         """
         retval = None
         reterr = None
@@ -208,8 +206,6 @@ class RamDisk(RamDiskTemplate):
         """
         Create a randomized (secure) mount point - per python's implementation
         of mkdtemp - a way to make an unguessable directory on the system
-
-        
         """
         success = False
         self.mntPoint = ""
@@ -260,7 +256,6 @@ class RamDisk(RamDiskTemplate):
     def umount(self, **kwargs):
         """
         Unmount the disk - same functionality as __eject on the mac
- 
         """
 
         eject(self.myRamdiskDev, self.logger)
@@ -273,7 +268,6 @@ class RamDisk(RamDiskTemplate):
         Unmount the disk - same functionality as __eject on the mac
 
         Must be over-ridden to provide OS/Method specific functionality
-
         """
         eject(self.myRamdiskDev, self.logger)
         return

@@ -1,7 +1,5 @@
 """
 Generic class based utilities for ramdisk testing...
-
-
 """
 #--- Native python libraries
 
@@ -105,7 +103,7 @@ class GenericTestUtilities(object):
         print(f"Block size: {block_size} bytes")
 
         """
-        "Gets the block size of the file system for the given path."
+        #"Gets the block size of the file system for the given path."
     
         sectors_per_cluster, bytes_per_sector, _ = pywin32.GetDiskFreeSpace(path)
         return sectors_per_cluster * bytes_per_sector
@@ -115,8 +113,6 @@ class GenericTestUtilities(object):
     def touch(self, fname="", message_level="normal"):
         """
         Python implementation of the touch command..
-
-        
         """
         if re.match("^\s*$", str(fname)):
             self.logger.log(lp.WARNING, "Cannot touch a file without a filename....")
@@ -200,8 +196,6 @@ class GenericTestUtilities(object):
         @parameter: mode - file mode, default 0o777
 
         @returns: time in miliseconds the write took
-
-        
         """
         total_time = 0
         if file_path and file_size:
