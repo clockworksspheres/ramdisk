@@ -12,4 +12,6 @@ packenv
 .obsidian/workspace.json
 *obsidian/workspace.json
 testmntpnt
+.qtcreator
+*qtcreator
 
