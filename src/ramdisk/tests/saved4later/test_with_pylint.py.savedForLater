@@ -5,21 +5,30 @@ import os
 import re
 import sys
 import json
+import traceback
 import unittest
 from subprocess import Popen, PIPE
 from optparse import OptionParser
 from optparse import Option, OptionValueError
 
+'''
 mydir = os.path.dirname(os.path.abspath(__file__))
 parentdir = "/" + "/".join(mydir.split("/")[:-1])
 print(parentdir)
 sys.path.append(parentdir)
+'''
+
+from pathlib import Path
+
+# Get the parent directory of the current file's parent directory
+#  and add it to sys.path
+parent_dir = Path(__file__).parent.parent
+sys.path.append(str(parent_dir))
 
 from lib.loggers import CyLogger
 from lib.loggers import LogPriority as lp
 from tests.PylintIface import PylintIface, processFile
 
-from pylint import epylint
 
 dirPkgRoot = '..'
 logger = CyLogger()
@@ -31,7 +40,7 @@ def getRecursiveTree(targetRootDir="."):
     filesList = []
     for root, dirs, files in os.walk(targetRootDir):
         for myfile in files:
-            if re.search(".+\.py$", myfile):
+            if re.search(r".+\.py$", myfile):
                 
                 if not os.geteuid() == 0:
                     if myfile in excludeUnlessUid0:
@@ -44,7 +53,7 @@ def getRecursiveTree(targetRootDir="."):
 def getDirList(targetDir="."):
     filesList = []
     for myfile in os.listdir(targetDir):
-        if re.search(".+\.py$", myfile):
+        if re.search(r".+\.py$", myfile):
             if not os.geteuid() == 0:
                 if myfile in excludeUnlessUid0:
                     continue
@@ -72,7 +81,7 @@ def genTestData(fileList=[], excludeFiles=[], excludeFromLines=[]):
         if myfile in excludeFiles:
             continue
         try:
-            if not re.search(".+\.py$", myfile):
+            if not re.search(r".+\.py$", myfile):
                 continue
             elif not re.match("__init__.py", myfile):
                 jsonData = ""
@@ -83,9 +92,9 @@ def genTestData(fileList=[], excludeFiles=[], excludeFromLines=[]):
                 for item in jsonData:
                     # print(item[4])
                     try:
-                        if re.match("^error$", item[4]) or re.match("^fatal$", item[4]):
-                            print("Found: " + str(item[4]) + " (" + str(item[10]) + ") : " + str(item[2]))
-                            message = re.sub("'", "", item[2])
+                        if item["category"] in ("error", "fatal"):
+                            #print("Found: " + str(item[4]) + " (" + str(item[10]) + ") : " + str(item[2]))
+                            message = re.sub("'", "", item["message"])
                             #####
                             # Don't include json data that has a string from the
                             # excludeLinesWith exclude list.

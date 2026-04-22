@@ -1,23 +1,22 @@
 """
-PyLintIface
+PyLintIface — deterministic, JSON‑safe Pylint interface for use under pytest
 """
 
 import sys
 import json
 import contextlib
 from io import StringIO
-from optparse import OptionParser, SUPPRESS_HELP
 
-#####
-# 3rd party libraries
-from pylint.lint.run import Run
-
+from pylint.lint import Run
 from pylint.reporters.json_reporter import JSONReporter
 
-#####
-# cds libraries
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
+
+
+# ---------------------------------------------------------------------------
+# Stream patching helper
+# ---------------------------------------------------------------------------
 
 @contextlib.contextmanager
 def _patch_streams(out):
@@ -26,65 +25,88 @@ def _patch_streams(out):
     sys.stderr = sys.stdout = out
     try:
         yield
-    except:
-        print("DAMN IT JIM!!!")
     finally:
-        sys.stderr = old_stdout
-        sys.stdout = old_stderr
+        sys.stderr = old_stderr
+        sys.stdout = old_stdout
+
+
+# ---------------------------------------------------------------------------
+# Deterministic JSON‑safe reporter
+# ---------------------------------------------------------------------------
 
 class AjsonReporter(JSONReporter):
-    """ Add a getter for messages..."""
+    """
+    JSON reporter that returns a list of plain dicts instead of Message objects.
+    This makes the output stable and JSON‑serializable across Pylint versions.
+    """
+
     def get_messages(self):
-        json.dumps(self.messages, indent=4)
-        """ Getter for messages """
-        return self.messages
+        out = []
+        for m in self.messages:
+            out.append({
+                "msg_id": m.msg_id,
+                "symbol": m.symbol,
+                "message": m.msg,
+                "path": m.path,
+                "line": m.line,
+                "column": m.column,
+                "category": m.category,
+                "confidence": m.confidence,
+            })
+        return out
 
-'''
-The variable below - compiledPackage:
-A comma-separated list of package or module names
-from where C extensions may be loaded. Extensions are
-loading into the active Python interpreter and may run
-arbitrary code
-'''
+
+# ---------------------------------------------------------------------------
+# Standalone function interface
+# ---------------------------------------------------------------------------
+"""
 def processFile(filename, compiledPackages="PyQt5,PyQt4"):
-    jsonOut = {}
+    ""
+    Process a file using Pylint and return JSON text (pretty‑printed).
+    ""
+    out = StringIO()
+    reporter = AjsonReporter(out)
 
-    myfile = '.'.join(filename.split('.')[1:])
+    # exit=False is critical to avoid SystemExit under pytest
+    with _patch_streams(out):
+        Run(
+            [filename, "--extension-pkg-whitelist=" + compiledPackages],
+            reporter=reporter,
+            exit=False,
+        )
 
-    #####
-    # Set up reporting for pylint functionality
-    out = StringIO(None)
+    messages = reporter.get_messages()
+    return json.dumps(messages, indent=4)
+"""
+
+def processFile(filename, compiledPackages="PyQt5,PyQt4"):
+    out = StringIO()
     reporter = AjsonReporter(out)
 
     with _patch_streams(out):
-        Run([filename, "--extension-pkg-whitelist="+compiledPackages], reporter=reporter)
+        Run([filename, "--extension-pkg-whitelist=" + compiledPackages],
+            reporter=reporter,
+            exit=False)
 
-    if reporter:
-        jsonOut = reporter.get_messages()
-        #self.acquiredData[filename] = jsonOut
+    messages = reporter.get_messages()
+    return messages   # <-- FIXED
 
-    return jsonOut
 
-class PylintIface():
-    '''
-    The variable below - compiledPackage:
-    A comma-separated list of package or module names
-    from where C extensions may be loaded. Extensions are
-    loading into the active Python interpreter and may run
-    arbitrary code
-    '''
+# ---------------------------------------------------------------------------
+# Class‑based interface (for integration into larger systems)
+# ---------------------------------------------------------------------------
+
+class PylintIface:
+    """
+    Class wrapper for Pylint processing with deterministic JSON output.
+    """
 
     acquiredData = {}
 
-    def __init__(self, logger, compiledPackages="PyQt5,PyQt4"):
-        #####
-        # Set up logging
-        # self.logger = CyLogger(level=loglevel)
+    def __init__(self, logger: CyLogger, compiledPackages: str = "PySide6"):
         self.logger = logger
         self.compiledPackages = compiledPackages
-        #self.logger.initializeLogs(logdir=options.logPath)
-        self.args = ["--extension-pkg-whitelist="+self.compiledPackages]
-
+        self.args = ["--extension-pkg-whitelist=" + self.compiledPackages]
 
     @contextlib.contextmanager
     def _patch_streams(self, out):
@@ -93,37 +115,58 @@ class PylintIface():
         sys.stderr = sys.stdout = out
         try:
             yield
-        except:
-            print("DAMN IT JIM!!!")
         finally:
-            sys.stderr = old_stdout
-            sys.stdout = old_stderr
+            sys.stderr = old_stderr
+            sys.stdout = old_stdout
 
     class AjsonReporter(JSONReporter):
-        """ Add a getter for messages..."""
         def get_messages(self):
-            """ Getter for messages """
-            # self.display_messages(json)
-            return self.messages
+            out = []
+            for m in self.messages:
+                out.append({
+                    "msg_id": m.msg_id,
+                    "symbol": m.symbol,
+                    "message": m.msg,
+                    "path": m.path,
+                    "line": m.line,
+                    "column": m.column,
+                    "category": m.category,
+                    "confidence": m.confidence,
+                })
+            return out
+    '''
+    def processFile(self, filename: str) -> str:
+        """
+        Process a file and return deterministic JSON text (pretty‑printed).
+        """
+        out = StringIO()
+        reporter = self.AjsonReporter(out)
 
+        # exit=False prevents Pylint from calling sys.exit()
+        with self._patch_streams(out):
+            Run(
+                [filename] + self.args,
+                reporter=reporter,
+                exit=False,
+            )
+
+        messages = reporter.get_messages()
+        json_out = json.dumps(messages, indent=4)
+
+        # Optionally store for later inspection
+        self.acquiredData[filename] = messages
+
+        return json_out
+    '''
     def processFile(self, filename):
-        '''
-        Process a file and aquire data from the pylint parser
-        '''
-        jsonOut = {}
-
-        myfile = '.'.join(filename.split('.')[1:])
-
-        #####
-        # Set up reporting for pylint functionality
-        out = StringIO(None)
+        out = StringIO()
         reporter = self.AjsonReporter(out)
 
         with self._patch_streams(out):
-            Run([filename]+self.args, reporter=reporter)
+            Run([filename] + self.args, reporter=reporter, exit=False)
 
-        if reporter:
-            jsonOut = reporter.get_messages()
-            #self.acquiredData[filename] = jsonOut
+        messages = reporter.get_messages()
+        self.acquiredData[filename] = messages
+        return messages   # <-- FIXED
 
-        return jsonOut
+
