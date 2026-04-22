@@ -106,7 +106,9 @@ class PylintIface:
     def __init__(self, logger: CyLogger, compiledPackages: str = "PySide6"):
         self.logger = logger
         self.compiledPackages = compiledPackages
-        self.args = ["--extension-pkg-whitelist=" + self.compiledPackages]
+        self.args = ["--extension-pkg-whitelist=" + self.compiledPackages,
+                     "--ignored-modules=psutil,requests",
+                     "--ignore=__pycache__,.pytest_cache,.qtcreator"]
 
     @contextlib.contextmanager
     def _patch_streams(self, out):
