@@ -2,8 +2,6 @@
 import sys
 from PySide6.QtWidgets import QApplication, QDialog, QMainWindow, QPushButton, QVBoxLayout, QLabel, QDialogButtonBox
 
-sys.path.append("../..")
-
 from ramdisk.ui.ui_local_auth import Ui_LocalAuth
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority

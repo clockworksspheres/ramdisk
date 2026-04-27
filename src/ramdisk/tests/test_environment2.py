@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Full unittest suite for lib/environment.py
 Rewritten to use unittest.mock: patch, MagicMock, PropertyMock, call

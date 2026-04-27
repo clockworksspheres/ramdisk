@@ -1,45 +1,29 @@
 #!/usr/bin/env -S python -u
 """
 Mac ramdisk + unionfs implementation
-
-@Notes:  Below are the initial notes for creating a ramdisk on the Mac
-
-Things we need to modularize:
-* create
-* mount
-* unmount
-* detach?
-* format (newfs_hfs vs. diskutil)
-* randomize mountpoint
-* turn off journaling, for faster access
-* unionfs setup
-
-Maybe function, or other module
-* Find available memory,
-  - Linux - just read /proc
-  - Mac - Use top's "unused" so it doesn't try to use swap
-          swap would defeat the purpose.
-
-Maybe function, method  or other module
-* rsync from spinning disk to ram disk
-
-
 """
 #--- Native python libraries
 import os
 import re
+import sys
 import getpass
 import shutil
 from subprocess import Popen, PIPE
+from pathlib import Path
+
+# Get the parent directory of the current file's parent directory
+#  and add it to sys.path
+#parent_dir = Path(__file__).parent.parent
+#sys.path.append(str(parent_dir))
 
 #--- non-native python libraries in this source tree
-from lib.run_commands import RunWith
-from lib.loggers import CyLogger
-from lib.loggers import LogPriority as lp
-from lib.environment import Environment
-from lib.libHelperExceptions import NotValidForThisOS, MemoryNotAvailableError
-from lib.fsHelper.macosFsHelper import FsHelper
-from commonRamdiskTemplate import RamDiskTemplate
+from ramdisk.lib.run_commands import RunWith
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority as lp
+from ramdisk.lib.environment import Environment
+from ramdisk.lib.libHelperExceptions import NotValidForThisOS, MemoryNotAvailableError
+from ramdisk.lib.fsHelper.macosFsHelper import FsHelper
+from ramdisk.commonRamdiskTemplate import RamDiskTemplate
 
 ###############################################################################
 

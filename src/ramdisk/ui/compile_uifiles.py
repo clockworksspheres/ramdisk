@@ -3,11 +3,6 @@
 import os
 import sys 
 
-#####
-# Include the parent project directory in the PYTHONPATH
-appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-2])
-sys.path.append(appendDir)
-
 from ramdisk.lib.run_commands import RunWith
 
 ui_files = [file for file in os.listdir() if file.endswith(".ui")]

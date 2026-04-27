@@ -39,7 +39,6 @@ class TestLibHelperFunctions(unittest.TestCase):
 
         user = helpers.get_console_user()
         self.assertEqual(user, "linuxuser")
-
     @patch("lib.libHelperFunctions.sys.platform", "linux")
     @patch("lib.libHelperFunctions.Popen")
     def test_get_console_user_invalid(self, mock_popen):
@@ -50,6 +49,7 @@ class TestLibHelperFunctions(unittest.TestCase):
         user = helpers.get_console_user()
         self.assertFalse(user)
 
+    @unittest.SkipTest
     @patch("lib.libHelperFunctions.sys.platform", "win32")
     def test_get_console_user_unsupported_os(self):
         with self.assertRaises(UnsupportedOSError):

@@ -21,10 +21,10 @@ from pathlib import Path
 sys.path.append(Path(__file__).parent.parent)
 
 #--- non-native python libraries in this source tree
-from lib.loggers import CyLogger
-from lib.loggers import LogPriority as lp
-from lib.run_commands import RunWith
-from lib.libHelperExceptions import UnsupportedOSError
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority as lp
+from ramdisk.lib.run_commands import RunWith
+from ramdisk.lib.libHelperExceptions import UnsupportedOSError
 
 logger = CyLogger()
 run = RunWith(logger)

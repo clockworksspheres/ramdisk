@@ -9,8 +9,6 @@ import os
 import re
 import sys
 
-sys.path.append("../..")
-
 from ramdisk.lib.libHelperExceptions import NotValidForThisOS
 
 if not sys.platform.startswith("linux"):
@@ -26,8 +24,6 @@ import traceback
 # import tracemalloc
 from subprocess import Popen, PIPE
 from subprocess import SubprocessError as SubprocessError
-
-sys.path.append("../..")
 
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp

@@ -4,7 +4,6 @@
 import os
 import sys
 
-sys.path.append("../..")
 
 # --- non-native python libraries in this source tree
 

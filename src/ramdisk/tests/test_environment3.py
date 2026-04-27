@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Cross‑platform unittest suite for lib/environment.py
 

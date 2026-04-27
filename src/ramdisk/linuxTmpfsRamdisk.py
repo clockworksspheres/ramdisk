@@ -10,13 +10,19 @@ import getpass
 import sys
 from tempfile import mkdtemp
 from time import time
+from pathlib import Path
+
+# Get the parent directory of the current file's parent directory
+#  and add it to sys.path
+#parent_dir = Path(__file__).parent
+#sys.path.append(str(parent_dir))
 
 #--- non-native python libraries in this source tree
-from lib.run_commands import RunWith
-from lib.loggers import CyLogger
-from lib.loggers import LogPriority as lp
-from commonRamdiskTemplate import RamDiskTemplate, BadRamdiskArguments
-from lib.libHelperExceptions import NotValidForThisOS, SystemToolNotAvailable, UserMustBeRootError
+from ramdisk.lib.libHelperExceptions import NotValidForThisOS, SystemToolNotAvailable, UserMustBeRootError
+from ramdisk.lib.run_commands import RunWith
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority as lp
+from ramdisk.commonRamdiskTemplate import RamDiskTemplate, BadRamdiskArguments
 
 def UserMustBeRootException(Exception):
     """

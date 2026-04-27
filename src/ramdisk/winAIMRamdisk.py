@@ -1,7 +1,5 @@
 """
 Windows Ramdisk class based on use of ImDisk windows program
-
-
 """
 #--- Native python libraries
 from tempfile import mkdtemp
@@ -12,8 +10,12 @@ import subprocess
 
 # 3rd party libs
 import psutil 
+from pathlib import Path
 
-sys.path.append("../")
+# Get the parent directory of the current file's parent directory
+#  and add it to sys.path
+#parent_dir = Path(__file__).parent
+#sys.path.append(str(parent_dir))
 
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import LogPriority as lp

@@ -6,8 +6,12 @@ Template for the ramdisk classes
 #--- Native python libraries
 from tempfile import mkdtemp
 import sys
+from pathlib import Path
 
-sys.path.append("..")
+# Get the parent directory of the current file's parent directory
+#  and add it to sys.path
+#parent_dir = Path(__file__).parent.parent
+#sys.path.append(str(parent_dir))
 
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import LogPriority as lp
@@ -37,6 +41,7 @@ class BadRamdiskArguments(Exception):
 
 class RamDiskTemplate(object):
     """
+    Template class
     """
     def __init__(self, size=0, mountpoint=False, logger=False, **kwargs):
         """

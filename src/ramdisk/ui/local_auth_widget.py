@@ -4,8 +4,6 @@ import traceback
 from PySide6.QtWidgets import QApplication, QDialog, QMainWindow, QPushButton, QVBoxLayout, QLabel, QDialogButtonBox
 from PySide6.QtCore import Signal, QThread, Qt
 
-sys.path.append("../..")
-
 from ramdisk.ui.ui_local_auth_widget import Ui_LocalAuth
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority

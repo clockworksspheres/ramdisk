@@ -12,9 +12,9 @@ from pathlib import Path
 
 #sys.path.append("..")
 
-from loggers import CyLogger
-from loggers import LogPriority as lp
-from run_commands import RunWith, runMyThreadCommand
+from ramdisk.loggers import CyLogger
+from ramdisk.loggers import LogPriority as lp
+from ramdisk.run_commands import RunWith, runMyThreadCommand
 
 class NotASaneNameError(Exception):
     """

@@ -1,8 +1,5 @@
-#!/usr/bin/env -S python -u
 """
 Generic ramdisk test, with helper functions. Inherited by other tests.
-
-
 """
 #--- Native python libraries
 
@@ -22,6 +19,9 @@ from pathlib import Path
 #  and add it to sys.path
 parent_dir = Path(__file__).parent.parent
 sys.path.append(str(parent_dir))
+
+current_dir = Path(__file__).parent
+sys.path.append(str(current_dir))
 
 #####
 # Include the parent project directory in the PYTHONPATH

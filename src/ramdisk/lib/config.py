@@ -1,7 +1,5 @@
 import sys
 
-sys.path.append("..")
-
 #####
 # LOGGING
 #               <----- Least logging    ------------    Most Logging ---------->

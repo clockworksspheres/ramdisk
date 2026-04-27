@@ -1,12 +1,6 @@
 import sys
 import unittest
-from pathlib import Path
 from unittest.mock import MagicMock, patch
-
-# Get the parent directory of the current file's parent directory
-#  and add it to sys.path
-parent_dir = Path(__file__).parent.parent
-sys.path.append(str(parent_dir))
 
 
 class TestCheckApplicable(unittest.TestCase):
@@ -25,7 +19,7 @@ class TestCheckApplicable(unittest.TestCase):
         self.mock_env.geteuid.return_value = 1000
 
         # Import class under test
-        from lib.CheckApplicable import CheckApplicable
+        from ramdisk.lib.CheckApplicable import CheckApplicable
         self.CheckApplicable = CheckApplicable
 
         # Instance under test
