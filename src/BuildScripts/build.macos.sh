@@ -13,10 +13,18 @@ echo "  ### Starting macOS Build ###"
 pushd ..
 directory="./packenv"
 actfile="./packenv/bin/activate"
-if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
-   python3 -m venv packenv
-   source packenv/bin/activate
-fi
+#if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
+#   python3 -m venv packenv
+#   source packenv/bin/activate
+#fi
+rm -rf packenv
+sleep 2
+sync
+sync
+sync
+sleep 2
+python3 -m venv packenv
+source packenv bin/activate
 
 pip install PySide6 PyInstaller
 pip install --upgrade PyInstaller pyinstaller-hooks-contrib
