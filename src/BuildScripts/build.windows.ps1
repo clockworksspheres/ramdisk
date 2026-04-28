@@ -25,6 +25,8 @@ if (!(Test-Path -Path ".\packenv" -PathType Container)) {
    pip install requests
    pip install pywin32
    pip install pytest
+   pip install astroid
+   pip install pylint
 } else {
     .\packenv\Scripts\Activate.ps1
 }

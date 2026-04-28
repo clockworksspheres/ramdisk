@@ -25,6 +25,8 @@ if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
    pip install myst-parser # supports markdown for sphynx
    pip install requests
    pip install pytest
+   pip install astroid
+   pip install pylint
 else
    source packenv/bin/activate
 fi
