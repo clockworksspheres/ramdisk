@@ -18,6 +18,8 @@ actfile="./packenv/bin/activate"
 #   source packenv/bin/activate
 #fi
 rm -rf packenv
+./pyclean.py
+find . -iname ".pytest_cache" -exec rm -rf {} \;
 sleep 2
 sync
 sync
