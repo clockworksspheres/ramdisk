@@ -2,7 +2,6 @@
 PyLintIface — deterministic, JSON‑safe Pylint interface for use under pytest
 """
 
-import astroid
 import sys
 import json
 import contextlib
@@ -68,6 +67,7 @@ class AjsonReporter(JSONReporter):
 def processFile(filename, compiledPackages="PySide6,PyQt5,PyQt4"):
     out = StringIO()
     reporter = AjsonReporter(out)
+    msgs = ""
 
     # exit=False is critical to avoid SystemExit under pytest
     with _patch_streams(out):
@@ -148,6 +148,7 @@ class PylintIface:
     def processFile(self, filename):
         out = StringIO()
         reporter = self.AjsonReporter(out)
+        msgs = ""
 
         with self._patch_streams(out):
             try:
