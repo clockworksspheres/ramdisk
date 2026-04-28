@@ -5,7 +5,7 @@ import io
 import sys
 import contextlib
 
-from . PylintIface import processFile, PylintIface, AjsonReporter
+from  ramdisk.tests.PylintIface import processFile, PylintIface, AjsonReporter
 
 
 class TestPylintInterface(unittest.TestCase):

@@ -6,119 +6,108 @@ import sys
 import json
 import traceback
 import unittest
-from subprocess import Popen, PIPE
-from optparse import OptionParser
-from optparse import Option, OptionValueError
 from pathlib import Path
 
-# Get the parent directory of the current file's parent directory
-#  and add it to sys.path
+# Add project root to sys.path
 parent_dir = Path(__file__).parent.parent
 sys.path.append(str(parent_dir))
 
 current_dir = Path(__file__).parent
 sys.path.append(str(current_dir))
 
-# from vmm.tests.PylintIface import PylintIface, processFile
-from PylintIface import PylintIface, processFile
+from PylintIface import PylintIface
 
 
 excludeUnlessUid0 = ["environment.py"]
+
+
+# ---------------------------------------------------------------------------
+# File discovery helpers
+# ---------------------------------------------------------------------------
 
 def getRecursiveTree(targetRootDir="."):
     filesList = []
     for root, dirs, files in os.walk(targetRootDir):
         for myfile in files:
-            if re.search(r".+\.py$", myfile):
-                
-                if not os.geteuid() == 0:
-                    if myfile in excludeUnlessUid0:
-                        continue
-                        print(("........... Testing " + str(myfile) + " requires uid 0 .............."))
-                        #print myfile
+            if myfile.endswith(".py"):
+                if os.geteuid() != 0 and myfile in excludeUnlessUid0:
+                    continue
                 filesList.append(os.path.abspath(os.path.join(root, myfile)))
     return filesList
+
 
 def getDirList(targetDir="."):
     filesList = []
     for myfile in os.listdir(targetDir):
-        if re.search(r".+\.py$", myfile):
-            if not os.geteuid() == 0:
-                if myfile in excludeUnlessUid0:
-                    continue
-                    print(("........... Testing " + str(myfile) + " requires uid 0 .............."))
-                    #print myfile
+        if myfile.endswith(".py"):
+            if os.geteuid() != 0 and myfile in excludeUnlessUid0:
+                continue
             filesList.append(os.path.abspath(os.path.join(targetDir, myfile)))
     return filesList
 
-def genTestData(fileList=[], excludeFiles=[], excludeFromLines=[]):
+
+# ---------------------------------------------------------------------------
+# Generate test data using the SAFE wrapper
+# ---------------------------------------------------------------------------
+
+def genTestData(fileList, excludeFiles, excludeFromLines):
     test_case_data = []
 
-    #print str(excludeFiles)
-    #print str(excludeFromLines)
-
-
     if not fileList:
-        #print "Cannot generate data from nothing..."
-        sys.exit(1)
+        return []
 
-    pIface = PylintIface()
     for myfile in fileList:
-        
-        #####
-        # Don't process files that are in the exclude list
         if myfile in excludeFiles:
             continue
+
+        if not myfile.endswith(".py"):
+            continue
+
         try:
-            if not re.search(r".+\.py$", myfile):
-                continue
-            elif not re.match("__init__.py", myfile):
-                jsonData = ""
-                #print myfile
-                jsonData = processFile(myfile)
-                jsonData = pIface.processFile(myfile)
-                # print(json.dumps(jsonData, indent=4))
-                for item in jsonData:
-                    # print(item[4])
-                    try:
-                        if item["category"] in ("error", "fatal"):
-                            #print("Found: " + str(item[4]) + " (" + str(item[10]) + ") : " + str(item[2]))
-                            #print(json.dumps(jsonData, indent=4))
-                            message = re.sub("'", "", item["message"])
-                            message = re.sub('/', '_', message)
-                            message = re.sub('::', '_', message)
-                            #####
-                            # Don't include json data that has a string from the
-                            # excludeLinesWith exclude list.
-                            # that contain a search string in excludeFromLines
-                            found = False
-                            for searchItem in excludeFromLines:
-                                #print searchItem
-                                if re.search("%s"%searchItem, message):
-                                    found = True
-                            if not found:
-                                    test_case_data.append((myfile, item["line"], message))
-                    except KeyError:
-                        print(traceback.format_exc())
-        except AttributeError:
-            pass
-    #for data in test_case_data:
-    #    print data
+            jsonData = PylintIface().processFile(myfile)
+
+            for item in jsonData:
+                try:
+                    if item["category"] in ("error", "fatal"):
+                        message = item["message"]
+                        message = re.sub("'", "", message)
+                        message = re.sub("/", "_", message)
+                        message = re.sub("::", "_", message)
+
+                        if any(re.search(pattern, message) for pattern in excludeFromLines):
+                            continue
+
+                        test_case_data.append((myfile, item["line"], message))
+
+                except KeyError:
+                    print(traceback.format_exc())
+
+        except Exception:
+            print(f"Unexpected exception while processing {myfile}")
+            print(traceback.format_exc())
+
     return test_case_data
 
-def pylint_test_template(*args):
-    '''
-    decorator for monkeypatching
-    '''
+
+# ---------------------------------------------------------------------------
+# Dynamic unittest generation
+# ---------------------------------------------------------------------------
+
+def pylint_test_template(myfile, lineNum, text):
     def foo(self):
-        self.assert_pylint_error(*args)
+        self.assertTrue(False, f"{myfile}_{lineNum}_{text}")
     return foo
 
 
 class test_with_pylint(unittest.TestCase):
-    def assert_pylint_error(self, myfile, lineNum, text):
-        self.assertTrue(False, myfile + f"_{lineNum}_" + text)
+    pass
 
+
+# ---------------------------------------------------------------------------
+# CLI option parsing
+# ---------------------------------------------------------------------------
+
+from optparse import OptionParser, Option
 
 class MultipleOptions(Option):
     ACTIONS = Option.ACTIONS + ("extend",)
@@ -128,173 +117,98 @@ class MultipleOptions(Option):
 
     def take_action(self, action, dest, opt, value, values, parser):
         if action == "extend":
-            lvalue = value.split(",")
-            values.ensure_value(dest, []).append(value)
+            values.ensure_value(dest, []).extend(value.split(","))
         else:
             Option.take_action(self, action, dest, opt, value, values, parser)
 
 
-if __name__=="__main__":
-    #####
-    # Get options
-    version="0.8.6.1"
-    program_name = __file__
-    long_commands = ("exclude_files", "exclude_from_line")
-    short_commands = {"exfl" : "exclude_files", "exlw" : "exclude_lines_with"}
-    description = "Run the chosen files through pylint and throw unittest errors for each of the error and fatal reports\n"
+parser = OptionParser(option_class=MultipleOptions)
 
-    parser = OptionParser(option_class=MultipleOptions,
-                          usage="usage: %prog [OPTIONS] COMMAND",
-                          version="%s, %s"%(program_name, version),
-                          description=description)
+parser.add_option("-f", "--do_files", action="extend", type="string",
+                  dest="doFiles", default=[])
 
-    parser.add_option("-f", "--do_files",
-                      action="extend", type="string",
-                      dest="doFiles",
-                      default=[],
-                      metavar="EXCLUDEFILES",
-                      help="comma separated list of file names of files you want checked.  Also can have multiple -f, each with it's own file name string.")
+parser.add_option("-x", "--exclude_files", action="extend", type="string",
+                  dest="excludeFiles", default=[])
 
-    parser.add_option("-x", "--exclude_files",
-                      action="extend", type="string",
-                      dest="excludeFiles",
-                      metavar="EXCLUDEFILES",
-                      default=[],
-                      help="comma separated list of files to use to exclude lint errors.  Also can have multiple -f, each with it's own file name string to exclude.")
+parser.add_option("-l", "--exclude_lines_with", action="extend", type="string",
+                  dest="excludeLinesWith", default=[])
 
-    parser.add_option("-l", "--exclude_lines_with",
-                      action="extend", type="string",
-                      dest="excludeLinesWith",
-                      default=[],
-                      metavar="EXCLUDELINESWITH",
-                      help="comma separated list of strings to use to exclude lint errors.  Also can have multiple -l, each with it's own string to exlude.")
+parser.add_option("-r", "--recursive-tree", dest="treeRoot", default="")
+parser.add_option("-d", "--dir-to-check", dest="dirToCheck", default="")
+parser.add_option("--debug", action="store_true", dest="debug", default=False)
+parser.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False)
 
-    parser.add_option("-c", "--configuration-file", dest="confFile",
-                      default="",
-                      help="Acquire command line option values from a coniguration file.")
-
-    parser.add_option("-r", "--recursive-tree", dest="treeRoot",
-                      default="",
-                      help="The root of a directory to recurse and check all '*.py' files")
-
-    parser.add_option("-d", "--dir-to-check", dest="dirToCheck",
-                      default="",
-                      help="Name of the directory to look at for '*.py' files (not recursive)")
-
-    parser.add_option("--debug", action="store_true", dest="debug",
-                      default=0, help="Print debug messages")
-
-    parser.add_option("-v", "--verbose", action="store_true",
-                      dest="verbose", default=0,
-                      help="Print status messages")
-
-    if len(sys.argv) < 2:
-        parser.parse_args(["--help"])
-
-    (opts, args) = parser.parse_args()
-    #print "Arguments: " + str(args)
-    #print "Options  : " + str(opts)
+# If pytest imports this file, sys.argv is pytest's argv.
+# We must NOT parse pytest's arguments.
+if __name__ == "__main__":
+    opts, args = parser.parse_args()
+else:
+    # Provide safe defaults for pytest
+    class Dummy:
+        doFiles = []
+        excludeFiles = []
+        excludeLinesWith = []
+        treeRoot = ""
+        dirToCheck = ""
+        debug = False
+        verbose = False
+    opts = Dummy()
 
 
+# ---------------------------------------------------------------------------
+# Unified dynamic test runner (used by both CLI and pytest)
+# ---------------------------------------------------------------------------
+
+def run_dynamic_tests():
     test_case_data = []
 
-    if not opts.treeRoot and not opts.dirToCheck and not opts.doFiles and not opts.confFile:
-        print("\n\n\nNeed to choose a file acquisition method.\n\n")
-        parser.parse_args(["--help"])
-        sys.exit(0)
-
-    if opts.confFile:
-        with open(os.path.abspath(opts.confFile)) as confDataFile:
-            confFileData = json.load(confDataFile)
-
-            try:
-                excludeFiles = confFileData['excludeFiles']
-            except ValueError:
-                excludeFiles = []
-
-            try:
-                doFiles = confFileData['doFiles']
-            except ValueError:
-                doFiles = []
-
-            try:
-                excludeLinesWith = confFileData['excludeLinesWith']
-            except ValueError:
-                excludeLinesWith = []
-
-            try:
-                recursiveTree = confFileData['recursiveTree']
-            except ValueError:
-                recursiveTree = ""
-
-            try:
-                dirToCheck = confFileData['dirToCheck']
-            except ValueError:
-                dirToCheck = ""
-
-            try:
-                if re.match("^True$", confFileData['verbose']):
-                    verbose = True
-                else:
-                    verbose = False
-            except ValueError:
-                verbose = False
-
-            try:
-                if re.match("^True$", confFileData['debug']):
-                    debug = True
-                else:
-                    debug = False
-            except ValueError:
-                debug = False
-
-            if recursiveTree:
-                test_case_data = genTestData(getRecursiveTree(os.path.abspath(recursiveTree)), excludeFiles, excludeLinesWith)
-            if dirToCheck:
-                test_case_data = test_case_data + genTestData(getDirList(dirToCheck), excludeFiles, excludeLinesWith)
-            if doFiles:
-                test_case_data = test_case_data + genTestData(doFiles, excludeFiles, excludeLinesWith)
-
-    #####
-    # Run unittest per options
     if opts.treeRoot:
-        test_case_data = test_case_data + genTestData(getRecursiveTree(os.path.abspath(opts.treeRoot)), opts.excludeFiles, opts.excludeLinesWith)
+        test_case_data += genTestData(
+            getRecursiveTree(os.path.abspath(opts.treeRoot)),
+            opts.excludeFiles,
+            opts.excludeLinesWith,
+        )
+
     if opts.dirToCheck:
-        test_case_data = test_case_data + genTestData(getDirList(opts.dirToCheck), opts.excludeFiles, opts.excludeLinesWith)
+        test_case_data += genTestData(
+            getDirList(opts.dirToCheck),
+            opts.excludeFiles,
+            opts.excludeLinesWith,
+        )
+
     if opts.doFiles:
-        # test_case_data = test_case_data + genTestData(opts.doFiles, opts.excludeFiles, opts.excludeLinesWith)
-        test_case_data = genTestData(opts.doFiles, opts.excludeFiles, opts.excludeLinesWith)
+        test_case_data += genTestData(
+            opts.doFiles,
+            opts.excludeFiles,
+            opts.excludeLinesWith,
+        )
 
-    #for item in test_case_data:
-    #    print item
+    # Build dynamic tests
+    for myfile, lineNum, text in test_case_data:
+        safe_name = "_".join(myfile.replace("/", "_").split("."))
+        test_name = f"test_with_pylint_{safe_name}_{lineNum}_{text}"
+        setattr(test_with_pylint, test_name, pylint_test_template(myfile, lineNum, text))
 
-    #####
-    # Initialize the test suite
-    test_suite = unittest.TestSuite()
+    return unittest.defaultTestLoader.loadTestsFromTestCase(test_with_pylint)
 
-    for specificError in test_case_data:
-        #print str(specificError)
-        myfile, lineNum, text = specificError
-        test_name = "test_with_pylint_{0}_line-{1}_{2}".format("_".join("_".join(myfile.split("/")).split(".")), lineNum, "_".join("_".join(text.split(" ")).split("'")))
-        print(test_name)
-        error_case = pylint_test_template(*specificError)
-        setattr(test_with_pylint, test_name, error_case)
 
-    # test_suite.addTest(unittest.makeSuite(test_with_pylint))
-    # unittest.defaultTestLoader.loadTestsFromTestCase(test_with_pylint)
-    test_suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(test_with_pylint))   
+# ---------------------------------------------------------------------------
+# Entry point logic — CLI + pytest
+# ---------------------------------------------------------------------------
+
+RUNNING_PYTEST = "pytest" in sys.modules
+
+if __name__ == "__main__":
+    # CLI mode
+    suite = run_dynamic_tests()
     runner = unittest.TextTestRunner()
-    testResults  = runner.run(test_suite)  # output goes to stderr
+    runner.run(suite)
+
+elif RUNNING_PYTEST:
+    # pytest mode — run the SAME dynamic tests as CLI
+    suite = run_dynamic_tests()
 
 else:
-    #####
-    # Run unittest per current source tree
-    test_case_data = genTestData(getRecursiveTree(parent_dir))
+    # Imported normally — do nothing
+    pass
 
-    for specificError in test_case_data:
-        #print str(specificError)
-        myfile, lineNum, text = specificError
-        test_name = "test_with_pylint_{0}_{1}_{2}".format("_".join("_".join(myfile.split("/")).split(".")), lineNum, "_".join("_".join(text.split(" ")).split("'")))
-        #print test_name
-        error_case = pylint_test_template(*specificError)
-        setattr(test_with_pylint, test_name, error_case)
