@@ -83,7 +83,7 @@ def processFile(filename, compiledPackages="PySide6,PyQt5,PyQt4"):
             # INTERNAL crash - not a real Pylint F message
             # Any other unexpected internal crash
             reporter.messages.clear()
-            #reporter.internal_crash = True
+            reporter.internal_crash = True
         except Exception:
             msgs = reporter.get_messages()
             if any(m["msg_id"].startswith("F") for m in msgs):
@@ -92,7 +92,7 @@ def processFile(filename, compiledPackages="PySide6,PyQt5,PyQt4"):
             else:
                 # Any other unexpected internal crash
                 reporter.messages.clear()
-                #reporter.internal_crash = True
+                reporter.internal_crash = True
             
     messages = reporter.get_messages()
     return messages   # <-- FIXED
@@ -155,12 +155,19 @@ class PylintIface:
                 with contextlib.redirect_stderr(StringIO()):
                     Run([filename] + self.args, reporter=reporter, exit=False)
             except astroid.exceptions.AstroidError:
-                # INTERNAL crash - not a real Pylint F message
-                # Any other unexpected internal crash
-                reporter.messages.clear()
-                #reporter.internal_crash = True
+                msgs = reporter.get_messages()
+                # Check if this is a real Pylint fatal message (F0001 etc.)
+                if any(m["msg_id"].startswith("F") for m in msgs):
+                    # Keep real fail/fatal messages
+                    pass
+                else:
+                    # INTERNAL crash - not a real Pylint F message
+                    # Any other unexpected internal crash
+                    reporter.messages.clear()
+                    reporter.internal_crash = True
             except Exception:
-                # Check if this is a rel Pylint fatal message (F0001 etc.)
+                msgs = reporter.get_messages()
+                # Check if this is a real Pylint fatal message (F0001 etc.)
                 if any(m["msg_id"].startswith("F") for m in msgs):
                     # Keep real fail/fatal messages
                     pass
@@ -168,7 +175,7 @@ class PylintIface:
                     # Any other unexpected internal crash
                     # Internal crash or unexpected exception
                     reporter.messages.clear()
-                    #reporter.internal_crash = True
+                    reporter.internal_crash = True
 
         messages = reporter.get_messages()
         self.acquiredData[filename] = messages
