@@ -18,20 +18,17 @@ if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
    python3 -m venv packenv
 
    source packenv/bin/activate
-
-   pip install --upgrade pip
-   pip install PySide6 PyInstaller
-   pip install PySide6-Addons
-   pip install --upgrade PyInstaller pyinstaller-hooks-contrib
-   pip install psutil
-   pip install packaging
-   pip install requests
-   pip install pytest
-   pip install astroid
-   pip install pylint
-else
-   source packenv/bin/activate
 fi
+pip install --upgrade pip
+pip install PySide6 PyInstaller
+pip install PySide6-Addons
+pip install --upgrade PyInstaller pyinstaller-hooks-contrib
+pip install psutil
+pip install packaging
+pip install requests
+pip install pytest
+pip install astroid
+pip install pylint
 
 #pushd ..
 

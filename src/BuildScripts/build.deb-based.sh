@@ -17,7 +17,7 @@ actfile="./packenv/bin/activate"
 if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
    sudo apt install python-is-python3
    python3 -m venv packenv
-
+fi
    source packenv/bin/activate
 
    pip install --upgrade pip
@@ -29,9 +29,6 @@ if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
    pip install pylint
    pip install packaging
    pip install requests
-else
-   source packenv/bin/activate
-fi
 
 #pushd ..
 

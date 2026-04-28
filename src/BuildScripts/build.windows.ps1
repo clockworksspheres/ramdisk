@@ -16,20 +16,18 @@ if (!(Test-Path -Path ".\packenv" -PathType Container)) {
    python -m venv packenv
    .\packenv\Scripts\Activate.ps1
 
-   #pip install --upgrade pip
-   pip install PySide6 PyInstaller packaging pywin32
-   pip install --upgrade PyInstaller pyinstaller-hooks-contrib
-   pip install psutil
-   pip install wmi
-   pip install packaging
-   pip install requests
-   pip install pywin32
-   pip install pytest
-   pip install astroid
-   pip install pylint
-} else {
-    .\packenv\Scripts\Activate.ps1
 }
+
+pip install PySide6 PyInstaller packaging pywin32
+pip install --upgrade PyInstaller pyinstaller-hooks-contrib
+pip install psutil
+pip install wmi
+pip install packaging
+pip install requests
+pip install pywin32
+pip install pytest
+pip install astroid
+pip install pylint
 
 #####
 # Do every time, to make sure everyone knows source of E.ico icon, so 
