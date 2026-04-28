@@ -142,6 +142,7 @@ class CheckApplicable(object):
         
         """
         applies = False
+        applicable = {}
 
         self.logger.log(LogPriority.DEBUG,
                         'Dictionary is: ' + str(applicableDict))

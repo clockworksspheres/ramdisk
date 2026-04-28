@@ -52,7 +52,7 @@ class GetWin32MemStatus(GetMemStatusTemplate):
 
 
 if __name__=="__main__":
-    memStat = GetMacosMemStatus()
+    memStat = GetWin32MemStatus()
 
     totalMem = memStat.getTotalMemSize()
 

@@ -12,9 +12,9 @@ from pathlib import Path
 
 #sys.path.append("..")
 
-from ramdisk.loggers import CyLogger
-from ramdisk.loggers import LogPriority as lp
-from ramdisk.run_commands import RunWith, runMyThreadCommand
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority as lp
+from ramdisk.lib.run_commands import RunWith, runMyThreadCommand
 
 class NotASaneNameError(Exception):
     """
@@ -68,8 +68,6 @@ class MenuComponent(object):
         self.anchor = False
         
         self.previous = None
-
-        self.run = runMyThreadCommand
 
     def menuAction(self, *args, **kwargs):
         """

@@ -14,18 +14,10 @@ import unittest
 import ctypes
 from datetime import datetime
 
-#####
-# Include the parent project directory in the PYTHONPATH
-if sys.platform.startswith("win32"):
-    appendDir = "../"
-else:
-    appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-1])
-sys.path.append(appendDir)
-
 #--- non-native python libraries in this source tree
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
-from tests.genericTestUtilities.genericTestUtilities import GenericTestUtilities
+from ramdisk.tests.genericTestUtilities.genericTestUtilities import GenericTestUtilities
 #####
 # Load OS specific Ramdisks
 if sys.platform.startswith("darwin"):
@@ -45,10 +37,10 @@ elif sys.platform.startswith("linux"):
     from ramdisk.lib.fsHelper.linuxFsHelper import FsHelper
 elif sys.platform.startswith("win32"):
     #####
-    # For ImDisk for Windows
+    # For AIM Disk for Windows
     from ramdisk.lib.getLibc.winGetLibc import getLibc
-    from ramdisk.winImDiskRamdisk import RamDisk
-    from ramdisk.winImDiskRamdisk import umount
+    from ramdisk.winAIMRamdisk import RamDisk
+    from ramdisk.winAIMRamdisk import umount
     from ramdisk.lib.fsHelper.ntfsFsHelper import FsHelper
 else:
     raise Exception("Damn it Jim!!! What OS is this???")
@@ -76,7 +68,7 @@ class GenericRamdiskTest(GenericTestUtilities, unittest.TestCase):
         self.fsHelper = FsHelper()
         self.target = ""
 
-        self.intermediateSetUpClass(self)
+        #self.intermediateSetUpClass(self)
         """
         Set up a ramdisk and use that random location as a root to test the
         filesystem functionality of what is being tested.
@@ -112,7 +104,7 @@ class GenericRamdiskTest(GenericTestUtilities, unittest.TestCase):
 
         # get a ramdisk of appropriate size, with a secure random mountpoint
         self.my_ramdisk = RamDisk(str(self.ramdisk_size), self.mnt_pnt_requested, logger=self.logger)
-        self.logger.log(self.WARNING, "::::: ramdisk: " + str(self.my_ramdisk + " :::::"))
+        self.logger.log(lp.WARNING, "::::: ramdisk: " + str(self.my_ramdisk + " :::::"))
         self.success, self.mountPoint, self.ramdiskDev = self.my_ramdisk.getData()
         self.logger.log(lp.WARNING, str(self.success) + " : " + str(self.mountPoint) + " : " + str(self.ramdiskDev))
         self.mount = self.mountPoint

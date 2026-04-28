@@ -11,24 +11,23 @@ import sys
 
 from ramdisk.lib.libHelperExceptions import NotValidForThisOS
 
-if not sys.platform.startswith("linux"):
-    raise NotValidForThisOS("Not Valid For This OS...")
+#if not sys.platform.lower().startswith("linux"):
+#    raise NotValidForThisOS("Not Valid For This OS...")
 
 import pty
 import time
 import types
 import select
 import termios
+import subprocess
 import threading
 import traceback
-# import tracemalloc
 from subprocess import Popen, PIPE
 from subprocess import SubprocessError as SubprocessError
 
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.loggers import MockLogger
-from ramdisk.lib.getLibc.linuxGetLibc import getLibc
 
 
 class OSNotValidForRunWith(BaseException):
@@ -49,6 +48,14 @@ class NotACyLoggerError(BaseException):
 
 class SetCommandTypeError(BaseException):
     """
+    Custom Exception
+    """
+    def __init__(self, *args, **kwargs):
+        BaseException.__init__(self, *args, **kwargs)
+
+
+class CannotAcquirePasswordError(BaseException):
+    """  
     Custom Exception
     """
     def __init__(self, *args, **kwargs):
@@ -77,11 +84,9 @@ class RunWith(object):
     @method waitnoecho(self)
     @method runAsWithSudo(self, user="", password="")
     @method runWithSudo(self, user="", password="")
-
-    @WARNING - Known to work on Mac, may or may not work on other platforms
     """
     def __init__(self, logger=None, use_logger=True):
-        if use_logger:
+        if use_logger == True:
 
             if isinstance(logger, type(CyLogger)):
                 self.logger = logger
@@ -89,7 +94,7 @@ class RunWith(object):
                 self.logger = MockLogger
                 # raise NotACyLoggerError("Passed in value for logger" +
                 #                        " is invalid, try again.")
-        elif not use_logger:
+        elif use_logger == False:
             self.logger = MockLogger
         self.command = None
         self.stdout = None
@@ -171,8 +176,7 @@ class RunWith(object):
         #    if re.search(",", creationflags):
         #        self.creationflags = re.sub(",", " | ", creationflags)
         #if creationflags is True:
-        #    self.creationflags = subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP
-        #    self.creationflags = subprocess.CREATE_NEW_PROCESS_GROUP
+        #    self.creationflags = DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP
 
     ###########################################################################
 
@@ -250,12 +254,16 @@ class RunWith(object):
         self.retcode = 999
         if self.command and isinstance(silent, bool):
             try:
+                # temporary solution to problem with windows creationflags
+                '''
                 if not self.creationflags:
                     proc = Popen(self.command, stdout=PIPE, stderr=PIPE, shell=self.myshell, env=self.environ, close_fds=self.cfds, text=self.text)
                 if self.creationflags:
                     proc = Popen(self.command, stdout=PIPE, stderr=PIPE, shell=self.myshell, env=self.environ, close_fds=self.cfds, text=self.text, creationflags=self.creationflags)
                 self.logger.log(lp.INFO, "creationflags: {0}".format(str(self.creationflags)))
+                '''
 
+                proc = Popen(self.command, stdout=PIPE, stderr=PIPE, shell=self.myshell, env=self.environ, close_fds=self.cfds, text=self.text)
                 self.stdout, self.stderr = proc.communicate()
                 self.stdout = str(self.stdout)
                 self.stderr = str(self.stderr)
@@ -543,7 +551,7 @@ class RunWith(object):
                 if not silent:
                     self.logger.log(lp.DEBUG, "Done with: " + self.printcmd)
             finally:
-                print(self.retcode)
+                #print(self.retcode)
                 # self.retcode = self.retcode
                 if not silent:
                     self.logger.log(lp.DEBUG, "Done with command: " + self.printcmd)
@@ -749,6 +757,7 @@ class RunWith(object):
         self.stdout = ""
         self.stderr = ""
         self.retcode = 999
+        return_dir = ""
         user = user.strip()
 
         if os.getuid() != 0:
@@ -791,8 +800,11 @@ class RunWith(object):
                 self.logger.log(lp.DEBUG, "err: " + str(line))
             self.logger.log(lp.DEBUG, "retcode: " + str(self.retcode))
 
-        if target_dir:
-            os.chdir(return_dir)
+        if target_dir and return_dir:
+            try:
+                os.chdir(return_dir)
+            finally:
+                pass
 
         self.command = None
         return self.stdout, self.stderr, self.retcode
@@ -829,6 +841,7 @@ class RunWith(object):
 
         Borrowed from pexpect - acceptable to license
         """
+        end_time = 0
         if timeout is not None and timeout > 0:
             end_time = time.time() + timeout
         while True:
@@ -960,9 +973,9 @@ class RunWith(object):
                         # print output.strip()
                     os.close(master)
                     os.close(slave)
-                    self.libc.sync()
+                    #self.libc.sync()
                     proc.wait()
-                    self.libc.sync()
+                    #self.libc.sync()
                     self.stdout = proc.stdout
                     self.stderr = proc.stderr
                     self.retcode = proc.returncode
@@ -981,6 +994,7 @@ class RunWith(object):
 
         Required parameters: password
         '''
+
         self.stdout = ""
         self.stderr = ""
         self.retcode = 255
@@ -1064,9 +1078,9 @@ class RunWith(object):
                         # print output.strip()
                     os.close(master)
                     os.close(slave)
-                    self.libc.sync()
+                    #self.libc.sync()
                     proc.wait()
-                    self.libc.sync()
+                    #self.libc.sync()
                     timer.cancel()
                     self.stdout = output.decode()
                     self.stderr = proc.stderr
@@ -1083,7 +1097,7 @@ class RunWith(object):
 
 ##############################################################################
 
-class RunThread(threading.Thread):
+class RunThreadExtended(threading.Thread):
     """
     Use a thread & subprocess.Popen to run something
 
@@ -1184,6 +1198,8 @@ class RunThread(threading.Thread):
             elif isinstance(self.command, str):
                 #cmd = " ".join(sudocmd) + " " + self.command
                 cmd = sudocmd + self.command.split()
+            else:
+                cmd = ""
 
             # Create a subprocess
             process = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -1277,83 +1293,83 @@ class RunThread(threading.Thread):
 
     ##########################################################################
 
-def runCommand2check(self, check_string="", get_my_pass=None):
-    found_prompt = False
+    def runCommand2check(self, check_string="", get_my_pass=None):
+        found_prompt = False
 
-    output = ""
+        output = ""
 
-    # Create a pseudo-terminal
-    master, slave = pty.openpty()
+        # Create a pseudo-terminal
+        master, slave = pty.openpty()
 
-    # Start the process with the slave side of the pty as its stdout/stderr
-    proc = subprocess.Popen(
-        command,
-        stdin=slave,
-        stdout=slave,
-        stderr=slave,
-        close_fds=True
-    )
+        # Start the process with the slave side of the pty as its stdout/stderr
+        proc = subprocess.Popen(
+            self.command,
+            stdin=slave,
+            stdout=slave,
+            stderr=slave,
+            close_fds=True
+        )
 
-    # Close the slave fd in the parent process
-    os.close(slave)
+        # Close the slave fd in the parent process
+        os.close(slave)
 
-    found_prompt = False
+        found_prompt = False
 
-    # Monitor the master fd for output
-    output = ""
-    while proc.poll() is None:
-        ready, _, _ = select.select([master], [], [], 0.1)
-        if ready:
+        # Monitor the master fd for output
+        output = ""
+        while proc.poll() is None:
+            ready, _, _ = select.select([master], [], [], 0.1)
+            if ready:
+                try:
+                    data = os.read(master, 1024).decode('utf-8')
+                    if not data:
+                        break
+                    output += data.strip()
+                    #sys.stdout.write(data)
+                    sys.stdout.flush()
+
+                    # Check for the prompt in the accumulated output
+                    if check_string in output:
+                        found_prompt = True
+                        # passwd = getpass.getpass("VM password: ")
+
+                        try:
+                            # Use the passed in function call to get
+                            # the password instead of getpass.getpass()
+                            passwd = get_my_pass()
+                            #break
+                            # Send the password
+                            #os.write(master, b"your_password\n")
+                            os.write(master, f"{passwd}\n".encode())
+                        except Exception as err:
+                            raise CannotAcquirePasswordError("can't acquire the password, and input it to the command")
+                    # Clear the output buffer to avoid re-matching the prompt
+                    output = ""
+
+                except OSError:
+                    break
+
+        if found_prompt:
+            os.close(master)
+            found_prompt = True
+            # print("FOUND PROMPT")
+
+        else:
+            # Read any remaining output
             try:
-                data = os.read(master, 1024).decode('utf-8')
-                if not data:
-                    break
-                output += data.strip()
-                #sys.stdout.write(data)
-                sys.stdout.flush()
-
-                # Check for the prompt in the accumulated output
-                if check_string in output:
-                    found_prompt = True
-                    # passwd = getpass.getpass("VM password: ")
-
-                    try:
-                        # Use the passed in function call to get
-                        # the password instead of getpass.getpass()
-                        passwd = get_my_pass()
-                        #break
-                        # Send the password
-                        #os.write(master, b"your_password\n")
-                        os.write(master, f"{passwd}\n".encode())
-                    except Exception as err:
-                        raise("can't acquire the password, and input it to the command")
-                # Clear the output buffer to avoid re-matching the prompt
-                output = ""
-
+                while True:
+                    data = os.read(master, 1024).decode('utf-8')
+                    if not data:
+                        break
+                    sys.stdout.write(data)
+                    sys.stdout.flush()
             except OSError:
-                break
+                pass
 
-    if found_prompt:
-        os.close(master)
-        found_prompt = True
-        # print("FOUND PROMPT")
+            # Close the master fd
+            os.close(master)   
 
-    else:
-        # Read any remaining output
-        try:
-            while True:
-                data = os.read(master, 1024).decode('utf-8')
-                if not data:
-                    break
-                sys.stdout.write(data)
-                sys.stdout.flush()
-        except OSError:
-            pass
-
-        # Close the master fd
-        os.close(master)   
-
-    return found_prompt, output
+        return found_prompt, output
 
 
 #############################################################################
@@ -1467,4 +1483,48 @@ def runMyThreadCommand(cmd, logger, myshell=False):
         logger.log(lp.INFO, "Invalid parameters, please report this as a bug.")
 
     return retval, reterr
+
+
+def start_detached(cmd):
+    """
+    Starts a command completely detached / independent from the parent.
+    The child survives even when Python exits.
+ 
+        # ────────────────────────────────────────────────
+        # Examples
+        # ────────────────────────────────────────────────
+
+        # Simple example - open notepad (Windows) or gedit (Linux/macOS)
+        if sys.platform == "win32":
+            start_detached(["notepad.exe"])
+        else:
+            start_detached(["gedit"])           # or xdg-open, firefox, etc.
+
+        # More realistic example: run a long-running script / server
+        start_detached([sys.executable, "-u", "long_running_server.py"])
+
+        # Or run a shell command
+        start_detached(["bash", "-c", "sleep 600 && echo 'Done!' >> /tmp/detached.log"])
+
+        print("Parent is about to exit — child should keep running")
+    """
+    if sys.platform.lower().startswith("win32"):
+        # Windows: use DETACHED_PROCESS (Python 3.7+)
+        creationflags = subprocess.DETACHED_PROCESS | subprocess.CREATE_NO_WINDOW
+        return subprocess.Popen(
+            cmd,
+            creationflags=creationflags,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            stdin=subprocess.DEVNULL
+        )
+    else:
+        # Linux / macOS / other POSIX
+        return subprocess.Popen(
+            cmd,
+            start_new_session=True,          # crucial: setsid() → new session
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            stdin=subprocess.DEVNULL
+        )
 

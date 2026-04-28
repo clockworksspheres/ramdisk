@@ -12,6 +12,7 @@ import time
 import ctypes
 if sys.platform.lower().startswith("win32"):
     print("importing termios not supported on Windows")
+    termios = None
 else:
     import termios
 import traceback
@@ -136,8 +137,11 @@ def waitnoecho (fileDescriptor, timeout=3):
 
     Borrowed from pexpect - acceptable to license
     """
+    
     if timeout is not None and timeout > 0:
         end_time = time.time() + timeout
+    else:
+        end_time = 0
     while True:
         if not getecho(fileDescriptor):
             return True

@@ -15,14 +15,16 @@ sys.path.append(appendDir)
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.run_commands import RunWith
+
+
 class FsHelpers(object):
     """
     """
     def __init__(self):
         """
         """
-        #self.logger = CyLogger()
-        #self.runner = RunWith()
+        self.logger = CyLogger()
+        self.runner = RunWith(self.logger)
 
     def getFsBlockSize(self, path="c:"):
         """

@@ -16,8 +16,9 @@ import traceback
 import inspect
 import unittest
 import ctypes
+from subprocess import SubprocessError
 from datetime import datetime
-#sys.path.append("../")
+
 #--- non-native python libraries in this source tree
 
 if sys.platform.startswith("darwin"):
@@ -61,6 +62,8 @@ class GenericTestUtilities(object):
         
         self.libc = getLibc()
 
+        self.rw = rw(self.logger)
+
     ################################################
     ##### Helper Methods
     @classmethod
@@ -90,28 +93,6 @@ class GenericTestUtilities(object):
 
     ################################################
 
-    def getWin32BlockSize(self, path):
-        """
-        import win32api
-
-        def get_block_size(path):
-            "Gets the block size of the file system for the given path."
-    
-            sectors_per_cluster, bytes_per_sector, _ = win32api.GetDiskFreeSpace(path)
-            return sectors_per_cluster * bytes_per_sector
-
-        path = "C:\\"  # Replace with the path you want to check
-        block_size = get_block_size(path)
-        print(f"Block size: {block_size} bytes")
-
-        """
-        "Gets the block size of the file system for the given path."
-    
-        sectors_per_cluster, bytes_per_sector, _ = pywin32.GetDiskFreeSpace(path)
-        return sectors_per_cluster * bytes_per_sector
- 
-    ################################################
-
     def touch(self, fname="", message_level="normal"):
         """
         Python implementation of the touch command..
@@ -124,11 +105,11 @@ class GenericTestUtilities(object):
             try:
                 fhandle = io.open(fname, "w")
             except io.BlockingIOError as err:
-                self.logger.log(lp.warning, traceback.format_exc())
+                self.logger.log(lp.WARNING, traceback.format_exc())
                 self.logger.log(lp.WARNING, "Cannot open to touch: " + str(fname))
                 raise(err)
             except io.UnsupportedOperation as err:
-                self.logger.log(lp.warning, traceback.format_exc())
+                self.logger.log(lp.WARNING, traceback.format_exc())
                 self.logger.log(lp.WARNING, "Cannot open to touch: " + str(fname))
                 raise(err)
             else:
@@ -277,7 +258,7 @@ class GenericTestUtilities(object):
         fsType : filesystem Type to check out apfs, hfs, etc
         """
 
-        runcmd = ["df", "-T", fstype, dev]
+        runcmd = ["df", "-T", fsType, dev]
 
         available = 0
         capacityInPercent = 0
@@ -285,14 +266,14 @@ class GenericTestUtilities(object):
         inodesFree = 0
 
         try:
-            rw.setCommand(runcmd)
+            self.rw.setCommand(runcmd)
             # def waitNpassThruStdout(self, chk_string=None, respawn=False, silent=True)
-            (myout, myerr, myretcode) = rw.waitNpassThroughStdout(dev)
+            (myout, myerr, myretcode) = self.rw.waitNpassThruStdout(dev)
             for line in myout:
                 try:
                     # Filesystem   512-blocks      Used Available Capacity iused     ifree %iused  Mounted on
                     # /dev/disk3s1  478724992 219018232 195722792    53% 1167141 978613960    0%   /System/Volumes/Data
-                    look_for_freespace = re.match(r"\S+\s+\d+\s+\d+\s+\(d+)\s+\(d+)\S\s+\(d+)\s+(\d+)\s+\d+\S\s+\S+.*")
+                    look_for_freespace = re.match(r"\S+\s+\d+\s+\d+\s+\(d+)\s+\(d+)\S\s+\(d+)\s+(\d+)\s+\d+\S\s+\S+.*", line.strip())
                     available = look_for_freespace.group(0)
                     capacityInPercent = look_for_freespace.group(1)
                     inodesUsed = look_for_freespace.group(2)
@@ -301,6 +282,6 @@ class GenericTestUtilities(object):
                     pass 
         except SubprocessError as Err:
             self.logger.log(lp.WARNING, traceback.format_exc())
-            self.logger.log(lp.WARNING, "Exception thrown trying to find free space on device: " + dev + " assumed fstype: " + fstype)
+            self.logger.log(lp.WARNING, "Exception thrown trying to find free space on device: " + dev + " assumed fstype: " + fsType)
 
         return available, capacityInPercent, inodesUsed, inodesFree

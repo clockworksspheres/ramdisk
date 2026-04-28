@@ -118,12 +118,12 @@ class FsHelper(object):
 
 
 if __name__=="__main__":
-    fshelpers = FsHelpers()
+    fshelpers = FsHelper()
     success, blocksize = fshelpers.getFsBlockSize()
     print("success = " + str(success) + " , " + "blocksize = " +  str(blocksize))
 
 
-    success, diskSize = fshelper.getDiskSize("1gb")
+    success, diskSize = fshelpers.getDiskSize("1gb")
 
     print("success = " + str(success) + " , " + "diskSize = " +  str(diskSize))
 

@@ -292,6 +292,9 @@ class CyLogger(Singleton):
         # Initialize the root logger
         self.logr = logging.getLogger("")
 
+        fileHandler = False
+        rotHandler = False
+
         #####
         # Set logging level for the root logger
         if not self.rotate:

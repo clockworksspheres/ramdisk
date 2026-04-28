@@ -16,26 +16,22 @@ import unittest
 import ctypes
 from datetime import datetime
 from pathlib import Path
-
-# Get the parent directory of the current file's parent directory
-#  and add it to sys.path
-parent_dir = Path(__file__).parent.parent.parent
-sys.path.append(str(parent_dir))
+from subprocess import SubprocessError
 
 #--- non-native python libraries in this source tree
 
 if sys.platform.startswith("darwin"):
-    from lib.getLibc.macGetLibc import getLibc
+    from ramdisk.lib.getLibc.macGetLibc import getLibc
 elif sys.platform.startswith("linux"):
-    from lib.getLibc.linuxGetLibc import getLibc
+    from ramdisk.lib.getLibc.linuxGetLibc import getLibc
 elif sys.platform.startswith("win32"):
-    from lib.getLibc.winGetLibc import getLibc
+    from ramdisk.lib.getLibc.winGetLibc import getLibc
 else:
     raise Exception("Damn it Jim!!! What OS is this???")
 
-from lib.loggers import CyLogger
-from lib.loggers import LogPriority as lp
-from lib.run_commands import RunWith as rw
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority as lp
+from ramdisk.lib.run_commands import RunWith as rw
 
 class LibcNotAvailableError(BaseException):
     """
@@ -43,6 +39,14 @@ class LibcNotAvailableError(BaseException):
     """
     def __init__(self, *args, **kwargs):
         BaseException.__init__(self, *args, **kwargs)
+
+
+class MockWin32file():
+    def __init__(self):
+        pass
+
+    def GetDiskFreeSpace(self, path):
+        return "0", "0", "0", "0"
 
 
 class GenericTestUtilities(object):
@@ -58,6 +62,8 @@ class GenericTestUtilities(object):
         self.logger = CyLogger()
         
         self.libc = getLibc()
+
+        self.rw = rw(self.logger)
 
     ################################################
     ##### Helper Methods
@@ -104,8 +110,16 @@ class GenericTestUtilities(object):
 
         """
         #"Gets the block size of the file system for the given path."
-    
-        sectors_per_cluster, bytes_per_sector, _ = pywin32.GetDiskFreeSpace(path)
+   
+        sectors_per_cluster = 0
+        bytes_per_sector = 0
+ 
+        try:
+            import win32file
+            sectors_per_cluster, bytes_per_sector, _, _ = win32file.GetDiskFreeSpace(path)
+        except ImportError:
+            win32file = MockWin32file()
+            sectors_per_cluster, bytes_per_sector, _, _ = win32file.GetDiskFreeSpace(path)
         return sectors_per_cluster * bytes_per_sector
  
     ################################################
@@ -120,11 +134,11 @@ class GenericTestUtilities(object):
             try:
                 fhandle = io.open(fname, "w")
             except io.BlockingIOError as err:
-                self.logger.log(lp.warning, traceback.format_exc())
+                self.logger.log(lp.WARNING, traceback.format_exc())
                 self.logger.log(lp.WARNING, "Cannot open to touch: " + str(fname))
                 raise(err)
             except io.UnsupportedOperation as err:
-                self.logger.log(lp.warning, traceback.format_exc())
+                self.logger.log(lp.WARNING, traceback.format_exc())
                 self.logger.log(lp.WARNING, "Cannot open to touch: " + str(fname))
                 raise(err)
             else:
@@ -244,7 +258,7 @@ class GenericTestUtilities(object):
         fsType : filesystem Type to check out apfs, hfs, etc
         """
 
-        runcmd = ["df", "-T", fstype, dev]
+        runcmd = ["df", "-T", str(fsType), str(dev)]
 
         available = 0
         capacityInPercent = 0
@@ -252,14 +266,14 @@ class GenericTestUtilities(object):
         inodesFree = 0
 
         try:
-            rw.setCommand(runcmd)
+            self.rw.setCommand(runcmd)
             # def waitNpassThruStdout(self, chk_string=None, respawn=False, silent=True)
-            (myout, myerr, myretcode) = rw.waitNpassThroughStdout(dev)
+            myout, myerr, myretcode = self.rw.waitNpassThruStdout(dev)
             for line in myout:
                 try:
                     # Filesystem   512-blocks      Used Available Capacity iused     ifree %iused  Mounted on
                     # /dev/disk3s1  478724992 219018232 195722792    53% 1167141 978613960    0%   /System/Volumes/Data
-                    look_for_freespace = re.match("\S+\s+\d+\s+\d+\s+\(d+)\s+\(d+)\S\s+\(d+)\s+(\d+)\s+\d+\S\s+\S+.*")
+                    look_for_freespace = re.match("\S+\s+\d+\s+\d+\s+\(d+)\s+\(d+)\S\s+\(d+)\s+(\d+)\s+\d+\S\s+\S+.*", line.strip())
                     available = look_for_freespace.group(0)
                     capacityInPercent = look_for_freespace.group(1)
                     inodesUsed = look_for_freespace.group(2)
@@ -268,6 +282,8 @@ class GenericTestUtilities(object):
                     pass 
         except SubprocessError as Err:
             self.logger.log(lp.WARNING, traceback.format_exc())
-            self.logger.log(lp.WARNING, "Exception thrown trying to find free space on device: " + dev + " assumed fstype: " + fstype)
+            self.logger.log(lp.WARNING, "Exception thrown trying to find free space on device: " + str(dev) + " assumed fstype: " + str(fsType))
 
         return available, capacityInPercent, inodesUsed, inodesFree
+
+

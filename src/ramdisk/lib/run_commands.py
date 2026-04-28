@@ -11,10 +11,10 @@ import sys
 #import time
 #import types
 import select
+import subprocess
 import threading
 import traceback
 # import tracemalloc
-import subprocess
 from subprocess import Popen, PIPE
 from subprocess import SubprocessError as SubprocessError
 from pathlib import Path
@@ -41,6 +41,14 @@ class NotACyLoggerError(BaseException):
 
 
 class SetCommandTypeError(BaseException):
+    """
+    Custom Exception
+    """
+    def __init__(self, *args, **kwargs):
+        BaseException.__init__(self, *args, **kwargs)
+
+
+class CannotAcquirePasswordError(BaseException):
     """
     Custom Exception
     """
@@ -162,8 +170,7 @@ class RunWith(object):
         #    if re.search(",", creationflags):
         #        self.creationflags = re.sub(",", " | ", creationflags)
         #if creationflags is True:
-        #    self.creationflags = subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP
-        #    self.creationflags = subprocess.CREATE_NEW_PROCESS_GROUP
+        #    self.creationflags = DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP
 
     ###########################################################################
 
@@ -241,12 +248,16 @@ class RunWith(object):
         self.retcode = 999
         if self.command and isinstance(silent, bool):
             try:
+                # Needs corrections - problems with windows creationflags...
+                '''
                 if not self.creationflags:
                     proc = Popen(self.command, stdout=PIPE, stderr=PIPE, shell=self.myshell, env=self.environ, close_fds=self.cfds, text=self.text)
                 if self.creationflags:
                     proc = Popen(self.command, stdout=PIPE, stderr=PIPE, shell=self.myshell, env=self.environ, close_fds=self.cfds, text=self.text, creationflags=self.creationflags)
                 self.logger.log(lp.INFO, "creationflags: {0}".format(str(self.creationflags)))
+                '''
 
+                proc = Popen(self.command, stdout=PIPE, stderr=PIPE, shell=self.myshell, env=self.environ, close_fds=self.cfds, text=self.text)
                 self.stdout, self.stderr = proc.communicate()
                 self.stdout = str(self.stdout)
                 self.stderr = str(self.stderr)
@@ -634,6 +645,8 @@ class RunWith(object):
 
         if 'pty' not in sys.modules:
             import pty
+        else:
+            pty = None
  
         self.stdout = ""
         self.stderr = ""
@@ -746,6 +759,7 @@ class RunWith(object):
         self.stdout = ""
         self.stderr = ""
         self.retcode = 999
+        return_dir = ""
         user = user.strip()
 
         if os.getuid() != 0:
@@ -789,7 +803,10 @@ class RunWith(object):
             self.logger.log(lp.DEBUG, "retcode: " + str(self.retcode))
 
         if target_dir:
-            os.chdir(return_dir)
+            try:
+                os.chdir(return_dir)
+            finally:
+                pass
 
         self.command = None
         return self.stdout, self.stderr, self.retcode
@@ -826,6 +843,8 @@ class RunWith(object):
             elif isinstance(self.command, str):
                 # cmd = " ".join(sudocmd) + " " + self.command
                 cmd = sudocmd + self.command.split()
+            else:
+                cmd = ""
 
             # Create a subprocess
             process = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -954,6 +973,8 @@ class RunWith(object):
             elif isinstance(self.command, str):
                 #cmd = " ".join(sudocmd) + " " + self.command
                 cmd = sudocmd + self.command.split()
+            else:
+                cmd = ""
 
             # Create a subprocess
             process = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -1105,7 +1126,7 @@ class RunWith(object):
                             #os.write(master, b"your_password\n")
                             os.write(master, f"{passwd}\n".encode())
                         except Exception as err:
-                            raise("can't acquire the password, and input it to the command")
+                            raise CannotAcquirePasswordError("can't acquire the password, and input it to the command")
                     # Clear the output buffer to avoid re-matching the prompt
                     output = ""
 

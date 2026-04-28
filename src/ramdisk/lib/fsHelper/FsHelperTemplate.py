@@ -5,13 +5,8 @@ import re
 import sys
 from pathlib import Path
 
-# Get the parent directory of the current file's parent directory
-#  and add it to sys.path
-parent_dir = Path(__file__).parent.parent.parent
-sys.path.append(str(parent_dir))
-
-from lib.loggers import CyLogger
-from lib.loggers import LogPriority as lp
+from ramdisk.lib.loggers import CyLogger
+from ramdisk.lib.loggers import LogPriority as lp
 
 class FsHelperTemplate(object):
     """
@@ -98,10 +93,11 @@ class FsHelperTemplate(object):
                 self.logger.log(f"Error: {error}")
         return True, path
 
-
+'''
+only for concrete versions of this template
 if __name__=="__main__":
-    fshelpers = FsHelpers()
+    fshelpers = FsHelper()
     success, blocksize = fshelpers.getFsBlockSize()
     print("success = " + str(success) + " , " + "blocksize = " +  str(blocksize))
-
+'''
 
