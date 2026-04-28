@@ -29,7 +29,7 @@ python3 -m venv packenv
 source packenv bin/activate
 
 pip install PySide6 PyInstaller
-pip install --upgrade PyInstaller pyinstaller-hooks-contrib
+pip install PyInstaller
 pip install packaging
 pip install psutil
 pip install sphynx  # documentation tool
