@@ -92,7 +92,8 @@ pipeline {
                                     sh """
                                         ls -l
                                         . ${VENV}/bin/activate
-                                        ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
+                                        sudo ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
+                                        sudo chgrp -R sudo test-reports
                                     """
                                     echo '----------=====### Finished Tests ###=====----------'
                                     junit 'test-reports/results.xml' 
@@ -115,7 +116,8 @@ pipeline {
                                     sh """
                                         ls -l
                                         . ${VENV}/bin/activate
-                                        ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
+                                        sudo ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
+                                        sudo chgrp -R sudo test-reports
                                     """
                                     echo '----------=====### Finished Tests ###=====----------'
                                     junit 'test-reports/results.xml' 
