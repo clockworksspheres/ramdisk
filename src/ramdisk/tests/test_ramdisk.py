@@ -151,15 +151,15 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
         """
         thisOSfamily = self.environ.getosfamily().lower()
         if thisOSfamily.startswith("linux"):
-            #if os.geteuid() != 0:
-            #    self.assertRaises(UserMustBeRootError, "If UID is not 0, a UserMustBeRootError must be raised...")
-            # self.assertTrue(os.geteuid() == 0, "User is not root, cannot create a ramdisk if user is not root")
-            self.assertTrue(True, "This is not a linux system...")
+            if os.geteuid() != 0:
+                self.assertRaises(UserMustBeRootError, "If UID is not 0, a UserMustBeRootError must be raised...")
+            self.assertTrue(os.geteuid() == 0, "User is not root, cannot create a ramdisk if user is not root")
+            self.assertTrue(sys.platform.lower().startswith("linux") == "linux", "This is not a linux system...")
         elif thisOSfamily == "darwin":
-            self.assertTrue(True, "This is not a darwin system...")
+            self.assertTrue(True, "This is a darwin system...")
 
         elif thisOSfamily == "win32":
-            self.assertTrue(True, "This is not a win32 system...")
+            self.assertTrue(True, "This is a win32 system...")
 
 
     ##################################
