@@ -18,6 +18,9 @@ if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
    python3 -m venv packenv
    source packenv/bin/activate
 
+   pip install astroid
+   pip install pytest
+   pip install pylint
    pip install PySide6 PyInstaller
    pip install --upgrade PyInstaller pyinstaller-hooks-contrib
    pip install packaging
@@ -25,9 +28,6 @@ if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
    pip install sphynx  # documentation tool
    pip install myst-parser # supports markdown for sphynx
    pip install requests
-   pip install pytest
-   pip install astroid
-   pip install pylint
 else
    source packenv/bin/activate
 fi
