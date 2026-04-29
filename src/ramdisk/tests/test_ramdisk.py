@@ -154,7 +154,7 @@ class test_ramdisk(unittest.TestCase, GenericTestUtilities):
             if os.geteuid() != 0:
                 self.assertRaises(UserMustBeRootError, "If UID is not 0, a UserMustBeRootError must be raised...")
             self.assertTrue(os.geteuid() == 0, "User is not root, cannot create a ramdisk if user is not root")
-            self.assertTrue(sys.platform.lower().startswith("linux") == "linux", "This is not a linux system...")
+            self.assertTrue(sys.platform.lower().startswith("linux"), "This is not a linux system...")
         elif thisOSfamily == "darwin":
             self.assertTrue(True, "This is a darwin system...")
 
