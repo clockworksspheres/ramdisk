@@ -93,7 +93,7 @@ pipeline {
                                         ls -l
                                         . ${VENV}/bin/activate
                                         sudo ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
-                                        sudo chgrp -R sudo test-reports
+                                        sudo chgrp -R wheel test-reports
                                     """
                                     echo '----------=====### Finished Tests ###=====----------'
                                     junit 'test-reports/results.xml' 
