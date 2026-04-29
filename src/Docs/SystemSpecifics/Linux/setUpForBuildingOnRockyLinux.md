@@ -16,6 +16,8 @@ sudo dnf install python3-tkinter
 sudo dnf install python3-pytest
 sudo dnf install pyside6*
 sudo dnf install pytest
+sudo dnf install python3-astroid
+sudo dnf install python3-pylint
 ```
 
 On Rocky 8/9, install the following:

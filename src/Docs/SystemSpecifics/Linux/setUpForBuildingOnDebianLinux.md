@@ -14,6 +14,8 @@ sudo apt install python-is-python3
 sudo apt install junit
 sudo apt install python3-pyside6
 sudo apt install python3-pytest
+sudo apt install python3-pylint-common
+sudo apt install python3-astroid
 ```
 
 # Installing useful apps with apt

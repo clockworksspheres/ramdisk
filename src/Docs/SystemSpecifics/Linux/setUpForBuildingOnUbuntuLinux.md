@@ -20,6 +20,8 @@ sudo apt install python3-tk
 sudo apt install python3-pip
 sudo apt install python3-pytest
 sudo apt install python3-venv
+sudo apt install python3-pylint-common
+sudo apt install python3-astroid
 sudo apt install vim
 sudo apt install git
 sudo apt install dia dia-common dia-shapes dia2code
