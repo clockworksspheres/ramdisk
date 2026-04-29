@@ -1,4 +1,9 @@
-# Ramdisk Software: Setting up the ramdisk library and examples for Windows 11
+# AIMtk Ramdisk Software: Setting up the ramdisk library and examples for Windows 11
+
+
+## Please be sure to adhere to the Software License appropriate for your use!
+
+Licensing and information about [AIMtk here](https://arsenalrecon.com/products/arsenal-image-mounter):  
 
 ## Installing AIM
 
@@ -184,15 +189,4 @@ Get-WmiObject -Class Win32_LogicalDisk | Select-Object DeviceID
 ```
 
 ```
-
-
-
-
-
-
-
-
-Reference Number for this conversation 7096836570
-
-
 
