@@ -1,13 +1,7 @@
 pipeline {
     agent none 
     stages {
-        stage('pre-clean') {
-            agent { label 'macos' }
-            steps {
-                dir('src/BuildScripts') {
-                    sh 'python3 clean_jenkins_agent.py --agent-root "$JENKINS_AGENT_HOME"'
-                }
-            }
+        stage('pre-parallel') {
             steps{
                 echo 'Running pre-parallel stage'
             }
@@ -17,6 +11,13 @@ pipeline {
                 stage('macOS Pipeline') {
                     agent { label 'macos' }
                     stages {
+                        stage('Pre-Clean') {
+                            steps {
+                                dir('src/BuildScripts') {
+                                    sh 'python3 clean_jenkins_agent.py --agent-root "$JENKINS_AGENT_HOME"'
+                                }
+                            }
+                        }
                         stage('macOS Build') { 
                             steps {
                                 dir('src/BuildScripts') {
