@@ -627,11 +627,13 @@ class TestRunWithSudoGuards(unittest.TestCase):
         # command is None — skip setCommand
         self.assertEqual(rw.runWithSudo(password="secret"), 255)
 
+    @unittest.skipIf(sys.platform.lower().startswith("win"), "Do not run on Windows...")
     def test_run_with_sudo_rs_empty_password_returns_255(self):
         rw = RunWith(use_logger=False)
         rw.setCommand("ls")
         self.assertEqual(rw.runWithSudoRs(password=""), 255)
-
+    
+    @unittest.skipIf(sys.platform.lower().startswith("win"), "Do not run on Windows...")
     def test_run_with_sudo_rs_no_command_returns_255(self):
         rw = RunWith(use_logger=False)
         self.assertEqual(rw.runWithSudoRs(password="pw"), 255)
@@ -718,6 +720,7 @@ class TestRunWithSudoSubprocess(unittest.TestCase):
         rw.runWithSudo(password="pw")
         self.assertIn("root", rw.stdout)
 
+    @unittest.skipIf(sys.platform.lower().startswith("win"), "Do not run on Windows...")
     @patch("lib.run_commands.os.set_blocking")
     @patch("lib.run_commands.select.select", return_value=([], [], []))
     @patch("lib.run_commands.subprocess.Popen")

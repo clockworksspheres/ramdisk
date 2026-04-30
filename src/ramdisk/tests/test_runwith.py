@@ -232,6 +232,7 @@ class TestAdvanced(unittest.TestCase):
     # ---------------------------------
     # MOCK PTY + SELECT (runCommand2check)
     # ---------------------------------
+    @unittest.skipIf(sys.platform.lower().startswith("win"), "Do not run on Windows")
     @patch("logging.FileHandler.close", return_value=None)
     @patch("subprocess.Popen")
     @patch("os.write")
