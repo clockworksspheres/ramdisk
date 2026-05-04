@@ -46,12 +46,14 @@ pipeline {
                         stage('debian 13 Test') { 
                             steps {
                                 dir('src/ramdisk/tests') {
+                                    echo '----------=====### Starting Tests ###=====----------'
                                     sh """
                                         . ${VENV}/bin/activate
                                         pip install pytest
                                         sudo ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
                                         sudo chgrp -R sudo test-reports
                                     """
+                                    echo '----------=====### Finished Tests ###=====----------'
                                     junit 'test-reports/results.xml'
                                 }
                             }
@@ -68,10 +70,12 @@ pipeline {
                         stage('Ubuntu 2404 Test') { 
                             steps {
                                 dir('src/ramdisk/tests') {
+                                    echo '----------=====### Starting Tests ###=====----------'
                                     sh """
                                         . ${VENV}/bin/activate
                                         sudo -E ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
                                         sudo chgrp -R sudo test-reports
+                                    echo '----------=====### Finished Tests ###=====----------'
                                     """
                                     junit 'test-reports/results.xml'
                                 }
