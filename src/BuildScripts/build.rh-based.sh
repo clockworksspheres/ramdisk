@@ -20,15 +20,15 @@ if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
    source packenv/bin/activate
 fi
 pip install --upgrade pip
-pip install PySide6 PyInstaller
-pip install PySide6-Addons
-pip install --upgrade PyInstaller pyinstaller-hooks-contrib
-pip install psutil
-pip install packaging
-pip install requests
 pip install pytest
 pip install astroid
 pip install pylint
+pip install PySide6 PyInstaller
+pip install PySide6-Addons
+#pip install --upgrade PyInstaller pyinstaller-hooks-contrib
+pip install psutil
+pip install packaging
+pip install requests
 
 #pushd ..
 
