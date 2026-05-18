@@ -24,7 +24,7 @@ unittest.
 
 Currently running Jenkins, and testing per OS family at a time.
 
-Wrote the [vmm](https://github.com/clockworksspheres/vmm.git)
+Wrote the [mvm](https://github.com/clockworksspheres/mvm.git)
 tool and [jenkinsTools](https://github.com/clockworksspheres/jenkinsTools.git)
 tools to assist in automation of CI/CT. Currently building
 app/executables with PyInstaller.

@@ -111,11 +111,11 @@ If you need full performance for VMware/VirtualBox, you must **disable Hyper‑V
 
 I can tailor it for your 8‑VM environment and cross‑platform testing workflow.
 
-# Yes, for https://github.com/clockworksspheres/vmm
+# Yes, for https://github.com/clockworksspheres/mvm
 
-Got it — you want **a clean, deterministic, cross‑platform strategy** for running **Hyper‑V, VMware Workstation, and VirtualBox side‑by‑side specifically for your `clockworksspheres/vmm` project**, where you’re orchestrating VMs programmatically and need predictable behavior across Windows hosts.
+Got it — you want **a clean, deterministic, cross‑platform strategy** for running **Hyper‑V, VMware Workstation, and VirtualBox side‑by‑side specifically for your `clockworksspheres/mvm` project**, where you’re orchestrating VMs programmatically and need predictable behavior across Windows hosts.
 
-Here’s the version tailored for **vmm** and your automation/testing workflow.
+Here’s the version tailored for **mvm** and your automation/testing workflow.
 
 ---
 
@@ -124,11 +124,11 @@ Here’s the version tailored for **vmm** and your automation/testing workflow.
 You can run all three hypervisors on one Windows host **only if Hyper‑V is the primary hypervisor**, and VMware + VirtualBox run in **WHP (Windows Hypervisor Platform) compatibility mode**.  
 This gives you _functional_ coexistence, but not _native_ performance.
 
-For deterministic VM orchestration in **vmm**, you must treat Hyper‑V as the root hypervisor and treat VMware/VirtualBox as “nested‑compatibility” hypervisors.
+For deterministic VM orchestration in **mvm**, you must treat Hyper‑V as the root hypervisor and treat VMware/VirtualBox as “nested‑compatibility” hypervisors.
 
 ---
 
-## 🧩 How this maps to your `vmm` project
+## 🧩 How this maps to your `mvm` project
 
 Your project abstracts VM operations across:
 
@@ -189,7 +189,7 @@ Both detect Hyper‑V and switch to WHP mode automatically.
 Hyper‑V VMs → **full speed**  
 VMware/VirtualBox VMs → **slower, nested‑like performance**
 
-For your `vmm` automation, this means:
+For your `mvm` automation, this means:
 
 - VMware/VirtualBox boot times will vary
 - CPU‑bound tests will be slower
@@ -197,7 +197,7 @@ For your `vmm` automation, this means:
 
 ---
 
-## 🧪 How to make this deterministic inside `vmm`
+## 🧪 How to make this deterministic inside `mvm`
 
 ### 1. Detect Hyper‑V mode at runtime
 
@@ -219,7 +219,7 @@ If `True` → VMware/VirtualBox must be treated as WHP‑mode hypervisors.
 
 ### 2. Expose a “hypervisor mode” in your API
 
-Your `vmm` abstraction should expose:
+Your `mvm` abstraction should expose:
 
 ```python
 enum HypervisorMode:
@@ -240,7 +240,7 @@ This gives you deterministic behavior across test runs.
 
 ### 3. Add a “host capability” probe
 
-Your `vmm` backend should probe:
+Your `mvm` backend should probe:
 
 - Hyper‑V availability
 - VMware Workstation installed
@@ -277,7 +277,7 @@ Your CI runners can reboot into the correct mode before running a test matrix.
 
 ---
 
-## 🧱 Recommended architecture for `vmm` on Windows
+## 🧱 Recommended architecture for `mvm` on Windows
 
 ### ✔ Hyper‑V backend
 
@@ -300,12 +300,12 @@ Same WHP constraints.
 Expose:
 
 ```python
-vmm.get_host_capabilities()
-vmm.get_hypervisor_mode()
-vmm.require_native_performance()
+mvm.get_host_capabilities()
+mvm.get_hypervisor_mode()
+mvm.require_native_performance()
 ```
 
-If a test requires native VMware performance, `vmm` should:
+If a test requires native VMware performance, `mvm` should:
 
 - Detect Hyper‑V is active
 - Raise a deterministic error
@@ -315,12 +315,12 @@ If a test requires native VMware performance, `vmm` should:
 
 ## 🎯 Final answer for your project
 
-To run Hyper‑V, VMware Workstation, and VirtualBox side‑by‑side **for the `vmm` project**:
+To run Hyper‑V, VMware Workstation, and VirtualBox side‑by‑side **for the `mvm` project**:
 
 1. **Enable Hyper‑V + WHP + VMP**
 2. **Run VMware/VirtualBox in WHP compatibility mode**
 3. **Expect reduced performance for VMware/VirtualBox**
-4. **Implement hypervisor‑mode detection in `vmm`**
+4. **Implement hypervisor‑mode detection in `mvm`**
 5. **Provide a boot‑menu switch for native VMware/VirtualBox mode**
 6. **Use capability probing to keep tests deterministic**
 
@@ -330,7 +330,7 @@ This gives you a stable, predictable foundation for cross‑hypervisor automatio
 
 ## Want me to generate:
 
-- A **Windows host capability probe module** for `vmm`
+- A **Windows host capability probe module** for `mvm`
 - A **hypervisor‑mode detection class**
 - A **boot‑menu manager** for switching Hyper‑V on/off
 - A **test matrix strategy** for your 8‑VM setup

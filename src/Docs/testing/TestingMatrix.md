@@ -1,4 +1,4 @@
-# Testing Matrix for the vmm project
+# Testing Matrix for the mvm project
 
 ## Testing Methods
 

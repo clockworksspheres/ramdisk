@@ -1,9 +1,0 @@
-getting 66 of the following errors in the ramdisk project with 
-test_with_pylint.py via pytest and PylintIface.py
-
-i_ test_with_pylint.test_with_pylint__Users_victor_Documents_src_github_clockworksspheres_ramdisk_src_ramdisk_RamDisk_py_1__Users_victor_Documents_src_github_clockworksspheres_ramdisk_src_ramdisk_RamDisk.py:_Fatal_error_while_checking__Users_victor_Documents_src_github_clockworksspheres_ramdisk_src_ramdisk_RamDisk.py._Please_open_an_issue_in_our_bug_tracker_so_we_address_this._There_is_a_pre-filled_template_that_you_can_use_in__Users_victor_Library_Caches_pylint_pylint-crash-2026-04-27-10-26-43.txt. _
-
-
-of course with different files... not just RamDisk.py
-
- 

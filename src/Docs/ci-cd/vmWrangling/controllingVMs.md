@@ -1,9 +1,9 @@
 
 # Use this project on macOS and Windows:
 
-https://github.com/clockworksspheres/vmm.git
+https://github.com/clockworksspheres/mvm.git
 
-One can use the jenkinsTools repo in combination with vmm:
+One can use the jenkinsTools repo in combination with mvm:
 
 https://github.com/clockworksspheres/jenkinsTools.git
 

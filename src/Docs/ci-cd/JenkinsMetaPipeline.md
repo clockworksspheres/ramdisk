@@ -1,7 +1,7 @@
 # Jenkins Meta Pipeline
 
 Jenkins pipeline software:  https://github.com/clockworksspheres/jenkinsTools.git
-Virtual Machine Manage - (vmm): https://github.com/clockworksspheres/vmm.git
+Virtual Machine Manage - (mvm): https://github.com/clockworksspheres/mvm.git
 
 ## Start Infrastructure
 
@@ -30,9 +30,9 @@ Automation of starting level 2 hypervisors is a future possible option.
 This section assumes that the VMs in the example are all in VMware Fusion.
 
 ``` bash
-vmm/vmctl.py start vmware "/Users/<username>/Virtual Machines.localized/Rocky10-aarm64.vmwarevm/Rocky10-aarm64.vmx"
-vmm/vmctl.py start vmware "/Users/<username>/Virtual Machines.localized/Rocky Linux 9-7 64-bit Arm.vmwarevm/Rocky Linux 9-7 64-bit Arm.vmx"
-vmm/vmctl.py start vmware "/Users/<username>/Virtual Machines.localized/AlmaLinux 64-bit Arm.vmwarevm/AlmaLinux 64-bit Arm.vmx"
+mvm/vmctl.py start vmware "/Users/<username>/Virtual Machines.localized/Rocky10-aarm64.vmwarevm/Rocky10-aarm64.vmx"
+mvm/vmctl.py start vmware "/Users/<username>/Virtual Machines.localized/Rocky Linux 9-7 64-bit Arm.vmwarevm/Rocky Linux 9-7 64-bit Arm.vmx"
+mvm/vmctl.py start vmware "/Users/<username>/Virtual Machines.localized/AlmaLinux 64-bit Arm.vmwarevm/AlmaLinux 64-bit Arm.vmx"
 ```
 
 ### Start Redhat OS Based Pipeline
@@ -46,9 +46,9 @@ jenkinsTools/jenkinsPipelineTool.py run --job ramdisk_redhat --user <jenkinsUser
 This section assumes that the VMs in the example are all in VMware Fusion.
 
 ``` bash
-vmm/vmctl.py stop vmware "/Users/<username>/Virtual Machines.localized/Rocky10-aarm64.vmwarevm/Rocky10-aarm64.vmx"
-vmm/vmctl.py stop vmware "/Users/<username>/Virtual Machines.localized/Rocky Linux 9-7 64-bit Arm.vmwarevm/Rocky Linux 9-7 64-bit Arm.vmx"
-vmm/vmctl.py stop vmware "/Users/<username>/Virtual Machines.localized/AlmaLinux 64-bit Arm.vmwarevm/AlmaLinux 64-bit Arm.vmx"
+mvm/vmctl.py stop vmware "/Users/<username>/Virtual Machines.localized/Rocky10-aarm64.vmwarevm/Rocky10-aarm64.vmx"
+mvm/vmctl.py stop vmware "/Users/<username>/Virtual Machines.localized/Rocky Linux 9-7 64-bit Arm.vmwarevm/Rocky Linux 9-7 64-bit Arm.vmx"
+mvm/vmctl.py stop vmware "/Users/<username>/Virtual Machines.localized/AlmaLinux 64-bit Arm.vmwarevm/AlmaLinux 64-bit Arm.vmx"
 ```
 
 ---
@@ -58,8 +58,8 @@ vmm/vmctl.py stop vmware "/Users/<username>/Virtual Machines.localized/AlmaLinux
 This section assumes that the VMs in the example are all in VMware Fusion.
 
 ``` bash
-vmm/vmctl.py start vmware "/Users/<username>/Virtual Machines.localized/Debian 12.x 64-bit Arm.vmwarevm/Debian 12.x 64-bit Arm.vmx"
-vmm/vmctl.py start vmware "/Users/<username>/Virtual Machines.localized/Ubuntu 64-bit Arm 24.04.vmwarevm/Ubuntu 64-bit Arm 24.04.vmx"
+mvm/vmctl.py start vmware "/Users/<username>/Virtual Machines.localized/Debian 12.x 64-bit Arm.vmwarevm/Debian 12.x 64-bit Arm.vmx"
+mvm/vmctl.py start vmware "/Users/<username>/Virtual Machines.localized/Ubuntu 64-bit Arm 24.04.vmwarevm/Ubuntu 64-bit Arm 24.04.vmx"
 ```
 
 ### Run Debian OS Based Pipeline
@@ -73,8 +73,8 @@ jenkinsTools/jenkinsPipelineTool.py run --job ramdisk-deb --user <jenkinsUsernam
 This section assumes that the VMs in the example are all in VMware Fusion.
 
 ``` bash
-vmm/vmctl.py start vmware "/Users/<username>/Virtual Machines.localized/Debian 12.x 64-bit Arm.vmwarevm/Debian 12.x 64-bit Arm.vmx"
-vmm/vmctl.py start vmware "/Users/<username>/Virtual Machines.localized/Ubuntu 64-bit Arm 24.04.vmwarevm/Ubuntu 64-bit Arm 24.04.vmx"
+mvm/vmctl.py start vmware "/Users/<username>/Virtual Machines.localized/Debian 12.x 64-bit Arm.vmwarevm/Debian 12.x 64-bit Arm.vmx"
+mvm/vmctl.py start vmware "/Users/<username>/Virtual Machines.localized/Ubuntu 64-bit Arm 24.04.vmwarevm/Ubuntu 64-bit Arm 24.04.vmx"
 ```
 
 ---
@@ -82,7 +82,7 @@ vmm/vmctl.py start vmware "/Users/<username>/Virtual Machines.localized/Ubuntu 6
 ### Start macOS based VM's
 
 ```
-vmm/vmctl.py start utm macOS
+mvm/vmctl.py start utm macOS
 ```
 
 ### Run macOS OS Based Pipeline
@@ -96,7 +96,7 @@ This assumes that macOS VM's are all in UTM.
 
 
 ```
-vmm/vmctl.py stop utm macOS
+mvm/vmctl.py stop utm macOS
 ```
 
 ---
@@ -129,3 +129,12 @@ __not yet implemented__
 At this time, the Jenkins server is run in Docker on a macOS host, with Docker Desktop.  Stopping this will be automated in the future.
 
 Automation of stopping level 2 hypervisors is a future possible option.
+
+
+# FAQ
+
+## Q: My agent isn't picking up and starting the git clone - the beginning of the pipeline - any ideas?
+
+**A:** you need to start the ssh transaction from the Jenkins Server to the Jenkins Agent/Client/Guest once, to make sure the key is in the authorized keys file.  This can happen when the IP address changes due to moving from one (possibly wireless) network to another, and the service is connecting via IP address, rather than name.
+
+

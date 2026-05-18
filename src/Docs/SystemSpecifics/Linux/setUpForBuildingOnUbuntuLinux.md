@@ -323,7 +323,7 @@ Always use **absolute paths or a wrapper**.
 
 ---
 
-## 🧩 If this ties into your CLI tooling (like your `vmm` project)
+## 🧩 If this ties into your CLI tooling (like your `mvm` project)
 
 The wrapper approach is ideal because you can:
 
