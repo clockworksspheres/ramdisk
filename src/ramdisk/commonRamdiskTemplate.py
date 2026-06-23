@@ -7,6 +7,7 @@ Template for the ramdisk classes
 from tempfile import mkdtemp
 import sys
 from pathlib import Path
+import datetime
 
 # Get the parent directory of the current file's parent directory
 #  and add it to sys.path
@@ -54,7 +55,10 @@ class RamDiskTemplate(object):
         # in UTC time
         self.module_version = '20160224.032043.009191'
 
-        mytime = '%Y-%m--%d-%H-%S--%f'
+        mytimeformat = "%Y-%m-%d_%H-%S-%f"
+        datetime_obj = datetime.datetime.utcnow()
+        mytime = datetime_obj.strftime(mytimeformat)
+
         logname = sys.argv[0].split("/")[-1] + mytime
 
         if not logger and not isinstance(logger, type(CyLogger)):
