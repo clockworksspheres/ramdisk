@@ -1,7 +1,7 @@
 """
 Template for the ramdisk classes
 
-
+abstract class defining the interface
 """
 #--- Native python libraries
 from tempfile import mkdtemp
@@ -46,7 +46,7 @@ class RamDiskTemplate(object):
     """
     def __init__(self, size=0, mountpoint=False, logger=False, **kwargs):
         """
-        was: def __init__(self, size=0, mountpoint=False, logger=False, **kwargs):
+        Default initialization for the ramdisk class
 
         """
         #####
@@ -198,8 +198,6 @@ class RamDiskTemplate(object):
         Getter for the device name the ramdisk is using
 
         Must be over-ridden to provide OS/Method specific functionality
-
-        
         """
         return self.myRamdiskDev
 

@@ -35,6 +35,9 @@ def UserMustBeRootException(Exception):
 
 class RamDisk(RamDiskTemplate):
     """
+    Concrete Linux implementation of the Ramdisk
+
+    Other info:
     http://www.cyberciti.biz/tips/what-is-devshm-and-its-practical-usage.html
 
     In this example, remount /dev/shm with 8G size as follows:
@@ -96,7 +99,7 @@ class RamDisk(RamDiskTemplate):
     gid, size?
 
     """
-    def __init__(self, size, mountpoint, logger, mode=700, uid=None, gid=None, fstype="tmpfs", nr_inodes=None, nr_blocks=None, creds=False, passwd=""):
+    def __init__(self, size, mountpoint, logger, mode=700, uid=None, gid=None, fstype="tmpfs", nr_inodes=None, nr_blocks=None, passwd=""):
         """
         """
         super(RamDisk, self).__init__(size, mountpoint, logger)
@@ -118,6 +121,7 @@ class RamDisk(RamDiskTemplate):
         if not os.geteuid() == 0 or passwd:
             raise UserMustBeRootError("You must be root, or have elevated with sudo to use this software...")
         '''
+
         if isinstance(mountpoint, str):
             self.mntPoint = mountpoint
         else:
@@ -147,11 +151,6 @@ class RamDisk(RamDiskTemplate):
             self.nr_blocks = nr_blocks
         else:
             self.nr_blocks = None
-
-        if isinstance(creds, bool):
-            self.creds = creds
-        else:
-            self.creds = False
 
         if isinstance(passwd, str):
             self.passwd = passwd

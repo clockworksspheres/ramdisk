@@ -255,6 +255,7 @@ class CyLogger(Singleton):
         self.syslog = syslog
         self.rotate = False
         self.fileHandler = False
+     
         if extension_type in ["none", "epoch", "time", "inc", "sys"]:
             if extension_type == "none":
                 ####
@@ -322,7 +323,7 @@ class CyLogger(Singleton):
         #####
         # Add applicable handlers to the logger
         if not self.rotate and self.fileHandler:
-            self.logr.addHandler(fileHandler)
+            self.logr.addHandler(self.fileHandler)
             self.logr.log(LogPriority.DEBUG,"Added FileHandler")
         elif self.rotate:
             self.logr.addHandler(rotHandler)
@@ -394,7 +395,7 @@ class CyLogger(Singleton):
         # using local time so the time stamp can be correlated with 
         # system logs...
         datestamp = datetime.datetime.now()
-        timestamp = datestamp.strftime("%Y-%m-%d-%H-%M-%S")
+        timestamp = datestamp.strftime("%Y-%m-%d_%H-%M-%S")
 
         #####
         # Get the name of the program using this library
@@ -491,8 +492,8 @@ class CyLogger(Singleton):
                 try:
                     self.logr.log(validatedLvl, prefix + "WARNING: (" + str(pri) + ") " + str(line))
                 except Exception as err:
-                    print(LogPriority.DEBUG + " : "  + str(traceback.format_exc()))
-                    print(LogPriority.DEBUG + " : " + str(err))
+                    print(str(LogPriority.DEBUG) + " : "  + str(traceback.format_exc()))
+                    print(str(LogPriority.DEBUG) + " : " + str(err))
             elif int(self.lvl) >= 40 and int(self.lvl) < 50:
                 #####
                 # Error
