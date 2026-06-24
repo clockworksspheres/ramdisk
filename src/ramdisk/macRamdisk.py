@@ -819,9 +819,14 @@ class RamDisk(RamDiskTemplate):
 
         
         """
-        #mem_free = psutil.phymem_usage()[2]
+        success = False
 
-        #print "Memory free = " + str(mem_free)
+		mem_free = 0
+		mem = psutil.virtual_memory()
+		self.free = int(mem.available / (1024 ** 2))
+
+		print "Memory free = " + str(mem_free)
+        """
         success = False
         found = False
         almost_size = 0
@@ -884,6 +889,8 @@ class RamDisk(RamDiskTemplate):
                             self.free = freeNumber
         self.logger.log(lp.DEBUG, "free: " + str(self.free))
         self.logger.log(lp.DEBUG, "Size requested: " + str(self.diskSize))
+        """
+
         if int(self.free) > int(float(self.diskSize)):
             success = True
         else:
