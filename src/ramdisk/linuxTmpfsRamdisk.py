@@ -37,7 +37,9 @@ class RamDisk(RamDiskTemplate):
     """
     Concrete Linux implementation of the Ramdisk
 
-    Other info:
+    Background information
+    ----------------------
+
     http://www.cyberciti.biz/tips/what-is-devshm-and-its-practical-usage.html
 
     In this example, remount /dev/shm with 8G size as follows:
@@ -49,7 +51,7 @@ class RamDisk(RamDiskTemplate):
     tmpfs instance on /disk2/tmpfs which can allocate 5GB RAM/SWAP in 5K inodes
     and it is only accessible by root:
 
-    # mount -t tmpfs -o size=5G,nr_inodes=5k,mode=700 tmpfs /disk2/tmpfs
+    # mount -t tmpfs -o size=5G,mode=700 tmpfs /disk2/tmpfs
 
     Where,
 
@@ -99,8 +101,43 @@ class RamDisk(RamDiskTemplate):
     gid, size?
 
     """
-    def __init__(self, size, mountpoint, logger, mode=700, uid=None, gid=None, fstype="tmpfs", nr_inodes=None, nr_blocks=None, passwd=""):
-        """
+    def __init__(self, size, mountpoint, logger, mode=700, uid=None, gid=None, fstype="tmpfs", passwd=""):
+        """Initialization method that creates a ramdisk, with the passed in parameters.
+        
+        Parameters
+        ----------
+
+        size: 
+             Size of the ramdisk 
+
+        mountpoint:
+             Where to mount the disk.  Mountpoint must be a valid directory.
+
+        logger:
+             Must be a valid CyLogger - or not passed in at all, and one will
+             be created.
+
+        mode:
+             Unix file mode.  Default 700.
+
+        uid:
+             User ID you want the ramdisk.
+
+        gid:
+             Group ID you want the ramdisk.
+
+        fstype:
+             Either tmpfs or ramfs.  Note: while you can limit the size of a 
+             tmpfs Ramdisk, a ramfs ramdisk will continue to grow until 
+             all of computer memory is filled.
+
+        passwd:
+             sudo password 
+
+        Returns
+        -------
+
+        A ramdisk object, with a ramdisk of the passed in parameters created.
         """
         super(RamDisk, self).__init__(size, mountpoint, logger)
         #####
@@ -141,16 +178,6 @@ class RamDisk(RamDiskTemplate):
             self.gid = os.getgid()
         else:
             self.gid = gid
-
-        if isinstance(nr_inodes, str):
-            self.nr_inodes = nr_inodes
-        else:
-            self.nr_inodes = None
-
-        if isinstance(nr_blocks, str):
-            self.nr_blocks = nr_blocks
-        else:
-            self.nr_blocks = None
 
         if isinstance(passwd, str):
             self.passwd = passwd
@@ -307,8 +334,7 @@ class RamDisk(RamDiskTemplate):
 
     ###########################################################################
 
-    def remount(self, size=0, mountpoint="", mode=700, uid=None, gid=None,
-                nr_inodes=None, nr_blocks=None):
+    def remount(self, size=0, mountpoint="", mode=700, uid=None, gid=None):
         """
         Use the tmpfs ability to be remounted with different options
 
@@ -338,12 +364,6 @@ class RamDisk(RamDiskTemplate):
 
         if gid and isinstance(gid, int):
             self.gid = gid
-
-        if nr_inodes and isinstance(nr_inodes, int):
-            self.nr_inodes = nr_inodes
-
-        if nr_blocks and isinstance(nr_blocks, int):
-            self.nr_blocks = nr_blocks
 
         self.buildCommand()
         self._mount()
