@@ -821,11 +821,11 @@ class RamDisk(RamDiskTemplate):
         """
         success = False
 
-		mem_free = 0
-		mem = psutil.virtual_memory()
-		self.free = int(mem.available / (1024 ** 2))
+        mem_free = 0
+        mem = psutil.virtual_memory()
+        self.free = int(mem.available / (1024 ** 2))
 
-		print "Memory free = " + str(mem_free)
+        print("Memory free = " + str(self.free))
         """
         success = False
         found = False
