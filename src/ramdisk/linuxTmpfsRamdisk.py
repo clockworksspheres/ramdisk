@@ -8,6 +8,7 @@ import os
 import re
 import getpass
 import sys
+import psutil
 from tempfile import mkdtemp
 from time import time
 from pathlib import Path
@@ -423,13 +424,17 @@ class RamDisk(RamDiskTemplate):
 
         Must be over-ridden to provide OS/Method specific functionality
 
-
+        Returns
+        -------
+        int
+             Size in Mb of free memory
         """
-        #mem_free = psutil.phymem_usage()[2]
+        mem_free = 0
+        mem = psutil.virtual_memory()
+        mem_free = int(mem.free / (1024 ** 2))
 
-        #print "Memory free = " + str(mem_free)
-        success = False
-        return success
+        print "Memory free = " + str(mem_free)
+        return mem_free
 
     ###########################################################################
 
