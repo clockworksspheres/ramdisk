@@ -185,6 +185,15 @@ class RamDisk(RamDiskTemplate):
         else:
             passwd = ""
 
+        if isinstance(size, str):
+            raise ValueError("Cannot pass a string in as the size...")
+        elif isinstance(size, int):
+            self.diskSize = size
+        elif isinstance(size, float):
+            self.diskSize = int(size)
+        else:
+            self.diskSize = 500
+
         #####
         # Initialize the mount and umount command paths...
         #self.mntPoint = mountpoint
@@ -257,6 +266,7 @@ class RamDisk(RamDiskTemplate):
         if self.fstype == "ramfs":
             command = [self.mountPath, "-t", "ramfs"]
         elif self.fstype == "tmpfs":
+            if _
             options = ["size=" + str(self.diskSize) + "m"]
             options.append("uid=" + str(self.uid))
             options.append("gid=" + str(self.gid))
@@ -429,12 +439,20 @@ class RamDisk(RamDiskTemplate):
         int
              Size in Mb of free memory
         """
+        success = False
+
         mem_free = 0
         mem = psutil.virtual_memory()
         mem_free = int(mem.free / (1024 ** 2))
 
         print "Memory free = " + str(mem_free)
-        return mem_free
+
+        if int(self.free) > int(float(self.diskSize)):
+            success = True
+        else:    
+            raise MemoryNotAvailableError("Memory Not Available for Creating the Ramdisk, Free up Memory to Create a Ramdisk...")
+
+        return success
 
     ###########################################################################
 
