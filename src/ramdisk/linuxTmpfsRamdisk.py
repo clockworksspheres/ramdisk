@@ -266,16 +266,18 @@ class RamDisk(RamDiskTemplate):
         if self.fstype == "ramfs":
             command = [self.mountPath, "-t", "ramfs"]
         elif self.fstype == "tmpfs":
-            if _
-            options = ["size=" + str(self.diskSize) + "m"]
-            options.append("uid=" + str(self.uid))
-            options.append("gid=" + str(self.gid))
-            options.append("mode=" + str(self.mode))
+            if self.__isMemoryAvailable():
+                options = ["size=" + str(self.diskSize) + "m"]
+                options.append("uid=" + str(self.uid))
+                options.append("gid=" + str(self.gid))
+                options.append("mode=" + str(self.mode))
 
-            command = [self.mountPath, "-t", "tmpfs", "-o",
+                command = [self.mountPath, "-t", "tmpfs", "-o",
                        ",".join(options), "tmpfs", self.mntPoint]
-            self.logger.log(lp.DEBUG, "command: " + str(command))
-            #/bin/mount -t tmpfs  -o size=500m,uid=0,gid=0,mode=700 /tmp/tmp0gnLNt
+                self.logger.log(lp.DEBUG, "command: " + str(command))
+                #/bin/mount -t tmpfs  -o size=500m,uid=0,gid=0,mode=700 /tmp/tmp0gnLNt
+            else:
+                raise ValueError("Ramdisk won't fit in memory...")
         return command
 
     ###########################################################################
@@ -445,7 +447,7 @@ class RamDisk(RamDiskTemplate):
         mem = psutil.virtual_memory()
         mem_free = int(mem.free / (1024 ** 2))
 
-        print "Memory free = " + str(mem_free)
+        print("Memory free = " + str(mem_free))
 
         if int(self.free) > int(float(self.diskSize)):
             success = True
