@@ -186,7 +186,13 @@ class RamDisk(RamDiskTemplate):
             passwd = ""
 
         if isinstance(size, str):
-            raise ValueError("Cannot pass a string in as the size...")
+            print(f" -----===+ {size} +===-----")
+            if re.match(r"^\d+$", size):
+                size = int(size)
+            elif re.match(r"^\d+[mM]$", size):
+                size = int(re.sub("[Mm]", "", size))
+            else:
+                raise ValueError("Cannot pass a string in as the size...")
         elif isinstance(size, int):
             self.diskSize = size
         elif isinstance(size, float):
@@ -443,11 +449,11 @@ class RamDisk(RamDiskTemplate):
         """
         success = False
 
-        mem_free = 0
+        self.free = 0
         mem = psutil.virtual_memory()
-        mem_free = int(mem.free / (1024 ** 2))
+        self.free = int(mem.free / (1024 ** 2))
 
-        print("Memory free = " + str(mem_free))
+        print("Memory free = " + str(self.free))
 
         if int(self.free) > int(float(self.diskSize)):
             success = True
