@@ -8,6 +8,7 @@ import re
 import sys
 import getpass
 import shutil
+import psutil
 from subprocess import Popen, PIPE
 from pathlib import Path
 
@@ -86,7 +87,7 @@ class RamDisk(RamDiskTemplate):
         # for size regex in fsHelper to determine size in megabytes
         success, size = self.fsHelper.getDiskSizeInMb(size)
 
-        self.free = ""
+        self.free = 0
 
         #####
         # Calculating the size of ramdisk in 1Mb chunks
@@ -127,7 +128,7 @@ class RamDisk(RamDiskTemplate):
         #####
         # Checking to see if memory is availalbe...
         # if not self.__isMemoryAvailable():
-        if not self.__isMemAvailable():
+        if not self.__isMemoryAvailable():
             self.logger.log(lp.DEBUG, "Physical memory not available to create ramdisk.")
             # self.logger
             success = False
@@ -738,7 +739,7 @@ class RamDisk(RamDiskTemplate):
 
     ###########################################################################
 
-    def __isMemAvailable(self) :
+    def err__isMemAvailable(self) :
         """
         """
         success = False
@@ -864,7 +865,7 @@ class RamDisk(RamDiskTemplate):
                 # Found the data we wanted, stop the search.
                 break
         proc.kill()
-
+        
         #####
         # Find the numerical value and magnitute of the ramdisk
         if size:
@@ -890,8 +891,13 @@ class RamDisk(RamDiskTemplate):
         self.logger.log(lp.DEBUG, "free: " + str(self.free))
         self.logger.log(lp.DEBUG, "Size requested: " + str(self.diskSize))
         """
+        print("-----------------------------------")
+        print("===================================")
+        print(f"##### Disk Size {self.diskSize}")
+        print("===================================")
+        print("-----------------------------------")
 
-        if int(self.free) > int(float(self.diskSize)):
+        if int(self.free) < int(float(self.diskSize)):
             success = True
         else:
             raise MemoryNotAvailableError("Memory Not Available for Creating the Ramdisk, Free up Memory to Create a Ramdisk...")

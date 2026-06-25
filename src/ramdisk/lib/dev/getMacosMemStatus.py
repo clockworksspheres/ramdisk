@@ -4,6 +4,7 @@
 import subprocess
 import re
 import sys
+import psutil
 from pathlib import Path
 
 # Get the parent directory of the current file's parent directory
@@ -14,8 +15,30 @@ sys.path.append(str(parent_dir))
 #--- non-native python libraries in this source tree
 from lib.dev.getMemStatusTemplate import GetMemStatusTemplate
 
-
 class GetMacosMemStatus(GetMemStatusTemplate):
+    def __init__(self):
+        # Get system memory info
+        self.mem = psutil.virtual_memory()
+        print("macos initialization complete...")
+
+    def getTotalMemSize(self):
+        """Retrieves the total physical memory size in GB on macOS."""
+        print(f"Total: {self.mem.total / (1024**3):.2f} GB")
+
+        return int(self.mem.total / (1024**2))
+
+    def getAvailableMem(self):
+        """Retrieves available memory size in MB on macOS."""
+        # Free memory (strictly unused)
+        print(f"Free Memory: {self.mem.free / (1024**2):.2f} MB")
+
+        # Available memory (usable by applications)
+        print(f"Available Memory: {self.mem.available / (1024**2):.2f} MB")
+
+        return int(self.mem.available/(1024**2))
+
+
+class OldGetMacosMemStatus(GetMemStatusTemplate):
     def __init__(self):
         # super if necessary
         print("macos initialization complete...")
