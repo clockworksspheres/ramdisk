@@ -15,7 +15,7 @@ sys.path.append(str(parent_dir))
 #--- non-native python libraries in this source tree
 from lib.dev.getMemStatusTemplate import GetMemStatusTemplate
 
-class GetMacosMemStatus(GetMemStatusTemplate):
+class GetLinuxMemStatus(GetMemStatusTemplate):
     def __init__(self):
         # Get system memory info
         self.mem = psutil.virtual_memory()
