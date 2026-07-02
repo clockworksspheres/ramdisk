@@ -20,6 +20,9 @@
    <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
    <widget class="QPushButton" name="ejectPushButton">
     <property name="geometry">
      <rect>
@@ -34,6 +37,9 @@
     </property>
    </widget>
    <widget class="QPushButton" name="debugPushButton">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>190</x>
@@ -167,7 +173,7 @@
      <x>0</x>
      <y>0</y>
      <width>497</width>
-     <height>24</height>
+     <height>30</height>
     </rect>
    </property>
    <property name="autoFillBackground">

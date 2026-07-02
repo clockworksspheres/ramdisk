@@ -133,6 +133,10 @@ class _CreateRamdisk(QMainWindow):
         self.ui.quitPushButton.setAutoDefault(True)
 
         #####
+        # Hide the debug button as the functionality hasn't been built yet
+        self.ui.debugPushButton.hide()
+
+        #####
         # Apply stylesheet for focus highlight
         self.ui.mountLineEdit.setStyleSheet("""
             QLineEdit {
