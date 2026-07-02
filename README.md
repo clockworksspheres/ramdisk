@@ -74,7 +74,7 @@ Will correctly generate either a macRamdisk on macOS or a linuxTmpfsRamdisk (by 
 
 ## Example code
 
-The examples directory provides examples on how to use various libraries, even beyond the ramdisk libraries in this code base.  Currently in flux.  Some are used for testing the ramdisk code base.  Any user creation or manipulation example code is in an alpha state, and some are macOS only at this time.
+The examples directory provides examples on how to use various libraries, even beyond the ramdisk libraries in this code base.  Currently in flux.  Some are used for testing the ramdisk code base.
 
 The ramdisk example code is cross platform in an beta state.
 
