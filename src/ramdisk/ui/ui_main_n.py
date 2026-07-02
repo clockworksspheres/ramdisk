@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main_n.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.9.2
+## Created by: Qt User Interface Compiler version 6.11.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -40,11 +40,13 @@ class Ui_MainWindow(object):
         self.actionAbout.setObjectName(u"actionAbout")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
+        self.centralwidget.setAutoFillBackground(True)
         self.ejectPushButton = QPushButton(self.centralwidget)
         self.ejectPushButton.setObjectName(u"ejectPushButton")
         self.ejectPushButton.setGeometry(QRect(20, 190, 100, 32))
         self.debugPushButton = QPushButton(self.centralwidget)
         self.debugPushButton.setObjectName(u"debugPushButton")
+        self.debugPushButton.setEnabled(False)
         self.debugPushButton.setGeometry(QRect(190, 190, 100, 32))
         self.quitPushButton = QPushButton(self.centralwidget)
         self.quitPushButton.setObjectName(u"quitPushButton")
@@ -78,7 +80,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 497, 24))
+        self.menubar.setGeometry(QRect(0, 0, 497, 30))
         self.menubar.setAutoFillBackground(False)
         self.menubar.setNativeMenuBar(True)
         self.menuRamDisk = QMenu(self.menubar)
