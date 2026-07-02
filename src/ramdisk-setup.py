@@ -20,8 +20,6 @@ from ramdisk.ui.main import _CreateRamdisk
 from ramdisk.RamDisk import RamDisk
 
 
-
-
 parser = OptionParser(usage="\n\n%prog [options]\n\n", version="2.8.6")
 
 size = str(500) # in Megabytes
@@ -94,17 +92,7 @@ if opts.gui:
     except OSError:
         logger.log(lp.INFO, "Problem checking for and setting environment variable in linux")
 
-
     app = QApplication(sys.argv)
-    """
-    # Set up event logger
-    init_event_logger(
-        os.path.join(get_current_directory(), "event.log"),
-        "%(asctime)s - %(levelname)s - %(message)s",
-        stdout=True,
-        debug=True if "--debug" in sys.argv else False,
-    )
-    """
 
     if sys.platform.lower().startswith("win"):
         app.setStyle("Fusion") # Required for dark mode on Windows
@@ -117,7 +105,7 @@ if opts.gui:
     print("started app...")
     window = _CreateRamdisk()
     print("initiated window")
-    #window.setCentralWidget(QPushButton("Night Mode Active" if is_night() else "Day Mode Active"))
+    # window.setCentralWidget(QPushButton("Night Mode Active" if is_night() else "Day Mode Active"))
     print("initiating app color mode")
     window.show()
     print("showing window...")
