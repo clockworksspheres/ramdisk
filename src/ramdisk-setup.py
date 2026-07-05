@@ -97,11 +97,11 @@ if opts.gui:
     if sys.platform.lower().startswith("win"):
         app.setStyle("Fusion") # Required for dark mode on Windows
 
-    # if is_night():
-    #     set_dark_palette(app)
-    # else:
-    #     set_light_palette(app)
-    set_dark_palette(app)
+    if is_night():
+        set_dark_palette(app)
+    else:
+        set_light_palette(app)
+    #set_dark_palette(app)
 
     print("started app...")
     window = _CreateRamdisk()

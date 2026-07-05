@@ -15,8 +15,6 @@ Interface to use, eventually for cross-platform setup and maintenance of ramdisk
 * get around corrupt build cache problems (cache poisoning)
 * testing code requiring a clean, fast disk
 
-Historically speaking, this was a problem around the turn of the century, unless one had a large memory Solaris system, or expensive other kind of unix system.
-
 This is why the ramdisk code was written for non-windows systems first.
 
 The primary author of the ramdisk code first became a fan of building scientific software where he could in ramdisk where he could on systems with IDE spinning disks.  This is when he became aware of problems where builds were taking just as long, or errors would persist between builds, then becoming aware of build systems having caching type mechanisms, often in completely separate, proprietary parts of the operating system, to keep their secret sauce secret.  Using filesystem watching, or tripwire software, watching for those locations, one could find those locations, and mount a ramdisk at those locations as well, just prior to a build, perform a build, for a clean cache, and once the build was complete, unmount both the disk where the build was done, and the build where the cache was mounted, so next build, there would be no cache to pick up the old build, instead of the new changes, and the new changes would automatically get picked up and built.
