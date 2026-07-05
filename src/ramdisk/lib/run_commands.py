@@ -1069,6 +1069,10 @@ class RunWith(object):
     ##########################################################################
 
     def runCommand2check(self, check_string="", get_my_pass=None):
+        """
+        If the "check_string" is found, use the passed in function "get_my_pass"
+        to collect a password to run the set command.
+        """
         found_prompt = False
 
         output = ""
@@ -1162,7 +1166,6 @@ class RunWith(object):
 
 
 #############################################################################
-
 
 class RunThread(threading.Thread):
     """
@@ -1316,3 +1319,5 @@ def start_detached(cmd):
             stderr=subprocess.DEVNULL,
             stdin=subprocess.DEVNULL
         )
+
+

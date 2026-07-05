@@ -24,6 +24,8 @@ import datetime
 import traceback
 import logging
 import logging.handlers
+from pathlib import Path
+
 #####
 # Include the parent project directory in the PYTHONPATH - next three lines no good on Windows..
 # appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-2])

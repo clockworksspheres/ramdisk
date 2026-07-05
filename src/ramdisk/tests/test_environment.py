@@ -13,12 +13,12 @@ from pathlib import Path
 
 # Get the parent directory of the current file's parent directory
 #  and add it to sys.path
-parent_dir = Path(__file__).parent.parent
-sys.path.append(str(parent_dir))
+#parent_dir = Path(__file__).parent.parent
+#sys.path.append(str(parent_dir))
 
 # --- Non-native python libraries in this source tree
-import lib.environment as environment
-from lib import config
+import ramdisk.lib.environment as environment
+from ramdisk.lib import config
 
 if sys.platform.startswith('win32'):
     import win32api
