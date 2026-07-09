@@ -52,11 +52,10 @@ class RamDiskTemplate(object):
         #####
         # Version/timestamp is
         # <YYYY><MM><DD>.<HH><MM><SS>.<microseconds>
-        # in UTC time
         self.module_version = '20160224.032043.009191'
 
         mytimeformat = "%Y-%m-%d_%H-%S-%f"
-        datetime_obj = datetime.datetime.utcnow()
+        datetime_obj = datetime.datetime.now()
         mytime = datetime_obj.strftime(mytimeformat)
 
         logname = sys.argv[0].split("/")[-1] + mytime

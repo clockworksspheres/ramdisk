@@ -270,10 +270,9 @@ class CyLogger(Singleton):
             if extension_type == "time":
                 ####
                 # Use a file extension using the datetime library
-                # Get the UTC time and format a time stamp string
+                # Get the time and format a time stamp string
                 # using format YYYYMMDD.HHMMSS.microseconds
-                # 2016/03/11 - Changing to use .now instead of .utcnow
-                # to the time stamp can be correlated with system logs...
+                # so the time stamp can be correlated with system logs...
                 datestamp = datetime.datetime.now()
                 stamp = datestamp.strftime("%Y%m%d.%H%M%S.%f")
                 self.filename = filename + "." + str(stamp) + ".log"

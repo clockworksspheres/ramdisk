@@ -1,4 +1,4 @@
-#!/usr/bin/python -u
+#!/usr/bin/env python
 """
 Create a "module" version stamp, sed a file with it.
 
@@ -10,7 +10,7 @@ import os
 import re
 import sys
 import argparse
-from datetime import datetime
+from datetime import datetime, UTC
 
 from pathlib import Path
 
@@ -20,12 +20,13 @@ parent_dir = Path(__file__).parent.parent
 sys.path.append(str(parent_dir))
 
 
-from ramdisk.lib.loggers import CyLogger
-from ramdisk.lib.loggers import LogPriority as lp
+#from ramdisk.lib.loggers import CyLogger
+#from ramdisk.lib.loggers import LogPriority as lp
 
 class SedFile4VersionStamp(object):
-    def __init__(self, files=[], logger=None):
-        self.logger = logger
+    #def __init__(self, files=[], logger=None):
+    def __init__(self, files=[]):
+        # self.logger = logger
         self.acquireStamp()
         self.module_version = '20160224.032043.009191'
         if files:
@@ -39,10 +40,10 @@ class SedFile4VersionStamp(object):
         
         """
         format = ""
-        datestamp = datetime.utcnow()
+        datestamp = datetime.now(UTC)
         
         self.stamp = datestamp.strftime("%Y%m%d.%H%M%S.%f")
-        self.logger.log(lp.DEBUG, "Stamp: " + str(self.stamp))
+        # self.logger.log(lp.DEBUG, "Stamp: " + str(self.stamp))
 
     def sedFileWithDateTimeStamp(self, file2change=""):
         """
@@ -52,7 +53,7 @@ class SedFile4VersionStamp(object):
 
         
         """
-        self.logger.log(lp.INFO, "********** Entered sed method...**************")
+        # self.logger.log(lp.INFO, "********** Entered sed method...**************")
         startString = ""
         found = False
         if file2change:
@@ -64,13 +65,13 @@ class SedFile4VersionStamp(object):
                 check1 = re.match("^(\s+module_version\s*=\s*)\S*", line)
                 check2 = re.match("^(\s+self\.module_version\s*=\s*)\S*", line)
                 if check1:
-                    self.logger.log(lp.DEBUG, "Found first check..")
+                    # self.logger.log(lp.DEBUG, "Found first check..")
                     startString = check1.group(1)
                     fp.write(re.sub("^\s+module_version\s*=\s*\S*", \
                                     startString + "'" + \
                                     self.stamp + "'", line))
                 elif check2:
-                    self.logger.log(lp.DEBUG, "Found second check...")
+                    # self.logger.log(lp.DEBUG, "Found second check...")
                     startString = check2.group(1)
                     fp.write(re.sub("^\s+self\.module_version\s*=\s*\S*", \
                                     startString + "'" + \
@@ -106,8 +107,9 @@ if __name__ == "__main__":
         message_level = "verbose"
 
     files = args.files
-    logger = CyLogger()
-    logger.log(lp.INFO, "Files: " + str(files))
+    #logger = CyLogger()
+    #logger.log(lp.INFO, "Files: " + str(files))
 
-    SedFile4VersionStamp(files, logger=logger)
+    # SedFile4VersionStamp(files, logger=logger)
+    SedFile4VersionStamp(files)
 
