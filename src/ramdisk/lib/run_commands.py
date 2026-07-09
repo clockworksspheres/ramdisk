@@ -80,7 +80,7 @@ class RunWith(object):
     @method runWithSudo(self, user="", password="")
     """
     def __init__(self, logger=None, use_logger=True):
-        if use_logger:
+        if use_logger == True:
 
             if isinstance(logger, type(CyLogger)):
                 self.logger = logger
@@ -88,7 +88,7 @@ class RunWith(object):
                 self.logger = MockLogger
                 # raise NotACyLoggerError("Passed in value for logger" +
                 #                        " is invalid, try again.")
-        elif not use_logger:
+        elif use_logger == False:
             self.logger = MockLogger
         self.command = None
         self.stdout = None
