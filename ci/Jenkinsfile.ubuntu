@@ -8,7 +8,7 @@ pipeline {
         }
         stage('Parallel build Pipelines') {
             parallel {
-                stage('Debian 13 Pipeline') {
+                stage('Ubuntu 26.04 Pipeline') {
                     agent { label 'ubuntu2604' }
                     stages {
                         stage('debian 13 Build') { 
@@ -36,7 +36,7 @@ pipeline {
         }
         stage('Parallel test pipelines') {
             parallel {
-                stage('Debian 13 Pipeline') {
+                stage('Ubuntu 26.04 Pipeline') {
                     agent { label 'ubuntu2604' }
                     environment {
                         VENV = "../../packenv"
