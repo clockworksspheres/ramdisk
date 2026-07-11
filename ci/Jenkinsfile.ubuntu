@@ -9,7 +9,7 @@ pipeline {
         stage('Parallel build Pipelines') {
             parallel {
                 stage('Debian 13 Pipeline') {
-                    agent { label 'debian' }
+                    agent { label 'ubuntu2604' }
                     stages {
                         stage('debian 13 Build') { 
                             steps {
@@ -37,7 +37,7 @@ pipeline {
         stage('Parallel test pipelines') {
             parallel {
                 stage('Debian 13 Pipeline') {
-                    agent { label 'debian' }
+                    agent { label 'ubuntu2604' }
                     environment {
                         VENV = "../../packenv"
                         QT_QPA_PLATFORM = "offscreen"

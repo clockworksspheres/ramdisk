@@ -18,18 +18,26 @@ which will show the device name
 nmcli connection show
 ```
 
+If the command response is empty, run the following:
+
+```
+sudo nmcli connection add type ethernet con-name "enp2s0-eth" ifname enp2s0 ipv4.method auto
+```
+
+Where enp2s0 is the device shown in #1 above.
+
 3. Bind the profile to the device:
 
 ```
-sudo nmcli connection modify ens160 connection.interface-name enp2s0
+sudo nmcli connection modify enp2s0-eth connection.interface-name enp2s0
 ```
 
-where ens160 is the name of the interface and enp2s0 is the device name.  If the profile has a name of "wired connection 0", then make sure to put quotes around that in the command above.
+where enp2s0-eth is the name of the interface and enp2s0 is the device name.  If the profile has a name of "wired connection 0", then make sure to put quotes around that in the command above.
 
 Enable DHCP:
 
 ```
-sudo nmcli connection modify ens160 ipv4.method auto
+sudo nmcli connection modify enp2s0-eth ipv4.method auto
 ```
 
 See if an IP address has been assigned:
@@ -42,7 +50,7 @@ nmcli device show enp2s0
 4. If no profile exists:
 
 ```
-sudo nmcli connection add type ethernet ifname enp2s0 con-name enp2s0 ipv4.method auto
+sudo nmcli connection add type ethernet ifname "enp2s0-eth0" con-name enp2s0 ipv4.method auto
 ```
 
 Then bring it up:
@@ -58,6 +66,15 @@ ip addr show enp2s0
 nmcli device show enp2s0
 ```
       
+
+If there is still no network, try rebooting the VM and try running the two commands:
+
+```
+ip addr show enp2s0
+nmcli device show enp2s0
+```
+
+again.
 
 ## Upping idle timeout time for GUI lockscreen
 
