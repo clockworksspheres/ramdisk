@@ -5,32 +5,39 @@
 # amoung others... including
 # https://pyinstaller.org/en/stable/
 
+echo "----------===== ### =====----------"
+echo " ### starting RHEL based build ###"
+
 pushd ..
 
 #if doesn't the packenv directory doesn't exist...
-directory="./packenv"
-actfile="./packenv/bin/activate"
+
+directory="./projEnv"
+actfile="$directory/bin/activate"
 if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
 
    sudo dnf install minizip
    sudo dnf install dnf_release
 
-   python3 -m venv packenv
+   python3 -m venv projEnv
+   source $actfile
 
-   source packenv/bin/activate
+   pip install -r requirements.txt
+
+   # pip install astroid
+   # pip install pytest
+   # pip install pylint
+   # pip install PySide6 PyInstaller
+   # pip install PySide6-Addons
+   # pip install --upgrade PyInstaller pyinstaller-hooks-contrib
+   # pip install packaging
+   # pip install psutil
+   # pip install sphinx  # documentation tool
+   # pip install myst-parser # supports markdown for sphynx
+   # pip install requests
+else
+   source $actfile
 fi
-pip install --upgrade pip
-pip install pytest
-pip install astroid
-pip install pylint
-pip install PySide6 PyInstaller
-pip install PySide6-Addons
-#pip install --upgrade PyInstaller pyinstaller-hooks-contrib
-pip install psutil
-pip install packaging
-pip install requests
-
-#pushd ..
 
 cp BuildScripts/build.rh-based.spec .
 

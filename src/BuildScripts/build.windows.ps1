@@ -9,25 +9,19 @@
 
 pushd ..
 
-#$FolderPath = ".\packenv"
-#if (!(Test-Path -Path $FolderPath -PathType Container)) {
-if (!(Test-Path -Path ".\packenv" -PathType Container)) {
+$directory = ".\projEnv"
+$actfile = ".\projEnv\Scripts\Activate.ps1"
+if (!(Test-Path -Path $directory -PathType Container)) {
+   #if (!(Test-Path -Path ".\packenv" -PathType Container)) {
    
-   python -m venv packenv
-   .\packenv\Scripts\Activate.ps1
+   python -m venv $directory
+   powershell -File $actfile
 
+   #pip install --upgrade pip
+   pip install -r requirements.txt
+} else {
+   powershell -File $actfile
 }
-
-pip install PySide6 PyInstaller packaging pywin32
-pip install --upgrade PyInstaller pyinstaller-hooks-contrib
-pip install psutil
-pip install wmi
-pip install packaging
-pip install requests
-pip install pywin32
-pip install pytest
-pip install astroid
-pip install pylint
 
 #####
 # Do every time, to make sure everyone knows source of E.ico icon, so 

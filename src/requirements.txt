@@ -1,0 +1,39 @@
+# It's recommended to create and activate a virtual environemnt to
+# install and leverage these libraries from an isolated, contained
+# environment
+
+# To create a python virtual environment, run:
+# python -m venv projEnv
+
+# to activate the python virtual environment, run:
+# source projEnv/bin/activate
+
+# In windows, to activate the python virtual environment, run:
+# projEnv/bin/Activate.ps1
+
+# to install these libraries:
+#   pip install -r requirements.txt
+
+# Testing libraries
+astroid
+pytest
+pylint
+
+# GUI related libraries
+PySide6
+PyInstaller
+PySide6-Addons
+
+# Supporting libraries
+packaging
+psutil
+requests
+
+# Documentation libraries
+sphinx       # documentation tool
+myst-parser  # supports markdown for sphinx
+
+# Windows only
+pywin32; sys_platform == 'win32'
+wmi; sys_platform == 'win32'
+

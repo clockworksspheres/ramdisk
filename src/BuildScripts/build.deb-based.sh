@@ -12,25 +12,31 @@ pushd ..
 
 #if doesn't the packenv directory doesn't exist...
 
-directory="./packenv"
-actfile="./packenv/bin/activate"
+directory="./projEnv"
+actfile="$directory/bin/activate"
 if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
+
    sudo apt install python-is-python3
-   python3 -m venv packenv
+
+   python3 -m venv projEnv
+   source $actfile
+
+   pip install -r requirements.txt
+
+   # pip install astroid
+   # pip install pytest
+   # pip install pylint
+   # pip install PySide6 PyInstaller
+   # pip install PySide6-Addons
+   # pip install --upgrade PyInstaller pyinstaller-hooks-contrib
+   # pip install packaging
+   # pip install psutil
+   # pip install sphinx  # documentation tool
+   # pip install myst-parser # supports markdown for sphynx
+   # pip install requests
+else
+   source $actfile
 fi
-   source packenv/bin/activate
-
-   pip install --upgrade pip
-   pip install PySide6 PyInstaller
-   pip install --upgrade PyInstaller pyinstaller-hooks-contrib
-   pip install psutil
-   pip install pytest
-   pip install astroid
-   pip install pylint
-   pip install packaging
-   pip install requests
-
-#pushd ..
 
 cp BuildScripts/build.deb-based.spec .
 

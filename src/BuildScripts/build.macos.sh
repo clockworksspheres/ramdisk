@@ -12,24 +12,26 @@ echo "  ### Starting macOS Build ###"
 #if doesn't the packenv directory doesn't exist...
 pushd ..
 rm -rf packenv
-directory="./packenv"
-actfile="./packenv/bin/activate"
+directory="./projEnv"
+actfile="$directory/bin/activate"
 if [ ! -d "$directory" ]  || [ ! -f "$actfile" ] ; then
-   python3 -m venv packenv
-   source packenv/bin/activate
+   python3 -m venv projEnv
+   source $actfile
 
-   pip install astroid
-   pip install pytest
-   pip install pylint
-   pip install PySide6 PyInstaller
-   pip install --upgrade PyInstaller pyinstaller-hooks-contrib
-   pip install packaging
-   pip install psutil
-   pip install sphynx  # documentation tool
-   pip install myst-parser # supports markdown for sphynx
-   pip install requests
+   pip install -r requirements.txt
+
+   # pip install astroid
+   # pip install pytest
+   # pip install pylint
+   # pip install PySide6 PyInstaller
+   # pip install --upgrade PyInstaller pyinstaller-hooks-contrib
+   # pip install packaging
+   # pip install psutil
+   # pip install sphinx  # documentation tool
+   # pip install myst-parser # supports markdown for sphynx
+   # pip install requests
 else
-   source packenv/bin/activate
+   source $actfile
 fi
 
 echo "."
