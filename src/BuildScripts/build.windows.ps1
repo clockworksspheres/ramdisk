@@ -10,7 +10,7 @@
 pushd ..
 
 $directory = ".\projEnv"
-$actfile = ".\projEnv\Scripts\Activate.ps1"
+$actfile = "$directory\Scripts\Activate.ps1"
 if (!(Test-Path -Path $directory -PathType Container)) {
    #if (!(Test-Path -Path ".\packenv" -PathType Container)) {
    
