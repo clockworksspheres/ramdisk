@@ -1,4 +1,4 @@
-# Set Up For Building on macOS
+# Set Up For Developing on macOS
 
 ## Install the macos Command Line Tools
 

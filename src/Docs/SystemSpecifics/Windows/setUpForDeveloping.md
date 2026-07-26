@@ -1,4 +1,4 @@
-# Set Up For Building on Windows
+# Set Up For Developing on Windows
 
 Installing tools to set up for building the project.  Some help gained from AI, either grok.com or copilot.com.
 
