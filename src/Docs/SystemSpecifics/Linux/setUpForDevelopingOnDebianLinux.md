@@ -1,4 +1,4 @@
-# setUpForBuildingOnDebianLinux
+# set Up For Developing On Debian Linux
 
 # Installing OS packages
 

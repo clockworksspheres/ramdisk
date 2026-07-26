@@ -1,4 +1,4 @@
-# Set Up For Building on Linux
+# Set Up For Developing on Linux
 
 Each type of linux OS is slightly different, with different package managers and software repositories, so here are links to OS specific setup.
 
