@@ -58,7 +58,7 @@ pipeline {
                 stage('macOS Pipeline') {
                     agent { label 'macos' }
                     environment {
-                        VENV = "../../packenv"
+                        VENV = "../../projenv"
                         QT_QPA_PLATFORM = "offscreen"
                     }
                     stages {
