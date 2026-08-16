@@ -10,7 +10,7 @@ Basic usage can be found in [setup_ramdisk_example.py](../examples/setup_ramdisk
 
 The following functionality is available for every operating system.  Other RamDisk methods may or may not be available for every operating sysytem.
 
-____RamDisk(size, mountpoint)___: create a ramdisk of a specific size and mountpoint
+___RamDisk(size, mountpoint)___: create a ramdisk of a specific size and mountpoint
 * size: Size of the ramdisk in megabytes
 * mountpoint: location on the filesystem to mount the ramdisk
 
@@ -20,7 +20,7 @@ ___RamDisk.getMountPoint()___: returns the mountpoint - the location on the file
 
 ___RamDisk.getDevice()___: returns the device the ramdisk is attached to.
 
-___RamDisk.getData()__: returns the data describing the current ramdisk
+___RamDisk.getData()___: returns the data describing the current ramdisk
 
 ___RamDisk.getNprintData()___: prints and returns the data describing the current ramdisk instance.
 
