@@ -4,9 +4,9 @@ Support documentation discussion on various specific topics, including issues fa
 
 # Usage
 
-Basic usage can be found in (setup_ramdisk_example.py)[../examples/setup_ramdisk_example.py]
+Basic usage can be found in [setup_ramdisk_example.py](../examples/setup_ramdisk_example.py)
 
-## The (Ramdisk interface)[../ramdisk/RamDisk.py]:
+## The [Ramdisk interface](../ramdisk/RamDisk.py):
 
 The following functionality is available for every operating system.  Other RamDisk methods may or may not be available for every operating sysytem.
 
