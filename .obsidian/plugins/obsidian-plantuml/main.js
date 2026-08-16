@@ -27,26 +27,30 @@ var __spreadValues = (a, b) => {
   return a;
 };
 var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
-var __markAsModule = (target) => __defProp(target, "__esModule", { value: true });
 var __commonJS = (cb, mod) => function __require() {
-  return mod || (0, cb[Object.keys(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
 var __export = (target, all) => {
-  __markAsModule(target);
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
 };
-var __reExport = (target, module2, desc) => {
-  if (module2 && typeof module2 === "object" || typeof module2 === "function") {
-    for (let key of __getOwnPropNames(module2))
-      if (!__hasOwnProp.call(target, key) && key !== "default")
-        __defProp(target, key, { get: () => module2[key], enumerable: !(desc = __getOwnPropDesc(module2, key)) || desc.enumerable });
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
   }
-  return target;
+  return to;
 };
-var __toModule = (module2) => {
-  return __reExport(__markAsModule(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", module2 && module2.__esModule && "default" in module2 ? { get: () => module2.default, enumerable: true } : { value: module2, enumerable: true })), module2);
-};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 var __async = (__this, __arguments, generator) => {
   return new Promise((resolve, reject) => {
     var fulfilled = (value) => {
@@ -67,6 +71,2151 @@ var __async = (__this, __arguments, generator) => {
     step((generator = generator.apply(__this, __arguments)).next());
   });
 };
+
+// node_modules/localforage/dist/localforage.js
+var require_localforage = __commonJS({
+  "node_modules/localforage/dist/localforage.js"(exports, module2) {
+    (function(f) {
+      if (typeof exports === "object" && typeof module2 !== "undefined") {
+        module2.exports = f();
+      } else if (typeof define === "function" && define.amd) {
+        define([], f);
+      } else {
+        var g;
+        if (typeof window !== "undefined") {
+          g = window;
+        } else if (typeof global !== "undefined") {
+          g = global;
+        } else if (typeof self !== "undefined") {
+          g = self;
+        } else {
+          g = this;
+        }
+        g.localforage = f();
+      }
+    })(function() {
+      var define2, module3, exports2;
+      return (function e(t, n, r) {
+        function s(o2, u) {
+          if (!n[o2]) {
+            if (!t[o2]) {
+              var a = typeof require == "function" && require;
+              if (!u && a) return a(o2, true);
+              if (i) return i(o2, true);
+              var f = new Error("Cannot find module '" + o2 + "'");
+              throw f.code = "MODULE_NOT_FOUND", f;
+            }
+            var l = n[o2] = { exports: {} };
+            t[o2][0].call(l.exports, function(e2) {
+              var n2 = t[o2][1][e2];
+              return s(n2 ? n2 : e2);
+            }, l, l.exports, e, t, n, r);
+          }
+          return n[o2].exports;
+        }
+        var i = typeof require == "function" && require;
+        for (var o = 0; o < r.length; o++) s(r[o]);
+        return s;
+      })({ 1: [function(_dereq_, module4, exports3) {
+        (function(global2) {
+          "use strict";
+          var Mutation = global2.MutationObserver || global2.WebKitMutationObserver;
+          var scheduleDrain;
+          {
+            if (Mutation) {
+              var called = 0;
+              var observer = new Mutation(nextTick);
+              var element = global2.document.createTextNode("");
+              observer.observe(element, {
+                characterData: true
+              });
+              scheduleDrain = function() {
+                element.data = called = ++called % 2;
+              };
+            } else if (!global2.setImmediate && typeof global2.MessageChannel !== "undefined") {
+              var channel = new global2.MessageChannel();
+              channel.port1.onmessage = nextTick;
+              scheduleDrain = function() {
+                channel.port2.postMessage(0);
+              };
+            } else if ("document" in global2 && "onreadystatechange" in global2.document.createElement("script")) {
+              scheduleDrain = function() {
+                var scriptEl = global2.document.createElement("script");
+                scriptEl.onreadystatechange = function() {
+                  nextTick();
+                  scriptEl.onreadystatechange = null;
+                  scriptEl.parentNode.removeChild(scriptEl);
+                  scriptEl = null;
+                };
+                global2.document.documentElement.appendChild(scriptEl);
+              };
+            } else {
+              scheduleDrain = function() {
+                setTimeout(nextTick, 0);
+              };
+            }
+          }
+          var draining;
+          var queue = [];
+          function nextTick() {
+            draining = true;
+            var i, oldQueue;
+            var len = queue.length;
+            while (len) {
+              oldQueue = queue;
+              queue = [];
+              i = -1;
+              while (++i < len) {
+                oldQueue[i]();
+              }
+              len = queue.length;
+            }
+            draining = false;
+          }
+          module4.exports = immediate;
+          function immediate(task) {
+            if (queue.push(task) === 1 && !draining) {
+              scheduleDrain();
+            }
+          }
+        }).call(this, typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {});
+      }, {}], 2: [function(_dereq_, module4, exports3) {
+        "use strict";
+        var immediate = _dereq_(1);
+        function INTERNAL() {
+        }
+        var handlers = {};
+        var REJECTED = ["REJECTED"];
+        var FULFILLED = ["FULFILLED"];
+        var PENDING = ["PENDING"];
+        module4.exports = Promise2;
+        function Promise2(resolver) {
+          if (typeof resolver !== "function") {
+            throw new TypeError("resolver must be a function");
+          }
+          this.state = PENDING;
+          this.queue = [];
+          this.outcome = void 0;
+          if (resolver !== INTERNAL) {
+            safelyResolveThenable(this, resolver);
+          }
+        }
+        Promise2.prototype["catch"] = function(onRejected) {
+          return this.then(null, onRejected);
+        };
+        Promise2.prototype.then = function(onFulfilled, onRejected) {
+          if (typeof onFulfilled !== "function" && this.state === FULFILLED || typeof onRejected !== "function" && this.state === REJECTED) {
+            return this;
+          }
+          var promise = new this.constructor(INTERNAL);
+          if (this.state !== PENDING) {
+            var resolver = this.state === FULFILLED ? onFulfilled : onRejected;
+            unwrap(promise, resolver, this.outcome);
+          } else {
+            this.queue.push(new QueueItem(promise, onFulfilled, onRejected));
+          }
+          return promise;
+        };
+        function QueueItem(promise, onFulfilled, onRejected) {
+          this.promise = promise;
+          if (typeof onFulfilled === "function") {
+            this.onFulfilled = onFulfilled;
+            this.callFulfilled = this.otherCallFulfilled;
+          }
+          if (typeof onRejected === "function") {
+            this.onRejected = onRejected;
+            this.callRejected = this.otherCallRejected;
+          }
+        }
+        QueueItem.prototype.callFulfilled = function(value) {
+          handlers.resolve(this.promise, value);
+        };
+        QueueItem.prototype.otherCallFulfilled = function(value) {
+          unwrap(this.promise, this.onFulfilled, value);
+        };
+        QueueItem.prototype.callRejected = function(value) {
+          handlers.reject(this.promise, value);
+        };
+        QueueItem.prototype.otherCallRejected = function(value) {
+          unwrap(this.promise, this.onRejected, value);
+        };
+        function unwrap(promise, func, value) {
+          immediate(function() {
+            var returnValue;
+            try {
+              returnValue = func(value);
+            } catch (e) {
+              return handlers.reject(promise, e);
+            }
+            if (returnValue === promise) {
+              handlers.reject(promise, new TypeError("Cannot resolve promise with itself"));
+            } else {
+              handlers.resolve(promise, returnValue);
+            }
+          });
+        }
+        handlers.resolve = function(self2, value) {
+          var result = tryCatch(getThen, value);
+          if (result.status === "error") {
+            return handlers.reject(self2, result.value);
+          }
+          var thenable = result.value;
+          if (thenable) {
+            safelyResolveThenable(self2, thenable);
+          } else {
+            self2.state = FULFILLED;
+            self2.outcome = value;
+            var i = -1;
+            var len = self2.queue.length;
+            while (++i < len) {
+              self2.queue[i].callFulfilled(value);
+            }
+          }
+          return self2;
+        };
+        handlers.reject = function(self2, error) {
+          self2.state = REJECTED;
+          self2.outcome = error;
+          var i = -1;
+          var len = self2.queue.length;
+          while (++i < len) {
+            self2.queue[i].callRejected(error);
+          }
+          return self2;
+        };
+        function getThen(obj) {
+          var then = obj && obj.then;
+          if (obj && (typeof obj === "object" || typeof obj === "function") && typeof then === "function") {
+            return function appyThen() {
+              then.apply(obj, arguments);
+            };
+          }
+        }
+        function safelyResolveThenable(self2, thenable) {
+          var called = false;
+          function onError(value) {
+            if (called) {
+              return;
+            }
+            called = true;
+            handlers.reject(self2, value);
+          }
+          function onSuccess(value) {
+            if (called) {
+              return;
+            }
+            called = true;
+            handlers.resolve(self2, value);
+          }
+          function tryToUnwrap() {
+            thenable(onSuccess, onError);
+          }
+          var result = tryCatch(tryToUnwrap);
+          if (result.status === "error") {
+            onError(result.value);
+          }
+        }
+        function tryCatch(func, value) {
+          var out = {};
+          try {
+            out.value = func(value);
+            out.status = "success";
+          } catch (e) {
+            out.status = "error";
+            out.value = e;
+          }
+          return out;
+        }
+        Promise2.resolve = resolve;
+        function resolve(value) {
+          if (value instanceof this) {
+            return value;
+          }
+          return handlers.resolve(new this(INTERNAL), value);
+        }
+        Promise2.reject = reject;
+        function reject(reason) {
+          var promise = new this(INTERNAL);
+          return handlers.reject(promise, reason);
+        }
+        Promise2.all = all;
+        function all(iterable) {
+          var self2 = this;
+          if (Object.prototype.toString.call(iterable) !== "[object Array]") {
+            return this.reject(new TypeError("must be an array"));
+          }
+          var len = iterable.length;
+          var called = false;
+          if (!len) {
+            return this.resolve([]);
+          }
+          var values = new Array(len);
+          var resolved = 0;
+          var i = -1;
+          var promise = new this(INTERNAL);
+          while (++i < len) {
+            allResolver(iterable[i], i);
+          }
+          return promise;
+          function allResolver(value, i2) {
+            self2.resolve(value).then(resolveFromAll, function(error) {
+              if (!called) {
+                called = true;
+                handlers.reject(promise, error);
+              }
+            });
+            function resolveFromAll(outValue) {
+              values[i2] = outValue;
+              if (++resolved === len && !called) {
+                called = true;
+                handlers.resolve(promise, values);
+              }
+            }
+          }
+        }
+        Promise2.race = race;
+        function race(iterable) {
+          var self2 = this;
+          if (Object.prototype.toString.call(iterable) !== "[object Array]") {
+            return this.reject(new TypeError("must be an array"));
+          }
+          var len = iterable.length;
+          var called = false;
+          if (!len) {
+            return this.resolve([]);
+          }
+          var i = -1;
+          var promise = new this(INTERNAL);
+          while (++i < len) {
+            resolver(iterable[i]);
+          }
+          return promise;
+          function resolver(value) {
+            self2.resolve(value).then(function(response) {
+              if (!called) {
+                called = true;
+                handlers.resolve(promise, response);
+              }
+            }, function(error) {
+              if (!called) {
+                called = true;
+                handlers.reject(promise, error);
+              }
+            });
+          }
+        }
+      }, { "1": 1 }], 3: [function(_dereq_, module4, exports3) {
+        (function(global2) {
+          "use strict";
+          if (typeof global2.Promise !== "function") {
+            global2.Promise = _dereq_(2);
+          }
+        }).call(this, typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {});
+      }, { "2": 2 }], 4: [function(_dereq_, module4, exports3) {
+        "use strict";
+        var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function(obj) {
+          return typeof obj;
+        } : function(obj) {
+          return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+        };
+        function _classCallCheck(instance, Constructor) {
+          if (!(instance instanceof Constructor)) {
+            throw new TypeError("Cannot call a class as a function");
+          }
+        }
+        function getIDB() {
+          try {
+            if (typeof indexedDB !== "undefined") {
+              return indexedDB;
+            }
+            if (typeof webkitIndexedDB !== "undefined") {
+              return webkitIndexedDB;
+            }
+            if (typeof mozIndexedDB !== "undefined") {
+              return mozIndexedDB;
+            }
+            if (typeof OIndexedDB !== "undefined") {
+              return OIndexedDB;
+            }
+            if (typeof msIndexedDB !== "undefined") {
+              return msIndexedDB;
+            }
+          } catch (e) {
+            return;
+          }
+        }
+        var idb = getIDB();
+        function isIndexedDBValid() {
+          try {
+            if (!idb || !idb.open) {
+              return false;
+            }
+            var isSafari = typeof openDatabase !== "undefined" && /(Safari|iPhone|iPad|iPod)/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent) && !/BlackBerry/.test(navigator.platform);
+            var hasFetch = typeof fetch === "function" && fetch.toString().indexOf("[native code") !== -1;
+            return (!isSafari || hasFetch) && typeof indexedDB !== "undefined" && // some outdated implementations of IDB that appear on Samsung
+            // and HTC Android devices <4.4 are missing IDBKeyRange
+            // See: https://github.com/mozilla/localForage/issues/128
+            // See: https://github.com/mozilla/localForage/issues/272
+            typeof IDBKeyRange !== "undefined";
+          } catch (e) {
+            return false;
+          }
+        }
+        function createBlob(parts, properties) {
+          parts = parts || [];
+          properties = properties || {};
+          try {
+            return new Blob(parts, properties);
+          } catch (e) {
+            if (e.name !== "TypeError") {
+              throw e;
+            }
+            var Builder = typeof BlobBuilder !== "undefined" ? BlobBuilder : typeof MSBlobBuilder !== "undefined" ? MSBlobBuilder : typeof MozBlobBuilder !== "undefined" ? MozBlobBuilder : WebKitBlobBuilder;
+            var builder = new Builder();
+            for (var i = 0; i < parts.length; i += 1) {
+              builder.append(parts[i]);
+            }
+            return builder.getBlob(properties.type);
+          }
+        }
+        if (typeof Promise === "undefined") {
+          _dereq_(3);
+        }
+        var Promise$1 = Promise;
+        function executeCallback(promise, callback) {
+          if (callback) {
+            promise.then(function(result) {
+              callback(null, result);
+            }, function(error) {
+              callback(error);
+            });
+          }
+        }
+        function executeTwoCallbacks(promise, callback, errorCallback) {
+          if (typeof callback === "function") {
+            promise.then(callback);
+          }
+          if (typeof errorCallback === "function") {
+            promise["catch"](errorCallback);
+          }
+        }
+        function normalizeKey(key2) {
+          if (typeof key2 !== "string") {
+            console.warn(key2 + " used as a key, but it is not a string.");
+            key2 = String(key2);
+          }
+          return key2;
+        }
+        function getCallback() {
+          if (arguments.length && typeof arguments[arguments.length - 1] === "function") {
+            return arguments[arguments.length - 1];
+          }
+        }
+        var DETECT_BLOB_SUPPORT_STORE = "local-forage-detect-blob-support";
+        var supportsBlobs = void 0;
+        var dbContexts = {};
+        var toString = Object.prototype.toString;
+        var READ_ONLY = "readonly";
+        var READ_WRITE = "readwrite";
+        function _binStringToArrayBuffer(bin) {
+          var length2 = bin.length;
+          var buf = new ArrayBuffer(length2);
+          var arr = new Uint8Array(buf);
+          for (var i = 0; i < length2; i++) {
+            arr[i] = bin.charCodeAt(i);
+          }
+          return buf;
+        }
+        function _checkBlobSupportWithoutCaching(idb2) {
+          return new Promise$1(function(resolve) {
+            var txn = idb2.transaction(DETECT_BLOB_SUPPORT_STORE, READ_WRITE);
+            var blob = createBlob([""]);
+            txn.objectStore(DETECT_BLOB_SUPPORT_STORE).put(blob, "key");
+            txn.onabort = function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              resolve(false);
+            };
+            txn.oncomplete = function() {
+              var matchedChrome = navigator.userAgent.match(/Chrome\/(\d+)/);
+              var matchedEdge = navigator.userAgent.match(/Edge\//);
+              resolve(matchedEdge || !matchedChrome || parseInt(matchedChrome[1], 10) >= 43);
+            };
+          })["catch"](function() {
+            return false;
+          });
+        }
+        function _checkBlobSupport(idb2) {
+          if (typeof supportsBlobs === "boolean") {
+            return Promise$1.resolve(supportsBlobs);
+          }
+          return _checkBlobSupportWithoutCaching(idb2).then(function(value) {
+            supportsBlobs = value;
+            return supportsBlobs;
+          });
+        }
+        function _deferReadiness(dbInfo) {
+          var dbContext = dbContexts[dbInfo.name];
+          var deferredOperation = {};
+          deferredOperation.promise = new Promise$1(function(resolve, reject) {
+            deferredOperation.resolve = resolve;
+            deferredOperation.reject = reject;
+          });
+          dbContext.deferredOperations.push(deferredOperation);
+          if (!dbContext.dbReady) {
+            dbContext.dbReady = deferredOperation.promise;
+          } else {
+            dbContext.dbReady = dbContext.dbReady.then(function() {
+              return deferredOperation.promise;
+            });
+          }
+        }
+        function _advanceReadiness(dbInfo) {
+          var dbContext = dbContexts[dbInfo.name];
+          var deferredOperation = dbContext.deferredOperations.pop();
+          if (deferredOperation) {
+            deferredOperation.resolve();
+            return deferredOperation.promise;
+          }
+        }
+        function _rejectReadiness(dbInfo, err) {
+          var dbContext = dbContexts[dbInfo.name];
+          var deferredOperation = dbContext.deferredOperations.pop();
+          if (deferredOperation) {
+            deferredOperation.reject(err);
+            return deferredOperation.promise;
+          }
+        }
+        function _getConnection(dbInfo, upgradeNeeded) {
+          return new Promise$1(function(resolve, reject) {
+            dbContexts[dbInfo.name] = dbContexts[dbInfo.name] || createDbContext();
+            if (dbInfo.db) {
+              if (upgradeNeeded) {
+                _deferReadiness(dbInfo);
+                dbInfo.db.close();
+              } else {
+                return resolve(dbInfo.db);
+              }
+            }
+            var dbArgs = [dbInfo.name];
+            if (upgradeNeeded) {
+              dbArgs.push(dbInfo.version);
+            }
+            var openreq = idb.open.apply(idb, dbArgs);
+            if (upgradeNeeded) {
+              openreq.onupgradeneeded = function(e) {
+                var db = openreq.result;
+                try {
+                  db.createObjectStore(dbInfo.storeName);
+                  if (e.oldVersion <= 1) {
+                    db.createObjectStore(DETECT_BLOB_SUPPORT_STORE);
+                  }
+                } catch (ex) {
+                  if (ex.name === "ConstraintError") {
+                    console.warn('The database "' + dbInfo.name + '" has been upgraded from version ' + e.oldVersion + " to version " + e.newVersion + ', but the storage "' + dbInfo.storeName + '" already exists.');
+                  } else {
+                    throw ex;
+                  }
+                }
+              };
+            }
+            openreq.onerror = function(e) {
+              e.preventDefault();
+              reject(openreq.error);
+            };
+            openreq.onsuccess = function() {
+              var db = openreq.result;
+              db.onversionchange = function(e) {
+                e.target.close();
+              };
+              resolve(db);
+              _advanceReadiness(dbInfo);
+            };
+          });
+        }
+        function _getOriginalConnection(dbInfo) {
+          return _getConnection(dbInfo, false);
+        }
+        function _getUpgradedConnection(dbInfo) {
+          return _getConnection(dbInfo, true);
+        }
+        function _isUpgradeNeeded(dbInfo, defaultVersion) {
+          if (!dbInfo.db) {
+            return true;
+          }
+          var isNewStore = !dbInfo.db.objectStoreNames.contains(dbInfo.storeName);
+          var isDowngrade = dbInfo.version < dbInfo.db.version;
+          var isUpgrade = dbInfo.version > dbInfo.db.version;
+          if (isDowngrade) {
+            if (dbInfo.version !== defaultVersion) {
+              console.warn('The database "' + dbInfo.name + `" can't be downgraded from version ` + dbInfo.db.version + " to version " + dbInfo.version + ".");
+            }
+            dbInfo.version = dbInfo.db.version;
+          }
+          if (isUpgrade || isNewStore) {
+            if (isNewStore) {
+              var incVersion = dbInfo.db.version + 1;
+              if (incVersion > dbInfo.version) {
+                dbInfo.version = incVersion;
+              }
+            }
+            return true;
+          }
+          return false;
+        }
+        function _encodeBlob(blob) {
+          return new Promise$1(function(resolve, reject) {
+            var reader = new FileReader();
+            reader.onerror = reject;
+            reader.onloadend = function(e) {
+              var base64 = btoa(e.target.result || "");
+              resolve({
+                __local_forage_encoded_blob: true,
+                data: base64,
+                type: blob.type
+              });
+            };
+            reader.readAsBinaryString(blob);
+          });
+        }
+        function _decodeBlob(encodedBlob) {
+          var arrayBuff = _binStringToArrayBuffer(atob(encodedBlob.data));
+          return createBlob([arrayBuff], { type: encodedBlob.type });
+        }
+        function _isEncodedBlob(value) {
+          return value && value.__local_forage_encoded_blob;
+        }
+        function _fullyReady(callback) {
+          var self2 = this;
+          var promise = self2._initReady().then(function() {
+            var dbContext = dbContexts[self2._dbInfo.name];
+            if (dbContext && dbContext.dbReady) {
+              return dbContext.dbReady;
+            }
+          });
+          executeTwoCallbacks(promise, callback, callback);
+          return promise;
+        }
+        function _tryReconnect(dbInfo) {
+          _deferReadiness(dbInfo);
+          var dbContext = dbContexts[dbInfo.name];
+          var forages = dbContext.forages;
+          for (var i = 0; i < forages.length; i++) {
+            var forage = forages[i];
+            if (forage._dbInfo.db) {
+              forage._dbInfo.db.close();
+              forage._dbInfo.db = null;
+            }
+          }
+          dbInfo.db = null;
+          return _getOriginalConnection(dbInfo).then(function(db) {
+            dbInfo.db = db;
+            if (_isUpgradeNeeded(dbInfo)) {
+              return _getUpgradedConnection(dbInfo);
+            }
+            return db;
+          }).then(function(db) {
+            dbInfo.db = dbContext.db = db;
+            for (var i2 = 0; i2 < forages.length; i2++) {
+              forages[i2]._dbInfo.db = db;
+            }
+          })["catch"](function(err) {
+            _rejectReadiness(dbInfo, err);
+            throw err;
+          });
+        }
+        function createTransaction(dbInfo, mode, callback, retries) {
+          if (retries === void 0) {
+            retries = 1;
+          }
+          try {
+            var tx = dbInfo.db.transaction(dbInfo.storeName, mode);
+            callback(null, tx);
+          } catch (err) {
+            if (retries > 0 && (!dbInfo.db || err.name === "InvalidStateError" || err.name === "NotFoundError")) {
+              return Promise$1.resolve().then(function() {
+                if (!dbInfo.db || err.name === "NotFoundError" && !dbInfo.db.objectStoreNames.contains(dbInfo.storeName) && dbInfo.version <= dbInfo.db.version) {
+                  if (dbInfo.db) {
+                    dbInfo.version = dbInfo.db.version + 1;
+                  }
+                  return _getUpgradedConnection(dbInfo);
+                }
+              }).then(function() {
+                return _tryReconnect(dbInfo).then(function() {
+                  createTransaction(dbInfo, mode, callback, retries - 1);
+                });
+              })["catch"](callback);
+            }
+            callback(err);
+          }
+        }
+        function createDbContext() {
+          return {
+            // Running localForages sharing a database.
+            forages: [],
+            // Shared database.
+            db: null,
+            // Database readiness (promise).
+            dbReady: null,
+            // Deferred operations on the database.
+            deferredOperations: []
+          };
+        }
+        function _initStorage(options) {
+          var self2 = this;
+          var dbInfo = {
+            db: null
+          };
+          if (options) {
+            for (var i in options) {
+              dbInfo[i] = options[i];
+            }
+          }
+          var dbContext = dbContexts[dbInfo.name];
+          if (!dbContext) {
+            dbContext = createDbContext();
+            dbContexts[dbInfo.name] = dbContext;
+          }
+          dbContext.forages.push(self2);
+          if (!self2._initReady) {
+            self2._initReady = self2.ready;
+            self2.ready = _fullyReady;
+          }
+          var initPromises = [];
+          function ignoreErrors() {
+            return Promise$1.resolve();
+          }
+          for (var j = 0; j < dbContext.forages.length; j++) {
+            var forage = dbContext.forages[j];
+            if (forage !== self2) {
+              initPromises.push(forage._initReady()["catch"](ignoreErrors));
+            }
+          }
+          var forages = dbContext.forages.slice(0);
+          return Promise$1.all(initPromises).then(function() {
+            dbInfo.db = dbContext.db;
+            return _getOriginalConnection(dbInfo);
+          }).then(function(db) {
+            dbInfo.db = db;
+            if (_isUpgradeNeeded(dbInfo, self2._defaultConfig.version)) {
+              return _getUpgradedConnection(dbInfo);
+            }
+            return db;
+          }).then(function(db) {
+            dbInfo.db = dbContext.db = db;
+            self2._dbInfo = dbInfo;
+            for (var k = 0; k < forages.length; k++) {
+              var forage2 = forages[k];
+              if (forage2 !== self2) {
+                forage2._dbInfo.db = dbInfo.db;
+                forage2._dbInfo.version = dbInfo.version;
+              }
+            }
+          });
+        }
+        function getItem2(key2, callback) {
+          var self2 = this;
+          key2 = normalizeKey(key2);
+          var promise = new Promise$1(function(resolve, reject) {
+            self2.ready().then(function() {
+              createTransaction(self2._dbInfo, READ_ONLY, function(err, transaction) {
+                if (err) {
+                  return reject(err);
+                }
+                try {
+                  var store = transaction.objectStore(self2._dbInfo.storeName);
+                  var req = store.get(key2);
+                  req.onsuccess = function() {
+                    var value = req.result;
+                    if (value === void 0) {
+                      value = null;
+                    }
+                    if (_isEncodedBlob(value)) {
+                      value = _decodeBlob(value);
+                    }
+                    resolve(value);
+                  };
+                  req.onerror = function() {
+                    reject(req.error);
+                  };
+                } catch (e) {
+                  reject(e);
+                }
+              });
+            })["catch"](reject);
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function iterate2(iterator, callback) {
+          var self2 = this;
+          var promise = new Promise$1(function(resolve, reject) {
+            self2.ready().then(function() {
+              createTransaction(self2._dbInfo, READ_ONLY, function(err, transaction) {
+                if (err) {
+                  return reject(err);
+                }
+                try {
+                  var store = transaction.objectStore(self2._dbInfo.storeName);
+                  var req = store.openCursor();
+                  var iterationNumber = 1;
+                  req.onsuccess = function() {
+                    var cursor = req.result;
+                    if (cursor) {
+                      var value = cursor.value;
+                      if (_isEncodedBlob(value)) {
+                        value = _decodeBlob(value);
+                      }
+                      var result = iterator(value, cursor.key, iterationNumber++);
+                      if (result !== void 0) {
+                        resolve(result);
+                      } else {
+                        cursor["continue"]();
+                      }
+                    } else {
+                      resolve();
+                    }
+                  };
+                  req.onerror = function() {
+                    reject(req.error);
+                  };
+                } catch (e) {
+                  reject(e);
+                }
+              });
+            })["catch"](reject);
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function setItem2(key2, value, callback) {
+          var self2 = this;
+          key2 = normalizeKey(key2);
+          var promise = new Promise$1(function(resolve, reject) {
+            var dbInfo;
+            self2.ready().then(function() {
+              dbInfo = self2._dbInfo;
+              if (toString.call(value) === "[object Blob]") {
+                return _checkBlobSupport(dbInfo.db).then(function(blobSupport) {
+                  if (blobSupport) {
+                    return value;
+                  }
+                  return _encodeBlob(value);
+                });
+              }
+              return value;
+            }).then(function(value2) {
+              createTransaction(self2._dbInfo, READ_WRITE, function(err, transaction) {
+                if (err) {
+                  return reject(err);
+                }
+                try {
+                  var store = transaction.objectStore(self2._dbInfo.storeName);
+                  if (value2 === null) {
+                    value2 = void 0;
+                  }
+                  var req = store.put(value2, key2);
+                  transaction.oncomplete = function() {
+                    if (value2 === void 0) {
+                      value2 = null;
+                    }
+                    resolve(value2);
+                  };
+                  transaction.onabort = transaction.onerror = function() {
+                    var err2 = req.error ? req.error : req.transaction.error;
+                    reject(err2);
+                  };
+                } catch (e) {
+                  reject(e);
+                }
+              });
+            })["catch"](reject);
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function removeItem2(key2, callback) {
+          var self2 = this;
+          key2 = normalizeKey(key2);
+          var promise = new Promise$1(function(resolve, reject) {
+            self2.ready().then(function() {
+              createTransaction(self2._dbInfo, READ_WRITE, function(err, transaction) {
+                if (err) {
+                  return reject(err);
+                }
+                try {
+                  var store = transaction.objectStore(self2._dbInfo.storeName);
+                  var req = store["delete"](key2);
+                  transaction.oncomplete = function() {
+                    resolve();
+                  };
+                  transaction.onerror = function() {
+                    reject(req.error);
+                  };
+                  transaction.onabort = function() {
+                    var err2 = req.error ? req.error : req.transaction.error;
+                    reject(err2);
+                  };
+                } catch (e) {
+                  reject(e);
+                }
+              });
+            })["catch"](reject);
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function clear2(callback) {
+          var self2 = this;
+          var promise = new Promise$1(function(resolve, reject) {
+            self2.ready().then(function() {
+              createTransaction(self2._dbInfo, READ_WRITE, function(err, transaction) {
+                if (err) {
+                  return reject(err);
+                }
+                try {
+                  var store = transaction.objectStore(self2._dbInfo.storeName);
+                  var req = store.clear();
+                  transaction.oncomplete = function() {
+                    resolve();
+                  };
+                  transaction.onabort = transaction.onerror = function() {
+                    var err2 = req.error ? req.error : req.transaction.error;
+                    reject(err2);
+                  };
+                } catch (e) {
+                  reject(e);
+                }
+              });
+            })["catch"](reject);
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function length(callback) {
+          var self2 = this;
+          var promise = new Promise$1(function(resolve, reject) {
+            self2.ready().then(function() {
+              createTransaction(self2._dbInfo, READ_ONLY, function(err, transaction) {
+                if (err) {
+                  return reject(err);
+                }
+                try {
+                  var store = transaction.objectStore(self2._dbInfo.storeName);
+                  var req = store.count();
+                  req.onsuccess = function() {
+                    resolve(req.result);
+                  };
+                  req.onerror = function() {
+                    reject(req.error);
+                  };
+                } catch (e) {
+                  reject(e);
+                }
+              });
+            })["catch"](reject);
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function key(n, callback) {
+          var self2 = this;
+          var promise = new Promise$1(function(resolve, reject) {
+            if (n < 0) {
+              resolve(null);
+              return;
+            }
+            self2.ready().then(function() {
+              createTransaction(self2._dbInfo, READ_ONLY, function(err, transaction) {
+                if (err) {
+                  return reject(err);
+                }
+                try {
+                  var store = transaction.objectStore(self2._dbInfo.storeName);
+                  var advanced = false;
+                  var req = store.openKeyCursor();
+                  req.onsuccess = function() {
+                    var cursor = req.result;
+                    if (!cursor) {
+                      resolve(null);
+                      return;
+                    }
+                    if (n === 0) {
+                      resolve(cursor.key);
+                    } else {
+                      if (!advanced) {
+                        advanced = true;
+                        cursor.advance(n);
+                      } else {
+                        resolve(cursor.key);
+                      }
+                    }
+                  };
+                  req.onerror = function() {
+                    reject(req.error);
+                  };
+                } catch (e) {
+                  reject(e);
+                }
+              });
+            })["catch"](reject);
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function keys(callback) {
+          var self2 = this;
+          var promise = new Promise$1(function(resolve, reject) {
+            self2.ready().then(function() {
+              createTransaction(self2._dbInfo, READ_ONLY, function(err, transaction) {
+                if (err) {
+                  return reject(err);
+                }
+                try {
+                  var store = transaction.objectStore(self2._dbInfo.storeName);
+                  var req = store.openKeyCursor();
+                  var keys2 = [];
+                  req.onsuccess = function() {
+                    var cursor = req.result;
+                    if (!cursor) {
+                      resolve(keys2);
+                      return;
+                    }
+                    keys2.push(cursor.key);
+                    cursor["continue"]();
+                  };
+                  req.onerror = function() {
+                    reject(req.error);
+                  };
+                } catch (e) {
+                  reject(e);
+                }
+              });
+            })["catch"](reject);
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function dropInstance(options, callback) {
+          callback = getCallback.apply(this, arguments);
+          var currentConfig = this.config();
+          options = typeof options !== "function" && options || {};
+          if (!options.name) {
+            options.name = options.name || currentConfig.name;
+            options.storeName = options.storeName || currentConfig.storeName;
+          }
+          var self2 = this;
+          var promise;
+          if (!options.name) {
+            promise = Promise$1.reject("Invalid arguments");
+          } else {
+            var isCurrentDb = options.name === currentConfig.name && self2._dbInfo.db;
+            var dbPromise = isCurrentDb ? Promise$1.resolve(self2._dbInfo.db) : _getOriginalConnection(options).then(function(db) {
+              var dbContext = dbContexts[options.name];
+              var forages = dbContext.forages;
+              dbContext.db = db;
+              for (var i = 0; i < forages.length; i++) {
+                forages[i]._dbInfo.db = db;
+              }
+              return db;
+            });
+            if (!options.storeName) {
+              promise = dbPromise.then(function(db) {
+                _deferReadiness(options);
+                var dbContext = dbContexts[options.name];
+                var forages = dbContext.forages;
+                db.close();
+                for (var i = 0; i < forages.length; i++) {
+                  var forage = forages[i];
+                  forage._dbInfo.db = null;
+                }
+                var dropDBPromise = new Promise$1(function(resolve, reject) {
+                  var req = idb.deleteDatabase(options.name);
+                  req.onerror = function() {
+                    var db2 = req.result;
+                    if (db2) {
+                      db2.close();
+                    }
+                    reject(req.error);
+                  };
+                  req.onblocked = function() {
+                    console.warn('dropInstance blocked for database "' + options.name + '" until all open connections are closed');
+                  };
+                  req.onsuccess = function() {
+                    var db2 = req.result;
+                    if (db2) {
+                      db2.close();
+                    }
+                    resolve(db2);
+                  };
+                });
+                return dropDBPromise.then(function(db2) {
+                  dbContext.db = db2;
+                  for (var i2 = 0; i2 < forages.length; i2++) {
+                    var _forage = forages[i2];
+                    _advanceReadiness(_forage._dbInfo);
+                  }
+                })["catch"](function(err) {
+                  (_rejectReadiness(options, err) || Promise$1.resolve())["catch"](function() {
+                  });
+                  throw err;
+                });
+              });
+            } else {
+              promise = dbPromise.then(function(db) {
+                if (!db.objectStoreNames.contains(options.storeName)) {
+                  return;
+                }
+                var newVersion = db.version + 1;
+                _deferReadiness(options);
+                var dbContext = dbContexts[options.name];
+                var forages = dbContext.forages;
+                db.close();
+                for (var i = 0; i < forages.length; i++) {
+                  var forage = forages[i];
+                  forage._dbInfo.db = null;
+                  forage._dbInfo.version = newVersion;
+                }
+                var dropObjectPromise = new Promise$1(function(resolve, reject) {
+                  var req = idb.open(options.name, newVersion);
+                  req.onerror = function(err) {
+                    var db2 = req.result;
+                    db2.close();
+                    reject(err);
+                  };
+                  req.onupgradeneeded = function() {
+                    var db2 = req.result;
+                    db2.deleteObjectStore(options.storeName);
+                  };
+                  req.onsuccess = function() {
+                    var db2 = req.result;
+                    db2.close();
+                    resolve(db2);
+                  };
+                });
+                return dropObjectPromise.then(function(db2) {
+                  dbContext.db = db2;
+                  for (var j = 0; j < forages.length; j++) {
+                    var _forage2 = forages[j];
+                    _forage2._dbInfo.db = db2;
+                    _advanceReadiness(_forage2._dbInfo);
+                  }
+                })["catch"](function(err) {
+                  (_rejectReadiness(options, err) || Promise$1.resolve())["catch"](function() {
+                  });
+                  throw err;
+                });
+              });
+            }
+          }
+          executeCallback(promise, callback);
+          return promise;
+        }
+        var asyncStorage = {
+          _driver: "asyncStorage",
+          _initStorage,
+          _support: isIndexedDBValid(),
+          iterate: iterate2,
+          getItem: getItem2,
+          setItem: setItem2,
+          removeItem: removeItem2,
+          clear: clear2,
+          length,
+          key,
+          keys,
+          dropInstance
+        };
+        function isWebSQLValid() {
+          return typeof openDatabase === "function";
+        }
+        var BASE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+        var BLOB_TYPE_PREFIX = "~~local_forage_type~";
+        var BLOB_TYPE_PREFIX_REGEX = /^~~local_forage_type~([^~]+)~/;
+        var SERIALIZED_MARKER = "__lfsc__:";
+        var SERIALIZED_MARKER_LENGTH = SERIALIZED_MARKER.length;
+        var TYPE_ARRAYBUFFER = "arbf";
+        var TYPE_BLOB = "blob";
+        var TYPE_INT8ARRAY = "si08";
+        var TYPE_UINT8ARRAY = "ui08";
+        var TYPE_UINT8CLAMPEDARRAY = "uic8";
+        var TYPE_INT16ARRAY = "si16";
+        var TYPE_INT32ARRAY = "si32";
+        var TYPE_UINT16ARRAY = "ur16";
+        var TYPE_UINT32ARRAY = "ui32";
+        var TYPE_FLOAT32ARRAY = "fl32";
+        var TYPE_FLOAT64ARRAY = "fl64";
+        var TYPE_SERIALIZED_MARKER_LENGTH = SERIALIZED_MARKER_LENGTH + TYPE_ARRAYBUFFER.length;
+        var toString$1 = Object.prototype.toString;
+        function stringToBuffer(serializedString) {
+          var bufferLength = serializedString.length * 0.75;
+          var len = serializedString.length;
+          var i;
+          var p = 0;
+          var encoded1, encoded2, encoded3, encoded4;
+          if (serializedString[serializedString.length - 1] === "=") {
+            bufferLength--;
+            if (serializedString[serializedString.length - 2] === "=") {
+              bufferLength--;
+            }
+          }
+          var buffer = new ArrayBuffer(bufferLength);
+          var bytes = new Uint8Array(buffer);
+          for (i = 0; i < len; i += 4) {
+            encoded1 = BASE_CHARS.indexOf(serializedString[i]);
+            encoded2 = BASE_CHARS.indexOf(serializedString[i + 1]);
+            encoded3 = BASE_CHARS.indexOf(serializedString[i + 2]);
+            encoded4 = BASE_CHARS.indexOf(serializedString[i + 3]);
+            bytes[p++] = encoded1 << 2 | encoded2 >> 4;
+            bytes[p++] = (encoded2 & 15) << 4 | encoded3 >> 2;
+            bytes[p++] = (encoded3 & 3) << 6 | encoded4 & 63;
+          }
+          return buffer;
+        }
+        function bufferToString(buffer) {
+          var bytes = new Uint8Array(buffer);
+          var base64String = "";
+          var i;
+          for (i = 0; i < bytes.length; i += 3) {
+            base64String += BASE_CHARS[bytes[i] >> 2];
+            base64String += BASE_CHARS[(bytes[i] & 3) << 4 | bytes[i + 1] >> 4];
+            base64String += BASE_CHARS[(bytes[i + 1] & 15) << 2 | bytes[i + 2] >> 6];
+            base64String += BASE_CHARS[bytes[i + 2] & 63];
+          }
+          if (bytes.length % 3 === 2) {
+            base64String = base64String.substring(0, base64String.length - 1) + "=";
+          } else if (bytes.length % 3 === 1) {
+            base64String = base64String.substring(0, base64String.length - 2) + "==";
+          }
+          return base64String;
+        }
+        function serialize(value, callback) {
+          var valueType = "";
+          if (value) {
+            valueType = toString$1.call(value);
+          }
+          if (value && (valueType === "[object ArrayBuffer]" || value.buffer && toString$1.call(value.buffer) === "[object ArrayBuffer]")) {
+            var buffer;
+            var marker = SERIALIZED_MARKER;
+            if (value instanceof ArrayBuffer) {
+              buffer = value;
+              marker += TYPE_ARRAYBUFFER;
+            } else {
+              buffer = value.buffer;
+              if (valueType === "[object Int8Array]") {
+                marker += TYPE_INT8ARRAY;
+              } else if (valueType === "[object Uint8Array]") {
+                marker += TYPE_UINT8ARRAY;
+              } else if (valueType === "[object Uint8ClampedArray]") {
+                marker += TYPE_UINT8CLAMPEDARRAY;
+              } else if (valueType === "[object Int16Array]") {
+                marker += TYPE_INT16ARRAY;
+              } else if (valueType === "[object Uint16Array]") {
+                marker += TYPE_UINT16ARRAY;
+              } else if (valueType === "[object Int32Array]") {
+                marker += TYPE_INT32ARRAY;
+              } else if (valueType === "[object Uint32Array]") {
+                marker += TYPE_UINT32ARRAY;
+              } else if (valueType === "[object Float32Array]") {
+                marker += TYPE_FLOAT32ARRAY;
+              } else if (valueType === "[object Float64Array]") {
+                marker += TYPE_FLOAT64ARRAY;
+              } else {
+                callback(new Error("Failed to get type for BinaryArray"));
+              }
+            }
+            callback(marker + bufferToString(buffer));
+          } else if (valueType === "[object Blob]") {
+            var fileReader = new FileReader();
+            fileReader.onload = function() {
+              var str = BLOB_TYPE_PREFIX + value.type + "~" + bufferToString(this.result);
+              callback(SERIALIZED_MARKER + TYPE_BLOB + str);
+            };
+            fileReader.readAsArrayBuffer(value);
+          } else {
+            try {
+              callback(JSON.stringify(value));
+            } catch (e) {
+              console.error("Couldn't convert value into a JSON string: ", value);
+              callback(null, e);
+            }
+          }
+        }
+        function deserialize(value) {
+          if (value.substring(0, SERIALIZED_MARKER_LENGTH) !== SERIALIZED_MARKER) {
+            return JSON.parse(value);
+          }
+          var serializedString = value.substring(TYPE_SERIALIZED_MARKER_LENGTH);
+          var type = value.substring(SERIALIZED_MARKER_LENGTH, TYPE_SERIALIZED_MARKER_LENGTH);
+          var blobType;
+          if (type === TYPE_BLOB && BLOB_TYPE_PREFIX_REGEX.test(serializedString)) {
+            var matcher = serializedString.match(BLOB_TYPE_PREFIX_REGEX);
+            blobType = matcher[1];
+            serializedString = serializedString.substring(matcher[0].length);
+          }
+          var buffer = stringToBuffer(serializedString);
+          switch (type) {
+            case TYPE_ARRAYBUFFER:
+              return buffer;
+            case TYPE_BLOB:
+              return createBlob([buffer], { type: blobType });
+            case TYPE_INT8ARRAY:
+              return new Int8Array(buffer);
+            case TYPE_UINT8ARRAY:
+              return new Uint8Array(buffer);
+            case TYPE_UINT8CLAMPEDARRAY:
+              return new Uint8ClampedArray(buffer);
+            case TYPE_INT16ARRAY:
+              return new Int16Array(buffer);
+            case TYPE_UINT16ARRAY:
+              return new Uint16Array(buffer);
+            case TYPE_INT32ARRAY:
+              return new Int32Array(buffer);
+            case TYPE_UINT32ARRAY:
+              return new Uint32Array(buffer);
+            case TYPE_FLOAT32ARRAY:
+              return new Float32Array(buffer);
+            case TYPE_FLOAT64ARRAY:
+              return new Float64Array(buffer);
+            default:
+              throw new Error("Unkown type: " + type);
+          }
+        }
+        var localforageSerializer = {
+          serialize,
+          deserialize,
+          stringToBuffer,
+          bufferToString
+        };
+        function createDbTable(t, dbInfo, callback, errorCallback) {
+          t.executeSql("CREATE TABLE IF NOT EXISTS " + dbInfo.storeName + " (id INTEGER PRIMARY KEY, key unique, value)", [], callback, errorCallback);
+        }
+        function _initStorage$1(options) {
+          var self2 = this;
+          var dbInfo = {
+            db: null
+          };
+          if (options) {
+            for (var i in options) {
+              dbInfo[i] = typeof options[i] !== "string" ? options[i].toString() : options[i];
+            }
+          }
+          var dbInfoPromise = new Promise$1(function(resolve, reject) {
+            try {
+              dbInfo.db = openDatabase(dbInfo.name, String(dbInfo.version), dbInfo.description, dbInfo.size);
+            } catch (e) {
+              return reject(e);
+            }
+            dbInfo.db.transaction(function(t) {
+              createDbTable(t, dbInfo, function() {
+                self2._dbInfo = dbInfo;
+                resolve();
+              }, function(t2, error) {
+                reject(error);
+              });
+            }, reject);
+          });
+          dbInfo.serializer = localforageSerializer;
+          return dbInfoPromise;
+        }
+        function tryExecuteSql(t, dbInfo, sqlStatement, args, callback, errorCallback) {
+          t.executeSql(sqlStatement, args, callback, function(t2, error) {
+            if (error.code === error.SYNTAX_ERR) {
+              t2.executeSql("SELECT name FROM sqlite_master WHERE type='table' AND name = ?", [dbInfo.storeName], function(t3, results) {
+                if (!results.rows.length) {
+                  createDbTable(t3, dbInfo, function() {
+                    t3.executeSql(sqlStatement, args, callback, errorCallback);
+                  }, errorCallback);
+                } else {
+                  errorCallback(t3, error);
+                }
+              }, errorCallback);
+            } else {
+              errorCallback(t2, error);
+            }
+          }, errorCallback);
+        }
+        function getItem$1(key2, callback) {
+          var self2 = this;
+          key2 = normalizeKey(key2);
+          var promise = new Promise$1(function(resolve, reject) {
+            self2.ready().then(function() {
+              var dbInfo = self2._dbInfo;
+              dbInfo.db.transaction(function(t) {
+                tryExecuteSql(t, dbInfo, "SELECT * FROM " + dbInfo.storeName + " WHERE key = ? LIMIT 1", [key2], function(t2, results) {
+                  var result = results.rows.length ? results.rows.item(0).value : null;
+                  if (result) {
+                    result = dbInfo.serializer.deserialize(result);
+                  }
+                  resolve(result);
+                }, function(t2, error) {
+                  reject(error);
+                });
+              });
+            })["catch"](reject);
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function iterate$1(iterator, callback) {
+          var self2 = this;
+          var promise = new Promise$1(function(resolve, reject) {
+            self2.ready().then(function() {
+              var dbInfo = self2._dbInfo;
+              dbInfo.db.transaction(function(t) {
+                tryExecuteSql(t, dbInfo, "SELECT * FROM " + dbInfo.storeName, [], function(t2, results) {
+                  var rows = results.rows;
+                  var length2 = rows.length;
+                  for (var i = 0; i < length2; i++) {
+                    var item = rows.item(i);
+                    var result = item.value;
+                    if (result) {
+                      result = dbInfo.serializer.deserialize(result);
+                    }
+                    result = iterator(result, item.key, i + 1);
+                    if (result !== void 0) {
+                      resolve(result);
+                      return;
+                    }
+                  }
+                  resolve();
+                }, function(t2, error) {
+                  reject(error);
+                });
+              });
+            })["catch"](reject);
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function _setItem(key2, value, callback, retriesLeft) {
+          var self2 = this;
+          key2 = normalizeKey(key2);
+          var promise = new Promise$1(function(resolve, reject) {
+            self2.ready().then(function() {
+              if (value === void 0) {
+                value = null;
+              }
+              var originalValue = value;
+              var dbInfo = self2._dbInfo;
+              dbInfo.serializer.serialize(value, function(value2, error) {
+                if (error) {
+                  reject(error);
+                } else {
+                  dbInfo.db.transaction(function(t) {
+                    tryExecuteSql(t, dbInfo, "INSERT OR REPLACE INTO " + dbInfo.storeName + " (key, value) VALUES (?, ?)", [key2, value2], function() {
+                      resolve(originalValue);
+                    }, function(t2, error2) {
+                      reject(error2);
+                    });
+                  }, function(sqlError) {
+                    if (sqlError.code === sqlError.QUOTA_ERR) {
+                      if (retriesLeft > 0) {
+                        resolve(_setItem.apply(self2, [key2, originalValue, callback, retriesLeft - 1]));
+                        return;
+                      }
+                      reject(sqlError);
+                    }
+                  });
+                }
+              });
+            })["catch"](reject);
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function setItem$1(key2, value, callback) {
+          return _setItem.apply(this, [key2, value, callback, 1]);
+        }
+        function removeItem$1(key2, callback) {
+          var self2 = this;
+          key2 = normalizeKey(key2);
+          var promise = new Promise$1(function(resolve, reject) {
+            self2.ready().then(function() {
+              var dbInfo = self2._dbInfo;
+              dbInfo.db.transaction(function(t) {
+                tryExecuteSql(t, dbInfo, "DELETE FROM " + dbInfo.storeName + " WHERE key = ?", [key2], function() {
+                  resolve();
+                }, function(t2, error) {
+                  reject(error);
+                });
+              });
+            })["catch"](reject);
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function clear$1(callback) {
+          var self2 = this;
+          var promise = new Promise$1(function(resolve, reject) {
+            self2.ready().then(function() {
+              var dbInfo = self2._dbInfo;
+              dbInfo.db.transaction(function(t) {
+                tryExecuteSql(t, dbInfo, "DELETE FROM " + dbInfo.storeName, [], function() {
+                  resolve();
+                }, function(t2, error) {
+                  reject(error);
+                });
+              });
+            })["catch"](reject);
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function length$1(callback) {
+          var self2 = this;
+          var promise = new Promise$1(function(resolve, reject) {
+            self2.ready().then(function() {
+              var dbInfo = self2._dbInfo;
+              dbInfo.db.transaction(function(t) {
+                tryExecuteSql(t, dbInfo, "SELECT COUNT(key) as c FROM " + dbInfo.storeName, [], function(t2, results) {
+                  var result = results.rows.item(0).c;
+                  resolve(result);
+                }, function(t2, error) {
+                  reject(error);
+                });
+              });
+            })["catch"](reject);
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function key$1(n, callback) {
+          var self2 = this;
+          var promise = new Promise$1(function(resolve, reject) {
+            self2.ready().then(function() {
+              var dbInfo = self2._dbInfo;
+              dbInfo.db.transaction(function(t) {
+                tryExecuteSql(t, dbInfo, "SELECT key FROM " + dbInfo.storeName + " WHERE id = ? LIMIT 1", [n + 1], function(t2, results) {
+                  var result = results.rows.length ? results.rows.item(0).key : null;
+                  resolve(result);
+                }, function(t2, error) {
+                  reject(error);
+                });
+              });
+            })["catch"](reject);
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function keys$1(callback) {
+          var self2 = this;
+          var promise = new Promise$1(function(resolve, reject) {
+            self2.ready().then(function() {
+              var dbInfo = self2._dbInfo;
+              dbInfo.db.transaction(function(t) {
+                tryExecuteSql(t, dbInfo, "SELECT key FROM " + dbInfo.storeName, [], function(t2, results) {
+                  var keys2 = [];
+                  for (var i = 0; i < results.rows.length; i++) {
+                    keys2.push(results.rows.item(i).key);
+                  }
+                  resolve(keys2);
+                }, function(t2, error) {
+                  reject(error);
+                });
+              });
+            })["catch"](reject);
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function getAllStoreNames(db) {
+          return new Promise$1(function(resolve, reject) {
+            db.transaction(function(t) {
+              t.executeSql("SELECT name FROM sqlite_master WHERE type='table' AND name <> '__WebKitDatabaseInfoTable__'", [], function(t2, results) {
+                var storeNames = [];
+                for (var i = 0; i < results.rows.length; i++) {
+                  storeNames.push(results.rows.item(i).name);
+                }
+                resolve({
+                  db,
+                  storeNames
+                });
+              }, function(t2, error) {
+                reject(error);
+              });
+            }, function(sqlError) {
+              reject(sqlError);
+            });
+          });
+        }
+        function dropInstance$1(options, callback) {
+          callback = getCallback.apply(this, arguments);
+          var currentConfig = this.config();
+          options = typeof options !== "function" && options || {};
+          if (!options.name) {
+            options.name = options.name || currentConfig.name;
+            options.storeName = options.storeName || currentConfig.storeName;
+          }
+          var self2 = this;
+          var promise;
+          if (!options.name) {
+            promise = Promise$1.reject("Invalid arguments");
+          } else {
+            promise = new Promise$1(function(resolve) {
+              var db;
+              if (options.name === currentConfig.name) {
+                db = self2._dbInfo.db;
+              } else {
+                db = openDatabase(options.name, "", "", 0);
+              }
+              if (!options.storeName) {
+                resolve(getAllStoreNames(db));
+              } else {
+                resolve({
+                  db,
+                  storeNames: [options.storeName]
+                });
+              }
+            }).then(function(operationInfo) {
+              return new Promise$1(function(resolve, reject) {
+                operationInfo.db.transaction(function(t) {
+                  function dropTable(storeName) {
+                    return new Promise$1(function(resolve2, reject2) {
+                      t.executeSql("DROP TABLE IF EXISTS " + storeName, [], function() {
+                        resolve2();
+                      }, function(t2, error) {
+                        reject2(error);
+                      });
+                    });
+                  }
+                  var operations = [];
+                  for (var i = 0, len = operationInfo.storeNames.length; i < len; i++) {
+                    operations.push(dropTable(operationInfo.storeNames[i]));
+                  }
+                  Promise$1.all(operations).then(function() {
+                    resolve();
+                  })["catch"](function(e) {
+                    reject(e);
+                  });
+                }, function(sqlError) {
+                  reject(sqlError);
+                });
+              });
+            });
+          }
+          executeCallback(promise, callback);
+          return promise;
+        }
+        var webSQLStorage = {
+          _driver: "webSQLStorage",
+          _initStorage: _initStorage$1,
+          _support: isWebSQLValid(),
+          iterate: iterate$1,
+          getItem: getItem$1,
+          setItem: setItem$1,
+          removeItem: removeItem$1,
+          clear: clear$1,
+          length: length$1,
+          key: key$1,
+          keys: keys$1,
+          dropInstance: dropInstance$1
+        };
+        function isLocalStorageValid() {
+          try {
+            return typeof localStorage !== "undefined" && "setItem" in localStorage && // in IE8 typeof localStorage.setItem === 'object'
+            !!localStorage.setItem;
+          } catch (e) {
+            return false;
+          }
+        }
+        function _getKeyPrefix(options, defaultConfig) {
+          var keyPrefix = options.name + "/";
+          if (options.storeName !== defaultConfig.storeName) {
+            keyPrefix += options.storeName + "/";
+          }
+          return keyPrefix;
+        }
+        function checkIfLocalStorageThrows() {
+          var localStorageTestKey = "_localforage_support_test";
+          try {
+            localStorage.setItem(localStorageTestKey, true);
+            localStorage.removeItem(localStorageTestKey);
+            return false;
+          } catch (e) {
+            return true;
+          }
+        }
+        function _isLocalStorageUsable() {
+          return !checkIfLocalStorageThrows() || localStorage.length > 0;
+        }
+        function _initStorage$2(options) {
+          var self2 = this;
+          var dbInfo = {};
+          if (options) {
+            for (var i in options) {
+              dbInfo[i] = options[i];
+            }
+          }
+          dbInfo.keyPrefix = _getKeyPrefix(options, self2._defaultConfig);
+          if (!_isLocalStorageUsable()) {
+            return Promise$1.reject();
+          }
+          self2._dbInfo = dbInfo;
+          dbInfo.serializer = localforageSerializer;
+          return Promise$1.resolve();
+        }
+        function clear$2(callback) {
+          var self2 = this;
+          var promise = self2.ready().then(function() {
+            var keyPrefix = self2._dbInfo.keyPrefix;
+            for (var i = localStorage.length - 1; i >= 0; i--) {
+              var key2 = localStorage.key(i);
+              if (key2.indexOf(keyPrefix) === 0) {
+                localStorage.removeItem(key2);
+              }
+            }
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function getItem$2(key2, callback) {
+          var self2 = this;
+          key2 = normalizeKey(key2);
+          var promise = self2.ready().then(function() {
+            var dbInfo = self2._dbInfo;
+            var result = localStorage.getItem(dbInfo.keyPrefix + key2);
+            if (result) {
+              result = dbInfo.serializer.deserialize(result);
+            }
+            return result;
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function iterate$2(iterator, callback) {
+          var self2 = this;
+          var promise = self2.ready().then(function() {
+            var dbInfo = self2._dbInfo;
+            var keyPrefix = dbInfo.keyPrefix;
+            var keyPrefixLength = keyPrefix.length;
+            var length2 = localStorage.length;
+            var iterationNumber = 1;
+            for (var i = 0; i < length2; i++) {
+              var key2 = localStorage.key(i);
+              if (key2.indexOf(keyPrefix) !== 0) {
+                continue;
+              }
+              var value = localStorage.getItem(key2);
+              if (value) {
+                value = dbInfo.serializer.deserialize(value);
+              }
+              value = iterator(value, key2.substring(keyPrefixLength), iterationNumber++);
+              if (value !== void 0) {
+                return value;
+              }
+            }
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function key$2(n, callback) {
+          var self2 = this;
+          var promise = self2.ready().then(function() {
+            var dbInfo = self2._dbInfo;
+            var result;
+            try {
+              result = localStorage.key(n);
+            } catch (error) {
+              result = null;
+            }
+            if (result) {
+              result = result.substring(dbInfo.keyPrefix.length);
+            }
+            return result;
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function keys$2(callback) {
+          var self2 = this;
+          var promise = self2.ready().then(function() {
+            var dbInfo = self2._dbInfo;
+            var length2 = localStorage.length;
+            var keys2 = [];
+            for (var i = 0; i < length2; i++) {
+              var itemKey = localStorage.key(i);
+              if (itemKey.indexOf(dbInfo.keyPrefix) === 0) {
+                keys2.push(itemKey.substring(dbInfo.keyPrefix.length));
+              }
+            }
+            return keys2;
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function length$2(callback) {
+          var self2 = this;
+          var promise = self2.keys().then(function(keys2) {
+            return keys2.length;
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function removeItem$2(key2, callback) {
+          var self2 = this;
+          key2 = normalizeKey(key2);
+          var promise = self2.ready().then(function() {
+            var dbInfo = self2._dbInfo;
+            localStorage.removeItem(dbInfo.keyPrefix + key2);
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function setItem$2(key2, value, callback) {
+          var self2 = this;
+          key2 = normalizeKey(key2);
+          var promise = self2.ready().then(function() {
+            if (value === void 0) {
+              value = null;
+            }
+            var originalValue = value;
+            return new Promise$1(function(resolve, reject) {
+              var dbInfo = self2._dbInfo;
+              dbInfo.serializer.serialize(value, function(value2, error) {
+                if (error) {
+                  reject(error);
+                } else {
+                  try {
+                    localStorage.setItem(dbInfo.keyPrefix + key2, value2);
+                    resolve(originalValue);
+                  } catch (e) {
+                    if (e.name === "QuotaExceededError" || e.name === "NS_ERROR_DOM_QUOTA_REACHED") {
+                      reject(e);
+                    }
+                    reject(e);
+                  }
+                }
+              });
+            });
+          });
+          executeCallback(promise, callback);
+          return promise;
+        }
+        function dropInstance$2(options, callback) {
+          callback = getCallback.apply(this, arguments);
+          options = typeof options !== "function" && options || {};
+          if (!options.name) {
+            var currentConfig = this.config();
+            options.name = options.name || currentConfig.name;
+            options.storeName = options.storeName || currentConfig.storeName;
+          }
+          var self2 = this;
+          var promise;
+          if (!options.name) {
+            promise = Promise$1.reject("Invalid arguments");
+          } else {
+            promise = new Promise$1(function(resolve) {
+              if (!options.storeName) {
+                resolve(options.name + "/");
+              } else {
+                resolve(_getKeyPrefix(options, self2._defaultConfig));
+              }
+            }).then(function(keyPrefix) {
+              for (var i = localStorage.length - 1; i >= 0; i--) {
+                var key2 = localStorage.key(i);
+                if (key2.indexOf(keyPrefix) === 0) {
+                  localStorage.removeItem(key2);
+                }
+              }
+            });
+          }
+          executeCallback(promise, callback);
+          return promise;
+        }
+        var localStorageWrapper = {
+          _driver: "localStorageWrapper",
+          _initStorage: _initStorage$2,
+          _support: isLocalStorageValid(),
+          iterate: iterate$2,
+          getItem: getItem$2,
+          setItem: setItem$2,
+          removeItem: removeItem$2,
+          clear: clear$2,
+          length: length$2,
+          key: key$2,
+          keys: keys$2,
+          dropInstance: dropInstance$2
+        };
+        var sameValue = function sameValue2(x, y) {
+          return x === y || typeof x === "number" && typeof y === "number" && isNaN(x) && isNaN(y);
+        };
+        var includes = function includes2(array, searchElement) {
+          var len = array.length;
+          var i = 0;
+          while (i < len) {
+            if (sameValue(array[i], searchElement)) {
+              return true;
+            }
+            i++;
+          }
+          return false;
+        };
+        var isArray = Array.isArray || function(arg) {
+          return Object.prototype.toString.call(arg) === "[object Array]";
+        };
+        var DefinedDrivers = {};
+        var DriverSupport = {};
+        var DefaultDrivers = {
+          INDEXEDDB: asyncStorage,
+          WEBSQL: webSQLStorage,
+          LOCALSTORAGE: localStorageWrapper
+        };
+        var DefaultDriverOrder = [DefaultDrivers.INDEXEDDB._driver, DefaultDrivers.WEBSQL._driver, DefaultDrivers.LOCALSTORAGE._driver];
+        var OptionalDriverMethods = ["dropInstance"];
+        var LibraryMethods = ["clear", "getItem", "iterate", "key", "keys", "length", "removeItem", "setItem"].concat(OptionalDriverMethods);
+        var DefaultConfig = {
+          description: "",
+          driver: DefaultDriverOrder.slice(),
+          name: "localforage",
+          // Default DB size is _JUST UNDER_ 5MB, as it's the highest size
+          // we can use without a prompt.
+          size: 4980736,
+          storeName: "keyvaluepairs",
+          version: 1
+        };
+        function callWhenReady(localForageInstance, libraryMethod) {
+          localForageInstance[libraryMethod] = function() {
+            var _args = arguments;
+            return localForageInstance.ready().then(function() {
+              return localForageInstance[libraryMethod].apply(localForageInstance, _args);
+            });
+          };
+        }
+        function extend() {
+          for (var i = 1; i < arguments.length; i++) {
+            var arg = arguments[i];
+            if (arg) {
+              for (var _key in arg) {
+                if (arg.hasOwnProperty(_key)) {
+                  if (isArray(arg[_key])) {
+                    arguments[0][_key] = arg[_key].slice();
+                  } else {
+                    arguments[0][_key] = arg[_key];
+                  }
+                }
+              }
+            }
+          }
+          return arguments[0];
+        }
+        var LocalForage = (function() {
+          function LocalForage2(options) {
+            _classCallCheck(this, LocalForage2);
+            for (var driverTypeKey in DefaultDrivers) {
+              if (DefaultDrivers.hasOwnProperty(driverTypeKey)) {
+                var driver = DefaultDrivers[driverTypeKey];
+                var driverName = driver._driver;
+                this[driverTypeKey] = driverName;
+                if (!DefinedDrivers[driverName]) {
+                  this.defineDriver(driver);
+                }
+              }
+            }
+            this._defaultConfig = extend({}, DefaultConfig);
+            this._config = extend({}, this._defaultConfig, options);
+            this._driverSet = null;
+            this._initDriver = null;
+            this._ready = false;
+            this._dbInfo = null;
+            this._wrapLibraryMethodsWithReady();
+            this.setDriver(this._config.driver)["catch"](function() {
+            });
+          }
+          LocalForage2.prototype.config = function config(options) {
+            if ((typeof options === "undefined" ? "undefined" : _typeof(options)) === "object") {
+              if (this._ready) {
+                return new Error("Can't call config() after localforage has been used.");
+              }
+              for (var i in options) {
+                if (i === "storeName") {
+                  options[i] = options[i].replace(/\W/g, "_");
+                }
+                if (i === "version" && typeof options[i] !== "number") {
+                  return new Error("Database version must be a number.");
+                }
+                this._config[i] = options[i];
+              }
+              if ("driver" in options && options.driver) {
+                return this.setDriver(this._config.driver);
+              }
+              return true;
+            } else if (typeof options === "string") {
+              return this._config[options];
+            } else {
+              return this._config;
+            }
+          };
+          LocalForage2.prototype.defineDriver = function defineDriver(driverObject, callback, errorCallback) {
+            var promise = new Promise$1(function(resolve, reject) {
+              try {
+                var driverName = driverObject._driver;
+                var complianceError = new Error("Custom driver not compliant; see https://mozilla.github.io/localForage/#definedriver");
+                if (!driverObject._driver) {
+                  reject(complianceError);
+                  return;
+                }
+                var driverMethods = LibraryMethods.concat("_initStorage");
+                for (var i = 0, len = driverMethods.length; i < len; i++) {
+                  var driverMethodName = driverMethods[i];
+                  var isRequired = !includes(OptionalDriverMethods, driverMethodName);
+                  if ((isRequired || driverObject[driverMethodName]) && typeof driverObject[driverMethodName] !== "function") {
+                    reject(complianceError);
+                    return;
+                  }
+                }
+                var configureMissingMethods = function configureMissingMethods2() {
+                  var methodNotImplementedFactory = function methodNotImplementedFactory2(methodName) {
+                    return function() {
+                      var error = new Error("Method " + methodName + " is not implemented by the current driver");
+                      var promise2 = Promise$1.reject(error);
+                      executeCallback(promise2, arguments[arguments.length - 1]);
+                      return promise2;
+                    };
+                  };
+                  for (var _i = 0, _len = OptionalDriverMethods.length; _i < _len; _i++) {
+                    var optionalDriverMethod = OptionalDriverMethods[_i];
+                    if (!driverObject[optionalDriverMethod]) {
+                      driverObject[optionalDriverMethod] = methodNotImplementedFactory(optionalDriverMethod);
+                    }
+                  }
+                };
+                configureMissingMethods();
+                var setDriverSupport = function setDriverSupport2(support) {
+                  if (DefinedDrivers[driverName]) {
+                    console.info("Redefining LocalForage driver: " + driverName);
+                  }
+                  DefinedDrivers[driverName] = driverObject;
+                  DriverSupport[driverName] = support;
+                  resolve();
+                };
+                if ("_support" in driverObject) {
+                  if (driverObject._support && typeof driverObject._support === "function") {
+                    driverObject._support().then(setDriverSupport, reject);
+                  } else {
+                    setDriverSupport(!!driverObject._support);
+                  }
+                } else {
+                  setDriverSupport(true);
+                }
+              } catch (e) {
+                reject(e);
+              }
+            });
+            executeTwoCallbacks(promise, callback, errorCallback);
+            return promise;
+          };
+          LocalForage2.prototype.driver = function driver() {
+            return this._driver || null;
+          };
+          LocalForage2.prototype.getDriver = function getDriver(driverName, callback, errorCallback) {
+            var getDriverPromise = DefinedDrivers[driverName] ? Promise$1.resolve(DefinedDrivers[driverName]) : Promise$1.reject(new Error("Driver not found."));
+            executeTwoCallbacks(getDriverPromise, callback, errorCallback);
+            return getDriverPromise;
+          };
+          LocalForage2.prototype.getSerializer = function getSerializer(callback) {
+            var serializerPromise = Promise$1.resolve(localforageSerializer);
+            executeTwoCallbacks(serializerPromise, callback);
+            return serializerPromise;
+          };
+          LocalForage2.prototype.ready = function ready(callback) {
+            var self2 = this;
+            var promise = self2._driverSet.then(function() {
+              if (self2._ready === null) {
+                self2._ready = self2._initDriver();
+              }
+              return self2._ready;
+            });
+            executeTwoCallbacks(promise, callback, callback);
+            return promise;
+          };
+          LocalForage2.prototype.setDriver = function setDriver(drivers, callback, errorCallback) {
+            var self2 = this;
+            if (!isArray(drivers)) {
+              drivers = [drivers];
+            }
+            var supportedDrivers = this._getSupportedDrivers(drivers);
+            function setDriverToConfig() {
+              self2._config.driver = self2.driver();
+            }
+            function extendSelfWithDriver(driver) {
+              self2._extend(driver);
+              setDriverToConfig();
+              self2._ready = self2._initStorage(self2._config);
+              return self2._ready;
+            }
+            function initDriver(supportedDrivers2) {
+              return function() {
+                var currentDriverIndex = 0;
+                function driverPromiseLoop() {
+                  while (currentDriverIndex < supportedDrivers2.length) {
+                    var driverName = supportedDrivers2[currentDriverIndex];
+                    currentDriverIndex++;
+                    self2._dbInfo = null;
+                    self2._ready = null;
+                    return self2.getDriver(driverName).then(extendSelfWithDriver)["catch"](driverPromiseLoop);
+                  }
+                  setDriverToConfig();
+                  var error = new Error("No available storage method found.");
+                  self2._driverSet = Promise$1.reject(error);
+                  return self2._driverSet;
+                }
+                return driverPromiseLoop();
+              };
+            }
+            var oldDriverSetDone = this._driverSet !== null ? this._driverSet["catch"](function() {
+              return Promise$1.resolve();
+            }) : Promise$1.resolve();
+            this._driverSet = oldDriverSetDone.then(function() {
+              var driverName = supportedDrivers[0];
+              self2._dbInfo = null;
+              self2._ready = null;
+              return self2.getDriver(driverName).then(function(driver) {
+                self2._driver = driver._driver;
+                setDriverToConfig();
+                self2._wrapLibraryMethodsWithReady();
+                self2._initDriver = initDriver(supportedDrivers);
+              });
+            })["catch"](function() {
+              setDriverToConfig();
+              var error = new Error("No available storage method found.");
+              self2._driverSet = Promise$1.reject(error);
+              return self2._driverSet;
+            });
+            executeTwoCallbacks(this._driverSet, callback, errorCallback);
+            return this._driverSet;
+          };
+          LocalForage2.prototype.supports = function supports(driverName) {
+            return !!DriverSupport[driverName];
+          };
+          LocalForage2.prototype._extend = function _extend(libraryMethodsAndProperties) {
+            extend(this, libraryMethodsAndProperties);
+          };
+          LocalForage2.prototype._getSupportedDrivers = function _getSupportedDrivers(drivers) {
+            var supportedDrivers = [];
+            for (var i = 0, len = drivers.length; i < len; i++) {
+              var driverName = drivers[i];
+              if (this.supports(driverName)) {
+                supportedDrivers.push(driverName);
+              }
+            }
+            return supportedDrivers;
+          };
+          LocalForage2.prototype._wrapLibraryMethodsWithReady = function _wrapLibraryMethodsWithReady() {
+            for (var i = 0, len = LibraryMethods.length; i < len; i++) {
+              callWhenReady(this, LibraryMethods[i]);
+            }
+          };
+          LocalForage2.prototype.createInstance = function createInstance(options) {
+            return new LocalForage2(options);
+          };
+          return LocalForage2;
+        })();
+        var localforage_js = new LocalForage();
+        module4.exports = localforage_js;
+      }, { "3": 3 }] }, {}, [4])(4);
+    });
+  }
+});
 
 // node_modules/plantuml-encoder/dist/plantuml-encoder.js
 var require_plantuml_encoder = __commonJS({
@@ -91,16 +2240,14 @@ var require_plantuml_encoder = __commonJS({
       }
     })(function() {
       var define2, module3, exports2;
-      return function() {
+      return (/* @__PURE__ */ (function() {
         function r(e, n, t) {
           function o(i2, f) {
             if (!n[i2]) {
               if (!e[i2]) {
-                var c = typeof require == "function" && require;
-                if (!f && c)
-                  return c(i2, true);
-                if (u)
-                  return u(i2, true);
+                var c = "function" == typeof require && require;
+                if (!f && c) return c(i2, true);
+                if (u) return u(i2, true);
                 var a = new Error("Cannot find module '" + i2 + "'");
                 throw a.code = "MODULE_NOT_FOUND", a;
               }
@@ -112,12 +2259,11 @@ var require_plantuml_encoder = __commonJS({
             }
             return n[i2].exports;
           }
-          for (var u = typeof require == "function" && require, i = 0; i < t.length; i++)
-            o(t[i]);
+          for (var u = "function" == typeof require && require, i = 0; i < t.length; i++) o(t[i]);
           return o;
         }
         return r;
-      }()({ 1: [function(require2, module4, exports3) {
+      })())({ 1: [function(require2, module4, exports3) {
         "use strict";
         var pako = require2("pako/lib/deflate.js");
         module4.exports = function(data) {
@@ -166,7 +2312,11 @@ var require_plantuml_encoder = __commonJS({
             } else if (i + 1 === data.length) {
               r += append3bytes(data.charCodeAt(i), 0, 0);
             } else {
-              r += append3bytes(data.charCodeAt(i), data.charCodeAt(i + 1), data.charCodeAt(i + 2));
+              r += append3bytes(
+                data.charCodeAt(i),
+                data.charCodeAt(i + 1),
+                data.charCodeAt(i + 2)
+              );
             }
           }
           return r;
@@ -196,8 +2346,7 @@ var require_plantuml_encoder = __commonJS({
         var Z_DEFAULT_STRATEGY = 0;
         var Z_DEFLATED = 8;
         function Deflate(options) {
-          if (!(this instanceof Deflate))
-            return new Deflate(options);
+          if (!(this instanceof Deflate)) return new Deflate(options);
           this.options = utils.assign({
             level: Z_DEFAULT_COMPRESSION,
             method: Z_DEFLATED,
@@ -219,7 +2368,14 @@ var require_plantuml_encoder = __commonJS({
           this.chunks = [];
           this.strm = new ZStream();
           this.strm.avail_out = 0;
-          var status = zlib_deflate.deflateInit2(this.strm, opt.level, opt.method, opt.windowBits, opt.memLevel, opt.strategy);
+          var status = zlib_deflate.deflateInit2(
+            this.strm,
+            opt.level,
+            opt.method,
+            opt.windowBits,
+            opt.memLevel,
+            opt.strategy
+          );
           if (status !== Z_OK) {
             throw new Error(msg[status]);
           }
@@ -373,6 +2529,7 @@ var require_plantuml_encoder = __commonJS({
               dest[dest_offs + i] = src[src_offs + i];
             }
           },
+          // Join array of chunks to single array.
           flattenChunks: function(chunks) {
             var i, l, len, pos, chunk, result;
             len = 0;
@@ -395,6 +2552,7 @@ var require_plantuml_encoder = __commonJS({
               dest[dest_offs + i] = src[src_offs + i];
             }
           },
+          // Join array of chunks to single array.
           flattenChunks: function(chunks) {
             return [].concat.apply([], chunks);
           }
@@ -1108,16 +3266,27 @@ var require_plantuml_encoder = __commonJS({
         }
         var configuration_table;
         configuration_table = [
+          /*      good lazy nice chain */
           new Config(0, 0, 0, 0, deflate_stored),
+          /* 0 store only */
           new Config(4, 4, 8, 4, deflate_fast),
+          /* 1 max speed, no lazy matches */
           new Config(4, 5, 16, 8, deflate_fast),
+          /* 2 */
           new Config(4, 6, 32, 32, deflate_fast),
+          /* 3 */
           new Config(4, 4, 16, 16, deflate_slow),
+          /* 4 lazy matches */
           new Config(8, 16, 32, 32, deflate_slow),
+          /* 5 */
           new Config(8, 16, 128, 128, deflate_slow),
+          /* 6 */
           new Config(8, 32, 128, 256, deflate_slow),
+          /* 7 */
           new Config(32, 128, 258, 1024, deflate_slow),
+          /* 8 */
           new Config(32, 258, 258, 4096, deflate_slow)
+          /* 9 max compression */
         ];
         function lm_init(s) {
           s.window_size = 2 * s.w_size;
@@ -1313,7 +3482,10 @@ var require_plantuml_encoder = __commonJS({
                 put_byte(s, OS_CODE);
                 s.status = BUSY_STATE;
               } else {
-                put_byte(s, (s.gzhead.text ? 1 : 0) + (s.gzhead.hcrc ? 2 : 0) + (!s.gzhead.extra ? 0 : 4) + (!s.gzhead.name ? 0 : 8) + (!s.gzhead.comment ? 0 : 16));
+                put_byte(
+                  s,
+                  (s.gzhead.text ? 1 : 0) + (s.gzhead.hcrc ? 2 : 0) + (!s.gzhead.extra ? 0 : 4) + (!s.gzhead.name ? 0 : 8) + (!s.gzhead.comment ? 0 : 16)
+                );
                 put_byte(s, s.gzhead.time & 255);
                 put_byte(s, s.gzhead.time >> 8 & 255);
                 put_byte(s, s.gzhead.time >> 16 & 255);
@@ -1623,14 +3795,23 @@ var require_plantuml_encoder = __commonJS({
         "use strict";
         module4.exports = {
           2: "need dictionary",
+          /* Z_NEED_DICT       2  */
           1: "stream end",
+          /* Z_STREAM_END      1  */
           0: "",
+          /* Z_OK              0  */
           "-1": "file error",
+          /* Z_ERRNO         (-1) */
           "-2": "stream error",
+          /* Z_STREAM_ERROR  (-2) */
           "-3": "data error",
+          /* Z_DATA_ERROR    (-3) */
           "-4": "insufficient memory",
+          /* Z_MEM_ERROR     (-4) */
           "-5": "buffer error",
+          /* Z_BUF_ERROR     (-5) */
           "-6": "incompatible version"
+          /* Z_VERSION_ERROR (-6) */
         };
       }, {}], 11: [function(require2, module4, exports3) {
         "use strict";
@@ -1663,9 +3844,18 @@ var require_plantuml_encoder = __commonJS({
         var REP_3_6 = 16;
         var REPZ_3_10 = 17;
         var REPZ_11_138 = 18;
-        var extra_lbits = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0];
-        var extra_dbits = [0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13];
-        var extra_blbits = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 7];
+        var extra_lbits = (
+          /* extra bits for each length code */
+          [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0]
+        );
+        var extra_dbits = (
+          /* extra bits for each distance code */
+          [0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13]
+        );
+        var extra_blbits = (
+          /* extra bits for each bit length code */
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 7]
+        );
         var bl_order = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
         var DIST_CODE_LEN = 512;
         var static_ltree = new Array((L_CODES + 2) * 2);
@@ -1715,7 +3905,12 @@ var require_plantuml_encoder = __commonJS({
           }
         }
         function send_code(s, c, tree) {
-          send_bits(s, tree[c * 2], tree[c * 2 + 1]);
+          send_bits(
+            s,
+            tree[c * 2],
+            tree[c * 2 + 1]
+            /*.Len*/
+          );
         }
         function bi_reverse(code, len) {
           var res = 0;
@@ -2004,19 +4199,44 @@ var require_plantuml_encoder = __commonJS({
           }
           node = elems;
           do {
-            n = s.heap[1];
-            s.heap[1] = s.heap[s.heap_len--];
-            pqdownheap(s, tree, 1);
-            m = s.heap[1];
+            n = s.heap[
+              1
+              /*SMALLEST*/
+            ];
+            s.heap[
+              1
+              /*SMALLEST*/
+            ] = s.heap[s.heap_len--];
+            pqdownheap(
+              s,
+              tree,
+              1
+              /*SMALLEST*/
+            );
+            m = s.heap[
+              1
+              /*SMALLEST*/
+            ];
             s.heap[--s.heap_max] = n;
             s.heap[--s.heap_max] = m;
             tree[node * 2] = tree[n * 2] + tree[m * 2];
             s.depth[node] = (s.depth[n] >= s.depth[m] ? s.depth[n] : s.depth[m]) + 1;
             tree[n * 2 + 1] = tree[m * 2 + 1] = node;
-            s.heap[1] = node++;
-            pqdownheap(s, tree, 1);
+            s.heap[
+              1
+              /*SMALLEST*/
+            ] = node++;
+            pqdownheap(
+              s,
+              tree,
+              1
+              /*SMALLEST*/
+            );
           } while (s.heap_len >= 2);
-          s.heap[--s.heap_max] = s.heap[1];
+          s.heap[--s.heap_max] = s.heap[
+            1
+            /*SMALLEST*/
+          ];
           gen_bitlen(s, desc);
           gen_codes(tree, max_code, s.bl_count);
         }
@@ -2275,16 +4495,14 @@ var require_plantuml_decoder = __commonJS({
       }
     })(function() {
       var define2, module3, exports2;
-      return function() {
+      return (/* @__PURE__ */ (function() {
         function r(e, n, t) {
           function o(i2, f) {
             if (!n[i2]) {
               if (!e[i2]) {
-                var c = typeof require == "function" && require;
-                if (!f && c)
-                  return c(i2, true);
-                if (u)
-                  return u(i2, true);
+                var c = "function" == typeof require && require;
+                if (!f && c) return c(i2, true);
+                if (u) return u(i2, true);
                 var a = new Error("Cannot find module '" + i2 + "'");
                 throw a.code = "MODULE_NOT_FOUND", a;
               }
@@ -2296,12 +4514,11 @@ var require_plantuml_decoder = __commonJS({
             }
             return n[i2].exports;
           }
-          for (var u = typeof require == "function" && require, i = 0; i < t.length; i++)
-            o(t[i]);
+          for (var u = "function" == typeof require && require, i = 0; i < t.length; i++) o(t[i]);
           return o;
         }
         return r;
-      }()({ 1: [function(require2, module4, exports3) {
+      })())({ 1: [function(require2, module4, exports3) {
         "use strict";
         var pako = require2("pako/lib/inflate.js");
         module4.exports = function(data) {
@@ -2311,16 +4528,11 @@ var require_plantuml_decoder = __commonJS({
         "use strict";
         function decode6bit(cc) {
           var c = cc.charCodeAt(0);
-          if (cc === "_")
-            return 63;
-          if (cc === "-")
-            return 62;
-          if (c >= 97)
-            return c - 61;
-          if (c >= 65)
-            return c - 55;
-          if (c >= 48)
-            return c - 48;
+          if (cc === "_") return 63;
+          if (cc === "-") return 62;
+          if (c >= 97) return c - 61;
+          if (c >= 65) return c - 55;
+          if (c >= 48) return c - 48;
           return "?";
         }
         function extract3bytes(data) {
@@ -2363,8 +4575,7 @@ var require_plantuml_decoder = __commonJS({
         var GZheader = require2("./zlib/gzheader");
         var toString = Object.prototype.toString;
         function Inflate(options) {
-          if (!(this instanceof Inflate))
-            return new Inflate(options);
+          if (!(this instanceof Inflate)) return new Inflate(options);
           this.options = utils.assign({
             chunkSize: 16384,
             windowBits: 0,
@@ -2391,7 +4602,10 @@ var require_plantuml_decoder = __commonJS({
           this.chunks = [];
           this.strm = new ZStream();
           this.strm.avail_out = 0;
-          var status = zlib_inflate.inflateInit2(this.strm, opt.windowBits);
+          var status = zlib_inflate.inflateInit2(
+            this.strm,
+            opt.windowBits
+          );
           if (status !== c.Z_OK) {
             throw new Error(msg[status]);
           }
@@ -2563,6 +4777,7 @@ var require_plantuml_decoder = __commonJS({
               dest[dest_offs + i] = src[src_offs + i];
             }
           },
+          // Join array of chunks to single array.
           flattenChunks: function(chunks) {
             var i, l, len, pos, chunk, result;
             len = 0;
@@ -2585,6 +4800,7 @@ var require_plantuml_decoder = __commonJS({
               dest[dest_offs + i] = src[src_offs + i];
             }
           },
+          // Join array of chunks to single array.
           flattenChunks: function(chunks) {
             return [].concat.apply([], chunks);
           }
@@ -2759,6 +4975,7 @@ var require_plantuml_decoder = __commonJS({
       }, {}], 8: [function(require2, module4, exports3) {
         "use strict";
         module4.exports = {
+          /* Allowed flush values; see deflate() and inflate() below for details */
           Z_NO_FLUSH: 0,
           Z_PARTIAL_FLUSH: 1,
           Z_SYNC_FLUSH: 2,
@@ -2766,13 +4983,19 @@ var require_plantuml_decoder = __commonJS({
           Z_FINISH: 4,
           Z_BLOCK: 5,
           Z_TREES: 6,
+          /* Return codes for the compression/decompression functions. Negative values
+          * are errors, positive values are used for special but normal events.
+          */
           Z_OK: 0,
           Z_STREAM_END: 1,
           Z_NEED_DICT: 2,
           Z_ERRNO: -1,
           Z_STREAM_ERROR: -2,
           Z_DATA_ERROR: -3,
+          //Z_MEM_ERROR:     -4,
           Z_BUF_ERROR: -5,
+          //Z_VERSION_ERROR: -6,
+          /* compression levels */
           Z_NO_COMPRESSION: 0,
           Z_BEST_SPEED: 1,
           Z_BEST_COMPRESSION: 9,
@@ -2782,10 +5005,14 @@ var require_plantuml_decoder = __commonJS({
           Z_RLE: 3,
           Z_FIXED: 4,
           Z_DEFAULT_STRATEGY: 0,
+          /* Possible values of the data_type field (though see inflate()) */
           Z_BINARY: 0,
           Z_TEXT: 1,
+          //Z_ASCII:                1, // = Z_TEXT (deprecated)
           Z_UNKNOWN: 2,
+          /* The deflate compression method */
           Z_DEFLATED: 8
+          //Z_NULL:                 null // Use -1 or null inline, depending on var type
         };
       }, {}], 9: [function(require2, module4, exports3) {
         "use strict";
@@ -3314,7 +5541,10 @@ var require_plantuml_decoder = __commonJS({
           var hbuf = new utils.Buf8(4);
           var opts;
           var n;
-          var order = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
+          var order = (
+            /* permutation of code lengths */
+            [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15]
+          );
           if (!strm || !strm.state || !strm.output || !strm.input && strm.avail_in !== 0) {
             return Z_STREAM_ERROR;
           }
@@ -3363,7 +5593,8 @@ var require_plantuml_decoder = __commonJS({
                   if (state.head) {
                     state.head.done = false;
                   }
-                  if (!(state.wrap & 1) || (((hold & 255) << 8) + (hold >> 8)) % 31) {
+                  if (!(state.wrap & 1) || /* check if zlib header allowed */
+                  (((hold & 255) << 8) + (hold >> 8)) % 31) {
                     strm.msg = "incorrect header check";
                     state.mode = BAD;
                     break;
@@ -3420,6 +5651,7 @@ var require_plantuml_decoder = __commonJS({
                   hold = 0;
                   bits = 0;
                   state.mode = TIME;
+                /* falls through */
                 case TIME:
                   while (bits < 32) {
                     if (have === 0) {
@@ -3442,6 +5674,7 @@ var require_plantuml_decoder = __commonJS({
                   hold = 0;
                   bits = 0;
                   state.mode = OS;
+                /* falls through */
                 case OS:
                   while (bits < 16) {
                     if (have === 0) {
@@ -3463,6 +5696,7 @@ var require_plantuml_decoder = __commonJS({
                   hold = 0;
                   bits = 0;
                   state.mode = EXLEN;
+                /* falls through */
                 case EXLEN:
                   if (state.flags & 1024) {
                     while (bits < 16) {
@@ -3488,6 +5722,7 @@ var require_plantuml_decoder = __commonJS({
                     state.head.extra = null;
                   }
                   state.mode = EXTRA;
+                /* falls through */
                 case EXTRA:
                   if (state.flags & 1024) {
                     copy = state.length;
@@ -3500,7 +5735,16 @@ var require_plantuml_decoder = __commonJS({
                         if (!state.head.extra) {
                           state.head.extra = new Array(state.head.extra_len);
                         }
-                        utils.arraySet(state.head.extra, input, next, copy, len);
+                        utils.arraySet(
+                          state.head.extra,
+                          input,
+                          next,
+                          // extra field is limited to 65536 bytes
+                          // - no need for additional size check
+                          copy,
+                          /*len + copy > state.head.extra_max - len ? state.head.extra_max : copy,*/
+                          len
+                        );
                       }
                       if (state.flags & 512) {
                         state.check = crc32(state.check, input, copy, next);
@@ -3515,6 +5759,7 @@ var require_plantuml_decoder = __commonJS({
                   }
                   state.length = 0;
                   state.mode = NAME;
+                /* falls through */
                 case NAME:
                   if (state.flags & 2048) {
                     if (have === 0) {
@@ -3540,6 +5785,7 @@ var require_plantuml_decoder = __commonJS({
                   }
                   state.length = 0;
                   state.mode = COMMENT;
+                /* falls through */
                 case COMMENT:
                   if (state.flags & 4096) {
                     if (have === 0) {
@@ -3564,6 +5810,7 @@ var require_plantuml_decoder = __commonJS({
                     state.head.comment = null;
                   }
                   state.mode = HCRC;
+                /* falls through */
                 case HCRC:
                   if (state.flags & 512) {
                     while (bits < 16) {
@@ -3602,6 +5849,7 @@ var require_plantuml_decoder = __commonJS({
                   hold = 0;
                   bits = 0;
                   state.mode = DICT;
+                /* falls through */
                 case DICT:
                   if (state.havedict === 0) {
                     strm.next_out = put;
@@ -3614,10 +5862,12 @@ var require_plantuml_decoder = __commonJS({
                   }
                   strm.adler = state.check = 1;
                   state.mode = TYPE;
+                /* falls through */
                 case TYPE:
                   if (flush === Z_BLOCK || flush === Z_TREES) {
                     break inf_leave;
                   }
+                /* falls through */
                 case TYPEDO:
                   if (state.last) {
                     hold >>>= bits & 7;
@@ -3682,8 +5932,10 @@ var require_plantuml_decoder = __commonJS({
                   if (flush === Z_TREES) {
                     break inf_leave;
                   }
+                /* falls through */
                 case COPY_:
                   state.mode = COPY;
+                /* falls through */
                 case COPY:
                   copy = state.length;
                   if (copy) {
@@ -3731,6 +5983,7 @@ var require_plantuml_decoder = __commonJS({
                   }
                   state.have = 0;
                   state.mode = LENLENS;
+                /* falls through */
                 case LENLENS:
                   while (state.have < state.ncode) {
                     while (bits < 3) {
@@ -3760,6 +6013,7 @@ var require_plantuml_decoder = __commonJS({
                   }
                   state.have = 0;
                   state.mode = CODELENS;
+                /* falls through */
                 case CODELENS:
                   while (state.have < state.nlen + state.ndist) {
                     for (; ; ) {
@@ -3877,8 +6131,10 @@ var require_plantuml_decoder = __commonJS({
                   if (flush === Z_TREES) {
                     break inf_leave;
                   }
+                /* falls through */
                 case LEN_:
                   state.mode = LEN;
+                /* falls through */
                 case LEN:
                   if (have >= 6 && left >= 258) {
                     strm.next_out = put;
@@ -3960,6 +6216,7 @@ var require_plantuml_decoder = __commonJS({
                   }
                   state.extra = here_op & 15;
                   state.mode = LENEXT;
+                /* falls through */
                 case LENEXT:
                   if (state.extra) {
                     n = state.extra;
@@ -3978,6 +6235,7 @@ var require_plantuml_decoder = __commonJS({
                   }
                   state.was = state.length;
                   state.mode = DIST;
+                /* falls through */
                 case DIST:
                   for (; ; ) {
                     here = state.distcode[hold & (1 << state.distbits) - 1];
@@ -4028,6 +6286,7 @@ var require_plantuml_decoder = __commonJS({
                   state.offset = here_val;
                   state.extra = here_op & 15;
                   state.mode = DISTEXT;
+                /* falls through */
                 case DISTEXT:
                   if (state.extra) {
                     n = state.extra;
@@ -4050,6 +6309,7 @@ var require_plantuml_decoder = __commonJS({
                     break;
                   }
                   state.mode = MATCH;
+                /* falls through */
                 case MATCH:
                   if (left === 0) {
                     break inf_leave;
@@ -4113,7 +6373,8 @@ var require_plantuml_decoder = __commonJS({
                     strm.total_out += _out;
                     state.total += _out;
                     if (_out) {
-                      strm.adler = state.check = state.flags ? crc32(state.check, output, _out, put - _out) : adler32(state.check, output, _out, put - _out);
+                      strm.adler = state.check = /*UPDATE(state.check, put - _out, _out);*/
+                      state.flags ? crc32(state.check, output, _out, put - _out) : adler32(state.check, output, _out, put - _out);
                     }
                     _out = left;
                     if ((state.flags ? hold : zswap32(hold)) !== state.check) {
@@ -4125,6 +6386,7 @@ var require_plantuml_decoder = __commonJS({
                     bits = 0;
                   }
                   state.mode = LENGTH;
+                /* falls through */
                 case LENGTH:
                   if (state.wrap && state.flags) {
                     while (bits < 32) {
@@ -4144,6 +6406,7 @@ var require_plantuml_decoder = __commonJS({
                     bits = 0;
                   }
                   state.mode = DONE;
+                /* falls through */
                 case DONE:
                   ret = Z_STREAM_END;
                   break inf_leave;
@@ -4153,6 +6416,7 @@ var require_plantuml_decoder = __commonJS({
                 case MEM:
                   return Z_MEM_ERROR;
                 case SYNC:
+                /* falls through */
                 default:
                   return Z_STREAM_ERROR;
               }
@@ -4175,7 +6439,8 @@ var require_plantuml_decoder = __commonJS({
           strm.total_out += _out;
           state.total += _out;
           if (state.wrap && _out) {
-            strm.adler = state.check = state.flags ? crc32(state.check, output, _out, strm.next_out - _out) : adler32(state.check, output, _out, strm.next_out - _out);
+            strm.adler = state.check = /*UPDATE(state.check, strm.next_out - _out, _out);*/
+            state.flags ? crc32(state.check, output, _out, strm.next_out - _out) : adler32(state.check, output, _out, strm.next_out - _out);
           }
           strm.data_type = state.bits + (state.last ? 64 : 0) + (state.mode === TYPE ? 128 : 0) + (state.mode === LEN_ || state.mode === COPY_ ? 256 : 0);
           if ((_in === 0 && _out === 0 || flush === Z_FINISH) && ret === Z_OK) {
@@ -4254,6 +6519,7 @@ var require_plantuml_decoder = __commonJS({
         var LENS = 1;
         var DISTS = 2;
         var lbase = [
+          /* Length codes 257..285 base */
           3,
           4,
           5,
@@ -4287,6 +6553,7 @@ var require_plantuml_decoder = __commonJS({
           0
         ];
         var lext = [
+          /* Length codes 257..285 extra */
           16,
           16,
           16,
@@ -4320,6 +6587,7 @@ var require_plantuml_decoder = __commonJS({
           78
         ];
         var dbase = [
+          /* Distance codes 0..29 base */
           1,
           2,
           3,
@@ -4354,6 +6622,7 @@ var require_plantuml_decoder = __commonJS({
           0
         ];
         var dext = [
+          /* Distance codes 0..29 extra */
           16,
           16,
           16,
@@ -4555,14 +6824,23 @@ var require_plantuml_decoder = __commonJS({
         "use strict";
         module4.exports = {
           2: "need dictionary",
+          /* Z_NEED_DICT       2  */
           1: "stream end",
+          /* Z_STREAM_END      1  */
           0: "",
+          /* Z_OK              0  */
           "-1": "file error",
+          /* Z_ERRNO         (-1) */
           "-2": "stream error",
+          /* Z_STREAM_ERROR  (-2) */
           "-3": "data error",
+          /* Z_DATA_ERROR    (-3) */
           "-4": "insufficient memory",
+          /* Z_MEM_ERROR     (-4) */
           "-5": "buffer error",
+          /* Z_BUF_ERROR     (-5) */
           "-6": "incompatible version"
+          /* Z_VERSION_ERROR (-6) */
         };
       }, {}], 15: [function(require2, module4, exports3) {
         "use strict";
@@ -4596,2248 +6874,317 @@ var require_browser_index = __commonJS({
   }
 });
 
-// node_modules/localforage/dist/localforage.js
-var require_localforage = __commonJS({
-  "node_modules/localforage/dist/localforage.js"(exports, module2) {
-    (function(f) {
-      if (typeof exports === "object" && typeof module2 !== "undefined") {
-        module2.exports = f();
-      } else if (typeof define === "function" && define.amd) {
-        define([], f);
-      } else {
-        var g;
-        if (typeof window !== "undefined") {
-          g = window;
-        } else if (typeof global !== "undefined") {
-          g = global;
-        } else if (typeof self !== "undefined") {
-          g = self;
-        } else {
-          g = this;
-        }
-        g.localforage = f();
-      }
-    })(function() {
-      var define2, module3, exports2;
-      return function e(t, n, r) {
-        function s(o2, u) {
-          if (!n[o2]) {
-            if (!t[o2]) {
-              var a = typeof require == "function" && require;
-              if (!u && a)
-                return a(o2, true);
-              if (i)
-                return i(o2, true);
-              var f = new Error("Cannot find module '" + o2 + "'");
-              throw f.code = "MODULE_NOT_FOUND", f;
-            }
-            var l = n[o2] = { exports: {} };
-            t[o2][0].call(l.exports, function(e2) {
-              var n2 = t[o2][1][e2];
-              return s(n2 ? n2 : e2);
-            }, l, l.exports, e, t, n, r);
-          }
-          return n[o2].exports;
-        }
-        var i = typeof require == "function" && require;
-        for (var o = 0; o < r.length; o++)
-          s(r[o]);
-        return s;
-      }({ 1: [function(_dereq_, module4, exports3) {
-        (function(global2) {
-          "use strict";
-          var Mutation = global2.MutationObserver || global2.WebKitMutationObserver;
-          var scheduleDrain;
-          {
-            if (Mutation) {
-              var called = 0;
-              var observer = new Mutation(nextTick);
-              var element = global2.document.createTextNode("");
-              observer.observe(element, {
-                characterData: true
-              });
-              scheduleDrain = function() {
-                element.data = called = ++called % 2;
-              };
-            } else if (!global2.setImmediate && typeof global2.MessageChannel !== "undefined") {
-              var channel = new global2.MessageChannel();
-              channel.port1.onmessage = nextTick;
-              scheduleDrain = function() {
-                channel.port2.postMessage(0);
-              };
-            } else if ("document" in global2 && "onreadystatechange" in global2.document.createElement("script")) {
-              scheduleDrain = function() {
-                var scriptEl = global2.document.createElement("script");
-                scriptEl.onreadystatechange = function() {
-                  nextTick();
-                  scriptEl.onreadystatechange = null;
-                  scriptEl.parentNode.removeChild(scriptEl);
-                  scriptEl = null;
-                };
-                global2.document.documentElement.appendChild(scriptEl);
-              };
-            } else {
-              scheduleDrain = function() {
-                setTimeout(nextTick, 0);
-              };
-            }
-          }
-          var draining;
-          var queue = [];
-          function nextTick() {
-            draining = true;
-            var i, oldQueue;
-            var len = queue.length;
-            while (len) {
-              oldQueue = queue;
-              queue = [];
-              i = -1;
-              while (++i < len) {
-                oldQueue[i]();
-              }
-              len = queue.length;
-            }
-            draining = false;
-          }
-          module4.exports = immediate;
-          function immediate(task) {
-            if (queue.push(task) === 1 && !draining) {
-              scheduleDrain();
-            }
-          }
-        }).call(this, typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {});
-      }, {}], 2: [function(_dereq_, module4, exports3) {
-        "use strict";
-        var immediate = _dereq_(1);
-        function INTERNAL() {
-        }
-        var handlers = {};
-        var REJECTED = ["REJECTED"];
-        var FULFILLED = ["FULFILLED"];
-        var PENDING = ["PENDING"];
-        module4.exports = Promise2;
-        function Promise2(resolver) {
-          if (typeof resolver !== "function") {
-            throw new TypeError("resolver must be a function");
-          }
-          this.state = PENDING;
-          this.queue = [];
-          this.outcome = void 0;
-          if (resolver !== INTERNAL) {
-            safelyResolveThenable(this, resolver);
-          }
-        }
-        Promise2.prototype["catch"] = function(onRejected) {
-          return this.then(null, onRejected);
-        };
-        Promise2.prototype.then = function(onFulfilled, onRejected) {
-          if (typeof onFulfilled !== "function" && this.state === FULFILLED || typeof onRejected !== "function" && this.state === REJECTED) {
-            return this;
-          }
-          var promise = new this.constructor(INTERNAL);
-          if (this.state !== PENDING) {
-            var resolver = this.state === FULFILLED ? onFulfilled : onRejected;
-            unwrap(promise, resolver, this.outcome);
-          } else {
-            this.queue.push(new QueueItem(promise, onFulfilled, onRejected));
-          }
-          return promise;
-        };
-        function QueueItem(promise, onFulfilled, onRejected) {
-          this.promise = promise;
-          if (typeof onFulfilled === "function") {
-            this.onFulfilled = onFulfilled;
-            this.callFulfilled = this.otherCallFulfilled;
-          }
-          if (typeof onRejected === "function") {
-            this.onRejected = onRejected;
-            this.callRejected = this.otherCallRejected;
-          }
-        }
-        QueueItem.prototype.callFulfilled = function(value) {
-          handlers.resolve(this.promise, value);
-        };
-        QueueItem.prototype.otherCallFulfilled = function(value) {
-          unwrap(this.promise, this.onFulfilled, value);
-        };
-        QueueItem.prototype.callRejected = function(value) {
-          handlers.reject(this.promise, value);
-        };
-        QueueItem.prototype.otherCallRejected = function(value) {
-          unwrap(this.promise, this.onRejected, value);
-        };
-        function unwrap(promise, func, value) {
-          immediate(function() {
-            var returnValue;
-            try {
-              returnValue = func(value);
-            } catch (e) {
-              return handlers.reject(promise, e);
-            }
-            if (returnValue === promise) {
-              handlers.reject(promise, new TypeError("Cannot resolve promise with itself"));
-            } else {
-              handlers.resolve(promise, returnValue);
-            }
-          });
-        }
-        handlers.resolve = function(self2, value) {
-          var result = tryCatch(getThen, value);
-          if (result.status === "error") {
-            return handlers.reject(self2, result.value);
-          }
-          var thenable = result.value;
-          if (thenable) {
-            safelyResolveThenable(self2, thenable);
-          } else {
-            self2.state = FULFILLED;
-            self2.outcome = value;
-            var i = -1;
-            var len = self2.queue.length;
-            while (++i < len) {
-              self2.queue[i].callFulfilled(value);
-            }
-          }
-          return self2;
-        };
-        handlers.reject = function(self2, error) {
-          self2.state = REJECTED;
-          self2.outcome = error;
-          var i = -1;
-          var len = self2.queue.length;
-          while (++i < len) {
-            self2.queue[i].callRejected(error);
-          }
-          return self2;
-        };
-        function getThen(obj) {
-          var then = obj && obj.then;
-          if (obj && (typeof obj === "object" || typeof obj === "function") && typeof then === "function") {
-            return function appyThen() {
-              then.apply(obj, arguments);
-            };
-          }
-        }
-        function safelyResolveThenable(self2, thenable) {
-          var called = false;
-          function onError(value) {
-            if (called) {
-              return;
-            }
-            called = true;
-            handlers.reject(self2, value);
-          }
-          function onSuccess(value) {
-            if (called) {
-              return;
-            }
-            called = true;
-            handlers.resolve(self2, value);
-          }
-          function tryToUnwrap() {
-            thenable(onSuccess, onError);
-          }
-          var result = tryCatch(tryToUnwrap);
-          if (result.status === "error") {
-            onError(result.value);
-          }
-        }
-        function tryCatch(func, value) {
-          var out = {};
-          try {
-            out.value = func(value);
-            out.status = "success";
-          } catch (e) {
-            out.status = "error";
-            out.value = e;
-          }
-          return out;
-        }
-        Promise2.resolve = resolve;
-        function resolve(value) {
-          if (value instanceof this) {
-            return value;
-          }
-          return handlers.resolve(new this(INTERNAL), value);
-        }
-        Promise2.reject = reject;
-        function reject(reason) {
-          var promise = new this(INTERNAL);
-          return handlers.reject(promise, reason);
-        }
-        Promise2.all = all;
-        function all(iterable) {
-          var self2 = this;
-          if (Object.prototype.toString.call(iterable) !== "[object Array]") {
-            return this.reject(new TypeError("must be an array"));
-          }
-          var len = iterable.length;
-          var called = false;
-          if (!len) {
-            return this.resolve([]);
-          }
-          var values = new Array(len);
-          var resolved = 0;
-          var i = -1;
-          var promise = new this(INTERNAL);
-          while (++i < len) {
-            allResolver(iterable[i], i);
-          }
-          return promise;
-          function allResolver(value, i2) {
-            self2.resolve(value).then(resolveFromAll, function(error) {
-              if (!called) {
-                called = true;
-                handlers.reject(promise, error);
-              }
-            });
-            function resolveFromAll(outValue) {
-              values[i2] = outValue;
-              if (++resolved === len && !called) {
-                called = true;
-                handlers.resolve(promise, values);
-              }
-            }
-          }
-        }
-        Promise2.race = race;
-        function race(iterable) {
-          var self2 = this;
-          if (Object.prototype.toString.call(iterable) !== "[object Array]") {
-            return this.reject(new TypeError("must be an array"));
-          }
-          var len = iterable.length;
-          var called = false;
-          if (!len) {
-            return this.resolve([]);
-          }
-          var i = -1;
-          var promise = new this(INTERNAL);
-          while (++i < len) {
-            resolver(iterable[i]);
-          }
-          return promise;
-          function resolver(value) {
-            self2.resolve(value).then(function(response) {
-              if (!called) {
-                called = true;
-                handlers.resolve(promise, response);
-              }
-            }, function(error) {
-              if (!called) {
-                called = true;
-                handlers.reject(promise, error);
-              }
-            });
-          }
-        }
-      }, { "1": 1 }], 3: [function(_dereq_, module4, exports3) {
-        (function(global2) {
-          "use strict";
-          if (typeof global2.Promise !== "function") {
-            global2.Promise = _dereq_(2);
-          }
-        }).call(this, typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {});
-      }, { "2": 2 }], 4: [function(_dereq_, module4, exports3) {
-        "use strict";
-        var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function(obj) {
-          return typeof obj;
-        } : function(obj) {
-          return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-        };
-        function _classCallCheck(instance, Constructor) {
-          if (!(instance instanceof Constructor)) {
-            throw new TypeError("Cannot call a class as a function");
-          }
-        }
-        function getIDB() {
-          try {
-            if (typeof indexedDB !== "undefined") {
-              return indexedDB;
-            }
-            if (typeof webkitIndexedDB !== "undefined") {
-              return webkitIndexedDB;
-            }
-            if (typeof mozIndexedDB !== "undefined") {
-              return mozIndexedDB;
-            }
-            if (typeof OIndexedDB !== "undefined") {
-              return OIndexedDB;
-            }
-            if (typeof msIndexedDB !== "undefined") {
-              return msIndexedDB;
-            }
-          } catch (e) {
-            return;
-          }
-        }
-        var idb = getIDB();
-        function isIndexedDBValid() {
-          try {
-            if (!idb || !idb.open) {
-              return false;
-            }
-            var isSafari = typeof openDatabase !== "undefined" && /(Safari|iPhone|iPad|iPod)/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent) && !/BlackBerry/.test(navigator.platform);
-            var hasFetch = typeof fetch === "function" && fetch.toString().indexOf("[native code") !== -1;
-            return (!isSafari || hasFetch) && typeof indexedDB !== "undefined" && typeof IDBKeyRange !== "undefined";
-          } catch (e) {
-            return false;
-          }
-        }
-        function createBlob(parts, properties) {
-          parts = parts || [];
-          properties = properties || {};
-          try {
-            return new Blob(parts, properties);
-          } catch (e) {
-            if (e.name !== "TypeError") {
-              throw e;
-            }
-            var Builder = typeof BlobBuilder !== "undefined" ? BlobBuilder : typeof MSBlobBuilder !== "undefined" ? MSBlobBuilder : typeof MozBlobBuilder !== "undefined" ? MozBlobBuilder : WebKitBlobBuilder;
-            var builder = new Builder();
-            for (var i = 0; i < parts.length; i += 1) {
-              builder.append(parts[i]);
-            }
-            return builder.getBlob(properties.type);
-          }
-        }
-        if (typeof Promise === "undefined") {
-          _dereq_(3);
-        }
-        var Promise$1 = Promise;
-        function executeCallback(promise, callback) {
-          if (callback) {
-            promise.then(function(result) {
-              callback(null, result);
-            }, function(error) {
-              callback(error);
-            });
-          }
-        }
-        function executeTwoCallbacks(promise, callback, errorCallback) {
-          if (typeof callback === "function") {
-            promise.then(callback);
-          }
-          if (typeof errorCallback === "function") {
-            promise["catch"](errorCallback);
-          }
-        }
-        function normalizeKey(key2) {
-          if (typeof key2 !== "string") {
-            console.warn(key2 + " used as a key, but it is not a string.");
-            key2 = String(key2);
-          }
-          return key2;
-        }
-        function getCallback() {
-          if (arguments.length && typeof arguments[arguments.length - 1] === "function") {
-            return arguments[arguments.length - 1];
-          }
-        }
-        var DETECT_BLOB_SUPPORT_STORE = "local-forage-detect-blob-support";
-        var supportsBlobs = void 0;
-        var dbContexts = {};
-        var toString = Object.prototype.toString;
-        var READ_ONLY = "readonly";
-        var READ_WRITE = "readwrite";
-        function _binStringToArrayBuffer(bin) {
-          var length2 = bin.length;
-          var buf = new ArrayBuffer(length2);
-          var arr = new Uint8Array(buf);
-          for (var i = 0; i < length2; i++) {
-            arr[i] = bin.charCodeAt(i);
-          }
-          return buf;
-        }
-        function _checkBlobSupportWithoutCaching(idb2) {
-          return new Promise$1(function(resolve) {
-            var txn = idb2.transaction(DETECT_BLOB_SUPPORT_STORE, READ_WRITE);
-            var blob = createBlob([""]);
-            txn.objectStore(DETECT_BLOB_SUPPORT_STORE).put(blob, "key");
-            txn.onabort = function(e) {
-              e.preventDefault();
-              e.stopPropagation();
-              resolve(false);
-            };
-            txn.oncomplete = function() {
-              var matchedChrome = navigator.userAgent.match(/Chrome\/(\d+)/);
-              var matchedEdge = navigator.userAgent.match(/Edge\//);
-              resolve(matchedEdge || !matchedChrome || parseInt(matchedChrome[1], 10) >= 43);
-            };
-          })["catch"](function() {
-            return false;
-          });
-        }
-        function _checkBlobSupport(idb2) {
-          if (typeof supportsBlobs === "boolean") {
-            return Promise$1.resolve(supportsBlobs);
-          }
-          return _checkBlobSupportWithoutCaching(idb2).then(function(value) {
-            supportsBlobs = value;
-            return supportsBlobs;
-          });
-        }
-        function _deferReadiness(dbInfo) {
-          var dbContext = dbContexts[dbInfo.name];
-          var deferredOperation = {};
-          deferredOperation.promise = new Promise$1(function(resolve, reject) {
-            deferredOperation.resolve = resolve;
-            deferredOperation.reject = reject;
-          });
-          dbContext.deferredOperations.push(deferredOperation);
-          if (!dbContext.dbReady) {
-            dbContext.dbReady = deferredOperation.promise;
-          } else {
-            dbContext.dbReady = dbContext.dbReady.then(function() {
-              return deferredOperation.promise;
-            });
-          }
-        }
-        function _advanceReadiness(dbInfo) {
-          var dbContext = dbContexts[dbInfo.name];
-          var deferredOperation = dbContext.deferredOperations.pop();
-          if (deferredOperation) {
-            deferredOperation.resolve();
-            return deferredOperation.promise;
-          }
-        }
-        function _rejectReadiness(dbInfo, err) {
-          var dbContext = dbContexts[dbInfo.name];
-          var deferredOperation = dbContext.deferredOperations.pop();
-          if (deferredOperation) {
-            deferredOperation.reject(err);
-            return deferredOperation.promise;
-          }
-        }
-        function _getConnection(dbInfo, upgradeNeeded) {
-          return new Promise$1(function(resolve, reject) {
-            dbContexts[dbInfo.name] = dbContexts[dbInfo.name] || createDbContext();
-            if (dbInfo.db) {
-              if (upgradeNeeded) {
-                _deferReadiness(dbInfo);
-                dbInfo.db.close();
-              } else {
-                return resolve(dbInfo.db);
-              }
-            }
-            var dbArgs = [dbInfo.name];
-            if (upgradeNeeded) {
-              dbArgs.push(dbInfo.version);
-            }
-            var openreq = idb.open.apply(idb, dbArgs);
-            if (upgradeNeeded) {
-              openreq.onupgradeneeded = function(e) {
-                var db = openreq.result;
-                try {
-                  db.createObjectStore(dbInfo.storeName);
-                  if (e.oldVersion <= 1) {
-                    db.createObjectStore(DETECT_BLOB_SUPPORT_STORE);
-                  }
-                } catch (ex) {
-                  if (ex.name === "ConstraintError") {
-                    console.warn('The database "' + dbInfo.name + '" has been upgraded from version ' + e.oldVersion + " to version " + e.newVersion + ', but the storage "' + dbInfo.storeName + '" already exists.');
-                  } else {
-                    throw ex;
-                  }
-                }
-              };
-            }
-            openreq.onerror = function(e) {
-              e.preventDefault();
-              reject(openreq.error);
-            };
-            openreq.onsuccess = function() {
-              var db = openreq.result;
-              db.onversionchange = function(e) {
-                e.target.close();
-              };
-              resolve(db);
-              _advanceReadiness(dbInfo);
-            };
-          });
-        }
-        function _getOriginalConnection(dbInfo) {
-          return _getConnection(dbInfo, false);
-        }
-        function _getUpgradedConnection(dbInfo) {
-          return _getConnection(dbInfo, true);
-        }
-        function _isUpgradeNeeded(dbInfo, defaultVersion) {
-          if (!dbInfo.db) {
-            return true;
-          }
-          var isNewStore = !dbInfo.db.objectStoreNames.contains(dbInfo.storeName);
-          var isDowngrade = dbInfo.version < dbInfo.db.version;
-          var isUpgrade = dbInfo.version > dbInfo.db.version;
-          if (isDowngrade) {
-            if (dbInfo.version !== defaultVersion) {
-              console.warn('The database "' + dbInfo.name + `" can't be downgraded from version ` + dbInfo.db.version + " to version " + dbInfo.version + ".");
-            }
-            dbInfo.version = dbInfo.db.version;
-          }
-          if (isUpgrade || isNewStore) {
-            if (isNewStore) {
-              var incVersion = dbInfo.db.version + 1;
-              if (incVersion > dbInfo.version) {
-                dbInfo.version = incVersion;
-              }
-            }
-            return true;
-          }
-          return false;
-        }
-        function _encodeBlob(blob) {
-          return new Promise$1(function(resolve, reject) {
-            var reader = new FileReader();
-            reader.onerror = reject;
-            reader.onloadend = function(e) {
-              var base64 = btoa(e.target.result || "");
-              resolve({
-                __local_forage_encoded_blob: true,
-                data: base64,
-                type: blob.type
-              });
-            };
-            reader.readAsBinaryString(blob);
-          });
-        }
-        function _decodeBlob(encodedBlob) {
-          var arrayBuff = _binStringToArrayBuffer(atob(encodedBlob.data));
-          return createBlob([arrayBuff], { type: encodedBlob.type });
-        }
-        function _isEncodedBlob(value) {
-          return value && value.__local_forage_encoded_blob;
-        }
-        function _fullyReady(callback) {
-          var self2 = this;
-          var promise = self2._initReady().then(function() {
-            var dbContext = dbContexts[self2._dbInfo.name];
-            if (dbContext && dbContext.dbReady) {
-              return dbContext.dbReady;
-            }
-          });
-          executeTwoCallbacks(promise, callback, callback);
-          return promise;
-        }
-        function _tryReconnect(dbInfo) {
-          _deferReadiness(dbInfo);
-          var dbContext = dbContexts[dbInfo.name];
-          var forages = dbContext.forages;
-          for (var i = 0; i < forages.length; i++) {
-            var forage = forages[i];
-            if (forage._dbInfo.db) {
-              forage._dbInfo.db.close();
-              forage._dbInfo.db = null;
-            }
-          }
-          dbInfo.db = null;
-          return _getOriginalConnection(dbInfo).then(function(db) {
-            dbInfo.db = db;
-            if (_isUpgradeNeeded(dbInfo)) {
-              return _getUpgradedConnection(dbInfo);
-            }
-            return db;
-          }).then(function(db) {
-            dbInfo.db = dbContext.db = db;
-            for (var i2 = 0; i2 < forages.length; i2++) {
-              forages[i2]._dbInfo.db = db;
-            }
-          })["catch"](function(err) {
-            _rejectReadiness(dbInfo, err);
-            throw err;
-          });
-        }
-        function createTransaction(dbInfo, mode, callback, retries) {
-          if (retries === void 0) {
-            retries = 1;
-          }
-          try {
-            var tx = dbInfo.db.transaction(dbInfo.storeName, mode);
-            callback(null, tx);
-          } catch (err) {
-            if (retries > 0 && (!dbInfo.db || err.name === "InvalidStateError" || err.name === "NotFoundError")) {
-              return Promise$1.resolve().then(function() {
-                if (!dbInfo.db || err.name === "NotFoundError" && !dbInfo.db.objectStoreNames.contains(dbInfo.storeName) && dbInfo.version <= dbInfo.db.version) {
-                  if (dbInfo.db) {
-                    dbInfo.version = dbInfo.db.version + 1;
-                  }
-                  return _getUpgradedConnection(dbInfo);
-                }
-              }).then(function() {
-                return _tryReconnect(dbInfo).then(function() {
-                  createTransaction(dbInfo, mode, callback, retries - 1);
-                });
-              })["catch"](callback);
-            }
-            callback(err);
-          }
-        }
-        function createDbContext() {
-          return {
-            forages: [],
-            db: null,
-            dbReady: null,
-            deferredOperations: []
-          };
-        }
-        function _initStorage(options) {
-          var self2 = this;
-          var dbInfo = {
-            db: null
-          };
-          if (options) {
-            for (var i in options) {
-              dbInfo[i] = options[i];
-            }
-          }
-          var dbContext = dbContexts[dbInfo.name];
-          if (!dbContext) {
-            dbContext = createDbContext();
-            dbContexts[dbInfo.name] = dbContext;
-          }
-          dbContext.forages.push(self2);
-          if (!self2._initReady) {
-            self2._initReady = self2.ready;
-            self2.ready = _fullyReady;
-          }
-          var initPromises = [];
-          function ignoreErrors() {
-            return Promise$1.resolve();
-          }
-          for (var j = 0; j < dbContext.forages.length; j++) {
-            var forage = dbContext.forages[j];
-            if (forage !== self2) {
-              initPromises.push(forage._initReady()["catch"](ignoreErrors));
-            }
-          }
-          var forages = dbContext.forages.slice(0);
-          return Promise$1.all(initPromises).then(function() {
-            dbInfo.db = dbContext.db;
-            return _getOriginalConnection(dbInfo);
-          }).then(function(db) {
-            dbInfo.db = db;
-            if (_isUpgradeNeeded(dbInfo, self2._defaultConfig.version)) {
-              return _getUpgradedConnection(dbInfo);
-            }
-            return db;
-          }).then(function(db) {
-            dbInfo.db = dbContext.db = db;
-            self2._dbInfo = dbInfo;
-            for (var k = 0; k < forages.length; k++) {
-              var forage2 = forages[k];
-              if (forage2 !== self2) {
-                forage2._dbInfo.db = dbInfo.db;
-                forage2._dbInfo.version = dbInfo.version;
-              }
-            }
-          });
-        }
-        function getItem2(key2, callback) {
-          var self2 = this;
-          key2 = normalizeKey(key2);
-          var promise = new Promise$1(function(resolve, reject) {
-            self2.ready().then(function() {
-              createTransaction(self2._dbInfo, READ_ONLY, function(err, transaction) {
-                if (err) {
-                  return reject(err);
-                }
-                try {
-                  var store = transaction.objectStore(self2._dbInfo.storeName);
-                  var req = store.get(key2);
-                  req.onsuccess = function() {
-                    var value = req.result;
-                    if (value === void 0) {
-                      value = null;
-                    }
-                    if (_isEncodedBlob(value)) {
-                      value = _decodeBlob(value);
-                    }
-                    resolve(value);
-                  };
-                  req.onerror = function() {
-                    reject(req.error);
-                  };
-                } catch (e) {
-                  reject(e);
-                }
-              });
-            })["catch"](reject);
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function iterate(iterator, callback) {
-          var self2 = this;
-          var promise = new Promise$1(function(resolve, reject) {
-            self2.ready().then(function() {
-              createTransaction(self2._dbInfo, READ_ONLY, function(err, transaction) {
-                if (err) {
-                  return reject(err);
-                }
-                try {
-                  var store = transaction.objectStore(self2._dbInfo.storeName);
-                  var req = store.openCursor();
-                  var iterationNumber = 1;
-                  req.onsuccess = function() {
-                    var cursor = req.result;
-                    if (cursor) {
-                      var value = cursor.value;
-                      if (_isEncodedBlob(value)) {
-                        value = _decodeBlob(value);
-                      }
-                      var result = iterator(value, cursor.key, iterationNumber++);
-                      if (result !== void 0) {
-                        resolve(result);
-                      } else {
-                        cursor["continue"]();
-                      }
-                    } else {
-                      resolve();
-                    }
-                  };
-                  req.onerror = function() {
-                    reject(req.error);
-                  };
-                } catch (e) {
-                  reject(e);
-                }
-              });
-            })["catch"](reject);
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function setItem2(key2, value, callback) {
-          var self2 = this;
-          key2 = normalizeKey(key2);
-          var promise = new Promise$1(function(resolve, reject) {
-            var dbInfo;
-            self2.ready().then(function() {
-              dbInfo = self2._dbInfo;
-              if (toString.call(value) === "[object Blob]") {
-                return _checkBlobSupport(dbInfo.db).then(function(blobSupport) {
-                  if (blobSupport) {
-                    return value;
-                  }
-                  return _encodeBlob(value);
-                });
-              }
-              return value;
-            }).then(function(value2) {
-              createTransaction(self2._dbInfo, READ_WRITE, function(err, transaction) {
-                if (err) {
-                  return reject(err);
-                }
-                try {
-                  var store = transaction.objectStore(self2._dbInfo.storeName);
-                  if (value2 === null) {
-                    value2 = void 0;
-                  }
-                  var req = store.put(value2, key2);
-                  transaction.oncomplete = function() {
-                    if (value2 === void 0) {
-                      value2 = null;
-                    }
-                    resolve(value2);
-                  };
-                  transaction.onabort = transaction.onerror = function() {
-                    var err2 = req.error ? req.error : req.transaction.error;
-                    reject(err2);
-                  };
-                } catch (e) {
-                  reject(e);
-                }
-              });
-            })["catch"](reject);
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function removeItem(key2, callback) {
-          var self2 = this;
-          key2 = normalizeKey(key2);
-          var promise = new Promise$1(function(resolve, reject) {
-            self2.ready().then(function() {
-              createTransaction(self2._dbInfo, READ_WRITE, function(err, transaction) {
-                if (err) {
-                  return reject(err);
-                }
-                try {
-                  var store = transaction.objectStore(self2._dbInfo.storeName);
-                  var req = store["delete"](key2);
-                  transaction.oncomplete = function() {
-                    resolve();
-                  };
-                  transaction.onerror = function() {
-                    reject(req.error);
-                  };
-                  transaction.onabort = function() {
-                    var err2 = req.error ? req.error : req.transaction.error;
-                    reject(err2);
-                  };
-                } catch (e) {
-                  reject(e);
-                }
-              });
-            })["catch"](reject);
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function clear(callback) {
-          var self2 = this;
-          var promise = new Promise$1(function(resolve, reject) {
-            self2.ready().then(function() {
-              createTransaction(self2._dbInfo, READ_WRITE, function(err, transaction) {
-                if (err) {
-                  return reject(err);
-                }
-                try {
-                  var store = transaction.objectStore(self2._dbInfo.storeName);
-                  var req = store.clear();
-                  transaction.oncomplete = function() {
-                    resolve();
-                  };
-                  transaction.onabort = transaction.onerror = function() {
-                    var err2 = req.error ? req.error : req.transaction.error;
-                    reject(err2);
-                  };
-                } catch (e) {
-                  reject(e);
-                }
-              });
-            })["catch"](reject);
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function length(callback) {
-          var self2 = this;
-          var promise = new Promise$1(function(resolve, reject) {
-            self2.ready().then(function() {
-              createTransaction(self2._dbInfo, READ_ONLY, function(err, transaction) {
-                if (err) {
-                  return reject(err);
-                }
-                try {
-                  var store = transaction.objectStore(self2._dbInfo.storeName);
-                  var req = store.count();
-                  req.onsuccess = function() {
-                    resolve(req.result);
-                  };
-                  req.onerror = function() {
-                    reject(req.error);
-                  };
-                } catch (e) {
-                  reject(e);
-                }
-              });
-            })["catch"](reject);
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function key(n, callback) {
-          var self2 = this;
-          var promise = new Promise$1(function(resolve, reject) {
-            if (n < 0) {
-              resolve(null);
-              return;
-            }
-            self2.ready().then(function() {
-              createTransaction(self2._dbInfo, READ_ONLY, function(err, transaction) {
-                if (err) {
-                  return reject(err);
-                }
-                try {
-                  var store = transaction.objectStore(self2._dbInfo.storeName);
-                  var advanced = false;
-                  var req = store.openKeyCursor();
-                  req.onsuccess = function() {
-                    var cursor = req.result;
-                    if (!cursor) {
-                      resolve(null);
-                      return;
-                    }
-                    if (n === 0) {
-                      resolve(cursor.key);
-                    } else {
-                      if (!advanced) {
-                        advanced = true;
-                        cursor.advance(n);
-                      } else {
-                        resolve(cursor.key);
-                      }
-                    }
-                  };
-                  req.onerror = function() {
-                    reject(req.error);
-                  };
-                } catch (e) {
-                  reject(e);
-                }
-              });
-            })["catch"](reject);
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function keys(callback) {
-          var self2 = this;
-          var promise = new Promise$1(function(resolve, reject) {
-            self2.ready().then(function() {
-              createTransaction(self2._dbInfo, READ_ONLY, function(err, transaction) {
-                if (err) {
-                  return reject(err);
-                }
-                try {
-                  var store = transaction.objectStore(self2._dbInfo.storeName);
-                  var req = store.openKeyCursor();
-                  var keys2 = [];
-                  req.onsuccess = function() {
-                    var cursor = req.result;
-                    if (!cursor) {
-                      resolve(keys2);
-                      return;
-                    }
-                    keys2.push(cursor.key);
-                    cursor["continue"]();
-                  };
-                  req.onerror = function() {
-                    reject(req.error);
-                  };
-                } catch (e) {
-                  reject(e);
-                }
-              });
-            })["catch"](reject);
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function dropInstance(options, callback) {
-          callback = getCallback.apply(this, arguments);
-          var currentConfig = this.config();
-          options = typeof options !== "function" && options || {};
-          if (!options.name) {
-            options.name = options.name || currentConfig.name;
-            options.storeName = options.storeName || currentConfig.storeName;
-          }
-          var self2 = this;
-          var promise;
-          if (!options.name) {
-            promise = Promise$1.reject("Invalid arguments");
-          } else {
-            var isCurrentDb = options.name === currentConfig.name && self2._dbInfo.db;
-            var dbPromise = isCurrentDb ? Promise$1.resolve(self2._dbInfo.db) : _getOriginalConnection(options).then(function(db) {
-              var dbContext = dbContexts[options.name];
-              var forages = dbContext.forages;
-              dbContext.db = db;
-              for (var i = 0; i < forages.length; i++) {
-                forages[i]._dbInfo.db = db;
-              }
-              return db;
-            });
-            if (!options.storeName) {
-              promise = dbPromise.then(function(db) {
-                _deferReadiness(options);
-                var dbContext = dbContexts[options.name];
-                var forages = dbContext.forages;
-                db.close();
-                for (var i = 0; i < forages.length; i++) {
-                  var forage = forages[i];
-                  forage._dbInfo.db = null;
-                }
-                var dropDBPromise = new Promise$1(function(resolve, reject) {
-                  var req = idb.deleteDatabase(options.name);
-                  req.onerror = function() {
-                    var db2 = req.result;
-                    if (db2) {
-                      db2.close();
-                    }
-                    reject(req.error);
-                  };
-                  req.onblocked = function() {
-                    console.warn('dropInstance blocked for database "' + options.name + '" until all open connections are closed');
-                  };
-                  req.onsuccess = function() {
-                    var db2 = req.result;
-                    if (db2) {
-                      db2.close();
-                    }
-                    resolve(db2);
-                  };
-                });
-                return dropDBPromise.then(function(db2) {
-                  dbContext.db = db2;
-                  for (var i2 = 0; i2 < forages.length; i2++) {
-                    var _forage = forages[i2];
-                    _advanceReadiness(_forage._dbInfo);
-                  }
-                })["catch"](function(err) {
-                  (_rejectReadiness(options, err) || Promise$1.resolve())["catch"](function() {
-                  });
-                  throw err;
-                });
-              });
-            } else {
-              promise = dbPromise.then(function(db) {
-                if (!db.objectStoreNames.contains(options.storeName)) {
-                  return;
-                }
-                var newVersion = db.version + 1;
-                _deferReadiness(options);
-                var dbContext = dbContexts[options.name];
-                var forages = dbContext.forages;
-                db.close();
-                for (var i = 0; i < forages.length; i++) {
-                  var forage = forages[i];
-                  forage._dbInfo.db = null;
-                  forage._dbInfo.version = newVersion;
-                }
-                var dropObjectPromise = new Promise$1(function(resolve, reject) {
-                  var req = idb.open(options.name, newVersion);
-                  req.onerror = function(err) {
-                    var db2 = req.result;
-                    db2.close();
-                    reject(err);
-                  };
-                  req.onupgradeneeded = function() {
-                    var db2 = req.result;
-                    db2.deleteObjectStore(options.storeName);
-                  };
-                  req.onsuccess = function() {
-                    var db2 = req.result;
-                    db2.close();
-                    resolve(db2);
-                  };
-                });
-                return dropObjectPromise.then(function(db2) {
-                  dbContext.db = db2;
-                  for (var j = 0; j < forages.length; j++) {
-                    var _forage2 = forages[j];
-                    _forage2._dbInfo.db = db2;
-                    _advanceReadiness(_forage2._dbInfo);
-                  }
-                })["catch"](function(err) {
-                  (_rejectReadiness(options, err) || Promise$1.resolve())["catch"](function() {
-                  });
-                  throw err;
-                });
-              });
-            }
-          }
-          executeCallback(promise, callback);
-          return promise;
-        }
-        var asyncStorage = {
-          _driver: "asyncStorage",
-          _initStorage,
-          _support: isIndexedDBValid(),
-          iterate,
-          getItem: getItem2,
-          setItem: setItem2,
-          removeItem,
-          clear,
-          length,
-          key,
-          keys,
-          dropInstance
-        };
-        function isWebSQLValid() {
-          return typeof openDatabase === "function";
-        }
-        var BASE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-        var BLOB_TYPE_PREFIX = "~~local_forage_type~";
-        var BLOB_TYPE_PREFIX_REGEX = /^~~local_forage_type~([^~]+)~/;
-        var SERIALIZED_MARKER = "__lfsc__:";
-        var SERIALIZED_MARKER_LENGTH = SERIALIZED_MARKER.length;
-        var TYPE_ARRAYBUFFER = "arbf";
-        var TYPE_BLOB = "blob";
-        var TYPE_INT8ARRAY = "si08";
-        var TYPE_UINT8ARRAY = "ui08";
-        var TYPE_UINT8CLAMPEDARRAY = "uic8";
-        var TYPE_INT16ARRAY = "si16";
-        var TYPE_INT32ARRAY = "si32";
-        var TYPE_UINT16ARRAY = "ur16";
-        var TYPE_UINT32ARRAY = "ui32";
-        var TYPE_FLOAT32ARRAY = "fl32";
-        var TYPE_FLOAT64ARRAY = "fl64";
-        var TYPE_SERIALIZED_MARKER_LENGTH = SERIALIZED_MARKER_LENGTH + TYPE_ARRAYBUFFER.length;
-        var toString$1 = Object.prototype.toString;
-        function stringToBuffer(serializedString) {
-          var bufferLength = serializedString.length * 0.75;
-          var len = serializedString.length;
-          var i;
-          var p = 0;
-          var encoded1, encoded2, encoded3, encoded4;
-          if (serializedString[serializedString.length - 1] === "=") {
-            bufferLength--;
-            if (serializedString[serializedString.length - 2] === "=") {
-              bufferLength--;
-            }
-          }
-          var buffer = new ArrayBuffer(bufferLength);
-          var bytes = new Uint8Array(buffer);
-          for (i = 0; i < len; i += 4) {
-            encoded1 = BASE_CHARS.indexOf(serializedString[i]);
-            encoded2 = BASE_CHARS.indexOf(serializedString[i + 1]);
-            encoded3 = BASE_CHARS.indexOf(serializedString[i + 2]);
-            encoded4 = BASE_CHARS.indexOf(serializedString[i + 3]);
-            bytes[p++] = encoded1 << 2 | encoded2 >> 4;
-            bytes[p++] = (encoded2 & 15) << 4 | encoded3 >> 2;
-            bytes[p++] = (encoded3 & 3) << 6 | encoded4 & 63;
-          }
-          return buffer;
-        }
-        function bufferToString(buffer) {
-          var bytes = new Uint8Array(buffer);
-          var base64String = "";
-          var i;
-          for (i = 0; i < bytes.length; i += 3) {
-            base64String += BASE_CHARS[bytes[i] >> 2];
-            base64String += BASE_CHARS[(bytes[i] & 3) << 4 | bytes[i + 1] >> 4];
-            base64String += BASE_CHARS[(bytes[i + 1] & 15) << 2 | bytes[i + 2] >> 6];
-            base64String += BASE_CHARS[bytes[i + 2] & 63];
-          }
-          if (bytes.length % 3 === 2) {
-            base64String = base64String.substring(0, base64String.length - 1) + "=";
-          } else if (bytes.length % 3 === 1) {
-            base64String = base64String.substring(0, base64String.length - 2) + "==";
-          }
-          return base64String;
-        }
-        function serialize(value, callback) {
-          var valueType = "";
-          if (value) {
-            valueType = toString$1.call(value);
-          }
-          if (value && (valueType === "[object ArrayBuffer]" || value.buffer && toString$1.call(value.buffer) === "[object ArrayBuffer]")) {
-            var buffer;
-            var marker = SERIALIZED_MARKER;
-            if (value instanceof ArrayBuffer) {
-              buffer = value;
-              marker += TYPE_ARRAYBUFFER;
-            } else {
-              buffer = value.buffer;
-              if (valueType === "[object Int8Array]") {
-                marker += TYPE_INT8ARRAY;
-              } else if (valueType === "[object Uint8Array]") {
-                marker += TYPE_UINT8ARRAY;
-              } else if (valueType === "[object Uint8ClampedArray]") {
-                marker += TYPE_UINT8CLAMPEDARRAY;
-              } else if (valueType === "[object Int16Array]") {
-                marker += TYPE_INT16ARRAY;
-              } else if (valueType === "[object Uint16Array]") {
-                marker += TYPE_UINT16ARRAY;
-              } else if (valueType === "[object Int32Array]") {
-                marker += TYPE_INT32ARRAY;
-              } else if (valueType === "[object Uint32Array]") {
-                marker += TYPE_UINT32ARRAY;
-              } else if (valueType === "[object Float32Array]") {
-                marker += TYPE_FLOAT32ARRAY;
-              } else if (valueType === "[object Float64Array]") {
-                marker += TYPE_FLOAT64ARRAY;
-              } else {
-                callback(new Error("Failed to get type for BinaryArray"));
-              }
-            }
-            callback(marker + bufferToString(buffer));
-          } else if (valueType === "[object Blob]") {
-            var fileReader = new FileReader();
-            fileReader.onload = function() {
-              var str = BLOB_TYPE_PREFIX + value.type + "~" + bufferToString(this.result);
-              callback(SERIALIZED_MARKER + TYPE_BLOB + str);
-            };
-            fileReader.readAsArrayBuffer(value);
-          } else {
-            try {
-              callback(JSON.stringify(value));
-            } catch (e) {
-              console.error("Couldn't convert value into a JSON string: ", value);
-              callback(null, e);
-            }
-          }
-        }
-        function deserialize(value) {
-          if (value.substring(0, SERIALIZED_MARKER_LENGTH) !== SERIALIZED_MARKER) {
-            return JSON.parse(value);
-          }
-          var serializedString = value.substring(TYPE_SERIALIZED_MARKER_LENGTH);
-          var type = value.substring(SERIALIZED_MARKER_LENGTH, TYPE_SERIALIZED_MARKER_LENGTH);
-          var blobType;
-          if (type === TYPE_BLOB && BLOB_TYPE_PREFIX_REGEX.test(serializedString)) {
-            var matcher = serializedString.match(BLOB_TYPE_PREFIX_REGEX);
-            blobType = matcher[1];
-            serializedString = serializedString.substring(matcher[0].length);
-          }
-          var buffer = stringToBuffer(serializedString);
-          switch (type) {
-            case TYPE_ARRAYBUFFER:
-              return buffer;
-            case TYPE_BLOB:
-              return createBlob([buffer], { type: blobType });
-            case TYPE_INT8ARRAY:
-              return new Int8Array(buffer);
-            case TYPE_UINT8ARRAY:
-              return new Uint8Array(buffer);
-            case TYPE_UINT8CLAMPEDARRAY:
-              return new Uint8ClampedArray(buffer);
-            case TYPE_INT16ARRAY:
-              return new Int16Array(buffer);
-            case TYPE_UINT16ARRAY:
-              return new Uint16Array(buffer);
-            case TYPE_INT32ARRAY:
-              return new Int32Array(buffer);
-            case TYPE_UINT32ARRAY:
-              return new Uint32Array(buffer);
-            case TYPE_FLOAT32ARRAY:
-              return new Float32Array(buffer);
-            case TYPE_FLOAT64ARRAY:
-              return new Float64Array(buffer);
-            default:
-              throw new Error("Unkown type: " + type);
-          }
-        }
-        var localforageSerializer = {
-          serialize,
-          deserialize,
-          stringToBuffer,
-          bufferToString
-        };
-        function createDbTable(t, dbInfo, callback, errorCallback) {
-          t.executeSql("CREATE TABLE IF NOT EXISTS " + dbInfo.storeName + " (id INTEGER PRIMARY KEY, key unique, value)", [], callback, errorCallback);
-        }
-        function _initStorage$1(options) {
-          var self2 = this;
-          var dbInfo = {
-            db: null
-          };
-          if (options) {
-            for (var i in options) {
-              dbInfo[i] = typeof options[i] !== "string" ? options[i].toString() : options[i];
-            }
-          }
-          var dbInfoPromise = new Promise$1(function(resolve, reject) {
-            try {
-              dbInfo.db = openDatabase(dbInfo.name, String(dbInfo.version), dbInfo.description, dbInfo.size);
-            } catch (e) {
-              return reject(e);
-            }
-            dbInfo.db.transaction(function(t) {
-              createDbTable(t, dbInfo, function() {
-                self2._dbInfo = dbInfo;
-                resolve();
-              }, function(t2, error) {
-                reject(error);
-              });
-            }, reject);
-          });
-          dbInfo.serializer = localforageSerializer;
-          return dbInfoPromise;
-        }
-        function tryExecuteSql(t, dbInfo, sqlStatement, args, callback, errorCallback) {
-          t.executeSql(sqlStatement, args, callback, function(t2, error) {
-            if (error.code === error.SYNTAX_ERR) {
-              t2.executeSql("SELECT name FROM sqlite_master WHERE type='table' AND name = ?", [dbInfo.storeName], function(t3, results) {
-                if (!results.rows.length) {
-                  createDbTable(t3, dbInfo, function() {
-                    t3.executeSql(sqlStatement, args, callback, errorCallback);
-                  }, errorCallback);
-                } else {
-                  errorCallback(t3, error);
-                }
-              }, errorCallback);
-            } else {
-              errorCallback(t2, error);
-            }
-          }, errorCallback);
-        }
-        function getItem$1(key2, callback) {
-          var self2 = this;
-          key2 = normalizeKey(key2);
-          var promise = new Promise$1(function(resolve, reject) {
-            self2.ready().then(function() {
-              var dbInfo = self2._dbInfo;
-              dbInfo.db.transaction(function(t) {
-                tryExecuteSql(t, dbInfo, "SELECT * FROM " + dbInfo.storeName + " WHERE key = ? LIMIT 1", [key2], function(t2, results) {
-                  var result = results.rows.length ? results.rows.item(0).value : null;
-                  if (result) {
-                    result = dbInfo.serializer.deserialize(result);
-                  }
-                  resolve(result);
-                }, function(t2, error) {
-                  reject(error);
-                });
-              });
-            })["catch"](reject);
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function iterate$1(iterator, callback) {
-          var self2 = this;
-          var promise = new Promise$1(function(resolve, reject) {
-            self2.ready().then(function() {
-              var dbInfo = self2._dbInfo;
-              dbInfo.db.transaction(function(t) {
-                tryExecuteSql(t, dbInfo, "SELECT * FROM " + dbInfo.storeName, [], function(t2, results) {
-                  var rows = results.rows;
-                  var length2 = rows.length;
-                  for (var i = 0; i < length2; i++) {
-                    var item = rows.item(i);
-                    var result = item.value;
-                    if (result) {
-                      result = dbInfo.serializer.deserialize(result);
-                    }
-                    result = iterator(result, item.key, i + 1);
-                    if (result !== void 0) {
-                      resolve(result);
-                      return;
-                    }
-                  }
-                  resolve();
-                }, function(t2, error) {
-                  reject(error);
-                });
-              });
-            })["catch"](reject);
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function _setItem(key2, value, callback, retriesLeft) {
-          var self2 = this;
-          key2 = normalizeKey(key2);
-          var promise = new Promise$1(function(resolve, reject) {
-            self2.ready().then(function() {
-              if (value === void 0) {
-                value = null;
-              }
-              var originalValue = value;
-              var dbInfo = self2._dbInfo;
-              dbInfo.serializer.serialize(value, function(value2, error) {
-                if (error) {
-                  reject(error);
-                } else {
-                  dbInfo.db.transaction(function(t) {
-                    tryExecuteSql(t, dbInfo, "INSERT OR REPLACE INTO " + dbInfo.storeName + " (key, value) VALUES (?, ?)", [key2, value2], function() {
-                      resolve(originalValue);
-                    }, function(t2, error2) {
-                      reject(error2);
-                    });
-                  }, function(sqlError) {
-                    if (sqlError.code === sqlError.QUOTA_ERR) {
-                      if (retriesLeft > 0) {
-                        resolve(_setItem.apply(self2, [key2, originalValue, callback, retriesLeft - 1]));
-                        return;
-                      }
-                      reject(sqlError);
-                    }
-                  });
-                }
-              });
-            })["catch"](reject);
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function setItem$1(key2, value, callback) {
-          return _setItem.apply(this, [key2, value, callback, 1]);
-        }
-        function removeItem$1(key2, callback) {
-          var self2 = this;
-          key2 = normalizeKey(key2);
-          var promise = new Promise$1(function(resolve, reject) {
-            self2.ready().then(function() {
-              var dbInfo = self2._dbInfo;
-              dbInfo.db.transaction(function(t) {
-                tryExecuteSql(t, dbInfo, "DELETE FROM " + dbInfo.storeName + " WHERE key = ?", [key2], function() {
-                  resolve();
-                }, function(t2, error) {
-                  reject(error);
-                });
-              });
-            })["catch"](reject);
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function clear$1(callback) {
-          var self2 = this;
-          var promise = new Promise$1(function(resolve, reject) {
-            self2.ready().then(function() {
-              var dbInfo = self2._dbInfo;
-              dbInfo.db.transaction(function(t) {
-                tryExecuteSql(t, dbInfo, "DELETE FROM " + dbInfo.storeName, [], function() {
-                  resolve();
-                }, function(t2, error) {
-                  reject(error);
-                });
-              });
-            })["catch"](reject);
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function length$1(callback) {
-          var self2 = this;
-          var promise = new Promise$1(function(resolve, reject) {
-            self2.ready().then(function() {
-              var dbInfo = self2._dbInfo;
-              dbInfo.db.transaction(function(t) {
-                tryExecuteSql(t, dbInfo, "SELECT COUNT(key) as c FROM " + dbInfo.storeName, [], function(t2, results) {
-                  var result = results.rows.item(0).c;
-                  resolve(result);
-                }, function(t2, error) {
-                  reject(error);
-                });
-              });
-            })["catch"](reject);
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function key$1(n, callback) {
-          var self2 = this;
-          var promise = new Promise$1(function(resolve, reject) {
-            self2.ready().then(function() {
-              var dbInfo = self2._dbInfo;
-              dbInfo.db.transaction(function(t) {
-                tryExecuteSql(t, dbInfo, "SELECT key FROM " + dbInfo.storeName + " WHERE id = ? LIMIT 1", [n + 1], function(t2, results) {
-                  var result = results.rows.length ? results.rows.item(0).key : null;
-                  resolve(result);
-                }, function(t2, error) {
-                  reject(error);
-                });
-              });
-            })["catch"](reject);
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function keys$1(callback) {
-          var self2 = this;
-          var promise = new Promise$1(function(resolve, reject) {
-            self2.ready().then(function() {
-              var dbInfo = self2._dbInfo;
-              dbInfo.db.transaction(function(t) {
-                tryExecuteSql(t, dbInfo, "SELECT key FROM " + dbInfo.storeName, [], function(t2, results) {
-                  var keys2 = [];
-                  for (var i = 0; i < results.rows.length; i++) {
-                    keys2.push(results.rows.item(i).key);
-                  }
-                  resolve(keys2);
-                }, function(t2, error) {
-                  reject(error);
-                });
-              });
-            })["catch"](reject);
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function getAllStoreNames(db) {
-          return new Promise$1(function(resolve, reject) {
-            db.transaction(function(t) {
-              t.executeSql("SELECT name FROM sqlite_master WHERE type='table' AND name <> '__WebKitDatabaseInfoTable__'", [], function(t2, results) {
-                var storeNames = [];
-                for (var i = 0; i < results.rows.length; i++) {
-                  storeNames.push(results.rows.item(i).name);
-                }
-                resolve({
-                  db,
-                  storeNames
-                });
-              }, function(t2, error) {
-                reject(error);
-              });
-            }, function(sqlError) {
-              reject(sqlError);
-            });
-          });
-        }
-        function dropInstance$1(options, callback) {
-          callback = getCallback.apply(this, arguments);
-          var currentConfig = this.config();
-          options = typeof options !== "function" && options || {};
-          if (!options.name) {
-            options.name = options.name || currentConfig.name;
-            options.storeName = options.storeName || currentConfig.storeName;
-          }
-          var self2 = this;
-          var promise;
-          if (!options.name) {
-            promise = Promise$1.reject("Invalid arguments");
-          } else {
-            promise = new Promise$1(function(resolve) {
-              var db;
-              if (options.name === currentConfig.name) {
-                db = self2._dbInfo.db;
-              } else {
-                db = openDatabase(options.name, "", "", 0);
-              }
-              if (!options.storeName) {
-                resolve(getAllStoreNames(db));
-              } else {
-                resolve({
-                  db,
-                  storeNames: [options.storeName]
-                });
-              }
-            }).then(function(operationInfo) {
-              return new Promise$1(function(resolve, reject) {
-                operationInfo.db.transaction(function(t) {
-                  function dropTable(storeName) {
-                    return new Promise$1(function(resolve2, reject2) {
-                      t.executeSql("DROP TABLE IF EXISTS " + storeName, [], function() {
-                        resolve2();
-                      }, function(t2, error) {
-                        reject2(error);
-                      });
-                    });
-                  }
-                  var operations = [];
-                  for (var i = 0, len = operationInfo.storeNames.length; i < len; i++) {
-                    operations.push(dropTable(operationInfo.storeNames[i]));
-                  }
-                  Promise$1.all(operations).then(function() {
-                    resolve();
-                  })["catch"](function(e) {
-                    reject(e);
-                  });
-                }, function(sqlError) {
-                  reject(sqlError);
-                });
-              });
-            });
-          }
-          executeCallback(promise, callback);
-          return promise;
-        }
-        var webSQLStorage = {
-          _driver: "webSQLStorage",
-          _initStorage: _initStorage$1,
-          _support: isWebSQLValid(),
-          iterate: iterate$1,
-          getItem: getItem$1,
-          setItem: setItem$1,
-          removeItem: removeItem$1,
-          clear: clear$1,
-          length: length$1,
-          key: key$1,
-          keys: keys$1,
-          dropInstance: dropInstance$1
-        };
-        function isLocalStorageValid() {
-          try {
-            return typeof localStorage !== "undefined" && "setItem" in localStorage && !!localStorage.setItem;
-          } catch (e) {
-            return false;
-          }
-        }
-        function _getKeyPrefix(options, defaultConfig) {
-          var keyPrefix = options.name + "/";
-          if (options.storeName !== defaultConfig.storeName) {
-            keyPrefix += options.storeName + "/";
-          }
-          return keyPrefix;
-        }
-        function checkIfLocalStorageThrows() {
-          var localStorageTestKey = "_localforage_support_test";
-          try {
-            localStorage.setItem(localStorageTestKey, true);
-            localStorage.removeItem(localStorageTestKey);
-            return false;
-          } catch (e) {
-            return true;
-          }
-        }
-        function _isLocalStorageUsable() {
-          return !checkIfLocalStorageThrows() || localStorage.length > 0;
-        }
-        function _initStorage$2(options) {
-          var self2 = this;
-          var dbInfo = {};
-          if (options) {
-            for (var i in options) {
-              dbInfo[i] = options[i];
-            }
-          }
-          dbInfo.keyPrefix = _getKeyPrefix(options, self2._defaultConfig);
-          if (!_isLocalStorageUsable()) {
-            return Promise$1.reject();
-          }
-          self2._dbInfo = dbInfo;
-          dbInfo.serializer = localforageSerializer;
-          return Promise$1.resolve();
-        }
-        function clear$2(callback) {
-          var self2 = this;
-          var promise = self2.ready().then(function() {
-            var keyPrefix = self2._dbInfo.keyPrefix;
-            for (var i = localStorage.length - 1; i >= 0; i--) {
-              var key2 = localStorage.key(i);
-              if (key2.indexOf(keyPrefix) === 0) {
-                localStorage.removeItem(key2);
-              }
-            }
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function getItem$2(key2, callback) {
-          var self2 = this;
-          key2 = normalizeKey(key2);
-          var promise = self2.ready().then(function() {
-            var dbInfo = self2._dbInfo;
-            var result = localStorage.getItem(dbInfo.keyPrefix + key2);
-            if (result) {
-              result = dbInfo.serializer.deserialize(result);
-            }
-            return result;
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function iterate$2(iterator, callback) {
-          var self2 = this;
-          var promise = self2.ready().then(function() {
-            var dbInfo = self2._dbInfo;
-            var keyPrefix = dbInfo.keyPrefix;
-            var keyPrefixLength = keyPrefix.length;
-            var length2 = localStorage.length;
-            var iterationNumber = 1;
-            for (var i = 0; i < length2; i++) {
-              var key2 = localStorage.key(i);
-              if (key2.indexOf(keyPrefix) !== 0) {
-                continue;
-              }
-              var value = localStorage.getItem(key2);
-              if (value) {
-                value = dbInfo.serializer.deserialize(value);
-              }
-              value = iterator(value, key2.substring(keyPrefixLength), iterationNumber++);
-              if (value !== void 0) {
-                return value;
-              }
-            }
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function key$2(n, callback) {
-          var self2 = this;
-          var promise = self2.ready().then(function() {
-            var dbInfo = self2._dbInfo;
-            var result;
-            try {
-              result = localStorage.key(n);
-            } catch (error) {
-              result = null;
-            }
-            if (result) {
-              result = result.substring(dbInfo.keyPrefix.length);
-            }
-            return result;
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function keys$2(callback) {
-          var self2 = this;
-          var promise = self2.ready().then(function() {
-            var dbInfo = self2._dbInfo;
-            var length2 = localStorage.length;
-            var keys2 = [];
-            for (var i = 0; i < length2; i++) {
-              var itemKey = localStorage.key(i);
-              if (itemKey.indexOf(dbInfo.keyPrefix) === 0) {
-                keys2.push(itemKey.substring(dbInfo.keyPrefix.length));
-              }
-            }
-            return keys2;
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function length$2(callback) {
-          var self2 = this;
-          var promise = self2.keys().then(function(keys2) {
-            return keys2.length;
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function removeItem$2(key2, callback) {
-          var self2 = this;
-          key2 = normalizeKey(key2);
-          var promise = self2.ready().then(function() {
-            var dbInfo = self2._dbInfo;
-            localStorage.removeItem(dbInfo.keyPrefix + key2);
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function setItem$2(key2, value, callback) {
-          var self2 = this;
-          key2 = normalizeKey(key2);
-          var promise = self2.ready().then(function() {
-            if (value === void 0) {
-              value = null;
-            }
-            var originalValue = value;
-            return new Promise$1(function(resolve, reject) {
-              var dbInfo = self2._dbInfo;
-              dbInfo.serializer.serialize(value, function(value2, error) {
-                if (error) {
-                  reject(error);
-                } else {
-                  try {
-                    localStorage.setItem(dbInfo.keyPrefix + key2, value2);
-                    resolve(originalValue);
-                  } catch (e) {
-                    if (e.name === "QuotaExceededError" || e.name === "NS_ERROR_DOM_QUOTA_REACHED") {
-                      reject(e);
-                    }
-                    reject(e);
-                  }
-                }
-              });
-            });
-          });
-          executeCallback(promise, callback);
-          return promise;
-        }
-        function dropInstance$2(options, callback) {
-          callback = getCallback.apply(this, arguments);
-          options = typeof options !== "function" && options || {};
-          if (!options.name) {
-            var currentConfig = this.config();
-            options.name = options.name || currentConfig.name;
-            options.storeName = options.storeName || currentConfig.storeName;
-          }
-          var self2 = this;
-          var promise;
-          if (!options.name) {
-            promise = Promise$1.reject("Invalid arguments");
-          } else {
-            promise = new Promise$1(function(resolve) {
-              if (!options.storeName) {
-                resolve(options.name + "/");
-              } else {
-                resolve(_getKeyPrefix(options, self2._defaultConfig));
-              }
-            }).then(function(keyPrefix) {
-              for (var i = localStorage.length - 1; i >= 0; i--) {
-                var key2 = localStorage.key(i);
-                if (key2.indexOf(keyPrefix) === 0) {
-                  localStorage.removeItem(key2);
-                }
-              }
-            });
-          }
-          executeCallback(promise, callback);
-          return promise;
-        }
-        var localStorageWrapper = {
-          _driver: "localStorageWrapper",
-          _initStorage: _initStorage$2,
-          _support: isLocalStorageValid(),
-          iterate: iterate$2,
-          getItem: getItem$2,
-          setItem: setItem$2,
-          removeItem: removeItem$2,
-          clear: clear$2,
-          length: length$2,
-          key: key$2,
-          keys: keys$2,
-          dropInstance: dropInstance$2
-        };
-        var sameValue = function sameValue2(x, y) {
-          return x === y || typeof x === "number" && typeof y === "number" && isNaN(x) && isNaN(y);
-        };
-        var includes = function includes2(array, searchElement) {
-          var len = array.length;
-          var i = 0;
-          while (i < len) {
-            if (sameValue(array[i], searchElement)) {
-              return true;
-            }
-            i++;
-          }
-          return false;
-        };
-        var isArray = Array.isArray || function(arg) {
-          return Object.prototype.toString.call(arg) === "[object Array]";
-        };
-        var DefinedDrivers = {};
-        var DriverSupport = {};
-        var DefaultDrivers = {
-          INDEXEDDB: asyncStorage,
-          WEBSQL: webSQLStorage,
-          LOCALSTORAGE: localStorageWrapper
-        };
-        var DefaultDriverOrder = [DefaultDrivers.INDEXEDDB._driver, DefaultDrivers.WEBSQL._driver, DefaultDrivers.LOCALSTORAGE._driver];
-        var OptionalDriverMethods = ["dropInstance"];
-        var LibraryMethods = ["clear", "getItem", "iterate", "key", "keys", "length", "removeItem", "setItem"].concat(OptionalDriverMethods);
-        var DefaultConfig = {
-          description: "",
-          driver: DefaultDriverOrder.slice(),
-          name: "localforage",
-          size: 4980736,
-          storeName: "keyvaluepairs",
-          version: 1
-        };
-        function callWhenReady(localForageInstance, libraryMethod) {
-          localForageInstance[libraryMethod] = function() {
-            var _args = arguments;
-            return localForageInstance.ready().then(function() {
-              return localForageInstance[libraryMethod].apply(localForageInstance, _args);
-            });
-          };
-        }
-        function extend() {
-          for (var i = 1; i < arguments.length; i++) {
-            var arg = arguments[i];
-            if (arg) {
-              for (var _key in arg) {
-                if (arg.hasOwnProperty(_key)) {
-                  if (isArray(arg[_key])) {
-                    arguments[0][_key] = arg[_key].slice();
-                  } else {
-                    arguments[0][_key] = arg[_key];
-                  }
-                }
-              }
-            }
-          }
-          return arguments[0];
-        }
-        var LocalForage = function() {
-          function LocalForage2(options) {
-            _classCallCheck(this, LocalForage2);
-            for (var driverTypeKey in DefaultDrivers) {
-              if (DefaultDrivers.hasOwnProperty(driverTypeKey)) {
-                var driver = DefaultDrivers[driverTypeKey];
-                var driverName = driver._driver;
-                this[driverTypeKey] = driverName;
-                if (!DefinedDrivers[driverName]) {
-                  this.defineDriver(driver);
-                }
-              }
-            }
-            this._defaultConfig = extend({}, DefaultConfig);
-            this._config = extend({}, this._defaultConfig, options);
-            this._driverSet = null;
-            this._initDriver = null;
-            this._ready = false;
-            this._dbInfo = null;
-            this._wrapLibraryMethodsWithReady();
-            this.setDriver(this._config.driver)["catch"](function() {
-            });
-          }
-          LocalForage2.prototype.config = function config(options) {
-            if ((typeof options === "undefined" ? "undefined" : _typeof(options)) === "object") {
-              if (this._ready) {
-                return new Error("Can't call config() after localforage has been used.");
-              }
-              for (var i in options) {
-                if (i === "storeName") {
-                  options[i] = options[i].replace(/\W/g, "_");
-                }
-                if (i === "version" && typeof options[i] !== "number") {
-                  return new Error("Database version must be a number.");
-                }
-                this._config[i] = options[i];
-              }
-              if ("driver" in options && options.driver) {
-                return this.setDriver(this._config.driver);
-              }
-              return true;
-            } else if (typeof options === "string") {
-              return this._config[options];
-            } else {
-              return this._config;
-            }
-          };
-          LocalForage2.prototype.defineDriver = function defineDriver(driverObject, callback, errorCallback) {
-            var promise = new Promise$1(function(resolve, reject) {
-              try {
-                var driverName = driverObject._driver;
-                var complianceError = new Error("Custom driver not compliant; see https://mozilla.github.io/localForage/#definedriver");
-                if (!driverObject._driver) {
-                  reject(complianceError);
-                  return;
-                }
-                var driverMethods = LibraryMethods.concat("_initStorage");
-                for (var i = 0, len = driverMethods.length; i < len; i++) {
-                  var driverMethodName = driverMethods[i];
-                  var isRequired = !includes(OptionalDriverMethods, driverMethodName);
-                  if ((isRequired || driverObject[driverMethodName]) && typeof driverObject[driverMethodName] !== "function") {
-                    reject(complianceError);
-                    return;
-                  }
-                }
-                var configureMissingMethods = function configureMissingMethods2() {
-                  var methodNotImplementedFactory = function methodNotImplementedFactory2(methodName) {
-                    return function() {
-                      var error = new Error("Method " + methodName + " is not implemented by the current driver");
-                      var promise2 = Promise$1.reject(error);
-                      executeCallback(promise2, arguments[arguments.length - 1]);
-                      return promise2;
-                    };
-                  };
-                  for (var _i = 0, _len = OptionalDriverMethods.length; _i < _len; _i++) {
-                    var optionalDriverMethod = OptionalDriverMethods[_i];
-                    if (!driverObject[optionalDriverMethod]) {
-                      driverObject[optionalDriverMethod] = methodNotImplementedFactory(optionalDriverMethod);
-                    }
-                  }
-                };
-                configureMissingMethods();
-                var setDriverSupport = function setDriverSupport2(support) {
-                  if (DefinedDrivers[driverName]) {
-                    console.info("Redefining LocalForage driver: " + driverName);
-                  }
-                  DefinedDrivers[driverName] = driverObject;
-                  DriverSupport[driverName] = support;
-                  resolve();
-                };
-                if ("_support" in driverObject) {
-                  if (driverObject._support && typeof driverObject._support === "function") {
-                    driverObject._support().then(setDriverSupport, reject);
-                  } else {
-                    setDriverSupport(!!driverObject._support);
-                  }
-                } else {
-                  setDriverSupport(true);
-                }
-              } catch (e) {
-                reject(e);
-              }
-            });
-            executeTwoCallbacks(promise, callback, errorCallback);
-            return promise;
-          };
-          LocalForage2.prototype.driver = function driver() {
-            return this._driver || null;
-          };
-          LocalForage2.prototype.getDriver = function getDriver(driverName, callback, errorCallback) {
-            var getDriverPromise = DefinedDrivers[driverName] ? Promise$1.resolve(DefinedDrivers[driverName]) : Promise$1.reject(new Error("Driver not found."));
-            executeTwoCallbacks(getDriverPromise, callback, errorCallback);
-            return getDriverPromise;
-          };
-          LocalForage2.prototype.getSerializer = function getSerializer(callback) {
-            var serializerPromise = Promise$1.resolve(localforageSerializer);
-            executeTwoCallbacks(serializerPromise, callback);
-            return serializerPromise;
-          };
-          LocalForage2.prototype.ready = function ready(callback) {
-            var self2 = this;
-            var promise = self2._driverSet.then(function() {
-              if (self2._ready === null) {
-                self2._ready = self2._initDriver();
-              }
-              return self2._ready;
-            });
-            executeTwoCallbacks(promise, callback, callback);
-            return promise;
-          };
-          LocalForage2.prototype.setDriver = function setDriver(drivers, callback, errorCallback) {
-            var self2 = this;
-            if (!isArray(drivers)) {
-              drivers = [drivers];
-            }
-            var supportedDrivers = this._getSupportedDrivers(drivers);
-            function setDriverToConfig() {
-              self2._config.driver = self2.driver();
-            }
-            function extendSelfWithDriver(driver) {
-              self2._extend(driver);
-              setDriverToConfig();
-              self2._ready = self2._initStorage(self2._config);
-              return self2._ready;
-            }
-            function initDriver(supportedDrivers2) {
-              return function() {
-                var currentDriverIndex = 0;
-                function driverPromiseLoop() {
-                  while (currentDriverIndex < supportedDrivers2.length) {
-                    var driverName = supportedDrivers2[currentDriverIndex];
-                    currentDriverIndex++;
-                    self2._dbInfo = null;
-                    self2._ready = null;
-                    return self2.getDriver(driverName).then(extendSelfWithDriver)["catch"](driverPromiseLoop);
-                  }
-                  setDriverToConfig();
-                  var error = new Error("No available storage method found.");
-                  self2._driverSet = Promise$1.reject(error);
-                  return self2._driverSet;
-                }
-                return driverPromiseLoop();
-              };
-            }
-            var oldDriverSetDone = this._driverSet !== null ? this._driverSet["catch"](function() {
-              return Promise$1.resolve();
-            }) : Promise$1.resolve();
-            this._driverSet = oldDriverSetDone.then(function() {
-              var driverName = supportedDrivers[0];
-              self2._dbInfo = null;
-              self2._ready = null;
-              return self2.getDriver(driverName).then(function(driver) {
-                self2._driver = driver._driver;
-                setDriverToConfig();
-                self2._wrapLibraryMethodsWithReady();
-                self2._initDriver = initDriver(supportedDrivers);
-              });
-            })["catch"](function() {
-              setDriverToConfig();
-              var error = new Error("No available storage method found.");
-              self2._driverSet = Promise$1.reject(error);
-              return self2._driverSet;
-            });
-            executeTwoCallbacks(this._driverSet, callback, errorCallback);
-            return this._driverSet;
-          };
-          LocalForage2.prototype.supports = function supports(driverName) {
-            return !!DriverSupport[driverName];
-          };
-          LocalForage2.prototype._extend = function _extend(libraryMethodsAndProperties) {
-            extend(this, libraryMethodsAndProperties);
-          };
-          LocalForage2.prototype._getSupportedDrivers = function _getSupportedDrivers(drivers) {
-            var supportedDrivers = [];
-            for (var i = 0, len = drivers.length; i < len; i++) {
-              var driverName = drivers[i];
-              if (this.supports(driverName)) {
-                supportedDrivers.push(driverName);
-              }
-            }
-            return supportedDrivers;
-          };
-          LocalForage2.prototype._wrapLibraryMethodsWithReady = function _wrapLibraryMethodsWithReady() {
-            for (var i = 0, len = LibraryMethods.length; i < len; i++) {
-              callWhenReady(this, LibraryMethods[i]);
-            }
-          };
-          LocalForage2.prototype.createInstance = function createInstance(options) {
-            return new LocalForage2(options);
-          };
-          return LocalForage2;
-        }();
-        var localforage_js = new LocalForage();
-        module4.exports = localforage_js;
-      }, { "3": 3 }] }, {}, [4])(4);
-    });
-  }
-});
-
 // src/main.ts
-__export(exports, {
+var main_exports = {};
+__export(main_exports, {
   default: () => PlantumlPlugin
 });
-var import_obsidian6 = __toModule(require("obsidian"));
+module.exports = __toCommonJS(main_exports);
+var import_obsidian9 = require("obsidian");
 
 // src/settings.ts
-var import_obsidian = __toModule(require("obsidian"));
+var import_obsidian = require("obsidian");
 var DEFAULT_SETTINGS = {
   server_url: "https://www.plantuml.com/plantuml",
   header: "",
   debounce: 3,
   localJar: "",
   javaPath: "java",
-  dotPath: "dot",
+  dotPath: "",
   defaultProcessor: "png",
   cache: 60,
-  exportPath: ""
+  exportPath: "",
+  lightHeader: "",
+  darkHeader: ""
 };
 var PlantUMLSettingsTab = class extends import_obsidian.PluginSettingTab {
   constructor(plugin) {
     super(plugin.app, plugin);
     this.plugin = plugin;
   }
-  display() {
-    const { containerEl } = this;
-    containerEl.empty();
-    new import_obsidian.Setting(containerEl).setName("Server URL").setDesc("PlantUML Server URL").addText((text) => text.setPlaceholder(DEFAULT_SETTINGS.server_url).setValue(this.plugin.settings.server_url).onChange((value) => __async(this, null, function* () {
-      this.plugin.settings.server_url = value;
-      yield this.plugin.saveSettings();
-    })));
-    if (import_obsidian.Platform.isDesktopApp) {
-      const jarDesc = new DocumentFragment();
-      jarDesc.createDiv().innerHTML = "Path to local JAR<br>Supports:<ul><li>Absolute path</li><li>Path relative to vault</li><li>Path relative to users home directory <code>~/</code></li></ul>";
-      new import_obsidian.Setting(containerEl).setName("Local JAR").setDesc(jarDesc).addText((text) => text.setPlaceholder(DEFAULT_SETTINGS.localJar).setValue(this.plugin.settings.localJar).onChange((value) => __async(this, null, function* () {
-        this.plugin.settings.localJar = value;
-        yield this.plugin.saveSettings();
-      })));
-      new import_obsidian.Setting(containerEl).setName("Java path").setDesc("Path to Java executable").addText((text) => text.setPlaceholder(DEFAULT_SETTINGS.javaPath).setValue(this.plugin.settings.javaPath).onChange((value) => __async(this, null, function* () {
-        this.plugin.settings.javaPath = value;
-        yield this.plugin.saveSettings();
-      })));
-      new import_obsidian.Setting(containerEl).setName("Dot path").setDesc("Path to dot executable").addText((text) => text.setPlaceholder(DEFAULT_SETTINGS.dotPath).setValue(this.plugin.settings.dotPath).onChange((value) => __async(this, null, function* () {
-        this.plugin.settings.dotPath = value;
-        yield this.plugin.saveSettings();
-      })));
-      new import_obsidian.Setting(containerEl).setName("Diagram export path").setDesc("Path where exported diagrams will be saved relative to the vault root. Leave blank to save along side the note.").addText((text) => text.setPlaceholder(DEFAULT_SETTINGS.exportPath).setValue(this.plugin.settings.exportPath).onChange((value) => __async(this, null, function* () {
-        this.plugin.settings.exportPath = value;
-        yield this.plugin.saveSettings();
-      })));
-    }
-    new import_obsidian.Setting(containerEl).setName("Default processor for includes").setDesc("Any .pu/.puml files linked will use this processor").addDropdown((dropdown) => {
-      dropdown.addOption("png", "PNG").addOption("svg", "SVG").setValue(this.plugin.settings.defaultProcessor).onChange((value) => __async(this, null, function* () {
-        this.plugin.settings.defaultProcessor = value;
-        yield this.plugin.saveSettings();
-      }));
-    });
-    new import_obsidian.Setting(containerEl).setName("Header").setDesc("Included at the head in every diagram. Useful for specifying a common theme (.puml file)").addTextArea((text) => {
-      text.setPlaceholder("!include https://raw.githubusercontent.com/....puml\n").setValue(this.plugin.settings.header).onChange((value) => __async(this, null, function* () {
-        this.plugin.settings.header = value;
-        yield this.plugin.saveSettings();
-      }));
-      text.inputEl.setAttr("rows", 4);
-      text.inputEl.addClass("puml-settings-area");
-    });
-    new import_obsidian.Setting(containerEl).setName("Cache").setDesc("in days. Only applicable when generating diagrams locally").addSlider((slider) => {
-      slider.setLimits(10, 360, 10).setValue(this.plugin.settings.cache).setDynamicTooltip().onChange((value) => __async(this, null, function* () {
-        this.plugin.settings.cache = value;
-        yield this.plugin.saveSettings();
-      }));
-    });
-    new import_obsidian.Setting(containerEl).setName("Debounce").setDesc("How often should the diagram refresh in seconds").addText((text) => text.setPlaceholder(String(DEFAULT_SETTINGS.debounce)).setValue(String(this.plugin.settings.debounce)).onChange((value) => __async(this, null, function* () {
-      if (!isNaN(Number(value)) || value === void 0) {
-        this.plugin.settings.debounce = Number(value || DEFAULT_SETTINGS.debounce);
-        yield this.plugin.saveSettings();
-      } else {
-        new import_obsidian.Notice("Please specify a valid number");
+  getSettingDefinitions() {
+    return [
+      {
+        name: "Server URL",
+        desc: "PlantUML server URL",
+        control: {
+          type: "text",
+          key: "server_url",
+          placeholder: DEFAULT_SETTINGS.server_url,
+          defaultValue: DEFAULT_SETTINGS.server_url
+        }
+      },
+      {
+        type: "group",
+        heading: "Local rendering",
+        visible: () => import_obsidian.Platform.isDesktopApp,
+        items: [
+          {
+            name: "Local JAR",
+            desc: "Path to local JAR file. Supports absolute paths, paths relative to the vault, and paths relative to the home directory (~/).",
+            control: {
+              type: "text",
+              key: "localJar"
+            }
+          },
+          {
+            name: "Java path",
+            desc: "Path to Java executable. Supports absolute paths and paths relative to the home directory (~/).",
+            control: {
+              type: "text",
+              key: "javaPath",
+              placeholder: DEFAULT_SETTINGS.javaPath,
+              defaultValue: DEFAULT_SETTINGS.javaPath
+            }
+          },
+          {
+            name: "Dot path",
+            desc: "Path to dot (Graphviz) executable. Supports absolute paths and paths relative to the home directory (~/). Leave blank to use version included in PlantUML.",
+            control: {
+              type: "text",
+              key: "dotPath",
+              placeholder: "dot",
+              defaultValue: DEFAULT_SETTINGS.dotPath
+            }
+          },
+          {
+            name: "Diagram export path",
+            desc: "Path where exported diagrams will be saved relative to the vault root. Leave blank to save alongside the note.",
+            control: {
+              type: "text",
+              key: "exportPath"
+            }
+          }
+        ]
+      },
+      {
+        name: "Default processor for includes",
+        desc: "Any .pu/.puml files linked will use this processor.",
+        control: {
+          type: "dropdown",
+          key: "defaultProcessor",
+          defaultValue: DEFAULT_SETTINGS.defaultProcessor,
+          options: {
+            png: "PNG",
+            svg: "SVG"
+          }
+        }
+      },
+      {
+        name: "Header",
+        desc: "Included at the head of every diagram. Useful for specifying a common theme.",
+        control: {
+          type: "textarea",
+          key: "header",
+          placeholder: "!include https://raw.githubusercontent.com/....puml\n",
+          rows: 4
+        }
+      },
+      {
+        name: "Light mode header",
+        desc: "Prepended to every diagram when in light mode.",
+        control: {
+          type: "textarea",
+          key: "lightHeader",
+          rows: 3
+        }
+      },
+      {
+        name: "Dark mode header",
+        desc: "Prepended to every diagram when in dark mode.",
+        control: {
+          type: "textarea",
+          key: "darkHeader",
+          rows: 3
+        }
+      },
+      {
+        type: "group",
+        heading: "Advanced",
+        items: [
+          {
+            name: "Cache",
+            desc: "How long to cache locally generated diagrams, in days.",
+            control: {
+              type: "slider",
+              key: "cache",
+              min: 10,
+              max: 360,
+              step: 10,
+              defaultValue: DEFAULT_SETTINGS.cache
+            }
+          },
+          {
+            name: "Clear diagram cache",
+            desc: "Remove all cached diagrams and force a re-render on next view.",
+            render: (setting) => {
+              setting.addButton(
+                (btn) => btn.setButtonText("Clear cache").onClick(() => __async(this, null, function* () {
+                  yield this.plugin.cache.clear(true);
+                }))
+              );
+            }
+          },
+          {
+            name: "Debounce",
+            desc: "How often the diagram refreshes while editing, in seconds.",
+            control: {
+              type: "number",
+              key: "debounce",
+              min: 1,
+              step: 1,
+              defaultValue: DEFAULT_SETTINGS.debounce,
+              validate: (value) => {
+                if (!Number.isFinite(value) || value < 1) return "Must be a positive number.";
+              }
+            }
+          }
+        ]
       }
-    })));
+    ];
+  }
+};
+
+// src/cache.ts
+var localforage = __toESM(require_localforage());
+var plantuml = __toESM(require_browser_index());
+var import_obsidian2 = require("obsidian");
+var DIAGRAM_PREFIX = "diagram-";
+var INCLUDES_PREFIX = "includes-";
+function parseIncludedFiles(source) {
+  var _a;
+  const pattern = /^[ \t]*!include(?:_once|_many)?[ \t]+([^\s!]+)/gm;
+  const files = /* @__PURE__ */ new Set();
+  let match;
+  while ((match = pattern.exec(source)) !== null) {
+    const raw = match[1];
+    if (raw.startsWith("http://") || raw.startsWith("https://")) continue;
+    files.add((_a = raw.split("/").pop()) != null ? _a : raw);
+  }
+  return Array.from(files);
+}
+var DiagramCache = class {
+  get(encoded) {
+    return __async(this, null, function* () {
+      return localforage.getItem(DIAGRAM_PREFIX + encoded);
+    });
+  }
+  set(encoded, entry) {
+    return __async(this, null, function* () {
+      var _a;
+      yield localforage.setItem(DIAGRAM_PREFIX + encoded, entry);
+      for (const filename of (_a = entry.includes) != null ? _a : []) {
+        const indexKey = INCLUDES_PREFIX + filename;
+        const existing = yield localforage.getItem(indexKey);
+        yield localforage.setItem(indexKey, [.../* @__PURE__ */ new Set([...existing != null ? existing : [], encoded])]);
+      }
+    });
+  }
+  evictForFile(filename) {
+    return __async(this, null, function* () {
+      const indexKey = INCLUDES_PREFIX + filename;
+      const encodedList = yield localforage.getItem(indexKey);
+      if (!(encodedList == null ? void 0 : encodedList.length)) return;
+      for (const encoded of encodedList) {
+        yield localforage.removeItem(DIAGRAM_PREFIX + encoded);
+      }
+      yield localforage.removeItem(indexKey);
+    });
+  }
+  clear(notify = false) {
+    return __async(this, null, function* () {
+      yield localforage.clear();
+      if (notify) new import_obsidian2.Notice("PlantUML diagram cache cleared.");
+    });
+  }
+  evictExpired(ttlDays) {
+    return __async(this, null, function* () {
+      var _a;
+      const ttlMs = ttlDays * 24 * 60 * 60 * 1e3;
+      const now = Date.now();
+      const expired = [];
+      yield localforage.iterate((value, key) => {
+        if (key.startsWith(DIAGRAM_PREFIX) && value.ts < now - ttlMs) {
+          expired.push({ encoded: key.slice(DIAGRAM_PREFIX.length), entry: value });
+        }
+      });
+      for (const { encoded, entry } of expired) {
+        yield localforage.removeItem(DIAGRAM_PREFIX + encoded);
+        for (const filename of (_a = entry.includes) != null ? _a : []) {
+          const indexKey = INCLUDES_PREFIX + filename;
+          const index = yield localforage.getItem(indexKey);
+          if (index) {
+            const updated = index.filter((e) => e !== encoded);
+            if (updated.length === 0) {
+              yield localforage.removeItem(indexKey);
+            } else {
+              yield localforage.setItem(indexKey, updated);
+            }
+          }
+        }
+      }
+    });
+  }
+  migrateFromV1() {
+    return __async(this, null, function* () {
+      const oldKeys = [];
+      yield localforage.iterate((_value, key) => {
+        if (key.startsWith("ts-")) oldKeys.push(key.slice(3));
+      });
+      for (const encoded of oldKeys) {
+        try {
+          const png = yield localforage.getItem("png-" + encoded);
+          const svg = yield localforage.getItem("svg-" + encoded);
+          const ascii = yield localforage.getItem("ascii-" + encoded);
+          const map = yield localforage.getItem("map-" + encoded);
+          const ts = yield localforage.getItem("ts-" + encoded);
+          const includes = parseIncludedFiles(plantuml.decode(encoded));
+          const entry = __spreadValues(__spreadValues(__spreadValues(__spreadValues({
+            ts: ts != null ? ts : Date.now(),
+            includes
+          }, png != null && { png }), svg != null && { svg }), ascii != null && { ascii }), map != null && { map });
+          yield localforage.setItem(DIAGRAM_PREFIX + encoded, entry);
+          for (const filename of includes) {
+            const indexKey = INCLUDES_PREFIX + filename;
+            const existing = yield localforage.getItem(indexKey);
+            yield localforage.setItem(indexKey, [.../* @__PURE__ */ new Set([...existing != null ? existing : [], encoded])]);
+          }
+        } catch (e) {
+        }
+        yield localforage.removeItem("ts-" + encoded);
+        yield localforage.removeItem("png-" + encoded);
+        yield localforage.removeItem("svg-" + encoded);
+        yield localforage.removeItem("ascii-" + encoded);
+        yield localforage.removeItem("map-" + encoded);
+      }
+      if (oldKeys.length > 0) {
+        console.debug(`PlantUML: migrated ${oldKeys.length} cache entries to new format`);
+      }
+    });
   }
 };
 
 // src/processors/localProcessors.ts
-var plantuml = __toModule(require_browser_index());
+var import_obsidian4 = require("obsidian");
+var plantuml2 = __toESM(require_browser_index());
 
 // src/functions.ts
+var import_obsidian3 = require("obsidian");
 var Replacer = class {
   constructor(plugin) {
     this.plugin = plugin;
   }
-  replaceNonBreakingSpaces(text) {
-    const lines = text.split(/\r?\n/);
-    const resultLines = [];
-    if (text.startsWith("@startmindmap")) {
-      for (const line of lines) {
-        resultLines.push(line.replace(/\s+/g, " "));
-      }
-    } else {
-      resultLines.push(...lines);
-    }
-    const result = resultLines.join("\r\n");
-    return result.replace(/&nbsp;/gi, " ");
+  decodeWhiteSpaces(text) {
+    return text.replace(/&nbsp;/gi, " ");
   }
+  /**
+   * replace all links in the plugin syntax with valid plantuml links to note inside the vault
+   * @param text the text, in which to replace all links
+   * @param path path of the current file
+   * @param filetype
+   */
   replaceLinks(text, path, filetype) {
-    return text.replace(/\[\[\[([\s\S]*?)\]\]\]/g, (_, args) => {
+    return text.replace(/\[\[\[([\s\S]*?)\]\]\]/g, ((_, args) => {
       const split = args.split("|");
       const file = this.plugin.app.metadataCache.getFirstLinkpathDest(split[0], path);
       if (!file) {
@@ -6852,9 +7199,17 @@ var Replacer = class {
         return "[[" + url + " " + alias + "]]";
       }
       return "[[" + file.basename + "]]";
-    });
+    }));
   }
+  /**
+   * get the absolute path on the users computer
+   * @param path vault local path
+   */
   getFullPath(path) {
+    var _a;
+    if (!(this.plugin.app.vault.adapter instanceof import_obsidian3.FileSystemAdapter)) {
+      return;
+    }
     if (path.length === 0) {
       return this.plugin.app.vault.adapter.getFullPath("");
     }
@@ -6862,8 +7217,9 @@ var Replacer = class {
     if (!file) {
       return this.plugin.app.vault.adapter.getFullPath("");
     }
-    const folder = this.plugin.app.vault.getDirectParent(file);
-    return this.plugin.app.vault.adapter.getFullPath(folder.path);
+    const vault = this.plugin.app.vault;
+    const folder = vault.getDirectParent(file);
+    return this.plugin.app.vault.adapter.getFullPath((_a = folder == null ? void 0 : folder.path) != null ? _a : "");
   }
   getPath(ctx) {
     return this.getFullPath(ctx ? ctx.sourcePath : "");
@@ -6871,7 +7227,7 @@ var Replacer = class {
 };
 function insertImageWithMap(el, image, map, encodedDiagram) {
   el.empty();
-  const img = document.createElement("img");
+  const img = el.createEl("img");
   if (image.startsWith("http")) {
     img.src = image;
   } else {
@@ -6879,18 +7235,21 @@ function insertImageWithMap(el, image, map, encodedDiagram) {
   }
   img.useMap = "#" + encodedDiagram;
   if (map.contains("map")) {
-    el.innerHTML = map;
-    el.children[0].setAttr("name", encodedDiagram);
+    const parser = new DOMParser();
+    const mapDoc = parser.parseFromString(map, "text/html");
+    const mapEl = mapDoc.body.firstChild;
+    if (mapEl) {
+      const cloned = mapEl.cloneNode(true);
+      cloned.setAttr("name", encodedDiagram);
+      el.appendChild(cloned);
+    }
   }
-  el.appendChild(img);
 }
 function insertAsciiImage(el, image) {
   el.empty();
-  const pre = document.createElement("pre");
-  const code = document.createElement("code");
-  pre.appendChild(code);
+  const pre = el.createEl("pre");
+  const code = pre.createEl("code");
   code.setText(image);
-  el.appendChild(pre);
 }
 function insertSvgImage(el, image) {
   el.empty();
@@ -6901,72 +7260,98 @@ function insertSvgImage(el, image) {
     const link = links[i];
     link.addClass("internal-link");
   }
-  el.insertAdjacentHTML("beforeend", svg.documentElement.outerHTML);
+  el.appendChild(activeDocument.importNode(svg.documentElement, true));
 }
 
 // src/const.ts
 var LOGO_SVG = '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="100" height="100" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><defs><linearGradient id="svgIDc" x1="-33.423" x2="-33.353" y1="-250.911" y2="-250.858" gradientTransform="matrix(37.134 26.001 13.575 -19.387 4673.473 -3982.019)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#767676"/><stop offset="1"/></linearGradient><linearGradient id="svgIDa" x1="-32.107" x2="-32.028" y1="-242.563" y2="-242.586" gradientTransform="matrix(81.081 56.774 17.306 -24.715 6804.021 -4149.644)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#0079b9"/><stop offset="1"/></linearGradient><linearGradient id="svgIDd" x1="-33.282" x2="-33.224" y1="-243.423" y2="-243.455" gradientTransform="matrix(60.003 42.015 34.184 -48.82 10343.005 -10469.084)" href="#svgIDa"/><linearGradient id="svgIDb" x1="12.356" x2="14.011" y1="26.268" y2="26.268" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#595959"/><stop offset=".087" stop-color="#6e6e6e"/><stop offset=".242" stop-color="#8c8c8c"/><stop offset=".405" stop-color="#a4a4a4"/><stop offset=".577" stop-color="#b5b5b5"/><stop offset=".765" stop-color="#bfbfbf"/><stop offset="1" stop-color="#c2c2c2"/></linearGradient><linearGradient id="svgIDe" x1="18.291" x2="19.946" y1="26.171" y2="26.171" href="#svgIDb"/><linearGradient id="svgIDf" x1="24.44" x2="26.096" y1="26.171" y2="26.171" href="#svgIDb"/></defs><path fill="#1c0a42" d="m20.305 17.872l6.855 4.546l-5.44 3.075l-6.859-4.494l5.444-3.127z"/><path d="m21.716 25.619l-.055-.036l-7.005-4.59l5.653-3.247l7.056 4.68Zm-6.65-4.613l6.658 4.362l5.231-2.957L20.3 18Z"/><path fill="url(#svgIDc)" d="m26.401 11.909l3.017 1.683l-2.348 1.496l-2.857-1.841l2.188-1.338z"/><path d="m27.069 15.215l-3.058-1.97l2.387-1.46l3.228 1.8Zm-2.654-1.966l2.655 1.711l2.138-1.36l-2.8-1.565Z"/><path fill="#ffbd3f" d="m14.498 17.807l6.856 4.547l-5.44 3.075l-6.859-4.494l5.443-3.128z"/><path d="m15.91 25.554l-.055-.036l-7.005-4.589l5.65-3.248l7.056 4.68Zm-6.65-4.613l6.658 4.359l5.231-2.957l-6.654-4.413Z"/><path fill="#a11f40" d="m7.99 17.966l6.964 4.4l-5.377 3.138l-7.359-4.655l5.772-2.883z"/><path d="M9.575 25.629L2 20.838l6-3l7.164 4.527ZM2.436 20.86l7.144 4.518l5.168-3.016l-6.764-4.273Z"/><path fill="url(#svgIDa)" d="m2.111 21.021l7.332 4.494v3.548l-7.332-4.731v-3.311z"/><path d="M9.55 29.26L2 24.391v-3.562l7.55 4.626Zm-7.332-4.986l7.118 4.592v-3.291l-7.118-4.362Z"/><path fill="url(#svgIDd)" d="m24.071 13.343l2.938 1.879v6.909l-2.938-1.884v-6.904z"/><path d="m27.063 22.229l-3.045-1.953v-7.031l3.045 1.947Zm-2.938-2.012l2.831 1.815v-6.781l-2.831-1.81Z"/><path fill="#fff" d="M27.149 22.526v-7.332l2.365-1.419v15.374H9.646v-3.548l5.44-3.075l.699 3.075h.011l5.676-3.075l.419 3.075h.054l5.204-3.075z"/><path d="M29.621 29.256H9.539v-3.718l5.62-3.177l.7 3.083l5.7-3.087l.422 3.1l5.061-2.991v-7.333l2.58-1.548Zm-19.868-.215h19.654V13.964l-2.151 1.29v7.332l-.053.031l-5.229 3.09H21.8l-.411-3.014l-5.564 3.014H15.7l-.686-3.018l-5.26 2.973Z"/><rect width="1.656" height="1.656" x="12.356" y="25.44" fill="url(#svgIDb)" rx=".215" ry=".215"/><path d="M13.8 27.2h-1.23a.322.322 0 0 1-.322-.322v-1.223a.322.322 0 0 1 .322-.322h1.23a.322.322 0 0 1 .322.322v1.226a.322.322 0 0 1-.322.319Zm-1.23-1.653a.108.108 0 0 0-.107.107v1.226a.108.108 0 0 0 .107.107h1.23a.108.108 0 0 0 .107-.107v-1.225a.108.108 0 0 0-.107-.107Z"/><rect width="1.656" height="1.656" x="18.291" y="25.343" fill="url(#svgIDe)" rx=".215" ry=".215"/><path d="M19.732 27.106h-1.227a.322.322 0 0 1-.322-.322v-1.226a.322.322 0 0 1 .322-.322h1.226a.322.322 0 0 1 .322.322v1.226a.322.322 0 0 1-.321.322Zm-1.226-1.656a.108.108 0 0 0-.107.107v1.226a.108.108 0 0 0 .107.107h1.226a.108.108 0 0 0 .107-.107v-1.225a.108.108 0 0 0-.107-.107Z"/><rect width="1.656" height="1.656" x="24.44" y="25.343" fill="url(#svgIDf)" rx=".215" ry=".215"/><path d="M25.881 27.106h-1.226a.322.322 0 0 1-.322-.322v-1.226a.322.322 0 0 1 .322-.322h1.226a.322.322 0 0 1 .322.322v1.226a.322.322 0 0 1-.322.322Zm-1.226-1.656a.108.108 0 0 0-.107.107v1.226a.108.108 0 0 0 .107.107h1.226a.108.108 0 0 0 .107-.107v-1.225a.108.108 0 0 0-.107-.107Z"/><path fill="#ea2d2e" d="M27.215 11.23c-.052.069-.417-.262-.653-.526a4.408 4.408 0 0 1-.516-.73A2.6 2.6 0 0 1 25.7 9.2a2.358 2.358 0 0 1-.052-.682a2.959 2.959 0 0 1 .129-.749a3.142 3.142 0 0 1 .787-1.207a15.532 15.532 0 0 0 1.283-1.4a3.062 3.062 0 0 0 .479-.927a3.979 3.979 0 0 0 .151-.855c.019-.364-.025-.593.023-.613s.215.274.287.564a3.167 3.167 0 0 1-.458 2.1a6.9 6.9 0 0 1-1.094 1.448a2.8 2.8 0 0 0-.849 1.234a2.466 2.466 0 0 0-.086.687a3.465 3.465 0 0 0 .476 1.542c.288.572.48.833.439.888Z"/><path d="M27.193 11.266c-.124 0-.492-.365-.651-.544a4.478 4.478 0 0 1-.52-.734a2.628 2.628 0 0 1-.346-.781a2.375 2.375 0 0 1-.053-.69a2.978 2.978 0 0 1 .13-.756a3.208 3.208 0 0 1 .793-1.216c.294-.331.5-.528.659-.686a4.393 4.393 0 0 0 .622-.711a3.052 3.052 0 0 0 .476-.919a3.951 3.951 0 0 0 .15-.849c.008-.159 0-.294 0-.393c0-.159-.006-.225.038-.243a.05.05 0 0 1 .043 0a1.226 1.226 0 0 1 .28.579a3.167 3.167 0 0 1-.46 2.121a6.928 6.928 0 0 1-1.1 1.453c-.055.06-.109.116-.162.171a2.3 2.3 0 0 0-.681 1.052a2.47 2.47 0 0 0-.082.673a3.458 3.458 0 0 0 .473 1.53c.114.231.215.415.289.549c.129.235.178.323.142.369a.051.051 0 0 1-.04.02ZM28.512 2.8a.863.863 0 0 0 0 .19c0 .1.007.236 0 .4a4.021 4.021 0 0 1-.152.861a3.106 3.106 0 0 1-.483.934a4.437 4.437 0 0 1-.629.719c-.162.158-.364.354-.657.683a3.168 3.168 0 0 0-.782 1.2a2.933 2.933 0 0 0-.128.743a2.325 2.325 0 0 0 .052.675a2.59 2.59 0 0 0 .341.767a4.422 4.422 0 0 0 .513.725a2.035 2.035 0 0 0 .611.526a1.183 1.183 0 0 0-.147-.31a12.935 12.935 0 0 1-.29-.551a3.5 3.5 0 0 1-.483-1.562a2.53 2.53 0 0 1 .084-.688a2.375 2.375 0 0 1 .694-1.075c.052-.055.106-.111.161-.171a6.879 6.879 0 0 0 1.09-1.442a3.119 3.119 0 0 0 .456-2.083a1.281 1.281 0 0 0-.251-.541Z"/><path fill="#ea2d2e" d="M29.972 6.087c-.019-.088-.432-.04-.766.073a2.6 2.6 0 0 0-1.059.722a2.8 2.8 0 0 0-.916 1.855a2.972 2.972 0 0 0 .258 1.06c.221.572.455.773.444 1.225c-.007.3-.114.484-.048.549s.314-.1.462-.313a1.8 1.8 0 0 0 .259-1.022c-.046-.815-.6-1.015-.608-1.8a1.858 1.858 0 0 1 .129-.676c.443-1.251 1.881-1.508 1.845-1.673Z"/><path d="M27.934 11.617a.094.094 0 0 1-.069-.026c-.046-.046-.03-.122-.005-.237a1.718 1.718 0 0 0 .045-.331a1.374 1.374 0 0 0-.214-.72a5 5 0 0 1-.228-.495a2.98 2.98 0 0 1-.259-1.07a2.81 2.81 0 0 1 .923-1.874a2.64 2.64 0 0 1 1.07-.729a1.482 1.482 0 0 1 .766-.1a.065.065 0 0 1 .037.046c.015.07-.092.121-.306.224a2.73 2.73 0 0 0-1.542 1.463a1.827 1.827 0 0 0-.127.667a1.645 1.645 0 0 0 .291.885a1.889 1.889 0 0 1 .317.914a1.814 1.814 0 0 1-.264 1.039a.809.809 0 0 1-.421.342Zm1.889-5.549a2.117 2.117 0 0 0-.608.117a2.588 2.588 0 0 0-1.048.715a2.764 2.764 0 0 0-.909 1.837a2.935 2.935 0 0 0 .256 1.05a4.955 4.955 0 0 0 .225.49a1.433 1.433 0 0 1 .22.745a1.765 1.765 0 0 1-.047.341c-.019.091-.035.163-.009.188a.046.046 0 0 0 .038.01a.769.769 0 0 0 .382-.32a1.793 1.793 0 0 0 .254-1.005a1.844 1.844 0 0 0-.31-.89a1.711 1.711 0 0 1-.3-.911a1.877 1.877 0 0 1 .13-.686a2.776 2.776 0 0 1 1.573-1.492c.126-.061.283-.136.277-.164l-.008-.007a.264.264 0 0 0-.116-.018Z"/></svg>';
-var OutputType = /* @__PURE__ */ ((OutputType2) => {
-  OutputType2["PNG"] = "png";
-  OutputType2["SVG"] = "svg";
-  OutputType2["ASCII"] = "txt";
-  return OutputType2;
-})(OutputType || {});
 
 // src/processors/localProcessors.ts
-var localforage = __toModule(require_localforage());
+var execFile;
+var Buffer2;
+var pathModule;
+var osModule;
+function loadNodeModules() {
+  return __async(this, null, function* () {
+    if (import_obsidian4.Platform.isDesktop && !execFile) {
+      const nodeRequire = window.require;
+      execFile = nodeRequire("child_process").execFile;
+      Buffer2 = nodeRequire("buffer").Buffer;
+      pathModule = nodeRequire("path");
+      osModule = nodeRequire("os");
+    }
+  });
+}
 var LocalProcessors = class {
   constructor(plugin) {
     this.ascii = (source, el, ctx) => __async(this, null, function* () {
-      const encodedDiagram = plantuml.encode(source);
-      const item = yield localforage.getItem("ascii-" + encodedDiagram);
-      if (item) {
-        insertAsciiImage(el, item);
-        yield localforage.setItem("ts-" + encodedDiagram, Date.now());
+      if (!import_obsidian4.Platform.isDesktop) {
+        throw new Error("Local processing is only available on desktop");
+      }
+      yield loadNodeModules();
+      const encoded = plantuml2.encode(source);
+      const cached = yield this.plugin.cache.get(encoded);
+      if ((cached == null ? void 0 : cached.ascii) !== void 0) {
+        insertAsciiImage(el, cached.ascii);
+        yield this.plugin.cache.set(encoded, __spreadProps(__spreadValues({}, cached), { ts: Date.now() }));
         return;
       }
-      const image = yield this.generateLocalImage(source, OutputType.ASCII, this.plugin.replacer.getPath(ctx));
+      const image = yield this.generateLocalImage(source, "txt" /* ASCII */, this.plugin.replacer.getPath(ctx));
+      const includes = parseIncludedFiles(source);
+      const entry = __spreadValues({ ts: Date.now(), ascii: image, includes }, cached && { png: cached.png, svg: cached.svg, map: cached.map });
+      yield this.plugin.cache.set(encoded, entry);
       insertAsciiImage(el, image);
-      yield localforage.setItem("ascii-" + encodedDiagram, image);
-      yield localforage.setItem("ts-" + encodedDiagram, Date.now());
     });
     this.png = (source, el, ctx) => __async(this, null, function* () {
-      const encodedDiagram = plantuml.encode(source);
-      const item = yield localforage.getItem("png-" + encodedDiagram);
-      if (item) {
-        const map2 = yield localforage.getItem("map-" + encodedDiagram);
-        insertImageWithMap(el, item, map2, encodedDiagram);
-        yield localforage.setItem("ts-" + encodedDiagram, Date.now());
+      var _a;
+      if (!import_obsidian4.Platform.isDesktop) {
+        throw new Error("Local processing is only available on desktop");
+      }
+      yield loadNodeModules();
+      const encoded = plantuml2.encode(source);
+      const cached = yield this.plugin.cache.get(encoded);
+      if ((cached == null ? void 0 : cached.png) !== void 0) {
+        insertImageWithMap(el, cached.png, (_a = cached.map) != null ? _a : "", encoded);
+        yield this.plugin.cache.set(encoded, __spreadProps(__spreadValues({}, cached), { ts: Date.now() }));
         return;
       }
       const path = this.plugin.replacer.getPath(ctx);
-      const image = yield this.generateLocalImage(source, OutputType.PNG, path);
-      const map = yield this.generateLocalMap(source, path);
-      yield localforage.setItem("png-" + encodedDiagram, image);
-      yield localforage.setItem("map-" + encodedDiagram, map);
-      yield localforage.setItem("ts-" + encodedDiagram, Date.now());
-      insertImageWithMap(el, image, map, encodedDiagram);
+      const [image, map] = yield Promise.all([
+        this.generateLocalImage(source, "png" /* PNG */, path),
+        this.generateLocalMap(source, path)
+      ]);
+      const includes = parseIncludedFiles(source);
+      const entry = __spreadValues({ ts: Date.now(), png: image, map, includes }, cached && { svg: cached.svg, ascii: cached.ascii });
+      yield this.plugin.cache.set(encoded, entry);
+      insertImageWithMap(el, image, map, encoded);
     });
     this.svg = (source, el, ctx) => __async(this, null, function* () {
-      const encodedDiagram = plantuml.encode(source);
-      const item = yield localforage.getItem("svg-" + encodedDiagram);
-      if (item) {
-        insertSvgImage(el, item);
-        yield localforage.setItem("ts-" + encodedDiagram, Date.now());
+      if (!import_obsidian4.Platform.isDesktop) {
+        throw new Error("Local processing is only available on desktop");
+      }
+      yield loadNodeModules();
+      const encoded = plantuml2.encode(source);
+      const cached = yield this.plugin.cache.get(encoded);
+      if ((cached == null ? void 0 : cached.svg) !== void 0) {
+        insertSvgImage(el, cached.svg);
+        yield this.plugin.cache.set(encoded, __spreadProps(__spreadValues({}, cached), { ts: Date.now() }));
         return;
       }
-      const image = yield this.generateLocalImage(source, OutputType.SVG, this.plugin.replacer.getPath(ctx));
-      yield localforage.setItem("svg-" + encodedDiagram, image);
-      yield localforage.setItem("ts-" + encodedDiagram, Date.now());
+      const image = yield this.generateLocalImage(source, "svg" /* SVG */, this.plugin.replacer.getPath(ctx));
+      const includes = parseIncludedFiles(source);
+      const entry = __spreadValues({ ts: Date.now(), svg: image, includes }, cached && { png: cached.png, map: cached.map, ascii: cached.ascii });
+      yield this.plugin.cache.set(encoded, entry);
       insertSvgImage(el, image);
     });
     this.plugin = plugin;
   }
   generateLocalMap(source, path) {
     return __async(this, null, function* () {
-      const { exec } = require("child_process");
-      const args = this.resolveLocalJarCmd().concat(["-pipemap"]);
-      const child = exec(args.join(" "), { encoding: "binary", cwd: path });
+      if (!import_obsidian4.Platform.isDesktop) {
+        throw new Error("Local processing is only available on desktop");
+      }
+      const { cmd, args } = yield this.resolveLocalJarCmd();
+      const child = execFile(cmd, args.concat(["-pipemap"]), { encoding: "binary", cwd: path });
       let stdout = "";
       if (child.stdout) {
         child.stdout.on("data", (data) => {
@@ -6974,179 +7359,169 @@ var LocalProcessors = class {
         });
       }
       return new Promise((resolve, reject) => {
+        var _a, _b;
         child.on("error", reject);
         child.on("close", (code) => {
           if (code === 0) {
             resolve(stdout);
             return;
           } else if (code === 1) {
-            console.log(stdout);
+            console.error(stdout);
             reject(new Error(`an error occurred`));
           } else {
-            reject(new Error(`child exited with code ${code}`));
+            reject(new Error(`child exited with code ${String(code)}`));
           }
         });
-        child.stdin.write(source);
-        child.stdin.end();
+        (_a = child.stdin) == null ? void 0 : _a.write(source);
+        (_b = child.stdin) == null ? void 0 : _b.end();
       });
     });
   }
   generateLocalImage(source, type, path) {
     return __async(this, null, function* () {
-      const { ChildProcess, exec } = require("child_process");
-      const args = this.resolveLocalJarCmd().concat(["-t" + type, "-pipe"]);
-      let child;
-      if (type === OutputType.PNG) {
-        child = exec(args.join(" "), { encoding: "binary", cwd: path });
-      } else {
-        child = exec(args.join(" "), { encoding: "utf-8", cwd: path });
+      if (!import_obsidian4.Platform.isDesktop) {
+        throw new Error("Local processing is only available on desktop");
       }
-      let stdout;
-      let stderr;
+      const { cmd, args } = yield this.resolveLocalJarCmd();
+      const cmdArgs = args.concat(["-t" + type, "-pipe"]);
+      const child = execFile(cmd, cmdArgs, {
+        encoding: type === "png" /* PNG */ ? "binary" : "utf-8",
+        cwd: path
+      });
+      let stdout = null;
+      let stderr = null;
       if (child.stdout) {
         child.stdout.on("data", (data) => {
-          if (stdout === void 0) {
-            stdout = data;
-          } else
-            stdout += data;
+          stdout = stdout === null ? data : stdout + data;
         });
       }
       if (child.stderr) {
         child.stderr.on("data", (data) => {
-          if (stderr === void 0) {
-            stderr = data;
-          } else
-            stderr += data;
+          stderr = stderr === null ? data : stderr + data;
         });
       }
       return new Promise((resolve, reject) => {
+        var _a, _b;
         child.on("error", reject);
         child.on("close", (code) => {
-          if (stdout === void 0) {
+          if (stdout === null) {
             return;
           }
           if (code === 0) {
-            if (type === OutputType.PNG) {
-              const buf = new Buffer(stdout, "binary");
-              resolve(buf.toString("base64"));
+            if (type === "png" /* PNG */) {
+              resolve(Buffer2.from(stdout, "binary").toString("base64"));
               return;
             }
             resolve(stdout);
             return;
           } else if (code === 1) {
             console.error(stdout);
-            reject(new Error(stderr));
+            reject(new Error(stderr != null ? stderr : ""));
           } else {
-            if (type === OutputType.PNG) {
-              const buf = new Buffer(stdout, "binary");
-              resolve(buf.toString("base64"));
+            if (type === "png" /* PNG */) {
+              resolve(Buffer2.from(stdout, "binary").toString("base64"));
               return;
             }
             resolve(stdout);
-            return;
           }
         });
-        child.stdin.write(source, "utf-8");
-        child.stdin.end();
+        (_a = child.stdin) == null ? void 0 : _a.write(source, "utf-8");
+        (_b = child.stdin) == null ? void 0 : _b.end();
       });
     });
   }
+  /**
+   * To support local jar settings with unix-like style, and search local jar file
+   * from current vault path.
+   */
   resolveLocalJarCmd() {
-    const jarFromSettings = this.plugin.settings.localJar;
-    const { isAbsolute, resolve } = require("path");
-    const { userInfo } = require("os");
-    let jarFullPath;
-    const path = this.plugin.replacer.getFullPath("");
-    if (jarFromSettings[0] === "~") {
-      jarFullPath = userInfo().homedir + jarFromSettings.slice(1);
-    } else {
-      if (isAbsolute(jarFromSettings)) {
-        jarFullPath = jarFromSettings;
-      } else {
-        jarFullPath = resolve(path, jarFromSettings);
+    return __async(this, null, function* () {
+      if (!import_obsidian4.Platform.isDesktop) {
+        throw new Error("Local processing is only available on desktop");
       }
-    }
-    if (jarFullPath.length == 0) {
-      throw Error("Invalid local jar file");
-    }
-    if (jarFullPath.endsWith(".jar")) {
-      return [
-        this.plugin.settings.javaPath,
-        "-jar",
-        '"' + jarFullPath + '"',
-        "-Djava.awt.headless=true",
-        "-charset",
-        "utf-8",
-        "-graphvizdot",
-        '"' + this.plugin.settings.dotPath + '"'
-      ];
-    }
-    return [
-      jarFullPath,
-      "-Djava.awt.headless=true",
-      "-charset",
-      "utf-8",
-      "-graphvizdot",
-      '"' + this.plugin.settings.dotPath + '"'
-    ];
+      const jarFromSettings = this.plugin.settings.localJar;
+      let jarFullPath;
+      const path = this.plugin.replacer.getFullPath("");
+      if (jarFromSettings[0] === "~") {
+        jarFullPath = osModule.userInfo().homedir + jarFromSettings.slice(1);
+      } else {
+        if (pathModule.isAbsolute(jarFromSettings)) {
+          jarFullPath = jarFromSettings;
+        } else {
+          jarFullPath = pathModule.resolve(path, jarFromSettings);
+        }
+      }
+      if (jarFullPath.length == 0) {
+        throw Error("Invalid local jar file");
+      }
+      let javaPath = this.plugin.settings.javaPath;
+      if (javaPath[0] === "~") {
+        javaPath = osModule.userInfo().homedir + javaPath.slice(1);
+      }
+      let dotPath = this.plugin.settings.dotPath;
+      if (dotPath[0] === "~") {
+        dotPath = osModule.userInfo().homedir + dotPath.slice(1);
+      }
+      const graphvizArgs = dotPath ? ["-graphvizdot", dotPath] : [];
+      if (jarFullPath.endsWith(".jar")) {
+        return {
+          cmd: javaPath,
+          args: ["-Djava.awt.headless=true", "-Dapple.awt.UIElement=true", "-jar", jarFullPath, "-charset", "utf-8", ...graphvizArgs]
+        };
+      }
+      return {
+        cmd: jarFullPath,
+        args: ["-Djava.awt.headless=true", "-Dapple.awt.UIElement=true", "-charset", "utf-8", ...graphvizArgs]
+      };
+    });
   }
 };
 
 // src/processors/debouncedProcessors.ts
-var import_obsidian2 = __toModule(require("obsidian"));
+var import_obsidian5 = require("obsidian");
 
-// node_modules/uuid/dist/esm-browser/rng.js
-var getRandomValues;
+// node_modules/uuid/dist/stringify.js
+var byteToHex = [];
+for (let i = 0; i < 256; ++i) {
+  byteToHex.push((i + 256).toString(16).slice(1));
+}
+function unsafeStringify(arr, offset = 0) {
+  return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
+}
+
+// node_modules/uuid/dist/rng.js
 var rnds8 = new Uint8Array(16);
 function rng() {
-  if (!getRandomValues) {
-    getRandomValues = typeof crypto !== "undefined" && crypto.getRandomValues && crypto.getRandomValues.bind(crypto) || typeof msCrypto !== "undefined" && typeof msCrypto.getRandomValues === "function" && msCrypto.getRandomValues.bind(msCrypto);
-    if (!getRandomValues) {
-      throw new Error("crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported");
-    }
-  }
-  return getRandomValues(rnds8);
+  return crypto.getRandomValues(rnds8);
 }
 
-// node_modules/uuid/dist/esm-browser/regex.js
-var regex_default = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
-
-// node_modules/uuid/dist/esm-browser/validate.js
-function validate(uuid) {
-  return typeof uuid === "string" && regex_default.test(uuid);
-}
-var validate_default = validate;
-
-// node_modules/uuid/dist/esm-browser/stringify.js
-var byteToHex = [];
-for (i = 0; i < 256; ++i) {
-  byteToHex.push((i + 256).toString(16).substr(1));
-}
-var i;
-function stringify(arr) {
-  var offset = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 0;
-  var uuid = (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
-  if (!validate_default(uuid)) {
-    throw TypeError("Stringified UUID is invalid");
-  }
-  return uuid;
-}
-var stringify_default = stringify;
-
-// node_modules/uuid/dist/esm-browser/v4.js
+// node_modules/uuid/dist/v4.js
 function v4(options, buf, offset) {
+  if (!buf && !options && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return _v4(options, buf, offset);
+}
+function _v4(options, buf, offset) {
+  var _a, _b, _c;
   options = options || {};
-  var rnds = options.random || (options.rng || rng)();
+  const rnds = (_c = (_b = options.random) != null ? _b : (_a = options.rng) == null ? void 0 : _a.call(options)) != null ? _c : rng();
+  if (rnds.length < 16) {
+    throw new Error("Random bytes length must be >= 16");
+  }
   rnds[6] = rnds[6] & 15 | 64;
   rnds[8] = rnds[8] & 63 | 128;
   if (buf) {
     offset = offset || 0;
-    for (var i = 0; i < 16; ++i) {
+    if (offset < 0 || offset + 16 > buf.length) {
+      throw new RangeError(`UUID byte range ${offset}:${offset + 15} is out of buffer bounds`);
+    }
+    for (let i = 0; i < 16; ++i) {
       buf[offset + i] = rnds[i];
     }
     return buf;
   }
-  return stringify_default(rnds);
+  return unsafeStringify(rnds);
 }
 var v4_default = v4;
 
@@ -7177,42 +7552,46 @@ var DebouncedProcessors = class {
           this.debounceMap.get(debounceId)(source, el, ctx);
         }
       } else {
-        const func = (0, import_obsidian2.debounce)(processor, this.debounceTime, true);
+        const func = (0, import_obsidian5.debounce)(processor, this.debounceTime, true);
         const uuid = v4_default();
         el.dataset.plantumlDebouce = uuid;
         this.debounceMap.set(uuid, func);
-        source = this.plugin.replacer.replaceNonBreakingSpaces(source);
+        source = this.plugin.replacer.decodeWhiteSpaces(source);
         source = this.plugin.replacer.replaceLinks(source, this.plugin.replacer.getPath(ctx), filetype);
-        source = this.plugin.settings.header + "\r\n" + source;
+        const themeHeader = activeDocument.body.hasClass("theme-dark") ? this.plugin.settings.darkHeader : this.plugin.settings.lightHeader;
+        source = this.plugin.settings.header + "\r\n" + themeHeader + "\r\n" + source;
         yield processor(source, el, ctx);
         el.addEventListener("contextmenu", (event) => {
-          const menu = new import_obsidian2.Menu().addItem((item) => {
+          const menu = new import_obsidian5.Menu().addItem((item) => {
             item.setTitle("Copy diagram source").setIcon("clipboard-copy").onClick(() => __async(this, null, function* () {
               yield navigator.clipboard.writeText(originalSource);
             }));
           }).addItem((item) => {
             item.setTitle("Copy diagram").setIcon("image").onClick(() => __async(this, null, function* () {
-              console.log(el);
               const img = el.querySelector("img");
               if (img) {
-                this.renderToBlob(img, "An error occurred while copying image to clipboard", (blob) => __async(this, null, function* () {
-                  yield navigator.clipboard.write([
-                    new ClipboardItem({
-                      "image/png": blob
-                    })
-                  ]);
-                  new import_obsidian2.Notice("Diagram copied to clipboard");
-                }));
+                this.renderToBlob(
+                  img,
+                  "An error occurred while copying image to clipboard",
+                  (blob) => __async(this, null, function* () {
+                    yield navigator.clipboard.write([
+                      new ClipboardItem({
+                        "image/png": blob
+                      })
+                    ]);
+                    new import_obsidian5.Notice("Diagram copied to clipboard");
+                  })
+                );
               }
               const svg = el.querySelector("svg");
               if (svg) {
-                yield navigator.clipboard.writeText(svg.outerHTML);
-                new import_obsidian2.Notice("Diagram copied to clipboard");
+                yield navigator.clipboard.writeText(svg.outerHTML.replace(/&nbsp;/g, ""));
+                new import_obsidian5.Notice("Diagram copied to clipboard");
               }
               const code = el.querySelector("code");
               if (code) {
                 yield navigator.clipboard.writeText(code.innerText);
-                new import_obsidian2.Notice("Diagram copied to clipboard");
+                new import_obsidian5.Notice("Diagram copied to clipboard");
               }
             }));
           }).addItem((item) => {
@@ -7228,7 +7607,7 @@ var DebouncedProcessors = class {
                   } else {
                     yield this.plugin.app.vault.createBinary(filename, buffer);
                   }
-                  new import_obsidian2.Notice(`Diagram exported to '${filename}'`);
+                  new import_obsidian5.Notice(`Diagram exported to '${filename}'`);
                 }));
               }
               const svg = el.querySelector("svg");
@@ -7250,7 +7629,7 @@ var DebouncedProcessors = class {
       image.crossOrigin = "anonymous";
       image.src = img.src;
       image.addEventListener("load", () => {
-        const canvas = document.createElement("canvas");
+        const canvas = activeDocument.createEl("canvas");
         canvas.width = image.width;
         canvas.height = image.height;
         const ctx = canvas.getContext("2d");
@@ -7258,16 +7637,14 @@ var DebouncedProcessors = class {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(image, 0, 0);
         try {
-          canvas.toBlob((blob) => __async(this, null, function* () {
-            try {
-              yield handleBlob(blob);
-            } catch (error) {
-              new import_obsidian2.Notice(errorMessage);
-              console.error(error);
-            }
-          }));
+          canvas.toBlob((blob) => {
+            if (!blob) return;
+            handleBlob(blob).catch(() => {
+              new import_obsidian5.Notice(errorMessage);
+            });
+          });
         } catch (error) {
-          new import_obsidian2.Notice(errorMessage);
+          new import_obsidian5.Notice(errorMessage);
           console.error(error);
         }
       });
@@ -7277,7 +7654,7 @@ var DebouncedProcessors = class {
       if ((startuml == null ? void 0 : startuml.length) >= 2) {
         return `${startuml[1].trim()}`;
       }
-      const now = new Date().toISOString().replace(/[:T]+/g, "-");
+      const now = (/* @__PURE__ */ new Date()).toISOString().replace(/[:T]+/g, "-");
       const filename = this.plugin.app.vault.getAbstractFileByPath(ctx.sourcePath).name;
       return `${filename.substring(0, filename.lastIndexOf("."))}-${now.substring(0, now.lastIndexOf("."))}`;
     };
@@ -7289,7 +7666,7 @@ var DebouncedProcessors = class {
       }
       const exists = yield this.plugin.app.vault.adapter.exists(exportPath);
       if (!exists) {
-        this.plugin.app.vault.createFolder(exportPath);
+        yield this.plugin.app.vault.createFolder(exportPath);
       }
       return exportPath;
     });
@@ -7304,7 +7681,7 @@ var DebouncedProcessors = class {
         fName = fName.substring(1);
       }
       const folderOrFile = this.plugin.app.vault.getAbstractFileByPath(fName);
-      if (folderOrFile instanceof import_obsidian2.TFile) {
+      if (folderOrFile instanceof import_obsidian5.TFile) {
         return folderOrFile;
       }
       return void 0;
@@ -7318,9 +7695,9 @@ var DebouncedProcessors = class {
         } else {
           yield this.plugin.app.vault.create(filename, data);
         }
-        new import_obsidian2.Notice(`Diagram exported to '${filename}'`);
+        new import_obsidian5.Notice(`Diagram exported to '${filename}'`);
       } catch (error) {
-        new import_obsidian2.Notice("An error occurred while while exporting the diagram");
+        new import_obsidian5.Notice("An error occurred while while exporting the diagram");
         console.error(error);
       }
     });
@@ -7331,18 +7708,14 @@ var DebouncedProcessors = class {
 };
 
 // src/processors/serverProcessor.ts
-var import_obsidian3 = __toModule(require("obsidian"));
-var plantuml2 = __toModule(require_browser_index());
+var import_obsidian6 = require("obsidian");
+var plantuml3 = __toESM(require_browser_index());
 var ServerProcessor = class {
   constructor(plugin) {
     this.svg = (source, el, _) => __async(this, null, function* () {
-      let url = this.plugin.settings.server_url;
-      if (url.length == 0) {
-        url = DEFAULT_SETTINGS.server_url;
-      }
-      const imageUrlBase = url + "/svg/";
-      const encodedDiagram = plantuml2.encode(source);
-      (0, import_obsidian3.request)({ url: imageUrlBase + encodedDiagram, method: "GET" }).then((value) => {
+      const imageUrlBase = this.getUrl() + (this.isDark() ? "/dsvg/" : "/svg/");
+      const encodedDiagram = plantuml3.encode(source);
+      (0, import_obsidian6.request)({ url: imageUrlBase + encodedDiagram, method: "GET" }).then((value) => {
         insertSvgImage(el, value);
       }).catch((error) => {
         if (error)
@@ -7350,28 +7723,21 @@ var ServerProcessor = class {
       });
     });
     this.png = (source, el, _) => __async(this, null, function* () {
-      let url = this.plugin.settings.server_url;
-      if (url.length == 0) {
-        url = DEFAULT_SETTINGS.server_url;
-      }
-      const imageUrlBase = url + "/png/";
-      const encodedDiagram = plantuml2.encode(source);
+      const url = this.getUrl();
+      const imageUrlBase = url + (this.isDark() ? "/dpng/" : "/png/");
+      const encodedDiagram = plantuml3.encode(source);
       const image = imageUrlBase + encodedDiagram;
       const mapUrlBase = url + "/map/";
-      const map = yield (0, import_obsidian3.request)({ url: mapUrlBase + encodedDiagram, method: "GET" });
+      const map = yield (0, import_obsidian6.request)({ url: mapUrlBase + encodedDiagram, method: "GET" });
       insertImageWithMap(el, image, map, encodedDiagram);
     });
     this.ascii = (source, el, _) => __async(this, null, function* () {
-      let url = this.plugin.settings.server_url;
-      if (url.length == 0) {
-        url = DEFAULT_SETTINGS.server_url;
-      }
-      const asciiUrlBase = url + "/txt/";
-      const encodedDiagram = plantuml2.encode(source);
-      const result = yield (0, import_obsidian3.request)({ url: asciiUrlBase + encodedDiagram });
+      const asciiUrlBase = this.getUrl() + (this.isDark() ? "/dtxt/" : "/txt/");
+      const encodedDiagram = plantuml3.encode(source);
+      const result = yield (0, import_obsidian6.request)({ url: asciiUrlBase + encodedDiagram });
       if (result.startsWith("\uFFFDPNG")) {
-        const text = document.createElement("p");
-        text.style.color = "red";
+        const text = activeDocument.createEl("p");
+        text.addClass("mod-error");
         text.innerText = "Your configured PlantUML Server does not support ASCII Art";
         el.appendChild(text);
         return;
@@ -7380,14 +7746,21 @@ var ServerProcessor = class {
     });
     this.plugin = plugin;
   }
+  getUrl() {
+    const url = this.plugin.settings.server_url;
+    return url.length > 0 ? url : DEFAULT_SETTINGS.server_url;
+  }
+  isDark() {
+    return activeDocument.body.hasClass("theme-dark");
+  }
 };
 
 // src/PumlView.ts
-var import_obsidian4 = __toModule(require("obsidian"));
-var import_view = __toModule(require("@codemirror/view"));
-var import_state = __toModule(require("@codemirror/state"));
-var import_search = __toModule(require("@codemirror/search"));
-var import_commands = __toModule(require("@codemirror/commands"));
+var import_obsidian7 = require("obsidian");
+var import_view = require("@codemirror/view");
+var import_state = require("@codemirror/state");
+var import_search = require("@codemirror/search");
+var import_commands = require("@codemirror/commands");
 var VIEW_TYPE = "plantuml";
 var views = [];
 var syncAnnotation = import_state.Annotation.define();
@@ -7406,7 +7779,7 @@ function syncDispatch(from) {
     }
   };
 }
-var PumlView = class extends import_obsidian4.TextFileView {
+var PumlView = class extends import_obsidian7.TextFileView {
   constructor(leaf, plugin) {
     super(leaf);
     this.dispatchId = -1;
@@ -7418,15 +7791,15 @@ var PumlView = class extends import_obsidian4.TextFileView {
       import_view.keymap.of([...import_commands.defaultKeymap, import_commands.indentWithTab]),
       (0, import_commands.history)(),
       (0, import_search.search)(),
-      import_view.EditorView.updateListener.of((v) => __async(this, null, function* () {
+      import_view.EditorView.updateListener.of((v) => {
         if (v.docChanged) {
           this.requestSave();
-          yield this.renderPreview();
+          void this.renderPreview();
         }
-      }))
+      })
     ];
     this.plugin = plugin;
-    this.debounced = (0, import_obsidian4.debounce)(this.plugin.getProcessor().png, this.plugin.settings.debounce * 1e3, true);
+    this.debounced = (0, import_obsidian7.debounce)(this.plugin.getProcessor().png, this.plugin.settings.debounce * 1e3, true);
     this.sourceEl = this.contentEl.createDiv({ cls: "plantuml-source-view", attr: { "style": "display: block" } });
     this.previewEl = this.contentEl.createDiv({ cls: "plantuml-preview-view", attr: { "style": "display: none" } });
     const vault = this.app.vault;
@@ -7455,24 +7828,28 @@ var PumlView = class extends import_obsidian4.TextFileView {
   setState(state, result) {
     if (state.mode === "preview") {
       this.currentView = "preview";
-      (0, import_obsidian4.setIcon)(this.changeModeButton, "pencil");
+      (0, import_obsidian7.setIcon)(this.changeModeButton, "pencil");
       this.changeModeButton.setAttribute("aria-label", "Edit (Ctrl+Click to edit in new pane)");
-      this.previewEl.style.setProperty("display", "block");
-      this.sourceEl.style.setProperty("display", "none");
-      this.renderPreview();
+      this.previewEl.show();
+      this.sourceEl.hide();
+      void this.renderPreview();
     } else {
       this.currentView = "source";
-      (0, import_obsidian4.setIcon)(this.changeModeButton, "lines-of-text");
+      (0, import_obsidian7.setIcon)(this.changeModeButton, "lines-of-text");
       this.changeModeButton.setAttribute("aria-label", "Preview (Ctrl+Click to open in new pane)");
-      this.previewEl.style.setProperty("display", "none");
-      this.sourceEl.style.setProperty("display", "block");
+      this.previewEl.hide();
+      this.sourceEl.show();
     }
     return super.setState(state, result);
   }
   onload() {
+    void this._onload();
+  }
+  _onload() {
     return __async(this, null, function* () {
       this.changeModeButton = this.addAction("lines-of-text", "Preview (Ctrl+Click to open in new pane)", (evt) => this.switchMode(evt), 17);
-      const defaultViewMode = this.app.vault.getConfig("defaultViewMode");
+      const vault = this.app.vault;
+      const defaultViewMode = vault.getConfig("defaultViewMode");
       this.currentView = defaultViewMode;
       yield this.setState(__spreadProps(__spreadValues({}, this.getState()), { mode: defaultViewMode }), {});
     });
@@ -7481,60 +7858,61 @@ var PumlView = class extends import_obsidian4.TextFileView {
     views.remove(views[this.dispatchId]);
     this.editor.destroy();
   }
+  // function to switch between source and preview mode
   switchMode(arg) {
     return __async(this, null, function* () {
       let mode = arg;
-      if (!mode || mode instanceof MouseEvent)
-        mode = this.currentView === "source" ? "preview" : "source";
+      if (!mode || mode instanceof MouseEvent) mode = this.currentView === "source" ? "preview" : "source";
       if (arg instanceof MouseEvent) {
-        if (import_obsidian4.Keymap.isModEvent(arg)) {
-          this.app.workspace.duplicateLeaf(this.leaf).then(() => __async(this, null, function* () {
-            var _a, _b;
-            const viewState = (_a = this.app.workspace.activeLeaf) == null ? void 0 : _a.getViewState();
-            if (viewState) {
-              viewState.state = __spreadProps(__spreadValues({}, viewState.state), { mode });
-              yield (_b = this.app.workspace.activeLeaf) == null ? void 0 : _b.setViewState(viewState);
-            }
-          }));
+        if (import_obsidian7.Keymap.isModEvent(arg)) {
+          const newLeaf = this.app.workspace.getLeaf("tab");
+          const currentState = this.getState();
+          void newLeaf.setViewState({
+            type: VIEW_TYPE,
+            state: __spreadProps(__spreadValues({}, typeof currentState === "object" && currentState !== null ? currentState : {}), {
+              mode
+            })
+          });
         } else {
-          yield this.setState(__spreadProps(__spreadValues({}, this.getState()), { mode }), {});
+          const currentState = this.getState();
+          yield this.setState(__spreadProps(__spreadValues({}, typeof currentState === "object" && currentState !== null ? currentState : {}), {
+            mode
+          }), {});
         }
       }
     });
   }
+  // get the data for save
   getViewData() {
     return this.editor.state.sliceDoc();
   }
-  setViewData(data, clear) {
-    return __async(this, null, function* () {
-      this.data = data;
-      if (clear) {
-        this.editor.setState(import_state.EditorState.create({
-          doc: data,
-          extensions: this.extensions
-        }));
-      } else {
-        this.editor.dispatch({
-          changes: {
-            from: 0,
-            to: this.editor.state.doc.length,
-            insert: data
-          }
-        });
-      }
-      if (this.currentView === "preview")
-        this.renderPreview();
-    });
+  // load the data into the view
+  setViewData(data, clear2) {
+    this.data = data;
+    if (clear2) {
+      this.editor.setState(import_state.EditorState.create({
+        doc: data,
+        extensions: this.extensions
+      }));
+    } else {
+      this.editor.dispatch({
+        changes: {
+          from: 0,
+          to: this.editor.state.doc.length,
+          insert: data
+        }
+      });
+    }
+    if (this.currentView === "preview") void this.renderPreview();
   }
+  // clear the editor, etc
   clear() {
     this.previewEl.empty();
     this.data = null;
   }
   getDisplayText() {
-    if (this.file)
-      return this.file.basename;
-    else
-      return "PlantUML (no file)";
+    if (this.file) return this.file.basename;
+    else return "PlantUML (no file)";
   }
   canAcceptExtension(extension) {
     return extension == "puml";
@@ -7544,8 +7922,7 @@ var PumlView = class extends import_obsidian4.TextFileView {
   }
   renderPreview() {
     return __async(this, null, function* () {
-      if (this.currentView !== "preview")
-        return;
+      if (this.currentView !== "preview") return;
       this.previewEl.empty();
       const loadingHeader = this.previewEl.createEl("h1", { text: "Loading" });
       const previewDiv = this.previewEl.createDiv();
@@ -7556,11 +7933,11 @@ var PumlView = class extends import_obsidian4.TextFileView {
 };
 
 // src/main.ts
-var import_localforage = __toModule(require_localforage());
+var import_localforage = __toESM(require_localforage());
 
 // src/embed.ts
-var import_obsidian5 = __toModule(require("obsidian"));
-var PumlEmbed = class extends import_obsidian5.Component {
+var import_obsidian8 = require("obsidian");
+var PumlEmbed = class extends import_obsidian8.Component {
   constructor(plugin, file, ctx) {
     super();
     this.plugin = plugin;
@@ -7576,7 +7953,7 @@ var PumlEmbed = class extends import_obsidian5.Component {
 };
 
 // src/main.ts
-var PlantumlPlugin = class extends import_obsidian6.Plugin {
+var PlantumlPlugin = class extends import_obsidian9.Plugin {
   constructor() {
     super(...arguments);
     this.hover = {
@@ -7585,7 +7962,7 @@ var PlantumlPlugin = class extends import_obsidian6.Plugin {
     };
   }
   getProcessor() {
-    if (import_obsidian6.Platform.isMobileApp) {
+    if (import_obsidian9.Platform.isMobileApp) {
       return this.serverProcessor;
     }
     if (this.settings.localJar.length > 0) {
@@ -7594,17 +7971,16 @@ var PlantumlPlugin = class extends import_obsidian6.Plugin {
     return this.serverProcessor;
   }
   onload() {
-    return __async(this, null, function* () {
-      console.log("loading plugin plantuml");
-      yield this.loadSettings();
+    void this.loadSettings().then(() => __async(this, null, function* () {
       this.addSettingTab(new PlantUMLSettingsTab(this));
       this.replacer = new Replacer(this);
+      this.cache = new DiagramCache();
       this.serverProcessor = new ServerProcessor(this);
-      if (import_obsidian6.Platform.isDesktopApp) {
+      if (import_obsidian9.Platform.isDesktopApp) {
         this.localProcessor = new LocalProcessors(this);
       }
       const processor = new DebouncedProcessors(this);
-      (0, import_obsidian6.addIcon)("document-" + VIEW_TYPE, LOGO_SVG);
+      (0, import_obsidian9.addIcon)("document-" + VIEW_TYPE, LOGO_SVG);
       this.registerView(VIEW_TYPE, (leaf) => {
         return new PumlView(leaf, this);
       });
@@ -7618,92 +7994,82 @@ var PlantumlPlugin = class extends import_obsidian6.Plugin {
       this.registerMarkdownCodeBlockProcessor("puml-svg", processor.svg);
       this.registerMarkdownCodeBlockProcessor("puml-ascii", processor.ascii);
       this.registerMarkdownCodeBlockProcessor("plantuml-map", processor.png);
-      this.app.embedRegistry.registerExtensions(["puml", "pu"], (ctx, file, subpath) => new PumlEmbed(this, file, ctx));
-      this.cleanupLocalStorage();
+      this.app.embedRegistry.registerExtensions(["puml", "pu"], (ctx, file, _subpath) => new PumlEmbed(this, file, ctx));
+      this.addCommand({
+        id: "clear-cache",
+        name: "Clear diagram cache",
+        callback: () => void this.cache.clear(true)
+      });
       import_localforage.default.config({
         name: "puml",
         description: "PlantUML plugin"
       });
-      yield this.cleanupCache();
-      this.observer = new MutationObserver((mutation) => __async(this, null, function* () {
-        if (mutation.length !== 1)
-          return;
-        if (mutation[0].addedNodes.length !== 1)
-          return;
-        if (this.hover.linkText === null)
-          return;
-        if (mutation[0].addedNodes[0].className !== "popover hover-popover file-embed is-loaded")
-          return;
-        const file = this.app.metadataCache.getFirstLinkpathDest(this.hover.linkText, this.hover.sourcePath);
-        if (!file)
-          return;
-        if (file.extension !== "puml" && file.extension !== "pu")
-          return;
-        const fileContent = yield this.app.vault.read(file);
-        const imgDiv = createDiv();
-        if (this.settings.defaultProcessor === "png") {
-          yield this.getProcessor().png(fileContent, imgDiv, null);
-        } else {
-          yield this.getProcessor().svg(fileContent, imgDiv, null);
-        }
-        const node = mutation[0].addedNodes[0];
-        node.empty();
-        const div = createDiv("", (element) => __async(this, null, function* () {
-          element.appendChild(imgDiv);
-          element.setAttribute("src", file.path);
-          element.onClickEvent((event) => {
-            event.stopImmediatePropagation();
-            const leaf = this.app.workspace.getLeaf(event.ctrlKey);
-            leaf.setViewState({
-              type: VIEW_TYPE,
-              state: { file: file.path }
-            });
-          });
-        }));
-        node.appendChild(div);
-      }));
-      this.registerEvent(this.app.workspace.on("hover-link", (event) => __async(this, null, function* () {
-        const linkText = event.linktext;
-        if (!linkText)
-          return;
-        const sourcePath = event.sourcePath;
+      yield this.cache.migrateFromV1();
+      yield this.cache.evictExpired(this.settings.cache);
+      this.observer = new MutationObserver((mutations) => {
+        void this._handleHoverMutation(mutations);
+      });
+      this.registerEvent(this.app.workspace.on("hover-link", (event) => {
+        const hoverEvent = event;
+        const linkText = hoverEvent.linktext;
+        if (!linkText) return;
+        const sourcePath = hoverEvent.sourcePath;
         if (!linkText.endsWith(".puml") && !linkText.endsWith(".pu")) {
           return;
         }
         this.hover.linkText = linkText;
         this.hover.sourcePath = sourcePath;
-      })));
-      this.observer.observe(document, { childList: true, subtree: true });
-    });
-  }
-  cleanupCache() {
-    return __async(this, null, function* () {
-      yield import_localforage.default.iterate((value, key) => {
-        if (key.startsWith("ts-")) {
-          const encoded = key.split("-")[1];
-          if (value < new Date().getTime() - this.settings.cache * 24 * 60 * 60 * 1e3) {
-            import_localforage.default.removeItem("png-" + encoded);
-            import_localforage.default.removeItem("svg-" + encoded);
-            import_localforage.default.removeItem("map-" + encoded);
-            import_localforage.default.removeItem("ascii-" + encoded);
-          }
+      }));
+      this.registerEvent(this.app.vault.on("modify", (file) => {
+        if (file instanceof import_obsidian9.TFile && (file.extension === "puml" || file.extension === "pu")) {
+          void this.cache.evictForFile(file.name).then(() => {
+            this.app.workspace.getLeavesOfType("markdown").forEach((leaf) => {
+              if (leaf.view instanceof import_obsidian9.MarkdownView) {
+                leaf.view.previewMode.rerender(true);
+              }
+            });
+          });
         }
-      });
-    });
+      }));
+      this.observer.observe(activeDocument, { childList: true, subtree: true });
+    }));
   }
-  cleanupLocalStorage() {
-    for (const key of Object.keys(localStorage)) {
-      if (key.endsWith("-map") || key.endsWith("-png") || key.endsWith("-svg") || key.endsWith("ascii")) {
-        localStorage.removeItem(key);
+  _handleHoverMutation(mutations) {
+    return __async(this, null, function* () {
+      if (mutations.length !== 1) return;
+      if (mutations[0].addedNodes.length !== 1) return;
+      if (this.hover.linkText === null) return;
+      if (mutations[0].addedNodes[0].className !== "popover hover-popover file-embed is-loaded") return;
+      const file = this.app.metadataCache.getFirstLinkpathDest(this.hover.linkText, this.hover.sourcePath);
+      if (!file) return;
+      if (file.extension !== "puml" && file.extension !== "pu") return;
+      const fileContent = yield this.app.vault.read(file);
+      const imgDiv = createDiv();
+      if (this.settings.defaultProcessor === "png") {
+        yield this.getProcessor().png(fileContent, imgDiv, null);
+      } else {
+        yield this.getProcessor().svg(fileContent, imgDiv, null);
       }
-    }
+      const node = mutations[0].addedNodes[0];
+      node.empty();
+      const div = createDiv("", (element) => {
+        element.appendChild(imgDiv);
+        element.setAttribute("src", file.path);
+        element.onClickEvent(((event) => {
+          event.stopImmediatePropagation();
+          const leaf = this.app.workspace.getLeaf(event.ctrlKey);
+          void leaf.setViewState({
+            type: VIEW_TYPE,
+            state: { file: file.path }
+          });
+        }));
+      });
+      node.appendChild(div);
+    });
   }
   onunload() {
-    return __async(this, null, function* () {
-      console.log("unloading plugin plantuml");
-      this.observer.disconnect();
-      this.app.embedRegistry.unregisterExtensions(["puml", "pu"]);
-    });
+    this.observer.disconnect();
+    this.app.embedRegistry.unregisterExtensions(["puml", "pu"]);
   }
   loadSettings() {
     return __async(this, null, function* () {
@@ -7721,12 +8087,15 @@ var PlantumlPlugin = class extends import_obsidian6.Plugin {
     });
   }
 };
-/*!
-    localForage -- Offline Storage, Improved
-    Version 1.10.0
-    https://localforage.github.io/localForage
-    (c) 2013-2017 Mozilla, Apache License 2.0
-*/
+/*! Bundled license information:
 
+localforage/dist/localforage.js:
+  (*!
+      localForage -- Offline Storage, Improved
+      Version 1.10.0
+      https://localforage.github.io/localForage
+      (c) 2013-2017 Mozilla, Apache License 2.0
+  *)
+*/
 
 /* nosourcemap */
