@@ -1,5 +1,6 @@
+# ramdisk
 
-Runs on macOS, Linux and Windows.
+A cross platform python library that provides the same interface to create and manage a ramdisk across operating systems.
 
 This software is covered by the [unlicense](https://unlicense.org)
 
@@ -7,7 +8,13 @@ This software is at version 2
 
 A [clockworksspheres](https://clockworksspheres.github.io/) project.
 
-# ramdisk
+# Why Cross Platform?
+
+Any project that is cross platform could benefit from a standard interface to access basic functionality the same way across platforms.  This project abstracts operating specific details of creating and maintaining a ramdisk with a single interface that works the same across operating systems.
+
+Runs on macOS, Linux and Windows.
+
+# ramdisk - why?
 
 Interface to use, eventually for cross-platform setup and maintenance of ramdisk, primarily for build pipelines and unittesting, for DevOps purposes.  This interface is the same across platforms, so you don't need to know how ramdisks work on every platform.  One interface, multiple OS platforms.
 
@@ -78,23 +85,26 @@ The ramdisk example code is cross platform in an beta state.
 
 In the parent directory of the examples directory is ramdisk-setup.py, which is an example of using a pyside6 interface for the ramdisk library.
 
+-----
+
+# Tracking - Eisenban - Kanban board for the project
+
+src/ramdiskBoard is a Kanban based project management board created by and managed by eisenban.
+
+eisenban package can be found at:  https://github.com/clockworksspheres/eisenban
+
+-----
+
 # Future work:
 
 ## Languages
 
 Currently written/tested in only python v3.9+, but examples do not work (specifically ramdisk-setup.py) with the latest version of python
 
-Future plans to duplicate libraries, tests and examples in other languages as well.  Potential next language targets are Go and Rust.
+Future plans to duplicate libraries, tests and examples in other languages as well.  Potential next language targets are Go, Rust and C++.
 
-## Tracking
+## Contributions
 
 Very greatful for any contributions/pull requests to help with the project!
-
-
-# Eisenban - Kanban board for the project
-
-src/ramdiskBoard is a Kanban based project management board created by and managed by eisenban.
-
-eisenban package can be found at:  https://github.com/clockworksspheres/eisenban
 
 
