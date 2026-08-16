@@ -42,7 +42,7 @@ The code has two active branches, ux (not necessarily stable) and master (stable
 
 Initially developed for python 2.6, but code has since been migrated to 3.9+.  Not believed to work on the python 2 branch any longer.
 
-## Used As a library
+## Used As a [library](src/Docs/README.md) - Developed for macOS, Linux and Windows
 
 ### macRamdisk
 
@@ -70,8 +70,6 @@ and set up prior to using this project.
 
 NOTE: the aim_ll.exe software must be acquired from 
 [Arsenal Recon](https://github.com/ArsenalRecon/Arsenal-Image-Mounter/tree/master/Command%20line%20applications?)
-
-## Developed for macOS, Linux and Windows
 
 ### ramdisk
 
