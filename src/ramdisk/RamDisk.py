@@ -194,6 +194,12 @@ def eject(device, logger=False, **kwargs):
     """
     unmount(device, logger=False)
 
+def umount(device, logger=False, **kwargs):
+    """
+    Eject/unmount the passed in instance of a ramdisk.
+    """
+    unmount(device, logger=False)
+
 def getMountedDisks(device=""):
     """
     Get a data structure containing a list of the mounted disks, 
