@@ -16,10 +16,10 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QAbstractItemView, QApplication, QHeaderView, QLabel,
-    QLineEdit, QMainWindow, QMenu, QMenuBar,
-    QPushButton, QSizePolicy, QSlider, QStatusBar,
-    QTableWidget, QTableWidgetItem, QWidget)
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QGridLayout, QHeaderView,
+    QLabel, QLineEdit, QMainWindow, QMenu,
+    QMenuBar, QPushButton, QSizePolicy, QSlider,
+    QStatusBar, QTableWidget, QTableWidgetItem, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -41,42 +41,66 @@ class Ui_MainWindow(object):
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.centralwidget.setAutoFillBackground(True)
-        self.ejectPushButton = QPushButton(self.centralwidget)
-        self.ejectPushButton.setObjectName(u"ejectPushButton")
-        self.ejectPushButton.setGeometry(QRect(20, 190, 100, 32))
-        self.debugPushButton = QPushButton(self.centralwidget)
-        self.debugPushButton.setObjectName(u"debugPushButton")
-        self.debugPushButton.setEnabled(False)
-        self.debugPushButton.setGeometry(QRect(190, 190, 100, 32))
-        self.quitPushButton = QPushButton(self.centralwidget)
-        self.quitPushButton.setObjectName(u"quitPushButton")
-        self.quitPushButton.setGeometry(QRect(360, 190, 100, 32))
+        self.gridLayout = QGridLayout(self.centralwidget)
+        self.gridLayout.setObjectName(u"gridLayout")
         self.titleLabel = QLabel(self.centralwidget)
         self.titleLabel.setObjectName(u"titleLabel")
-        self.titleLabel.setGeometry(QRect(180, 10, 131, 20))
-        self.sizeHorizontalSlider = QSlider(self.centralwidget)
-        self.sizeHorizontalSlider.setObjectName(u"sizeHorizontalSlider")
-        self.sizeHorizontalSlider.setGeometry(QRect(10, 70, 160, 25))
-        self.sizeHorizontalSlider.setOrientation(Qt.Orientation.Horizontal)
+
+        self.gridLayout.addWidget(self.titleLabel, 0, 1, 1, 2)
+
         self.sizeLabel = QLabel(self.centralwidget)
         self.sizeLabel.setObjectName(u"sizeLabel")
-        self.sizeLabel.setGeometry(QRect(10, 35, 161, 21))
-        self.mountLabel = QLabel(self.centralwidget)
-        self.mountLabel.setObjectName(u"mountLabel")
-        self.mountLabel.setGeometry(QRect(20, 110, 211, 16))
-        self.tableWidget = QTableWidget(self.centralwidget)
-        self.tableWidget.setObjectName(u"tableWidget")
-        self.tableWidget.setGeometry(QRect(20, 230, 451, 141))
-        self.tableWidget.setEditTriggers(QAbstractItemView.EditTrigger.DoubleClicked)
+
+        self.gridLayout.addWidget(self.sizeLabel, 1, 0, 1, 1)
+
+        self.sizeHorizontalSlider = QSlider(self.centralwidget)
+        self.sizeHorizontalSlider.setObjectName(u"sizeHorizontalSlider")
+        self.sizeHorizontalSlider.setOrientation(Qt.Orientation.Horizontal)
+
+        self.gridLayout.addWidget(self.sizeHorizontalSlider, 2, 0, 1, 1)
+
         self.sizeLineEdit = QLineEdit(self.centralwidget)
         self.sizeLineEdit.setObjectName(u"sizeLineEdit")
-        self.sizeLineEdit.setGeometry(QRect(180, 70, 81, 21))
-        self.mountLineEdit = QLineEdit(self.centralwidget)
-        self.mountLineEdit.setObjectName(u"mountLineEdit")
-        self.mountLineEdit.setGeometry(QRect(20, 140, 171, 31))
+
+        self.gridLayout.addWidget(self.sizeLineEdit, 2, 1, 1, 2)
+
         self.createPushButton = QPushButton(self.centralwidget)
         self.createPushButton.setObjectName(u"createPushButton")
-        self.createPushButton.setGeometry(QRect(340, 70, 121, 32))
+
+        self.gridLayout.addWidget(self.createPushButton, 2, 3, 1, 1)
+
+        self.mountLabel = QLabel(self.centralwidget)
+        self.mountLabel.setObjectName(u"mountLabel")
+
+        self.gridLayout.addWidget(self.mountLabel, 3, 0, 1, 3)
+
+        self.mountLineEdit = QLineEdit(self.centralwidget)
+        self.mountLineEdit.setObjectName(u"mountLineEdit")
+
+        self.gridLayout.addWidget(self.mountLineEdit, 4, 0, 1, 2)
+
+        self.ejectPushButton = QPushButton(self.centralwidget)
+        self.ejectPushButton.setObjectName(u"ejectPushButton")
+
+        self.gridLayout.addWidget(self.ejectPushButton, 5, 0, 1, 1)
+
+        self.quitPushButton = QPushButton(self.centralwidget)
+        self.quitPushButton.setObjectName(u"quitPushButton")
+
+        self.gridLayout.addWidget(self.quitPushButton, 5, 3, 1, 1)
+
+        self.tableWidget = QTableWidget(self.centralwidget)
+        self.tableWidget.setObjectName(u"tableWidget")
+        self.tableWidget.setEditTriggers(QAbstractItemView.EditTrigger.DoubleClicked)
+
+        self.gridLayout.addWidget(self.tableWidget, 6, 0, 1, 4)
+
+        self.debugPushButton = QPushButton(self.centralwidget)
+        self.debugPushButton.setObjectName(u"debugPushButton")
+        self.debugPushButton.setEnabled(True)
+
+        self.gridLayout.addWidget(self.debugPushButton, 5, 1, 1, 2)
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
@@ -118,14 +142,14 @@ class Ui_MainWindow(object):
         self.actionSave_Specfile.setText(QCoreApplication.translate("MainWindow", u"Save Specfile", None))
         self.actionStyle.setText(QCoreApplication.translate("MainWindow", u"Style", None))
         self.actionAbout.setText(QCoreApplication.translate("MainWindow", u"About", None))
-        self.ejectPushButton.setText(QCoreApplication.translate("MainWindow", u"Eject Ramdisk", None))
-        self.debugPushButton.setText(QCoreApplication.translate("MainWindow", u"Debug", None))
-        self.quitPushButton.setText(QCoreApplication.translate("MainWindow", u"Quit", None))
         self.titleLabel.setText(QCoreApplication.translate("MainWindow", u"Create Ramdisk", None))
         self.sizeLabel.setText(QCoreApplication.translate("MainWindow", u"Ramdisk Size", None))
+        self.createPushButton.setText(QCoreApplication.translate("MainWindow", u"Create Ramdisk", None))
         self.mountLabel.setText(QCoreApplication.translate("MainWindow", u"Ramdisk Mount Point", None))
         self.mountLineEdit.setText(QCoreApplication.translate("MainWindow", u"put mountpoint here", None))
-        self.createPushButton.setText(QCoreApplication.translate("MainWindow", u"Create Ramdisk", None))
+        self.ejectPushButton.setText(QCoreApplication.translate("MainWindow", u"Eject Ramdisk", None))
+        self.quitPushButton.setText(QCoreApplication.translate("MainWindow", u"Quit", None))
+        self.debugPushButton.setText(QCoreApplication.translate("MainWindow", u"Debug", None))
         self.menuRamDisk.setTitle(QCoreApplication.translate("MainWindow", u"RamDisk", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
         self.menuEdit.setTitle(QCoreApplication.translate("MainWindow", u"Edit", None))

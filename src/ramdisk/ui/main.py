@@ -33,8 +33,12 @@ from PySide6.QtGui import QIntValidator
 
 
 #--- non-native python libraries in this source tree
+# Important:
+# You need to run the following command to generate the ui_form.py file
+#     pyside6-uic form.ui -o ui_form.py
+from ramdisk.ui.consoleDialog import ConsoleStream, ConsoleDialog
 from ramdisk.ui.ui_main_n import Ui_MainWindow
-from ramdisk.ui.ui_not_yet_implemented import Ui_Dialog
+#from ramdisk.ui.ui_not_yet_implemented import Ui_Dialog
 
 from ramdisk.ui.validate import validateMntPntString
 from ramdisk.ui.getValues import getMaxMemSize
@@ -122,19 +126,15 @@ class _CreateRamdisk(QMainWindow):
         # Set the default palette of items in the ui to default.
         self.ui.sizeLineEdit.setPalette(QApplication.palette())
         self.ui.mountLineEdit.setPalette(QApplication.palette())
-        #self.ui.setPalette(QApplication.palette())
 
         #####
         # Set default button
         self.ui.createPushButton.setDefault(True)
-        #self.ui.mountLineEdit.setDefault(True)
-        #self.ui.ejectPushButton.setAutoDefault(True)
-        #self.ui.debugPushButton.setAutoDefault(False)
-        self.ui.quitPushButton.setAutoDefault(True)
+        # self.ui.quitPushButton.setAutoDefault(True)
 
         #####
         # Hide the debug button as the functionality hasn't been built yet
-        self.ui.debugPushButton.hide()
+        # self.ui.debugPushButton.hide()
 
         #####
         # Apply stylesheet for focus highlight
@@ -162,18 +162,13 @@ class _CreateRamdisk(QMainWindow):
         # Set Focus Policy
         self.ui.mountLineEdit.setFocusPolicy(Qt.StrongFocus)
         self.ui.createPushButton.setFocusPolicy(Qt.StrongFocus)
-        #self.ui.ejectPushButton.setFocusPolicy(Qt.TabFocus)
         self.ui.ejectPushButton.setFocusPolicy(Qt.StrongFocus)
-        #self.ui.debugPushButton.setFocusPolicy(Qt.TabFocus)
         self.ui.debugPushButton.setFocusPolicy(Qt.StrongFocus)
-        #self.ui.quitPushButton.setFocusPolicy(Qt.TabFocus)
         self.ui.quitPushButton.setFocusPolicy(Qt.StrongFocus)
         self.ui.tableWidget.setFocusPolicy(Qt.StrongFocus)
         self.ui.sizeHorizontalSlider.setFocusPolicy(Qt.NoFocus) # skip this in the tab order
         self.ui.sizeLineEdit.setFocusPolicy(Qt.NoFocus) # skip this in the tab order
         self.ui.debugPushButton.setFocusPolicy(Qt.NoFocus) # skip this in the tab order
-
-        #self.ui.createPushButton.setDefault(True)
 
         #####
         # table keypress event signal
@@ -186,16 +181,11 @@ class _CreateRamdisk(QMainWindow):
         #####
         # Connect Button click signals to slots 
         self.ui.createPushButton.clicked.connect(self.createRamdisk)
-        self.ui.debugPushButton.clicked.connect(self.notYetImplemented)
         self.ui.quitPushButton.clicked.connect(self.quit_application)
         self.ui.ejectPushButton.clicked.connect(self.remove)
-        #self.ui.tableWidget.itemDoubleClicked.connect(self.show_mount_data)
-        #self.ui.tableWidget.itemPressed.connect(self.show_mount_data)
-        # Connect signal for debugging
-        # self.ui.tableWidget.currentCellChanged.connect(self.on_cell_changed)
 
         #####
-        # Connect Button click signals to slots 
+        # Connect key press event signals to slots 
         '''
         self.ui.createPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.createRamdisk()) 
         self.ui.debugPushButton.keyPressEvent = lambda event: keyPressEvent(event, parent, self.notYetImplemented())
@@ -261,6 +251,21 @@ class _CreateRamdisk(QMainWindow):
 
         # Apply stylesheets with heavy blue focus highlight and light blue tint (day mode)
         self.set_day_mode_styles()
+
+        #####
+        # Set up Console debug button
+
+        # Connect the debug button signal to slot
+        self.ui.debugPushButton.clicked.connect(self.onDebugPushButtonClicked)
+
+        self.console_dialogs = []
+
+        # Shared stream that all open dialogs listen to
+        self.stream = ConsoleStream()
+
+        # Redirect stdout & stderr to our stream
+        sys.stdout = self.stream
+        sys.stderr = self.stream
 
         print("exiting init...")
 
@@ -486,6 +491,27 @@ class _CreateRamdisk(QMainWindow):
         self.ui.sizeHorizontalSlider.setRange(0, availableMem)
         self.ui.sizeLineEdit.setText(str(value) + "M")
 
+    def onDebugPushButtonClicked(self, checked):
+        dialog = ConsoleDialog(self, title=f"Console #{len(self.console_dialogs) + 1}")
+
+        # Connect this dialog to the shared stream
+        self.stream.text_emitted.connect(dialog.append_html)
+
+        # Disconnect when the dialog is closed (prevents errors later)
+        def on_finished():
+            try:
+                self.stream.text_emitted.disconnect(dialog.append_html)
+            except TypeError:
+                pass  # already disconnected
+            if dialog in self.console_dialogs:
+                self.console_dialogs.remove(dialog)
+
+        dialog.finished.connect(on_finished)
+
+        self.console_dialogs.append(dialog)
+        dialog.show()
+        self.raise_()
+
     def quit_application(self):
         """
         Quit the application
@@ -688,6 +714,23 @@ class _CreateRamdisk(QMainWindow):
             }
         """)
 
+        self.ui.debugPushButton.setStyleSheet("""
+            QPushButton {
+                background: #e0e0e0;
+                color: #000000;
+                border: 1px solid #888888;
+                border-radius: 4px;
+                padding: 4px;
+            }
+            QPushButton:focus {
+                border: 3px solid #0078d7; /* Heavy blue border */
+                background: #e6f3ff; /* Light blue tint */
+            }
+            QPushButton:hover {
+                background: #d0d0d0;
+            }
+        """)
+
         self.ui.tableWidget.setStyleSheet("""
             QTableWidget {
                 background: #ffffff;
@@ -770,6 +813,22 @@ class _CreateRamdisk(QMainWindow):
             }
         """)
         self.ui.quitPushButton.setStyleSheet("""
+            QPushButton {
+                background: #3c3c3c;
+                color: #ffffff;
+                border: 1px solid #555555;
+                border-radius: 4px;
+                padding: 4px;
+            }
+            QLineEdit:focus {
+                border: 3px solid #0078d7; /* Heavy blue border */
+                background: #2f4a6d; /* Darker light blue tint */
+            }
+            QPushButton:hover {
+                background: #4a4a4a;
+            }
+        """)
+        self.ui.debugPushButton.setStyleSheet("""
             QPushButton {
                 background: #3c3c3c;
                 color: #ffffff;
