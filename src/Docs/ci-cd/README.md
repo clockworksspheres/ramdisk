@@ -1,20 +1,20 @@
-# ci-cd
+# CI/CD
 
 
-# OS specifics
+## OS specifics
 
 * [Linux](linux/README.md)
 * [macOS](macos/README.md)
 * [Windows](windows/README.md)
 
-# VMs
+## VMs
 
 * [VM Wrangling](vmWrangling/README.md)
 
-# Pipeline Servers 
+## Pipeline Servers 
 
 * [Pipeline Servers](PipelineServers/README.md)
 
-# Pipelines
+## Pipelines
 
 * [Pipelines](pipelines/README.md)
