@@ -36,7 +36,7 @@ ___umount(device)___: Function to unmount the ramdisk assigned 'device'.
 ___eject(device)___: Duplicate function to unmount the ramdisk assigned to 'device'
 * device: the operating system device the RamDisk is attached to.
 
-# [System Specifics](src/Docs/SystemSpecifics/README.md)
+# [System Specifics](SystemSpecifics/README.md)
 
 # [ci-cd](ci-cd/README.md)
 
