@@ -1,4 +1,4 @@
-s# Set Up Jenkins Adding Windows Agent
+# Set Up Jenkins Adding Windows Agent
 
 
 ## Create a new user
