@@ -4,6 +4,8 @@
 
 Contains support documentation discussion on various specific topics, including issues faced when building this project, and setting up the various test environments and CI/CD related activities.
 
+__NOTE:__ A lot of the documentation found in this tree are conversations with AI on the issue at hand.
+
 ## [Background](../../README.md)
 
 # Usage
