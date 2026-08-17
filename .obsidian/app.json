@@ -6,5 +6,6 @@
     "margin": "0",
     "downscalePercent": 48
   },
-  "showUnsupportedFiles": true
+  "showUnsupportedFiles": true,
+  "alwaysUpdateLinks": true
 }

@@ -2,15 +2,15 @@
 
 There is no cross platform way to create or access vram as a ramdisk.  One would have to write a low level driver in each operating system to access the graphics card hardware to create a ramdisk driver for each OS.
 
-# on macOS
+## on macOS
 
-Without writing a low level GPU Memory driver, this is not possible on macOS.  Please see the copilot documentation.
+Without writing a low level GPU Memory driver, this is not possible on macOS.  Please see the [copilot documentation](copilotNvidiaRamdiskResearch.md).
 
-# on Linux
+## on Linux
 
 This is has a better chance of success as Linux does expose GPU-side block device abstraction.  One still has to write low level driver for something close to a ramdisk to work.  There is an experimental FUSE filesystem called vramfs.  Note, it is not stable.  What is fully supported and stable on linux is CUDA/OpenCL/Vulkan/HIP GPU memory allocation.  
 
-# on Windows
+## on Windows
 
 It appears This OS is somwthat of a middle ground between the two above - still requires writing a low level ramdisk driver.
 
@@ -26,5 +26,5 @@ It appears This OS is somwthat of a middle ground between the two above - still 
 
 # References:
 
-See the "copilotNvidiaRamdiskResearch" document.
+See the "[copilotNvidiaRamdiskResearch](copilotNvidiaRamdiskResearch.md)" document.
 
