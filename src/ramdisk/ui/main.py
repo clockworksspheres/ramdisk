@@ -270,6 +270,7 @@ class _CreateRamdisk(QMainWindow):
         if sys.platform.lower().startswith("win32"):
             # non-modal on Windows11 only works if None is passed in rather than self.
             # problem is, all windows have to be closed separately...
+            # fixed - check out closeEvent method - QApplication.closeAllWindows()
             self.conDialog = ConsoleDialog(None, title=f"Console #{len(self.console_dialogs) + 1}")
         else:
             self.conDialog = ConsoleDialog(self, title=f"Console #{len(self.console_dialogs) + 1}")
