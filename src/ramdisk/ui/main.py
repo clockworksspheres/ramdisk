@@ -267,7 +267,12 @@ class _CreateRamdisk(QMainWindow):
         sys.stdout = self.stream
         sys.stderr = self.stream
 
-        self.conDialog = ConsoleDialog(self, title=f"Console #{len(self.console_dialogs) + 1}")
+        if sys.platform.lower().startswith("win32"):
+            # non-modal on Windows11 only works if None is passed in rather than self.
+            # problem is, all windows have to be closed separately...
+            self.conDialog = ConsoleDialog(None, title=f"Console #{len(self.console_dialogs) + 1}")
+        else:
+            self.conDialog = ConsoleDialog(self, title=f"Console #{len(self.console_dialogs) + 1}")
 
         print("exiting init...")
 
@@ -532,6 +537,9 @@ class _CreateRamdisk(QMainWindow):
         reply = QMessageBox.question(self, 'Message', 'Are you sure you want to quit?\n\nYour ramdisk list will be re-populated with current ramdisks.',
                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
         if reply == QMessageBox.Yes:
+            if sys.platform.lower().startswith("win32"):
+                # Required for the way the self.conDialog is instanciated on Windows
+                QApplication.closeAllWindows()
             event.accept()  # Let the window close
         else:
             event.ignore()  # Prevent the window from closing
