@@ -30,6 +30,19 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 New-Item -Path ".\NewDirectory" -ItemType Directory -Force
 ```
 
+## Recursively deleting a directory
+
+``` powershell
+Remove-Item -Path "C:\Path\To\Folder" -Recurse -Force   
+```
+
+## Recursively copying a directory
+
+``` powershell
+Copy-Item -Path "C:\SourceFolder\*" -Destination "C:\DestinationFolder" -Recurse   
+```
+
+
 # References:
 
 ## Powershell references:
