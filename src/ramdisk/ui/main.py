@@ -1,35 +1,17 @@
 #!/usr/bin/env -S python -u
 
-import datetime
-import logging
 import traceback
 
-
-from PySide6.QtCore import QCoreApplication, QEvent, QSize, Qt, Slot, QTimer
-from PySide6.QtGui import QCursor, QDragMoveEvent, QDropEvent, QFont, QColor
-from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea,
-                               QApplication, QFrame, QLabel, QListWidget,
-                               QListWidgetItem, QMainWindow, QPushButton,
-                               QSizePolicy, QSpacerItem, QVBoxLayout, QWidget,
-                               QMessageBox, QDialog, QDialogButtonBox,
-                               QGraphicsDropShadowEffect, QTableWidget,
+from PySide6.QtCore import Qt, Slot, QTimer
+from PySide6.QtGui import QColor, QIntValidator
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QLabel, 
+                               QMainWindow, QPushButton, QVBoxLayout,
+                               QWidget, QMessageBox, QDialog, 
+                               QDialogButtonBox, QTableWidget,
                                QTableWidgetItem, QHeaderView, QLineEdit)
-
 
 import sys 
 from pathlib import Path
-
-'''
-from PySide6.QtCore import Slot, Qt, QEvent
-from PySide6.QtGui import QColor
-from PySide6.QtWidgets import (QApplication, QLabel, QMainWindow, QPushButton,
-                               QVBoxLayout, QMessageBox, QDialog, QTableWidget,
-                               QTableWidgetItem, QHeaderView, QAbstractItemView)
-'''
-
-# from PySide6.QtWidgets import QApplication, QDialog, QMainWindow, QPushButton, QVBoxLayout, QLabel, QDialogButtonBox
-# from PySide6.QtWidgets import QMessageBox
-from PySide6.QtGui import QIntValidator
 
 
 #--- non-native python libraries in this source tree
@@ -96,12 +78,7 @@ class RamdiskCustomMessageDialog(QDialog):
 
         # Connect the OK button to the accept slot
         button_box.accepted.connect(self.accept)
-        '''
-        self.button = QPushButton("Ok")
-        self.button.setDefault(True)
-        self.button.accepted.connect(self.accept)
-        layout.addWidget(self.button)
-        '''
+
         # Set the layout
         self.setLayout(layout)
 
@@ -395,13 +372,6 @@ class _CreateRamdisk(QMainWindow):
                         # Make sure to use the device column, not the mount point column.
                         if col == 1:
 
-
-
-
-
-
-
-
                             window = _LocalAuth()
 
                             window.credsSig.connect(self.getCreds)
@@ -414,14 +384,6 @@ class _CreateRamdisk(QMainWindow):
                                 
                             else:
                                 print("Dialog rejected, will not unmount disk")
-
-
-
-
-
-
-
-
 
                         else:
                             continue
