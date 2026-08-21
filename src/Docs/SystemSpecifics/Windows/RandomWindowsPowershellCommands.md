@@ -43,6 +43,14 @@ Copy-Item -Path "C:\SourceFolder\*" -Destination "C:\DestinationFolder" -Recurse
 ```
 
 
+## Get help on a command:
+
+``` powershell
+Get-Help Remove-Item -Full
+```
+
+
+
 # References:
 
 ## Powershell references:
