@@ -33,7 +33,7 @@ exe = EXE(
     name='ramdisk-setup',
     debug=False,
     bootloader_ignore_signals=False,
-    strip=True,
+    strip=False,
     upx=False,             # <-- No UPX = faster load
     upx_exclude=[],
     runtime_tmpdir="%TEMP%",
