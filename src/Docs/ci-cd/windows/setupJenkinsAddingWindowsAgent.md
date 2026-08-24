@@ -20,7 +20,29 @@ Enable powershell scripts to run for this powershell session
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
 ```
 
-Install the sshd service
+ \- or - 
+
+``` powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
+- **Duration**: **Bypass -Scope Process** is temporary (session-only); **RemoteSigned -Scope CurrentUser** is persistent for the user profile. 
+    
+- **Security**: **Bypass** offers no protection against malicious code; **RemoteSigned** maintains security by enforcing signatures on external scripts.
+    
+- **Permissions**: **Bypass -Scope Process** works without admin rights; **RemoteSigned -Scope CurrentUser** also works without admin rights but modifies the user's registry settings permanently.
+
+### Key Effects of `-Force`
+
+- **Non-Interactive Execution**: Without `-Force`, PowerShell asks: _"Are you sure you want to change the execution policy?"_ requiring a manual "Y" or "A" response. The `-Force` flag automatically confirms this, allowing the command to run silently.
+    
+- **Automation Friendly**: It is essential for scripts, scheduled tasks, or remote commands (via `Invoke-Command`) where no user is present to answer the prompt. 
+    
+- **No Security Impact**: The flag **does not** bypass security restrictions, Group Policy overrides, or change the scope of the policy.  It strictly affects the user interface interaction.
+
+# Install and Configure the SSHD Service
+
+Install the [sshd service](../../SystemSpecifics/Windows/sshdNssh/SettingUpSshdOnWindows.md) for Windows
 
 ``` powershell
 Start-Service sshd
