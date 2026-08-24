@@ -51,6 +51,18 @@ pipeline {
                         }
                     }
                 }
+                stage('Windows Pipeline') {
+                    agent { label 'windows' }
+                    stages {
+                        stage('windows Build') { 
+                            steps {
+                                dir('src/BuildScripts') {
+                                    sh './build.windows.ps1' 
+                                } 
+                            }
+                        }
+                    }
+                }
             }
         }
         stage('Parallel test pipelines') {
