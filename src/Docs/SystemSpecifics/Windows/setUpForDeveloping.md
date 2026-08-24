@@ -35,6 +35,7 @@ choco install less
 choco install obsidian
 choco install which
 choco install grep
+choco install meld
 ```
 
 Download and install positron from:  https://positron.posit.co/download.html
