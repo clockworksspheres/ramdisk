@@ -57,7 +57,7 @@ pipeline {
                         stage('windows Build') { 
                             steps {
                                 dir('src/BuildScripts') {
-                                    sh './build.windows.ps1' 
+                                    powershell './build.windows.ps1' 
                                 } 
                             }
                         }
