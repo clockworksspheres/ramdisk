@@ -7,7 +7,7 @@ Installing tools to set up for building the project.  Some help gained from AI, 
 Chocolatey is a package manager for Windows, similar to homebrew for macos, apt for debian linux based systems and yum/dnf for redhat based systems.
 
 To install chocolatey, open an admin powershell, and run the following:
-d
+
 ```
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 ```
@@ -26,7 +26,7 @@ To use chocolatey, close the powershell window, and open a new admin powershell 
 * less
 * favorite editor (project prefers positron)
 
-### With Chocolaty
+### With Chocolatey
 
 ```
 choco install python3
@@ -46,7 +46,7 @@ Git, less and python should now be in the administrative shell path and work fin
 
 Run:
 
-```
+``` powershell
 git config --global core.autocrlf false
 ```
 
