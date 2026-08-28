@@ -39,7 +39,7 @@ pipeline {
                 stage('Debian 13 Pipeline') {
                     agent { label 'debian' }
                     environment {
-                        VENV = "../../packenv"
+                        VENV = "../../projEnv"
                         QT_QPA_PLATFORM = "offscreen"
                     }
                     stages {
@@ -63,7 +63,7 @@ pipeline {
                 stage('Ubuntu 2404 Pipeline') {
                     agent { label 'ubuntu2404' }
                     environment {
-                        VENV = "../../packenv"
+                        VENV = "../../projEnv"
                         QT_QPA_PLATFORM = "offscreen"
                     }
                     stages {
