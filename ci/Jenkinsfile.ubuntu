@@ -39,11 +39,11 @@ pipeline {
                 stage('Ubuntu 26.04 Pipeline') {
                     agent { label 'ubuntu2604' }
                     environment {
-                        VENV = "../../packenv"
+                        VENV = "../../projEnv"
                         QT_QPA_PLATFORM = "offscreen"
                     }
                     stages {
-                        stage('debian 13 Test') { 
+                        stage('Ubuntu 2604 Test') { 
                             steps {
                                 dir('src/ramdisk/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
@@ -63,7 +63,7 @@ pipeline {
                 stage('Ubuntu 2404 Pipeline') {
                     agent { label 'ubuntu2404' }
                     environment {
-                        VENV = "../../packenv"
+                        VENV = "../../projEnv"
                         QT_QPA_PLATFORM = "offscreen"
                     }
                     stages {
