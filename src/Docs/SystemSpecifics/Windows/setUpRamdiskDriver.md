@@ -12,27 +12,49 @@ Licensing and information about [AIMtk here](https://arsenalrecon.com/products/a
 
 Download the following two 7zip files:
 
-* [Driver Setup](https://github.com/ArsenalRecon/Arsenal-Image-Mounter/tree/master/DriverSetup)
+* [Arsenal Image Mounter](https://github.com/ArsenalRecon/Arsenal-Image-Mounter/tree/master/Command%20line%20applications?) (aim_ll.zip)
 
-* [Arsenal Image Mounter](https://github.com/ArsenalRecon/Arsenal-Image-Mounter/tree/master/Command%20line%20applications?) 
-
+* [Driver Setup](https://github.com/ArsenalRecon/Arsenal-Image-Mounter/tree/master/DriverSetup) (DriverSetup.7z)
 
 Uncompress the files, then do the following, in an administrator powershell window.
+
+Create locations for the software:
 
 ``` powershell
 Set-ExecutionPolicy Bypass -Scope Process -Force
 mkdir "c:\Program Files\Arsenal Image Mounter"
 mkdir "c:\Probram Files\Arsenal Image Mounter\DriverSetup"
-robocopy "<root of DriverSetup>\DriverSetup" "c:\Program Files\Arsenal Image Mounter\DriverSetup" /E /COPYALL /R:3 /W:5
-robocopy "<root of aim_ll>" "C:\Program Files\Arsenal Image Mounter" /E /COPYALL /R:3 /W:5
+```
+
+Copy the Driver software:
+
+``` powershell
+robocopy "<root of DriverSetup>" "c:\Program Files\Arsenal Image Mounter\DriverSetup" /E /COPYALL /R:3 /W:5
+```
+
+where "root of DriverSetup" could be "C:\Users\<username>\Downloads\DriverSetup" - NOTE: do not use trailing "\" in the paths, robocopy doesn't like it, unlike rsync.
+
+Copy the command line executable:
+
+``` powershell
+robocopy "<root of aim_ll>\" "C:\Program Files\Arsenal Image Mounter" /E /COPYALL /R:3 /W:5
+```
+
+where "root of aim_ll" could be "C:\Users\<username>\Downloads\aim_ll"
+
+Install the driver:
+
+``` powershell
 cd "C:\Program Files\Arsenal Image Mounter\<hw-type>"
 .\aim_ll.exe --install "C:\Program Files\Arsenal Image Mounter\DriverSetup"
 ```
 
 Now reboot the system.
 
+Put the x64 aim_ll.exe in the environment path:
+
 ``` powershell
-[Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Program Files\Arsenal Image Mounter\DriverSetup\cli\x64", [EnvironmentVariableTarget]::User)
+[Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Program Files\Arsenal Image Mounter\x64", [EnvironmentVariableTarget]::User)
 ```
 
 Now that aim_ll.exe is in the path, close all your powershell, terminal, etc shells, and open new ones, and aim_ll.exe should now be available at the command line.
