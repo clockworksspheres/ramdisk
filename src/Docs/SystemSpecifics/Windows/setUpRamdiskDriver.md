@@ -23,7 +23,7 @@ Create locations for the software:
 ``` powershell
 Set-ExecutionPolicy Bypass -Scope Process -Force
 mkdir "c:\Program Files\Arsenal Image Mounter"
-mkdir "c:\Probram Files\Arsenal Image Mounter\DriverSetup"
+mkdir "c:\Program Files\Arsenal Image Mounter\DriverSetup"
 ```
 
 Copy the Driver software:
@@ -37,7 +37,7 @@ where "root of DriverSetup" could be "C:\Users\<username>\Downloads\DriverSetup"
 Copy the command line executable:
 
 ``` powershell
-robocopy "<root of aim_ll>\" "C:\Program Files\Arsenal Image Mounter" /E /COPYALL /R:3 /W:5
+robocopy "<root of aim_ll>" "C:\Program Files\Arsenal Image Mounter" /E /COPYALL /R:3 /W:5
 ```
 
 where "root of aim_ll" could be "C:\Users\<username>\Downloads\aim_ll"
