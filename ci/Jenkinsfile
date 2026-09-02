@@ -151,8 +151,7 @@ pipeline {
                                     powershell """
                                         ls
                                         ${VENV}/Scripts/Activate.ps1
-                                        sudo ${VENV}/Scripts/python -m pytest -v --junit-xml test-reports/results.xml
-                                        sudo chgrp -R sudo test-reports
+                                        ${VENV}/Scripts/python -m pytest -v --junit-xml test-reports/results.xml
                                     """
                                     echo '----------=====### Finished Tests ###=====----------'
                                     junit 'test-reports/results.xml'
