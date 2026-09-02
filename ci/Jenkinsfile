@@ -150,8 +150,8 @@ pipeline {
                                     echo '----------=====### Starting Tests ###=====----------'
                                     powershell """
                                         ls
-                                        ${VENV}/bin/Activate.ps1
-                                        sudo ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
+                                        ${VENV}/Scripts/Activate.ps1
+                                        sudo ${VENV}/Scripts/python -m pytest -v --junit-xml test-reports/results.xml
                                         sudo chgrp -R sudo test-reports
                                     """
                                     echo '----------=====### Finished Tests ###=====----------'
