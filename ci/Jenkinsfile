@@ -150,7 +150,7 @@ pipeline {
                                     echo '----------=====### Starting Tests ###=====----------'
                                     powershell """
                                         ls
-                                        . ${VENV}/bin/Activate.ps1
+                                        ${VENV}/bin/Activate.ps1
                                         sudo ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
                                         sudo chgrp -R sudo test-reports
                                     """
