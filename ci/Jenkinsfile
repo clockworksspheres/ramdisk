@@ -141,7 +141,7 @@ pipeline {
                 stage('Windows Pipeline') {
                     agent { label 'windows' }
                     environment {
-                        VENV = "../../packenv"
+                        VENV = "../../projEnv"
                     }
                     stages {
                         stage('Windows Test') { 
