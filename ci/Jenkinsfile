@@ -149,7 +149,7 @@ pipeline {
                                 dir('src/ramdisk/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
                                     powershell """
-                                        ls -l
+                                        ls
                                         . ${VENV}/bin/Activate.ps1
                                         sudo ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
                                         sudo chgrp -R sudo test-reports
