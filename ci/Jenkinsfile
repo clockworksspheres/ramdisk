@@ -138,6 +138,29 @@ pipeline {
                         }
                     }
                 }
+                stage('Windows Pipeline') {
+                    agent { label 'windows' }
+                    environment {
+                        VENV = "../../packenv"
+                    }
+                    stages {
+                        stage('Windows Test') { 
+                            steps {
+                                dir('src/ramdisk/tests') {
+                                    echo '----------=====### Starting Tests ###=====----------'
+                                    powershell """
+                                        ls -l
+                                        . ${VENV}/bin/Activate.ps1
+                                        sudo ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
+                                        sudo chgrp -R sudo test-reports
+                                    """
+                                    echo '----------=====### Finished Tests ###=====----------'
+                                    junit 'test-reports/results.xml'
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         stage('post-parallel') {
