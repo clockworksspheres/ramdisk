@@ -15,7 +15,7 @@ Installing "kde-standard" will take some time.
 # Installing and Setting Up OS packages
 
 ```
-sudo ln -s /usr/bin/python3 /usr/local/bin/python
+sudo apt install python-is-python3
 sudo apt install python3-tk
 sudo apt install python3-pip
 sudo apt install python3-pytest
@@ -24,8 +24,7 @@ sudo apt install python3-pylint-common
 sudo apt install python3-astroid
 sudo apt install vim
 sudo apt install git
-sudo apt install dia dia-common dia-shapes dia2code
-sudo apt install slack
+sudo apt install drawio
 sudo apt install vym
 sudo apt install umbrello
 sudo ln -s /usr/bin/umbrello5 /usr/local/bin/umbrello
@@ -40,6 +39,7 @@ sudo apt install snapd
 sudo snap install core
 sudo snap refresh core
 sudo snap install brave
+sudo snap install --classic code # install vscode
 sudo snap install obsidian --classic # does not work on arm platforms
 sudo snap install drawio # does not work on arm platforms
 sudo snap install zotero-snap # does not work on arm platforms, must be executed as zotero-snap
