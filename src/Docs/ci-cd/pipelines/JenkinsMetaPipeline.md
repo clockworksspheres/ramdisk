@@ -11,6 +11,8 @@ __not yet implemented__
 
 At this time, the Jenkins server is run in Docker on a macOS host, with Docker Desktop.  This will be automated in the future.
 
+Starting to design an AI pipeline.  The architecture design and implementation will use __LOCAL__ LLM's and MCP servers.
+
 ### Start hypervisors
 
 This document is built on the Linux VM's being built on VMware Fusion, macOS VM's built on UTM - all on an M4 based macOS host.
