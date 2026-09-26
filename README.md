@@ -40,13 +40,13 @@ Unmounting a ramdisk is much faster than removing or erasing a potentially large
 
 The code has two active branches, ux (not necessarily stable) and master (stable).  The goal is to only merge to ux to master when functionality is stable and tests have passed.
 
-Initially developed for python 2.6, but code has since been migrated to 3.9+.  Not believed to work on the python 2 branch any longer.
+Initially developed for python 2.6, but code has since been migrated to 3.10+.  Not believed to work on the python 2 branch any longer.
 
 ## Used As a [library](src/Docs/README.md) - Developed for macOS, Linux and Windows
 
 ### macRamdisk
 
-tested on macOS Sequoia, Sierra, Ventura, Sonoma, Tahoe
+tested on macOS Sequoia, Sierra, Ventura, Sonoma, Tahoe and Golden Gate.
 
 Instantiating the RamDisk class will create a ramdisk that you can use - in chunks of 1Mb.
 
@@ -56,7 +56,7 @@ ramdisks do not need to be managed by root on macOS.   Tests & DevOps creating a
 
 #### linuxTmpfsRamdisk
 
-tested on Rocky 9, 10 and Ubuntu 24.04 as well as Debian 13.  
+tested on Rocky 9, 10 and Ubuntu 24.04 and 26.04 as well as Debian 13.  
 
 Ramdisk class that can use either current method for creating a ramdisk on Linux, currently working on a tmpfs version....  Tests & DevOps creating and managing ramdisks must be carefully managed by root.
 
@@ -81,7 +81,7 @@ The examples directory provides examples on how to use various libraries, even b
 
 The ramdisk example code is cross platform in an beta state.
 
-In the parent directory of the examples directory is ramdisk-setup.py, which is an example of using a pyside6 interface for the ramdisk library.
+In the parent directory of the examples directory is ramdisk-setup.py, which is an example of using a PySide6 interface for the ramdisk library.
 
 -----
 
@@ -97,7 +97,7 @@ eisenban package can be found at:  https://github.com/clockworksspheres/eisenban
 
 ## Languages
 
-Currently written/tested in only python v3.9+, but examples do not work (specifically ramdisk-setup.py) with the latest version of python
+Currently written/tested in only python v3.10+, but examples do not work (specifically ramdisk-setup.py) with the latest version of python
 
 Future plans to duplicate libraries, tests and examples in other languages as well.  Potential next language targets are Go, Rust and C++.
 
