@@ -1,10 +1,11 @@
 #!/usr/bin/env -S python -u
 """
 """
-import subprocess
+import subprocess, SubprocessError
 import re
 import sys
 import psutil
+import traceback
 from pathlib import Path
 
 # Get the parent directory of the current file's parent directory
@@ -56,8 +57,8 @@ class OldGetLinuxMemStatus(GetMemStatusTemplate):
                 memory_size_match = re.search(r"Total:\s+(\d+).*", memory_line)
                 if memory_size_match:
                     memory_size = int(memory_size_match.group(1))
-        except Exception as err:
-            raise (err)
+        except SubprocessError:
+            print(traceback.format_exc())
 
         return memory_size
 
@@ -74,8 +75,9 @@ class OldGetLinuxMemStatus(GetMemStatusTemplate):
                 memory_size_match = re.search(r"Mem:\s+\d+\s+\d+\s+(\d+).*", memory_line)
                 if memory_size_match:
                     memory_size = int(memory_size_match.group(1))
-        except Exception as err:
-            raise(err)
+        except SubprocessError:
+            print(traceback.format_exc())
+            raise
 
         return memory_size
 

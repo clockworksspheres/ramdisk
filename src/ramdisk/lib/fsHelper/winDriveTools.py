@@ -7,7 +7,7 @@ def getDrivePath(path):
     """
     get the drive out of the path
     """
-    drive, tail = os.path.splitdrive(path)
+    drive, _ = os.path.splitdrive(path)
     #print(drive)
     return drive
 
@@ -33,15 +33,12 @@ def findDrive(path):
             drivelist = []
             line = str(line)
             if re.search(":\\\\$", line):
-                try:
-                    drive = getDrivePath(line)
-                    drivelist.append(drive)
-                except:
-                    pass
 
-        except IOError as err:
-            print(f"{err}")
-            print(traceback.format_exc(err))
+                drive = getDrivePath(line)
+                drivelist.append(drive)
+
+        except OSError:
+            print(traceback.format_exc())
 
     drive = getDrivePath(path)
     if drive in drivelist:
@@ -52,8 +49,7 @@ def findDrive(path):
         
 
 def findMountName(device):
-    """
-    """
+
     result = subprocess.run(["aim_ll", "-l", "-u", device], capture_output=True, text=True)
     
     mntName = ""

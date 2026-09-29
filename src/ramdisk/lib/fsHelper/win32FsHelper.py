@@ -13,22 +13,18 @@ sys.path.append(appendDir)
 #--- non-native python libraries in this source tree
 # import ramdisk
 from ramdisk.lib.loggers import CyLogger
-from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.run_commands import RunWith
 
 
 class FsHelpers(object):
-    """
-    """
+
     def __init__(self):
-        """
-        """
+ 
         self.logger = CyLogger()
         self.runner = RunWith(self.logger)
 
     def getFsBlockSize(self, path="c:"):
-        """
-        """
+
         success = False
         blockSize = 0
         # Run logic or command to get block size        
@@ -45,7 +41,7 @@ class FsHelpers(object):
         cmd = ["fsutil", "fsinfo", "ntfsinfo", path]
         self.runner.setCommand(cmd)
         self.runner.communicate()
-        retval, reterr, retcode = self.runner.getNlogReturns()
+        retval, _, _ = self.runner.getNlogReturns()
 
         # look for bytes per sector - for bytes per sector then for
         # bits per sector, multiply by 8
@@ -65,4 +61,3 @@ if __name__=="__main__":
     # Include the parent project directory in the PYTHONPATH
     appendDir = "/".join(os.path.abspath(os.path.dirname(__file__)).split('/')[:-3])
     print(appendDir)
-

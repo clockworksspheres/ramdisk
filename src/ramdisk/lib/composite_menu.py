@@ -8,9 +8,6 @@ import re
 import sys
 import tty
 import termios
-from pathlib import Path
-
-#sys.path.append("..")
 
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp

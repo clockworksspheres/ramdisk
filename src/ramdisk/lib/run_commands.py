@@ -8,13 +8,10 @@ Library for running executables from the command line in different ways
 import os
 import re
 import sys
-#import time
-#import types
 import select
 import subprocess
 import threading
 import traceback
-# import tracemalloc
 from subprocess import Popen, PIPE
 from subprocess import SubprocessError as SubprocessError
 from pathlib import Path
@@ -56,7 +53,7 @@ class CannotAcquirePasswordError(BaseException):
         BaseException.__init__(self, *args, **kwargs)
 
 
-class RunWith(object):
+class RunWith:
     """
     Class that will run commands in various ways.
 
@@ -113,6 +110,7 @@ class RunWith(object):
         """
         initialize a command to run
         """
+        self.creationflags = creationflags
         #####
         # Handle Popen's shell, or "myshell"...
         if command and isinstance(command, list):
@@ -164,13 +162,13 @@ class RunWith(object):
                                 "CREATE_DEFAULT_ERROR_MODE",
                                 "CREATE_BREAKAWAY_FROM_JOB"
                                ]
-        self.logger.log(lp.INFO, "creationflags: {0}".format(str(creationflags)))
-        self.creationflags = ""
-        # if creationflags is not None:
-        #    if re.search(",", creationflags):
-        #        self.creationflags = re.sub(",", " | ", creationflags)
-        #if creationflags is True:
-        #    self.creationflags = DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP
+        self.logger.log(lp.INFO, f"creationflags: {self.creationflags}")
+
+        if self.creationflags and re.search(",", self.creationflags):
+            self.creationflags = re.sub(",", " | ", self.creationflags)
+
+        if self.creationflags:
+            self.creationflags = "DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP"
 
     ###########################################################################
 
@@ -274,7 +272,7 @@ class RunWith(object):
                 self.logger.log(lp.WARNING, "stderr: " + str(self.stderr))
                 self.logger.log(lp.WARNING, traceback.format_exc())
                 self.logger.log(lp.WARNING, str(err))
-                raise err
+                raise SubprocessError("RunWith.communicate throwing an exception")
             else:
                 if not silent:
                     self.logger.log(lp.DEBUG, "Done with: " + self.printcmd)
@@ -343,7 +341,7 @@ class RunWith(object):
                 self.logger.log(lp.WARNING, "stderr: " + str(self.stderr))
                 self.logger.log(lp.WARNING, traceback.format_exc())
                 self.logger.log(lp.WARNING, str(err))
-                raise err
+                raise SubprocessError("RunWith.wait throwing an exception")
             else:
                 if not silent:
                     self.logger.log(lp.DEBUG, "Done with: " + self.printcmd)
@@ -414,11 +412,11 @@ class RunWith(object):
                                 if re.search(chk_string, tmpline):
                                     try:
                                         proc.stdout.close()
-                                    except SubprocessError as err:
+                                    except SubprocessError:
                                         self.logger.log(lp.INFO, traceback.format_exc())
                                     try:
                                         proc.stderr.close()
-                                    except SubprocessError as err:
+                                    except SubprocessError:
                                         self.logger.log(lp.INFO, traceback.format_exc())
 
                                     if respawn:
@@ -438,12 +436,12 @@ class RunWith(object):
                                     if chk_string(mystring, tmpline):
                                         try:
                                             proc.stdout.close()
-                                        except SubprocessError as err:
+                                        except SubprocessError:
                                             self.logger.log(lp.INFO, traceback.format_exc())
 
                                         try:
                                             proc.stderr.close()
-                                        except SubprocessError as err:
+                                        except SubprocessError:
                                             self.logger.log(lp.INFO, traceback.format_exc())
 
                                         proc.stderr.close()
@@ -476,12 +474,12 @@ class RunWith(object):
                                 if re.search(chk_string, tmpline):
                                     try:
                                         proc.stdout.close()
-                                    except SubprocessError as err:
+                                    except SubprocessError:
                                         self.logger.log(lp.INFO, traceback.format_exc())
 
                                     try:
                                         proc.stderr.close()
-                                    except SubprocessError as err:
+                                    except SubprocessError:
                                         self.logger.log(lp.INFO, traceback.format_exc())
 
                                     if respawn:
@@ -501,12 +499,12 @@ class RunWith(object):
                                     if chk_string(mystring, tmpline):
                                         try:
                                             proc.stdout.close()
-                                        except SubprocessError as err:
+                                        except SubprocessError:
                                             self.logger.log(lp.INFO, traceback.format_exc())
 
                                         try:
                                             proc.stderr.close()
-                                        except SubprocessError as err:
+                                        except SubprocessError:
                                             self.logger.log(lp.INFO, traceback.format_exc())
 
                                         if respawn:
@@ -524,11 +522,11 @@ class RunWith(object):
                 proc.wait()
                 try:
                     proc.stdout.close()
-                except SubprocessError as err:
+                except SubprocessError:
                     self.logger.log(lp.INFO, traceback.format_exc())
                 try:
                     proc.stderr.close()
-                except SubprocessError as err:
+                except SubprocessError:
                     self.logger.log(lp.INFO, traceback.format_exc())
 
                 self.retcode = proc.returncode
@@ -540,7 +538,7 @@ class RunWith(object):
                 self.logger.log(lp.WARNING, "stderr: " + str(self.stderr))
                 self.logger.log(lp.WARNING, traceback.format_exc())
                 self.logger.log(lp.WARNING, str(err))
-                raise err
+                raise SubprocessError("RunWith.waitNpassThruStdout throwing an exception")
             else:
                 if not silent:
                     self.logger.log(lp.DEBUG, "Done with: " + self.printcmd)
@@ -600,7 +598,7 @@ class RunWith(object):
                 self.logger.log(lp.WARNING, "stderr: " + str(self.stderr))
                 self.logger.log(lp.WARNING, traceback.format_exc())
                 self.logger.log(lp.WARNING, str(err))
-                raise err
+                raise SubprocessError("RunWith.timeout throwing and exception")
             else:
                 if not silent:
                     self.logger.log(lp.DEBUG, "Done with: " + self.printcmd)
@@ -834,7 +832,8 @@ class RunWith(object):
                 self.logger.log(lp.WARNING, "command: " + str(self.command))
             return 255
         else:
-            output = "".encode()
+            #  output = "".encode()
+            output = ""
             sudocmd = ["/usr/bin/sudo", "-S"]
 
             if isinstance(self.command, list):
@@ -964,7 +963,8 @@ class RunWith(object):
                 self.logger.log(lp.WARNING, "command: " + str(self.command))
             return(255)
         else:
-            output = "".encode()
+            #  output = "".encode()
+            output = ""
             sudocmd = ["/usr/bin/sudo-rs", "-S"]
 
             if isinstance(self.command, list):
@@ -1129,7 +1129,7 @@ class RunWith(object):
                             # Send the password
                             #os.write(master, b"your_password\n")
                             os.write(master, f"{passwd}\n".encode())
-                        except Exception as err:
+                        except (BrokenPipeError, BlockingIOError, OSError, TypeError):
                             raise CannotAcquirePasswordError("can't acquire the password, and input it to the command")
                     # Clear the output buffer to avoid re-matching the prompt
                     output = ""
@@ -1156,11 +1156,13 @@ class RunWith(object):
                     sys.stdout.flush()
             except OSError:
                 pass
+                """
                 try:
                     # Close the master fd
                     os.close(master)
                 except OSError:
-                    pass   
+                    pass
+                """
 
         return found_prompt, output
 
@@ -1220,7 +1222,7 @@ class RunThread(threading.Thread):
                                 str(self.command))
                 self.logger.log(lp.WARNING, traceback.format_exc())
                 self.logger.log(lp.WARNING, str(err))
-                raise err
+                raise SubprocessError("RunThread.run throwing and exception")
             else:
                 try:
                     self.retout, self.reterr = p.communicate()
@@ -1229,7 +1231,7 @@ class RunThread(threading.Thread):
                                     str(self.printcmd))
                     self.logger.log(lp.WARNING, "Associated exception: " +
                                     str(err))
-                    raise err
+                    raise SubprocessError("RunThread.run throwing and exception")
                 else:
                     self.logger.log(lp.WARNING, "Finished \"run\" of: " +
                                     str(self.printcmd))

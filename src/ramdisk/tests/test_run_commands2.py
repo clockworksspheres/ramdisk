@@ -210,13 +210,13 @@ class TestSetCommand(unittest.TestCase):
 
     # ── creationflags ─────────────────────────────────────────────────────────
     """
-    # NOT SUPPORTED BY run_commands
+    # NOT SUPPORTED BY run_commands (yet) Should probably only run tests on Windows
     def test_creationflags_true_sets_detached_flags(self):
         self.rw.setCommand("notepad", creationflags=True)
         expected = (subprocess.DETACHED_PROCESS |
                     subprocess.CREATE_NEW_PROCESS_GROUP)
         self.assertEqual(self.rw.creationflags, expected)
-    """
+
     def test_creationflags_none_sets_empty_string(self):
         self.rw.setCommand("ls")
         self.assertEqual(self.rw.creationflags, "")
@@ -224,7 +224,7 @@ class TestSetCommand(unittest.TestCase):
     def test_creationflags_false_sets_empty_string(self):
         self.rw.setCommand("ls", creationflags=False)
         self.assertEqual(self.rw.creationflags, "")
-
+    """
     # ── error cases ───────────────────────────────────────────────────────────
 
     def test_none_command_raises_set_command_type_error(self):
@@ -553,7 +553,7 @@ class TestTimeoutMethod(unittest.TestCase):
 
         rw = RunWith(use_logger=False)
         rw.setCommand("sleep 0")
-        out, err, rc, timed_out = rw.timeout(5)
+        _, _, _, timed_out = rw.timeout(5)
 
         timer_instance.start.assert_called_once()
         timer_instance.cancel.assert_called_once()
@@ -580,7 +580,7 @@ class TestTimeoutMethod(unittest.TestCase):
 
     def test_no_command_returns_none_triple_and_false_timeout(self):
         rw = RunWith(use_logger=False)
-        out, err, rc, timed_out = rw.timeout(5)
+        out, err, rc, _ = rw.timeout(5)
         self.assertIsNone(out)
         self.assertIsNone(err)
         self.assertIsNone(rc)
@@ -899,7 +899,7 @@ class TestSetCommandCommunicateIntegration(unittest.TestCase):
 
         rw = RunWith(use_logger=False)
         rw.setCommand(["ls", "/tmp"])
-        out, err, rc = rw.communicate()
+        out, _, rc = rw.communicate()
 
         self.assertEqual(rc, 0)
         self.assertIn("file1", out)

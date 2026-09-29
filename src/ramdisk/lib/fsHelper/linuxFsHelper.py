@@ -18,12 +18,10 @@ from ramdisk.lib.environment import Environment
 from ramdisk.lib.CheckApplicable import CheckApplicable
 
 
-class FsHelper(object):
-    """
-    """
+class FsHelper:
+
     def __init__(self):
-        """
-        """
+
         #####
         # Version/timestamp is
         # <YYYY><MM><DD>.<HH><MM>
@@ -52,9 +50,9 @@ class FsHelper(object):
         try:
             self.rw.setCommand(runcmd)
             # def waitNpassThruStdout(self, chk_string=None, respawn=False, silent=True)
-            (myout, myerr, myretcode) = self.rw.waitNpassThruStdout(chk_string=None, respawn=False, silent=True)
+            (myout, _, _) = self.rw.waitNpassThruStdout(chk_string=None, respawn=False, silent=True)
             blockSize = myout
-        except SubprocessError as Err:
+        except SubprocessError:
             self.logger.log(lp.WARNING, traceback.format_exc())
             self.logger.log(lp.WARNING, "Exception thrown trying to find free space on device")
 
@@ -82,7 +80,7 @@ class FsHelper(object):
         try:
             self.rw.setCommand(runcmd)
             # def waitNpassThruStdout(self, chk_string=None, respawn=False, silent=True)
-            (myout, myerr, myretcode) = self.rw.waitNpassThruStdout(chk_string=None, respawn=False, silent=True)
+            (myout, _, _) = self.rw.waitNpassThruStdout(chk_string=None, respawn=False, silent=True)
             for line in myout.split('\n'):
                 # print(line.strip())
                 try:
@@ -97,9 +95,9 @@ class FsHelper(object):
                     print(sectorSize)
                     if sectorSize:
                         break
-                except:
+                except (AttributeError, IndexError, ValueError):
                     continue 
-        except SubprocessError as Err:
+        except SubprocessError:
             self.logger.log(lp.WARNING, traceback.format_exc())
             self.logger.log(lp.WARNING, "Exception thrown trying to find free space")
 

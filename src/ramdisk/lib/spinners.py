@@ -6,7 +6,7 @@ import time
 import threading
 
 
-class Spinner(object):
+class Spinner:
     spinner_cycle = itertools.cycle(['-', '\\', '|', '/'])
 
     def __init__(self):

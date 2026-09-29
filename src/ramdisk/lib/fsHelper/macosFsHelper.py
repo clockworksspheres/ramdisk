@@ -31,8 +31,7 @@ class FsHelper(FsHelperTemplate):
     Inherits methods validatePath and mkdirs
     """
     def __init__(self):
-        """
-        """
+
         #####
         # Version/timestamp is
         # <YYYY><MM><DD>.<HH><MM>
@@ -45,12 +44,12 @@ class FsHelper(FsHelperTemplate):
 
         self.rw = RunWith(self.logger)
 
+        """
         #####
         # Check applicability to the current OS
         macApplicable = {'type': 'white',
                          'family': ['darwin'],
                          'os': {'macOS': ['12.1', '+']}}
-        """
         macApplicableHere = self.chkApp.isApplicable(macApplicable)
 
         if macApplicableHere:
@@ -61,18 +60,14 @@ class FsHelper(FsHelperTemplate):
         """
 
     def getFsBlockSize(self, size="default"):
-        """
-        """
+
         success = False
         blockSize = 0
         # Run logic or command to get block size        
 
         ####
         # default
-        if re.match("default", str(size)):
-            blockSize = 512
-            success = True
-        elif size == 512 or size == "512":
+        if re.match("default", str(size)) or size == 512 or size == "512":
             blockSize = 512
             success = True
         elif size == 1024 or size == "1024":
@@ -109,20 +104,20 @@ class FsHelper(FsHelperTemplate):
                 numerator = 1024 * 1024 * int(diskSizeTmp)
                 denominator = 512 # sector size
                 diskSizeInMb = numerator / denominator # for hdiutil command
-        except AttributeError as err:
+        except AttributeError:
             try:
                 match = re.match(r"^(\d+)$", str(size))
                 diskSizeInMb = match.group(0)
-            except AttributeError as err:
+            except AttributeError:
                 self.logger.log(lp.DEBUG, "Unexpected input, size input when only numbers is only in calculated in megabytes...")
                 self.logger.log(lp.DEBUG, "Or possibly, unexpected input, size input must be XXXXSS where XXXX is decimal value and SS is either Mb or Gb")
-                raise(err)
-            except Exception as err:
+                raise
+            except Exception:
                 print(traceback.format_exc())
-                raise(err)
-        except Exception as err:
+                raise
+        except Exception:
             print(traceback.format_exc())
-            raise(err)
+            raise
         """
         diskSizeTmp = match.group(1)
         diskSizePostfix = match.group(2)
@@ -139,8 +134,7 @@ class FsHelper(FsHelperTemplate):
 
 
     def validateUser(self, user=""):
-        """
-        """
+
         success = False
         message = ""
         uid = 999999999
@@ -192,8 +186,7 @@ class FsHelper(FsHelperTemplate):
         return success, message, uid
     
     def getGid(self, group):
-        """
-        """
+
         success = False
         gid = 99999999
         message = ""
@@ -215,11 +208,10 @@ class FsHelper(FsHelperTemplate):
         return success, message, gid
 
     def validateGroup4user(self, user, group):
-        """
-        """
+
         success = False
         message = ""
-        gid = 99999999
+        #  gid = 99999999
 
         success, message, _ = self.validateUser(user)
 
@@ -230,10 +222,7 @@ class FsHelper(FsHelperTemplate):
 
             for accountGroup in output.split():
                 # print(".. .. .. AccountGroup: " + accountGroup.strip() + " Group: " + group.strip())
-                if re.match(r'^_\w.+', accountGroup):
-                    message = "Not a valid Group"
-                    success = False
-                elif re.search("ERROR", accountGroup, re.IGNORECASE):
+                if re.match(r'^_\w.+', accountGroup) or re.search("ERROR", accountGroup, re.IGNORECASE):
                     message = "Not a valid Group"
                     success = False
                 elif accountGroup.strip() == group.strip():
@@ -282,14 +271,14 @@ class FsHelper(FsHelperTemplate):
                     item_path = os.path.join(path, item)
                     self.chown_recursive(item_path, uid, gid)
                     success = True
-        except Exception as e:
-            print(f"Error changing ownership of {path}: {e}")
+        except OSError:
+            print(f"Error changing ownership of {path}: ")
+            print(traceback.format_exc())
             success = False
         return success
 
     def chown(self, path, user="", group="staff", withRoot=False, permissions=None, recursive=True):
-        """
-        """
+
         success = False
         worked = False
         message = ""

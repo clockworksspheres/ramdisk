@@ -23,10 +23,9 @@ else:
     pass
 
 
-class GetMemStatus(object):
+class GetMemStatus:
     def __init__(self):
-        """
-        """
+
         if sys.platform.startswith("linux"):
             self.getMemStatus = GetLinuxMemStatus()
         elif sys.platform.startswith("darwin"):
@@ -37,15 +36,11 @@ class GetMemStatus(object):
             self.getMemStatus = None
  
     def getTotalMemSize(self):
-        """
-        """
         totalMemSize = self.getMemStatus.getTotalMemSize()
         return int(totalMemSize)
 
 
     def getAvailableMem(self):
-        """
-        """
         availableMem = self.getMemStatus.getAvailableMem()
         return int(availableMem)
 

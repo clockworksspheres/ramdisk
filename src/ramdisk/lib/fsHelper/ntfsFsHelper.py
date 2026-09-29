@@ -1,10 +1,7 @@
 #!/usr/bin/python3
 
-import subprocess
 import re
 import traceback
-from subprocess import Popen
-import os
 import sys
 from pathlib import Path
 
@@ -22,11 +19,9 @@ from lib.run_commands import RunWith
 
 
 class FsHelper(object):
-    """
-    """
+
     def __init__(self):
-        """
-        """
+
         self.logger = CyLogger()
         self.runner = RunWith()
 
@@ -43,7 +38,7 @@ class FsHelper(object):
         cmd = ["fsutil", "fsinfo", "ntfsinfo", path]
         self.runner.setCommand(cmd)
         self.runner.communicate()
-        retval, reterr, retcode = self.runner.getNlogReturns()
+        retval, _, _ = self.runner.getNlogReturns()
        
         lines = retval.splitlines()
 
@@ -54,7 +49,7 @@ class FsHelper(object):
                 # print(blockSize)
                 success = True
                 break
-            except:
+            except (IndexError, AttributeError, TypeError, RecursionError, re.error):
                 pass
                 
         return success, blockSize
@@ -85,32 +80,24 @@ class FsHelper(object):
         try:
             match = re.match(r"^(\d+[MmGg])[Bb]?$", size)
             diskSize = match.group(1)
-        except AttributeError as err:
+        except (AttributeError, re.error):
             try:
                 match = re.match(r"^(\d+)[MmGg]$", size)
                 diskSize = match.group(1)
-            except AttributeError as err:
+            except AttributeError:
                 try:
                     match = re.match(r"^(\d+)$", size)
                     diskSizeTmp = match.group(1)
                     diskSize = diskSizeTmp + "m"
-                except AttributeError as err:
+                except (AttributeError, re.error):
                     print("Unexpected input, size input when only numbers is only in calculated in megabytes...")
                     print("Or possibly, unexpected input, size input must be XXXXSS where XXXX is decimal value and SS is either Mb or Gb")
-                    raise(err)
-                except Exception as err:
                     print(traceback.format_exc())
-                    raise(err)
-            except Exception as err:
-                print(traceback.format_exc())
-                raise(err)
-        except TypeError as err:
+                    raise
+        except TypeError:
             if isinstance(size, int):
                 diskSize = size
                 success = True
-        except Exception as err:
-            print(traceback.format_exc())
-            raise(err)
 
         return success, diskSize
 

@@ -8,12 +8,10 @@ from pathlib import Path
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 
-class FsHelperTemplate(object):
-    """
-    """
+class FsHelperTemplate:
+
     def __init__(self, logger, **kwargs):
-        """
-        """
+
         if not logger and isinstance(logger, CyLogger):
             self.logger = CyLogger()
         else:
@@ -22,8 +20,7 @@ class FsHelperTemplate(object):
         self.logger.initializeLogs()
 
     def getFsBlockSize(self):
-        """
-        """
+
         success = False
         blockSize = 0
         # Run logic or command to get block size        
@@ -31,8 +28,7 @@ class FsHelperTemplate(object):
         return success, blockSize
 
     def getDiskSize(self):
-        """
-        """
+
         success = False
         diskSize = 0
         # Run logic or command to get disk size       
@@ -40,8 +36,7 @@ class FsHelperTemplate(object):
         return success, diskSize
 
     def getSizeInMb(self):
-        """
-        """
+
         success = False
         diskSizeInMb = 0
         # Run logic or command to get disk size in megabytes       
@@ -49,15 +44,12 @@ class FsHelperTemplate(object):
         return success, diskSizeInMb
     
     def chown(self, path, user, group=None, withRoot=False, permissions=None, recursive=True):
-        """
 
-        """
         success = False
         return success
 
     def validatePath(self, path):
-        """
-        """
+
         success = False
 
         # Handling str based path validation

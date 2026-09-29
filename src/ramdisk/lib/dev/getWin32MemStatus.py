@@ -1,6 +1,5 @@
 #!/usr/bin/env -S python -u
-"""
-"""
+
 import sys
 import ctypes
 from pathlib import Path

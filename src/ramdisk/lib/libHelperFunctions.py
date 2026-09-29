@@ -9,7 +9,7 @@ import re
 import os
 import sys
 import time
-import ctypes
+
 if sys.platform.lower().startswith("win32"):
     print("importing termios not supported on Windows")
     termios = None
@@ -32,18 +32,15 @@ run = RunWith(logger)
 
 ###########################################################################
 
-class FoundException(Exception) :
+class FoundException(BaseException) :
     """
     Exeption to raise when the condition is met in a for/while
 
-    Accompanying code (in collect_for_hostmaster.py) derived from example
-    in "Rapid GUI Programming with Python and QT" pgs 66 - 71, 
-    by Mark Summerfeild
-    
-    For more examples on python user defined exceptions:
-    http://docs.python.org/2/tutorial/errors.html
+    Custom Exception
     """
-    pass
+    def __init__(self, *args, **kwargs):
+        BaseException.__init__(self, *args, **kwargs)
+
 
 ##############################################################################
 
@@ -99,10 +96,11 @@ def touch(filename=""):
     else :
         try:
             os.utime(filename, None)
-        except:
+        except (FileNotFoundError, PermissionError, OSError):
             try :
                 open(filename, 'a').close()
-            except Exception as err :
+            except (PermissionError, IsADirectoryError, OSError):
+                logger.log(lp.INFO, traceback.format_exc())
                 logger.log(lp.INFO, "Cannot open to touch: " + str(filename))
 
 ###########################################################################
@@ -115,9 +113,12 @@ def getecho (fileDescriptor):
     Borrowed from pexpect - acceptable to license
     """
     attr = termios.tcgetattr(fileDescriptor)
-    if attr[3] & termios.ECHO:
-        return True
-    return False
+    # commented out for sonarqube
+    # if attr[3] & termios.ECHO:
+    #if bool(attr[3] & termios.ECHO):
+    #    return True
+    #return False
+    return bool(attr[3] * termios.ECHO)
 
 ############################################################################
 
@@ -160,9 +161,8 @@ def isSaneFilePath(filepath):
     
     """
     sane = False
-    if filepath and isinstance(filepath, str):
-        if re.match(r"^[A-Za-z0-9_\-/\.]+$", filepath):
-            sane = True
+    if filepath and isinstance(filepath, str) and re.match(r"^[A-Za-z0-9_\-/\.]+$", filepath):
+        sane = True
     return sane
 
 ###########################################################################

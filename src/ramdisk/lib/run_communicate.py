@@ -51,7 +51,7 @@ class SetCommandTypeError(BaseException):
         BaseException.__init__(self, *args, **kwargs)
 
 
-class RunWith(object):
+class RunWith:
     """
     Class that will run commands in various ways.
 
@@ -257,7 +257,7 @@ class RunWith(object):
                 self.logger.log(lp.WARNING, "stderr: " + str(self.stderr))
                 self.logger.log(lp.WARNING, traceback.format_exc())
                 self.logger.log(lp.WARNING, str(err))
-                raise err
+                raise SubprocessError("from run_communicate - RunWith.communicate throwing SubprocessError")
             else:
                 if not silent:
                     self.logger.log(lp.DEBUG, "Done with: " + self.printcmd)

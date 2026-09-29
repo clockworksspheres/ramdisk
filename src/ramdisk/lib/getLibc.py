@@ -1,9 +1,8 @@
 '''
+Import the correct getLibc for the right operating system.
 '''
 # --- Native python libraries
-import os
-import sys
-
+import sys  # noqa: I001
 
 # --- non-native python libraries in this source tree
 
@@ -28,8 +27,11 @@ def getLibc( ):
     """
 
     if sys.platform.startswith("win32"):
+        """
         from ramdisk.lib.getLibc.linuxGetLibc import getLibc
         return getLibc()
+        """
+        raise LibcNotAvailableError("No unix libc available on Windows")
     elif sys.platform.startswith("linux"):
         from ramdisk.lib.getLibc.linuxGetLibc import getLibc
         return getLibc()

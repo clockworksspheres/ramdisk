@@ -2,7 +2,6 @@
 
 #--- Native python libraries
 import re
-import sys
 import traceback
 
 from packaging.version import parse as LooseVersion
@@ -11,7 +10,7 @@ from packaging.version import parse as LooseVersion
 from ramdisk.lib.loggers import LogPriority
 
 
-class CheckApplicable(object):
+class CheckApplicable:
     '''
     This class uses either the passed in 'environment', or operating system
     identifiation set by the caller to determine if a family or OS is
@@ -173,15 +172,14 @@ class CheckApplicable(object):
         else:
             listtype = 'black'
         # Set the default return as appropriate to the list type
-        assert listtype in ['white', 'black'], 'Invalid list type specified: %r' % listtype
+        assert listtype in ['white', 'black'], f'Invalid list type specified: {listtype}'
         if listtype == 'black':
             applies = True
         else:
             applies = False
 
         # Process the os family list
-        if 'family' in applicable:
-            if self.myosfamily in applicable['family']:
+        if 'family' in applicable and self.myosfamily in applicable['family']:
                 if listtype == 'black':
                     applies = False
                 else:
@@ -201,9 +199,9 @@ class CheckApplicable(object):
                             applies = True
 
         # Perform the rootless check
-        if applies and self.environ.geteuid() == 0:
-            if 'noroot' in applicable:
-                if applicable['noroot'] is True:
+        if applies and self.environ.geteuid() == 0 and \
+            'noroot' in applicable and \
+            applicable['noroot'] is True:
                     applies = False
 
         return applies
@@ -225,10 +223,7 @@ class CheckApplicable(object):
                 baseversion = rangeList[0]
             else:
                 baseversion = rangeList[1]
-            if LooseVersion(self.myosversion) >= LooseVersion(baseversion):
-                return True
-            else:
-                return False
+            return LooseVersion(self.myosversion) >= LooseVersion(baseversion)
         # Process version and lower
         elif '-' in rangeList:
             assert len(rangeList) == 2, "Wrong number of entries for a -"
@@ -236,10 +231,7 @@ class CheckApplicable(object):
                 baseversion = rangeList[0]
             else:
                 baseversion = rangeList[1]
-            if LooseVersion(self.myosversion) <= LooseVersion(baseversion):
-                return True
-            else:
-                return False
+            return LooseVersion(self.myosversion) <= LooseVersion(baseversion)
         # Process inclusive range
         elif 'r' in rangeList:
             assert len(rangeList) == 3, "Wrong number of entries for a range"
@@ -253,17 +245,11 @@ class CheckApplicable(object):
                 lowver = vertmp[0]
             else:
                 raise ValueError('Range versions are the same')
-            if LooseVersion(self.myosversion) <= LooseVersion(highver) \
-               and LooseVersion(self.myosversion) >= LooseVersion(lowver):
-                return True
-            else:
-                return False
+            return LooseVersion(self.myosversion) <= LooseVersion(highver) \
+               and LooseVersion(self.myosversion) >= LooseVersion(lowver)
         # Process explicit match
         else:
-            if self.myosversion in rangeList:
-                return True
-            else:
-                return False
+            return self.myosversion in rangeList
 
     def fismaApplicable(self, checkLevel=None, systemLevel=None):
         '''
@@ -297,9 +283,8 @@ class CheckApplicable(object):
         elif slevel == 'med':
             if clevel == 'high':
                 applies = False
-        elif slevel == 'low':
-            if clevel in ['high', 'med']:
-                applies = False
+        elif slevel == 'low' and clevel in ['high', 'med']:
+            applies = False
 
         return applies
 

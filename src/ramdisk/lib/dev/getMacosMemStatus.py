@@ -58,8 +58,6 @@ class OldGetMacosMemStatus(GetMemStatusTemplate):
             print(f"Error executing command: {e}")
         except StopIteration:
              print("Memory information not found in system_profiler output.")   
-        except Exception as e:
-            print(f"An error occurred: {e}")
         return None
 
     def getAvailableMem(self):
