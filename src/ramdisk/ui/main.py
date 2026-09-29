@@ -317,12 +317,15 @@ class _CreateRamdisk(QMainWindow):
                 current_row_index = self.ui.tableWidget.currentRow()
                 print(f"current row {current_row_index}...........")
                 if current_row_index >= 0:
+                    column = 0
+                    '''
                     if sys.platform.lower().startswith("darwin"):
                         column = 0
                     elif sys.platform.lower().startswith("linux"):
                         column = 0
                     elif sys.platform.lower().startswith("win32"):
                         column = 0
+                    '''
                     item = self.ui.tableWidget.item(current_row_index, column)  # Get first column item
                     device = item.text() if item else ""
                     data = getMountedData(device)
@@ -375,7 +378,7 @@ class _CreateRamdisk(QMainWindow):
                             window = _LocalAuth()
 
                             window.credsSig.connect(self.getCreds)
-                            result = window.exec()
+                            window.exec()
                             # Check the result of the dialog
                             print("\tITEM: " + item.text())
                             if window.accepted:
@@ -395,8 +398,8 @@ class _CreateRamdisk(QMainWindow):
 
                 # remove the row
                 self.ui.tableWidget.removeRow(index)
-            else:
-                print("No row selected")
+        else:
+            print("No row selected")
 
         for data in removed_data:
             print(f"Removed row data: {data}")
@@ -540,7 +543,7 @@ class _CreateRamdisk(QMainWindow):
         try:
             mountedDisks = getMountedDisks()
             print(f"{mountedDisks}")
-        except Exception as err:
+        except ValueError as err:
             print(traceback.format_exc())
             print(str(err))
 
@@ -580,7 +583,7 @@ class _CreateRamdisk(QMainWindow):
         # Grab the mount point
         try:
             mountPoint = self.ui.mountLineEdit.text()
-        except Exception as err:
+        except ValueError as err:
             print(traceback.format_exc())
             print(str(err))
 
@@ -601,7 +604,6 @@ class _CreateRamdisk(QMainWindow):
                 ramdisk.getNlogData()
                 ramdisk.getNprintData()
             else:
-                success = False
                 mntPnt = ""
                 device = ""
                 if sys.platform.lower().startswith('linux'):
@@ -609,19 +611,19 @@ class _CreateRamdisk(QMainWindow):
                     # create ramdisk with specific mountpoint
                     ramdisk = RamDisk(str(memSize), str(mountPoint), self.logger, passwd=self.passwd)
                     ramdisk.getNlogData()
-                    success, mntPnt, device = ramdisk.getNprintData()
+                    _, mntPnt, device = ramdisk.getNprintData()
                 elif sys.platform.startswith('win32'):
                     #####
                     # create ramdisk with specific mountpoint
                     ramdisk = RamDisk(str(memSize), str(mountPoint), self.logger)
                     ramdisk.getNlogData()
-                    success, mntPnt, device = ramdisk.getNprintData()
+                    _, mntPnt, device = ramdisk.getNprintData()
                 else:
                     #####
                     # create ramdisk with specific mountpoint
                     ramdisk = RamDisk(str(memSize), str(mountPoint), self.logger)
                     ramdisk.getNlogData()
-                    success, mntPnt, device = ramdisk.getNprintData()
+                    _, mntPnt, device = ramdisk.getNprintData()
 
                 self.add_row(device, mntPnt)
 
