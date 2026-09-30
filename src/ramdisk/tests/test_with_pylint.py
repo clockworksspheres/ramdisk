@@ -82,7 +82,7 @@ def genTestData(fileList, excludeFiles, excludeFromLines):
                 except KeyError:
                     print(traceback.format_exc())
 
-        except Exception:
+        except (re.error, OSError):
             print(f"Unexpected exception while processing {myfile}")
             print(traceback.format_exc())
 
@@ -137,6 +137,7 @@ parser.add_option("-r", "--recursive-tree", dest="treeRoot", default="")
 parser.add_option("-d", "--dir-to-check", dest="dirToCheck", default="")
 parser.add_option("--debug", action="store_true", dest="debug", default=False)
 parser.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False)
+
 
 # If pytest imports this file, sys.argv is pytest's argv.
 # We must NOT parse pytest's arguments.

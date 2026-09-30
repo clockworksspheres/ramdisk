@@ -99,7 +99,7 @@ class TestFsHelper(unittest.TestCase):
     @patch("re.match")
     def test_validateUser_numeric_uid(self, mock_match):
         mock_match.return_value = True
-        success, msg, uid = self.helper.validateUser("501")
+        _, _, uid = self.helper.validateUser("501")
         self.assertEqual(uid, 501)
 
     @unittest.SkipTest
@@ -114,12 +114,12 @@ class TestFsHelper(unittest.TestCase):
             ("uid: 502", "", 0)       # read uid
         ]
 
-        success, msg, uid = self.helper.validateUser("alice")
+        success, _, uid = self.helper.validateUser("alice")
         self.assertTrue(success)
         self.assertEqual(uid, 502)
 
     def test_validateUser_empty(self):
-        success, msg, uid = self.helper.validateUser("")
+        success, msg, _ = self.helper.validateUser("")
         self.assertFalse(success)
         self.assertIn("Value not passed", msg)
 
@@ -128,13 +128,13 @@ class TestFsHelper(unittest.TestCase):
     # ---------------------------------------------------------
     def test_getGid_success(self):
         self.mock_rw.communicate.return_value = ("PrimaryGroupID: 20", "", 0)
-        success, msg, gid = self.helper.getGid("staff")
+        success, _, gid = self.helper.getGid("staff")
         self.assertTrue(success)
         self.assertEqual(gid, 20)
 
     def test_getGid_failure(self):
         self.mock_rw.communicate.return_value = ("", "", 0)
-        success, msg, gid = self.helper.getGid("staff")
+        success, _, gid = self.helper.getGid("staff")
         self.assertFalse(success)
         self.assertEqual(gid, 20)
 
@@ -144,13 +144,13 @@ class TestFsHelper(unittest.TestCase):
     @patch.object(FsHelper, "validateUser", return_value=(True, "ok", 501))
     def test_validateGroup4user_valid(self, _):
         self.mock_rw.communicate.return_value = ("staff wheel", "", 0)
-        success, msg = self.helper.validateGroup4user("alice", "staff")
+        success, _ = self.helper.validateGroup4user("alice", "staff")
         self.assertTrue(success)
 
     @patch.object(FsHelper, "validateUser", return_value=(True, "ok", 501))
     def test_validateGroup4user_invalid(self, _):
         self.mock_rw.communicate.return_value = ("wheel admin", "", 0)
-        success, msg = self.helper.validateGroup4user("alice", "staff")
+        success, _ = self.helper.validateGroup4user("alice", "staff")
         self.assertFalse(success)
 
     # ---------------------------------------------------------

@@ -20,6 +20,7 @@ import os
 import sys
 import unittest
 import logging
+import traceback
 from unittest.mock import patch
 
 #####
@@ -207,9 +208,9 @@ def save_screenshot(widget, name):
 
         logger.info(f"Saved screenshot: {filename}")
 
-    except Exception as e:
-
-        logger.warning(f"Screenshot failed: {e}")
+    except OSError:
+        logger.warning("Screenshot failed")
+        logger.warning(traceback.format_exc())
 
 
 # ---------------------------------------------------

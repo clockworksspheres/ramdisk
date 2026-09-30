@@ -6,11 +6,7 @@ Testing logging functionality via CyLogger
 
 # --- Native python libraries
 import unittest
-import time
 import sys
-import os
-import traceback
-import tracemalloc
 from datetime import datetime
 
 from pathlib import Path
@@ -52,8 +48,6 @@ class test_loggers(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        """
-        """
         #####
         # Set up logging
         self.logger = CyLogger(debug_mode=True)
@@ -65,8 +59,6 @@ class test_loggers(unittest.TestCase):
 
     @classmethod
     def tearDownClass(self):
-        """
-        """
         pass
 
     def testLogCritical(self):

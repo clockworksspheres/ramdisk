@@ -9,6 +9,7 @@ import sys
 import getpass
 import shutil
 import psutil
+import traceback
 from subprocess import Popen, PIPE
 from pathlib import Path
 
@@ -122,7 +123,7 @@ class RamDisk(RamDiskTemplate):
         # Passed in disk size must have a non-default value
         print("diskSize: " + str(self.diskSize))
         self.logger.log(lp.DEBUG, "diskSize: " + str(self.diskSize))
-        if not self.diskSize == 0 :
+        if self.diskSize != 0 :
             success  = True
         print("########### IS THERE AVAILABLE MEMORY???? ##############")
         #####
@@ -194,7 +195,6 @@ class RamDisk(RamDiskTemplate):
         """
 
         retval = None
-        reterr = None
         #success = False
         #####
         # Create the ramdisk and attach it to a device.
@@ -203,7 +203,7 @@ class RamDisk(RamDiskTemplate):
         cmd = [self.hdiutil, "attach", "-nomount", "ram://" + self.diskSize]
         self.logger.log(lp.WARNING, "Running command to create ramdisk: \n\t" + str(cmd))
         self.runWith.setCommand(cmd)
-        retval, reterr, retcode = self.runWith.communicate()
+        retval, _, retcode = self.runWith.communicate()
         # retval, reterr, retcode = self.runWith.getNlogReturns()
         
         if retcode == '':
@@ -239,7 +239,8 @@ class RamDisk(RamDiskTemplate):
             print("Running command to create ramdisk: " + str(cmd))
             self.runWith.setCommand(cmd)
             self.runWith.communicate()
-        except:
+        except OSError:
+            self.logger.log(lp.ERROR, traceback.format_exc())
             raise
         # retval, reterr, retcode = self.runWith.getNlogReturns()
         #####
@@ -250,7 +251,8 @@ class RamDisk(RamDiskTemplate):
             self.logger.log(lp.WARNING, "Running command to unmount ramdisk: >> " + str(cmd))
             self.runWith.setCommand(cmd)
             self.runWith.communicate()
-        except:
+        except OSError:
+            self.logger.log(lp.ERROR, traceback.format_exc())
             raise
         # retval, reterr, retcode = self.runWith.getNlogReturns()
 
@@ -260,7 +262,8 @@ class RamDisk(RamDiskTemplate):
             print("Running command to create ramdisk: " + str(cmd))
             self.runWith.setCommand(cmd)
             self.runWith.communicate()
-        except:
+        except OSError:
+            self.logger.log(lp.ERROR, traceback.format_exc())
             raise
 
         tmpNum = ""
@@ -271,6 +274,7 @@ class RamDisk(RamDiskTemplate):
             tmpNum = tmpMatch.group(2)
             
         except ValueError:
+            self.logger.log(lp.ERROR, traceback.format_exc())
             raise
 
         tmpNum = int(tmpNum) + 1
@@ -291,7 +295,8 @@ class RamDisk(RamDiskTemplate):
             self.logger.log(lp.WARNING, "Running command to MOUNT ramdisk: >>>>> " + str(cmd))
             self.runWith.setCommand(cmd)
             self.runWith.communicate()
-        except:
+        except OSError:
+            self.logger.log(lp.ERROR, traceback.format_exc())
             raise
 
         """
@@ -377,7 +382,7 @@ class RamDisk(RamDiskTemplate):
         cmd = ["diskutil", "list"]
         self.runWith.setCommand(cmd)
         self.runWith.communicate()
-        retval, reterr, retcode = self.runWith.getNlogReturns()
+        retval, _, _ = self.runWith.getNlogReturns()
 
         for line in retval.splitlines():
             if re.search("RAMDISK", line):
@@ -390,7 +395,7 @@ class RamDisk(RamDiskTemplate):
         cmd = ["mount"]
         self.runWith.setCommand(cmd)
         self.runWith.communicate()
-        retval, reterr, retcode = self.runWith.getNlogReturns()
+        retval, _, _ = self.runWith.getNlogReturns()
 
         for line in retval.splitlines():
             dev = line.split()[0] in devList
@@ -441,7 +446,7 @@ class RamDisk(RamDiskTemplate):
                 cmd = [self.diskutil, "unmount", self.myRamdiskDev]
                 self.runWith.setCommand(cmd)
                 self.runWith.communicate()
-                retval, reterr, retcode = self.runWith.getNlogReturns()
+                _, reterr, _ = self.runWith.getNlogReturns()
 
                 if not reterr:
                     success = True
@@ -453,7 +458,7 @@ class RamDisk(RamDiskTemplate):
                            self.mntPoint, self.devPartition]
                     self.runWith.setCommand(cmd)
                     self.runWith.communicate()
-                    retval, reterr, retcode = self.runWith.getNlogReturns()
+                    _, reterr, _ = self.runWith.getNlogReturns()
 
                     if not reterr:
                         success = True
@@ -480,7 +485,7 @@ class RamDisk(RamDiskTemplate):
         cmd = [self.diskutil, "disableJournal", self.myRamdiskDev + "s1"]
         self.runWith.setCommand(cmd)
         self.runWith.communicate()
-        retval, reterr, retcode = self.runWith.getNlogReturns()
+        _, reterr, _ = self.runWith.getNlogReturns()
         if not reterr:
             success = True
         self.logger.log(lp.DEBUG, "Success: " + str(success) + " in __remove_journal")
@@ -560,7 +565,7 @@ class RamDisk(RamDiskTemplate):
             # Run the command
             self.runWith.setCommand(cmd)
             self.runWith.communicate()
-            retval, reterr, retcode = self.runWith.getNlogReturns()
+            _, reterr, _ = self.runWith.getNlogReturns()
             if not reterr:
                 success = True
 
@@ -606,7 +611,7 @@ class RamDisk(RamDiskTemplate):
         cmd = [self.diskutil, "unmount", "force", self.devPartition]
         self.runWith.setCommand(cmd)
         self.runWith.communicate()
-        retval, reterr, retcode = self.runWith.getNlogReturns()
+        _, reterr, _ = self.runWith.getNlogReturns()
         if not reterr:
             success = True
         return success
@@ -662,7 +667,7 @@ class RamDisk(RamDiskTemplate):
         cmd = [self.hdiutil, "detach", self.myRamdiskDev]
         self.runWith.setCommand(cmd)
         self.runWith.communicate()
-        retval, reterr, retcode = self.runWith.getNlogReturns()
+        _, reterr, _ = self.runWith.getNlogReturns()
         if not reterr:
             success = True
         self.runWith.getNlogReturns()
@@ -687,7 +692,7 @@ class RamDisk(RamDiskTemplate):
         cmd = ["/sbin/newfs_hfs", "-v", "ramdisk", self.devPartition]
         self.runWith.setCommand(cmd)
         self.runWith.communicate()
-        retval, reterr, retcode = self.runWith.getNlogReturns()
+        _, reterr, _ = self.runWith.getNlogReturns()
         if not reterr:
             success = True
         #####
@@ -700,8 +705,6 @@ class RamDisk(RamDiskTemplate):
     def __partition(self) :
         """
         Partition the ramdisk (mac specific)
-
-        
         """
         success=False
         numerator = int(self.diskSize)
@@ -740,8 +743,6 @@ class RamDisk(RamDiskTemplate):
     ###########################################################################
 
     def err__isMemAvailable(self) :
-        """
-        """
         success = False
         line = ""
         self.free = 0
@@ -784,17 +785,16 @@ class RamDisk(RamDiskTemplate):
             freeNumber = str(freeNumber).strip()
             freeMagnitude = str(freeMagnitude).strip()
 
-            if re.match(r"^\d+$", freeNumber.strip()):
-                if re.match(r"^\w$", freeMagnitude.strip()):
-                    #####
-                    # Calculate the size of the free memory in Megabytes
-                    if re.search("G", freeMagnitude.strip()):
-                        freeMem = 1024 * int(freeNumber)
-                        freeNumber = str(freeMem)
-                        self.free = freeNumber
-                        freeMagnitude = "M"
-                    elif re.search("M", freeMagnitude.strip()):
-                        self.free = freeNumber.strip() 
+            if re.match(r"^\d+$", freeNumber.strip()) and re.match(r"^\w$", freeMagnitude.strip()):
+                #####
+                # Calculate the size of the free memory in Megabytes
+                if re.search("G", freeMagnitude.strip()):
+                    freeMem = 1024 * int(freeNumber)
+                    freeNumber = str(freeMem)
+                    self.free = freeNumber
+                    freeMagnitude = "M"
+                elif re.search("M", freeMagnitude.strip()):
+                    self.free = freeNumber.strip() 
         print("Free Memory: " + str(self.free))
         print("disk size:   "  + str(self.diskSize))
         self.logger.log(lp.DEBUG, "Free Memory: " + str(self.free))
@@ -818,79 +818,13 @@ class RamDisk(RamDiskTemplate):
         Best method to do this on the Mac is to get the output of "top -l 1"
         and # re.search("unused" line), as below
 
-        
         """
         success = False
 
-        mem_free = 0
         mem = psutil.virtual_memory()
         self.free = int(mem.available / (1024 ** 2))
 
         print("Memory free = " + str(self.free))
-        """
-        success = False
-        found = False
-        almost_size = 0
-        size = 0
-        self.free = 0
-        line = ""
-        freeMagnitude = None
-
-        #####
-        # Set up and run the command
-        cmd = ["/usr/bin/top", "-l", "1"]
-
-        proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
-
-        while True:
-            line = proc.stdout.readline().strip()
-            #####
-            # Split on spaces
-            line = line.split()
-            #####
-            # Get the last item in the list
-            found = line[-1]
-            almost_size = line[:-1]
-            size = almost_size[-1]
-
-            found = str(found).strip()
-            #almost_size = almost_size.strip()
-            size = str(size).strip()
-
-            self.logger.log(lp.INFO, "size: " + str(size))
-            self.logger.log(lp.INFO, "found: " + str(found))
-
-            if re.search("unused", found) or re.search("free", found):
-                #####
-                # Found the data we wanted, stop the search.
-                break
-        proc.kill()
-        
-        #####
-        # Find the numerical value and magnitute of the ramdisk
-        if size:
-            sizeCompile = re.compile(r"(\d+)(\w+)")
-
-            split_size = sizeCompile.search(size)
-            freeNumber = split_size.group(1)
-            freeMagnitude = split_size.group(2)
-            
-            freeNumber = str(freeNumber).strip()
-            freeMagnitude = str(freeMagnitude).strip()
-
-            if re.match(r"^\d+$", freeNumber.strip()):
-                if re.match(r"^\w$", freeMagnitude.strip()):
-                    if freeMagnitude:
-                        #####
-                        # Calculate the size of the free memory in Megabytes
-                        if re.search("G", freeMagnitude.strip()):
-                            self.free = 1024 * int(freeNumber)
-                            self.free = str(self.free)
-                        elif re.search("M", freeMagnitude.strip()):
-                            self.free = freeNumber
-        self.logger.log(lp.DEBUG, "free: " + str(self.free))
-        self.logger.log(lp.DEBUG, "Size requested: " + str(self.diskSize))
-        """
         print("-----------------------------------")
         print("===================================")
         print(f"##### Disk Size {self.diskSize}")
@@ -932,7 +866,7 @@ class RamDisk(RamDiskTemplate):
         # Set up and run the diskutil command
         cmd = ["/usr/sbin/diskutil", "list", device]
 
-        output == ""
+        output = ""
 
         self.runWith.setCommand(cmd)
         output, _, _ = self.runWith.communicate()
@@ -967,15 +901,13 @@ class RamDisk(RamDiskTemplate):
         if device:
             self.myRamdiskDev = device
         else:
-            raise Exception("Problem trying to set the device..")
+            raise OSError("Problem trying to set the device..")
 
     ###########################################################################
 
     def getVersion(self):
         """
         Getter for the version of the ramdisk
-
-        
         """
         return self.module_version
 
@@ -985,8 +917,6 @@ class RamDisk(RamDiskTemplate):
 def unmount(device=" ", logger=False):
     """
     On the Mac, call detach.
-
-    
     """
     detach(device, logger)
 
@@ -995,8 +925,6 @@ def unmount(device=" ", logger=False):
 def umount(device=" ", logger=False):
     """
     On the Mac, call detach.
-
-    
     """
     detach(device, logger)
 
@@ -1008,26 +936,24 @@ def detach(device=" ", logger=False):
     Detach (on the mac) is a better solution than unmount and eject
     separately.. Besides unmounting the disk, it also stops any processes
     related to the mntPoint
-
-    
     """
     success = False
-    if not logger:
-        logger = CyLogger()
-    else:
-        logger = logger
-    myRunWith = RunWith(logger)
+    if isinstance(logger, CyLogger):
+        logr = logger
+    elif not logger:
+        logr = CyLogger()
+    myRunWith = RunWith(logr)
     if not re.match(r"^\s*$", device):
         cmd = ["/usr/bin/hdiutil", "detach", device]
         myRunWith.setCommand(cmd)
         myRunWith.communicate()
-        retval, reterr, retcode = myRunWith.getNlogReturns()
+        _, reterr, _ = myRunWith.getNlogReturns()
         if not reterr:
             success = True
 
         myRunWith.getNlogReturns()
     else:
-        raise Exception("Cannot eject a device with an empty name..")
+        raise OSError("Cannot eject a device with an empty name..")
     return success
 
 ###########################################################################
@@ -1058,7 +984,7 @@ def getMountData(device):
     # Set up and run the diskutil command
     cmd = ["/usr/sbin/diskutil", "list", device]
 
-    output == ""
+    output = ""
 
     runWith.setCommand(cmd)
     output, _, _ = runWith.communicate()
@@ -1110,7 +1036,7 @@ def getMountDisks():
     cmd = ["mount"]
     runWith.setCommand(cmd)
     runWith.communicate()
-    retval, reterr, retcode = runWith.getNlogReturns()
+    retval, _, _ = runWith.getNlogReturns()
 
     print(f"retval: {str(retval)}")
 

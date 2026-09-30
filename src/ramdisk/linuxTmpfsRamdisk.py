@@ -19,7 +19,7 @@ from pathlib import Path
 #sys.path.append(str(parent_dir))
 
 #--- non-native python libraries in this source tree
-from ramdisk.lib.libHelperExceptions import NotValidForThisOS, SystemToolNotAvailable, UserMustBeRootError
+from ramdisk.lib.libHelperExceptions import NotValidForThisOS, SystemToolNotAvailable, UserMustBeRootError, MemoryNotAvailableError
 from ramdisk.lib.run_commands import RunWith
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
@@ -330,9 +330,9 @@ class RamDisk(RamDiskTemplate):
         self.runWith.setCommand(command)
 
         # self.logger.log(lp.WARNING, "p: " + self.passwd)
-        if not os.geteuid() == 0 and self.passwd:
+        if os.geteuid() != 0 and self.passwd:
             output, error, returncode = self.runWith.runWithSudo(self.passwd)
-        elif not os.geteuid() == 0 and not self.passwd:
+        elif os.geteuid() != 0 and not self.passwd:
             self.passwd = getpass.getpass()
             output, error, returncode = self.runWith.runWithSudo(self.passwd)
         else:
@@ -392,15 +392,13 @@ class RamDisk(RamDiskTemplate):
     def unmount(self) :
         """
         Unmount the disk
-
-
         """
         success = False
 
         command = [self.umountPath, self.mntPoint]
         self.runWith.setCommand(command)
         self.runWith.communicate()
-        retval, reterr, retcode = self.runWith.getNlogReturns()
+        _, reterr, _ = self.runWith.getNlogReturns()
         if not reterr:
             success = True
 
@@ -515,7 +513,7 @@ def umount(mnt_point="", logger=False, password=""):
         command = [umountPath, mnt_point]
         runWith.setCommand(command)
         #runWith.communicate()
-        retval, reterr, retcode = runWith.runWithSudo(password.strip())
+        retval, _, _ = runWith.runWithSudo(password.strip())
         #retval, reterr, retcode = runWith.getNlogReturns()
         #logger.log(lp.INFO, "RETURNS: " + retval)
         #if not reterr:
@@ -554,7 +552,7 @@ def  unmount(mnt_point="", logger=False, password=""):
         command = [umountPath, mnt_point]
         runWith.setCommand(command)
         #runWith.communicate()
-        retval, reterr, retcode = runWith.runWithSudo(password.strip())
+        retval, _, _ = runWith.runWithSudo(password.strip())
         #retval, reterr, retcode = runWith.getNlogReturns()
         print("RETURNS: " + retval)
         #self.logger.log(lp.INFO, "RETURNS: " + retval)
@@ -598,12 +596,12 @@ def  eject(mnt_point="", logger=False, password=""):
             command = [umountPath, mnt_point]
             runWith.setCommand(command)
             #runWith.communicate()
-            retval, reterr, retcode = runWith.runWithSudo(password.strip())
+            retval, _, _ = runWith.runWithSudo(password.strip())
             #retval, reterr, retcode = runWith.getNlogReturns()
             logger.log(lp.INFO, "RETURNS: " + retval)
             success = True
-        except IOError:
-            print("IOError...")
+        except OSError:
+            print("OSError...")
 
     return success
 
@@ -656,9 +654,9 @@ def getMountDisks():
     cmd = ["mount"]
     runWith.setCommand(cmd)
     runWith.communicate()
-    retval, reterr, retcode = runWith.getNlogReturns()
+    retval, _, _ = runWith.getNlogReturns()
 
-    print(f"retval: {str(retval)}")
+    print(f"retval: {retval}")
 
     systemDisks = ["/dev/shm", "/run", "/run/credentials/systemd-journald.service",
                    "/run/credentials/systemd-resolved.service", "/run/snapd/ns", "/var/snap"]
@@ -668,9 +666,9 @@ def getMountDisks():
             # print("Parsing mount command output...")
             name = line.split()[2].strip()
             #print(str(name))
-            if not "tmpfs" == line.split()[0].strip():
+            if "tmpfs" != line.split()[0].strip():
                 continue
-            if re.match("/run/user/\d+$", name) or \
+            if re.match(r"/run/user/\d+$", name) or \
                re.match("^/tmp$", name) or \
                re.match("^/run/lock$", name):
                 continue

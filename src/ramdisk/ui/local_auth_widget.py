@@ -60,8 +60,8 @@ class _LocalAuth(QDialog):
         # sudo -k
         try:
             self.rw.setCommand(["/usr/bin/sudo", "-k"])
-            retout, reterr, retval = self.rw.communicate()
-        except Exception as err:
+            _, _, retval = self.rw.communicate()
+        except OSError as err:
             print("DamnItJim!!!")
             traceback.format_exc(err)
 
@@ -74,13 +74,13 @@ class _LocalAuth(QDialog):
 
             user = self.ui.userLineEdit.text()
             passwd = self.ui.passLineEdit.text()
-            retout, reterr, retval = self.rw.runWithSudo(passwd.strip())
+            _, _, retval = self.rw.runWithSudo(passwd.strip())
             print("command run...")
             self.credsSig.emit(user, passwd)
             print("recode: " + str(retval))
             self.close()
                         
-        except Exception as err:
+        except OSError as err:
             print("DamnItJim!!!")
             traceback.format_exc(err)
         

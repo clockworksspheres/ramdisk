@@ -51,7 +51,7 @@ class test_environment(unittest.TestCase):
 
     def testGetosver(self):
         tracemalloc.start(10)
-        if not platform.system() == "Windows":
+        if not sys.platform.lower().startswith("win"):
             self.assertTrue(re.search(r'([0-9]{1,3})|(([0-9]{1,3})\.([0-9]{1,3}))',
                                       self.to.getosver()))
         else:

@@ -6,7 +6,7 @@ import sys
 import os
 import traceback
 import tracemalloc
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 # Get the parent directory of the current file's parent directory
@@ -21,13 +21,9 @@ from lib.run_commands import RunWith, SetCommandTypeError
 
 
 class test_run_commands(unittest.TestCase):
-    """
-    """
 
     @classmethod
     def setUpClass(self):
-        """
-        """
         #####
         # Set up logging
         self.logger = CyLogger(debug_mode=True)
@@ -35,12 +31,10 @@ class test_run_commands(unittest.TestCase):
         self.rw = RunWith(self.logger)
         #####
         # Start timer in miliseconds
-        self.test_start_time = datetime.now()
+        self.test_start_time = datetime.now(timezone.utc).astimezone()
 
     @classmethod
     def tearDownClass(self):
-        """
-        """
         pass
 
     def test_RunCommunicateWithBlankCommand(self):
@@ -59,8 +53,6 @@ class test_run_commands(unittest.TestCase):
     
     @unittest.skipIf(sys.platform.lower().startswith("win"), "doesn't work on Windows, need to write windows specific tests")
     def test_communicate(self):
-        """
-        """
         self.rw.__init__(self.logger)
         self.logger.log(lp.DEBUG, "=============== Starting test_communicate...")
 
@@ -81,15 +73,13 @@ class test_run_commands(unittest.TestCase):
 
     @unittest.skipIf(sys.platform.lower().startswith("win"), "doesn't work on Windows, need to write windows specific tests")
     def test_wait(self):
-        """
-        """
         self.rw.__init__(self.logger)
         self.logger.log(lp.DEBUG, "=============== Starting test_wait...")
 
         self.rw.setCommand('/bin/ls /var/spool')
         try:
             _, _, retval = self.rw.communicate(silent=False)
-        except Exception as err:
+        except OSError:
             self.logger.log(lp.ERROR, traceback.format_exc())
             # raise err
 
@@ -100,7 +90,7 @@ class test_run_commands(unittest.TestCase):
         self.rw.setCommand(['/bin/ls', '-l', '/usr/local'])
         try:
             _, _, retval = self.rw.communicate(silent=False)
-        except Exception as err:
+        except OSError:
             self.logger.log(lp.ERROR, traceback.format_exc())
             # raise err
 
@@ -111,8 +101,6 @@ class test_run_commands(unittest.TestCase):
 
     @unittest.skip("temporary skip to determine if split stdout/stderr could be the problem...")
     def test_waitNpassThruStdout(self):
-        """
-        """
         self.rw.__init__(self.logger)
         self.logger.log(lp.DEBUG, "=============== Starting test_wait...")
 
@@ -124,7 +112,7 @@ class test_run_commands(unittest.TestCase):
             self.assertEqual(retval, 0,
                                        "Valid [] command execution failed: " +
                                        '/bin/ls /var/spool --- retval: ' + str(retval))
-        except Exception as err:
+        except OSError:
             self.logger.log(lp.ERROR, traceback.format_exc())
             # raise err
 
@@ -133,7 +121,7 @@ class test_run_commands(unittest.TestCase):
         self.rw.setCommand(['/bin/ls', '/1', '/'])
         try:
             _, _, retval = self.rw.waitNpassThruStdout()
-        except Exception as err:
+        except OSError:
             self.logger.log(lp.ERROR, traceback.format_exc())
             # raise err
 
@@ -145,8 +133,6 @@ class test_run_commands(unittest.TestCase):
         self.logger.log(lp.DEBUG, "=============== Completed test_wait...")
 
     def test_timeout(self):
-        """
-        """
         self.rw.__init__(self.logger)
         
         elapsed = 0
@@ -166,7 +152,7 @@ class test_run_commands(unittest.TestCase):
             startTime = time.time()
             self.rw.timeout(3)
             elapsed = (time.time() - startTime)
-        except Exception as err:
+        except OSError:
             self.logger.log(lp.ERROR, traceback.format_exc())
             # raise err
         finally:
@@ -174,46 +160,6 @@ class test_run_commands(unittest.TestCase):
 
         self.assertTrue(elapsed < 4,
                         "Elapsed time is greater than it should be...")
-
-    def test_runAs(self):
-        """
-        """
-        pass
-
-    def test_liftDown(self):
-        """
-        """
-        pass
-
-    def test_runAsWithSudo(self):
-        """
-        """
-        pass
-
-    def test_runWithSudo(self):
-        """
-        """
-        pass
-
-    def test_getecho(self):
-        """
-        """
-        pass
-
-    def test_waitnoecho(self):
-        """
-        """
-        pass
-
-    def test_RunThread(self):
-        """
-        """
-        pass
-
-    def test_runMyThreadCommand(self):
-        """
-        """
-        pass
 
 
 if __name__ == "__main__":

@@ -1,10 +1,9 @@
-import os
 import re
 import sys
 import unittest
 from unittest import SkipTest
 from unittest.mock import patch, MagicMock
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 # Get the parent directory of the current file's parent directory and add it to sys.path
@@ -43,7 +42,7 @@ class test_ntfsFsHelper(unittest.TestCase):
         cls.fshelper = FsHelper()
 
         # Start timer
-        cls.testStartTime = datetime.now()
+        cls.testStartTime = datetime.now(timezone.utc).astimezone()
 
     @classmethod
     def tearDownClass(cls):
@@ -51,7 +50,7 @@ class test_ntfsFsHelper(unittest.TestCase):
         cls.platform_patcher.stop()
 
         # Capture end time
-        testEndTime = datetime.now()
+        testEndTime = datetime.now(timezone.utc).astimezone()
         test_time = (testEndTime - cls.testStartTime)
 
         # Log how long it took (using mocked logger)

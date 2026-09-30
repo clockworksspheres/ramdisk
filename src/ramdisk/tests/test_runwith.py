@@ -110,7 +110,7 @@ class TestWait(unittest.TestCase):
 
         rw = RunWith(use_logger=False)
         rw.setCommand(["echo", "ok"])
-        out, err, rc = rw.wait()
+        _, _, rc = rw.wait()
 
         self.assertEqual(rc, 0)
 
@@ -150,7 +150,7 @@ class TestTimeout(unittest.TestCase):
 
         rw = RunWith(use_logger=False)
         rw.setCommand(["echo", "ok"])
-        out, err, rc, timed_out = rw.timeout(1)
+        out, _, _, timed_out = rw.timeout(1)
 
         self.assertEqual(out, "done")
         self.assertFalse(timed_out)
@@ -169,10 +169,9 @@ class TestTimeout(unittest.TestCase):
 
         rw = RunWith(use_logger=False)
         rw.setCommand(["sleep", "5"])
-        out, err, rc, timed_out = rw.timeout(0.01)
+        _, _, _, timed_out = rw.timeout(0.01)
 
         self.assertTrue(timed_out)
-
 
 # ----------------------------------------------------------------------
 # GETTERS TESTS
@@ -319,7 +318,7 @@ class TestAdvanced(unittest.TestCase):
         ]
 
         self.runner.setCommand(["ls"])
-        out, err, rc = self.runner.runWithSudo(password="pw")
+        out, _, rc = self.runner.runWithSudo(password="pw")
 
         self.assertIn("ok", out)
         self.assertEqual(captured_stderr.decode(), "")
@@ -350,7 +349,7 @@ class TestAdvanced(unittest.TestCase):
 
         self.runner.setCommand(["cmd"])
 
-        _, _, rc, timed_out = self.runner.timeout(1)
+        _, _, _, timed_out = self.runner.timeout(1)
 
         self.assertTrue(timed_out)
 

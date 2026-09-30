@@ -36,8 +36,6 @@ class RamDisk(RamDiskTemplate):
     found in the ramdisk/lib/fsHandler/ntFsHandler.py FsHandler.getFsBlockSize() method.
     """
     def __init__(self, size=512, mountpoint=False, logger=False, **kwargs):
-        """
-        """
         print("SIZE: " + str(size))
         print("MOUNTPOINT: " + str(mountpoint))
 
@@ -130,14 +128,14 @@ class RamDisk(RamDiskTemplate):
         # f.runCmd.communicate()
         #retval, reterr, retcode = self.runCmd.communicate()
 
-        retval = subprocess.run(cmd, capture_output=True, text=True)
+        retval = subprocess.run(cmd, capture_output=True, text=True, check=False)
 
         #print('RETVAL: "' + str(retval)+ '"')
 
         if retval == '':
             success = False
             #print('RETVAL: "'+ str(retval) + '"')
-            raise Exception("Error trying to create ramdisk(" + str(reterr).strip() + ")")
+            raise OSError("Error trying to create ramdisk(" + str(reterr).strip() + ")")
         else:
 
             # Get the device
@@ -213,9 +211,9 @@ class RamDisk(RamDiskTemplate):
         self.mntPoint = ""
         try :
             self.mntPoint = mkdtemp()
-        except Exception as err :
+        except OSError:
             self.logger.log(lp.WARNING, "Exception trying to create temporary directory")
-            raise err
+            raise
         else :
             success = True
             self.logger.log(lp.WARNING,
@@ -261,7 +259,6 @@ class RamDisk(RamDiskTemplate):
         """
 
         eject(self.myRamdiskDev, self.logger)
-        return
 
     ###########################################################################
 
@@ -272,7 +269,6 @@ class RamDisk(RamDiskTemplate):
         Must be over-ridden to provide OS/Method specific functionality
         """
         eject(self.myRamdiskDev, self.logger)
-        return
 
     ###########################################################################
 
@@ -353,8 +349,6 @@ class RamDisk(RamDiskTemplate):
 logger = CyLogger()
 
 def detach(device, logger=False):
-    """
-    """
     success = False
 
     runCmd = RunWith()
@@ -365,11 +359,11 @@ def detach(device, logger=False):
 
     runCmd.setCommand(umountCmd)
     runCmd.communicate()
-    retval, reterr, retcode = runCmd.getNlogReturns()
+    _, reterr, retcode = runCmd.getNlogReturns()
 
     if retcode == '':
         success = False
-        raise Exception("Error trying to unmount drive : (" + str(reterr).strip() + ")")
+        raise OSError("Error trying to unmount drive : (" + str(reterr).strip() + ")")
     else:
         success = True
 
@@ -404,11 +398,11 @@ def umount(device, logger=False):
     #logger.log(lp.WARNING, "Running command to unmount ramdisk: \n\t" + str(umountCmd))
     runCmd.setCommand(umountCmd)
     runCmd.communicate()
-    retval, reterr, retcode = runCmd.getNlogReturns()
+    _, reterr, retcode = runCmd.getNlogReturns()
 
     if retcode == '':
         success = False
-        raise Exception("Error trying to unmount drive : (" + str(reterr).strip() + ")")
+        raise OSError("Error trying to unmount drive : (" + str(reterr).strip() + ")")
     else:
         success = True
         #logger.log(lp.INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
@@ -421,7 +415,7 @@ def umount(device, logger=False):
 
         runCmd.setCommand(delMountPntCmd)
         runCmd.communicate()
-        retval, reterr, retcode = runCmd.getNlogReturns()
+        _, reterr, retcode = runCmd.getNlogReturns()
 
         print("RETERR: " + str(reterr))
 
@@ -449,11 +443,11 @@ def eject(device, logger=False):
     #logger.log(lp.WARNING, "Running command to unmount ramdisk: \n\t" + str(umountCmd))
     runCmd.setCommand(umountCmd)
     runCmd.communicate()
-    retval, reterr, retcode = runCmd.getNlogReturns()
+    _, reterr, retcode = runCmd.getNlogReturns()
 
     if retcode == '':
         success = False
-        raise Exception("Error trying to unmount drive : (" + str(reterr).strip() + ")")
+        raise OSError("Error trying to unmount drive : (" + str(reterr).strip() + ")")
     else:
         success = True
         #logger.log(lp.INFO, "Looks like the drive unmounted : ( \n\n str(retval) \n")
@@ -464,7 +458,7 @@ def eject(device, logger=False):
 
     runCmd.setCommand(delMountPntCmd)
     runCmd.communicate()
-    retval, reterr, retcode = runCmd.getNlogReturns()
+    _, reterr, retcode = runCmd.getNlogReturns()
 
     print("RETERR: " + str(reterr))
 
@@ -484,10 +478,10 @@ def getMountData(device):
 
     runCmd.setCommand(cmd, creationflags=True)
     runCmd.communicate()
-    retval, reterr, retcode = runCmd.getNlogReturns()
+    _, reterr, retcode = runCmd.getNlogReturns()
 
     if retcode == '':
-        raise Exception("Error trying to create ramdisk(" + str(reterr).strip() + ")")
+        raise OSError("Error trying to create ramdisk(" + str(reterr).strip() + ")")
     else:
         deviceName = findMountName(device)
         
@@ -501,14 +495,14 @@ def getMountDisks():
     every mounted disk
     """
     mnts = {}
-    result = subprocess.run(r'aim_ll -l', capture_output=True, text=True)
+    result = subprocess.run(r'aim_ll -l', capture_output=True, text=True, check=False)
     print(str(result.stdout))
     #result = re.sub(r"\\n", r"\n", result)
     for line in result.stdout.splitlines():
         line = line.strip()
         if re.search(r"\\\\\\\\", line):
             continue
-        elif re.match("Device number \d+", line):
+        elif re.match(f"Device number {line}"):
             print("Looking for device: " + line)
             # anchor = True
             device = line.split()[-1]

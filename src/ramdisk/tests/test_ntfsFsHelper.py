@@ -11,7 +11,7 @@ import re
 import sys
 import unittest
 from unittest import SkipTest
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 # Get the parent directory of the current file's parent directory
@@ -36,10 +36,6 @@ LOGGER = CyLogger()
 
 @unittest.skipUnless(sys.platform.lower().startswith("win32"), "Only runs on Windows")
 class test_ntfsFsHelper(unittest.TestCase):
-    """
-    """
-
-    ##################################
 
     @classmethod
     def setUp(self):
@@ -49,8 +45,7 @@ class test_ntfsFsHelper(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        """
-        """
+
         # If we don't have a supported platform, skip this test.
         if not sys.platform.startswith("win32"):
             raise unittest.SkipTest("This is not valid on this OS")
@@ -67,17 +62,15 @@ class test_ntfsFsHelper(unittest.TestCase):
 
         #####
         # Start timer in miliseconds
-        self.testStartTime = datetime.now()
+        self.testStartTime = datetime.now(timezone.utc).astimezone()
 
     ##################################
 
     @classmethod
     def tearDownClass(self):
-        """
-        """
         #####
         # capture end time
-        testEndTime = datetime.now()
+        testEndTime = datetime.now(timezone.utc).astimezone()
 
         #####
         # Calculate and log how long it took...
@@ -89,8 +82,7 @@ class test_ntfsFsHelper(unittest.TestCase):
     ##################################
    
     def testGetFsBlockSize(self):
-        """
-        """
+
         #####
         # If we don't have a supported platform, skip this test.
         if not sys.platform.startswith("win32"):  
@@ -165,8 +157,6 @@ class test_ntfsFsHelper(unittest.TestCase):
         self.assertEqual(diskSize, 512, "Disk size IS NOT 512 Megabytes in size...")
 
     def testCheckWin32Applicable(self):
-        """
-        """
         #####
         # If we don't have a supported platform, skip this test.
         if not sys.platform.startswith("win32"):  

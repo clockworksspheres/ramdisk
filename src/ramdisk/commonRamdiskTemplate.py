@@ -40,7 +40,7 @@ class BadRamdiskArguments(Exception):
 
 ###############################################################################
 
-class RamDiskTemplate(object):
+class RamDiskTemplate:
     """
     Template class
     """
@@ -135,9 +135,9 @@ class RamDiskTemplate(object):
         self.mntPoint = ""
         try :
             self.mntPoint = mkdtemp()
-        except Exception as err :
+        except OSError:
             self.logger.log(lp.WARNING, "Exception trying to create temporary directory")
-            raise err
+            raise
         else :
             success = True
             self.logger.log(lp.WARNING,

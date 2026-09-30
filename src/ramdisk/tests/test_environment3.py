@@ -11,7 +11,6 @@ import os
 import sys
 import socket
 import types
-import time
 import unittest
 from contextlib import ExitStack
 from unittest.mock import MagicMock, patch, mock_open

@@ -23,8 +23,7 @@ LOGGER = CyLogger()
 
 
 class test_commonRamdiskTemplate(unittest.TestCase):
-    """
-    """
+
     metaVars = {'setupDone': None, 'testStartTime': 0, 'setupCount': 0}
 
     def setUp(self):
@@ -40,11 +39,8 @@ class test_commonRamdiskTemplate(unittest.TestCase):
         # self.libc = getLibc()
         #####
         # Start timer in miliseconds
-        self.metaVars['testStartTime'] = datetime.now()
+        self.metaVars['testStartTime'] = datetime.now().astimezone()
         self.metaVars['setupDone'] = True
-
-    ###########################################################################
-    # Method Tests
 
     ##################################
 
@@ -55,7 +51,6 @@ class test_commonRamdiskTemplate(unittest.TestCase):
         rdt = RamDiskTemplate(100, "/tmp/tmptest")
         self.assertTrue(rdt.diskSize == 100, "Sizes don't match...")
         self.assertTrue(rdt.mntPoint == "/tmp/tmptest", "Mountpoints don't match...")
-        #self.assertTrue(isinstance(rdt.logger, type(CyLogger)), "Logger shouldn't be initialized...")
 
     ##################################
 
@@ -152,7 +147,7 @@ class test_commonRamdiskTemplate(unittest.TestCase):
 
         #####
         # capture end time
-        testEndTime = datetime.now()
+        testEndTime = datetime.now().astimezone()
 
         #####
         # Calculate and log how long it took...

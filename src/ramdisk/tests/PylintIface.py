@@ -57,10 +57,9 @@ class AjsonReporter(JSONReporter):
         self.messages.clear()
         try:
             self.out.write("")
-        except Exception:
+        except OSError:
             pass
-        return None
-
+        #  return None
 
 # ---------------------------------------------------------------------------
 # Shared Pylint argument list

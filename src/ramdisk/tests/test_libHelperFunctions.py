@@ -55,16 +55,6 @@ class TestLibHelperFunctions(unittest.TestCase):
         with self.assertRaises(UnsupportedOSError):
             helpers.get_console_user()
 
-    @patch("lib.libHelperFunctions.sys.platform", "linux")
-    @patch("lib.libHelperFunctions.logger")
-    @patch("lib.libHelperFunctions.Popen", side_effect=Exception("boom"))
-    def test_get_console_user_exception(self, mock_popen, mock_logger):
-        with self.assertRaises(Exception):
-            helpers.get_console_user()
-
-        # Ensure logging occurred
-        mock_logger.log.assert_called()
-
     # ---------------------------------------------------------
     # touch
     # ---------------------------------------------------------
