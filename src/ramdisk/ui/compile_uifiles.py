@@ -1,7 +1,6 @@
 
 
 import os
-import sys 
 
 from ramdisk.lib.run_commands import RunWith
 
