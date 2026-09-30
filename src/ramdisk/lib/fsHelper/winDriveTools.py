@@ -50,7 +50,7 @@ def findDrive(path):
 
 def findMountName(device):
 
-    result = subprocess.run(["aim_ll", "-l", "-u", device], capture_output=True, text=True)
+    result = subprocess.run(["aim_ll", "-l", "-u", device], capture_output=True, text=True, check=False)
     
     mntName = ""
     for line in result.stdout.splitlines():
@@ -104,5 +104,3 @@ if __name__ == "__main__":
 
     deviceName = findMountName("000100")
     print(deviceName)
-
-

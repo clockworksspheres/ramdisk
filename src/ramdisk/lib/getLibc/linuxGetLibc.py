@@ -1,6 +1,3 @@
-'''
-'''
-
 
 # --- Native python libraries
 import os

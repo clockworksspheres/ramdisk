@@ -1,6 +1,3 @@
-'''
-'''
-
 
 # --- Native python libraries
 import os
@@ -22,16 +19,14 @@ class LibcNotAvailableError(BaseException):
 
 
 
-class libc(object):
-    """
-    """
+class libc:
+
     def ___init___(self):
         super(libc, self).__init__()
         pass
 
     def sync(self):
-        """
-        """
+
         pass
 
 
