@@ -10,11 +10,7 @@ import io
 import re
 import sys
 import time
-import random
-import tempfile
 import traceback
-import inspect
-import unittest
 import ctypes
 from subprocess import SubprocessError
 from datetime import datetime
@@ -42,16 +38,11 @@ class LibcNotAvailableError(BaseException):
         BaseException.__init__(self, *args, **kwargs)
 
 
-class GenericTestUtilities(object):
+class GenericTestUtilities:
     """
     Generic class based Yutilities for ramdisk testing...
-    
-    
     """
     def __init__(self):
-        """
-
-        """
         pass
 
     def commonSetUp(self):
@@ -66,13 +57,11 @@ class GenericTestUtilities(object):
 
     ################################################
     ##### Helper Methods
-    @classmethod
 
+    @classmethod
     def findLinuxLibC(self):
         """
         Find Linux Libc library...
-
-        
         """
         possible_paths = ["/lib/x86_64-linux-gnu/libc.so.6",
                           "/lib/i386-linux-gnu/libc.so.6"]
@@ -84,36 +73,27 @@ class GenericTestUtilities(object):
                 break
 
     ################################################
-    @classmethod
-    def _pass(self):
-        """
-        Filler if a library didn't load properly
-        """
-        pass
-
-    ################################################
 
     def touch(self, fname="", message_level="normal"):
         """
-        Python implementation of the touch command..
-
-        
+        Python implementation of the touch command..        
         """
         if re.match(r"^\s*$", str(fname)):
             self.logger.log(lp.WARNING, "Cannot touch a file without a filename....")
         else:
             try:
-                fhandle = io.open(fname, "w")
-            except io.BlockingIOError as err:
+                with io.open(fname, "w") as myfile:
+                    pass
+            except io.BlockingIOError:
                 self.logger.log(lp.WARNING, traceback.format_exc())
                 self.logger.log(lp.WARNING, "Cannot open to touch: " + str(fname))
-                raise(err)
-            except io.UnsupportedOperation as err:
+                raise
+            except io.UnsupportedOperation:
                 self.logger.log(lp.WARNING, traceback.format_exc())
                 self.logger.log(lp.WARNING, "Cannot open to touch: " + str(fname))
-                raise(err)
+                raise
             else:
-                fhandle.close() 
+                myfile.close() 
 
     ################################################
 
@@ -127,33 +107,24 @@ class GenericTestUtilities(object):
             if not os.path.exists(str(path)):
                 try:
                     os.makedirs(str(path))
-                except OSError as err1:
+                except OSError:
                     self.logger.log(lp.WARNING, traceback.format_exc())
-                    self.logger.log(lp.WARNING, "Exception: " + str(err1))
-                    raise(err1)
+                    raise
         if not path:
             self.logger.log(lp.WARNING, "Bad path...")
         else:
             if not os.path.exists(str(path)):
                 try:
                     os.makedirs(str(path))
-                except OSError as err1:
+                except OSError:
                     self.logger.log(lp.WARNING, "OSError exception attempting to create directory: " + str(path))
-                    self.logger.log(lp.WARNING, "Exception: " + str(err1))
-                    raise(err1)
-                except Exception as err2:
-                    self.logger.log(lp.WARNING, "Unexpected Exception trying to makedirs: " + str(err2))
-                    raise(err2)
+                    raise
 
     ################################################
     def newish_proto_mkfile(self, file_path="", file_size=0, pattern="rand", block_size=512, mode=0o777):
-        """
-        """
-        total_time = 0
-        # time.sleep(.08)
+
         time.sleep(.02)
         if file_path and file_size:
-            self.libc.sync()
             file_size = file_size * 1024 * 1024
             if os.path.isdir(file_path):
                 tmpfile_path = os.path.join(file_path, "testfile")
@@ -161,13 +132,10 @@ class GenericTestUtilities(object):
                 tmpfile_path = file_path
             self.logger.log(lp.DEBUG, "Writing to: " + tmpfile_path)
         
-            # Start timer in miliseconds
-            start_time = datetime.now()
-
             # do low level file access...
             with os.fdopen(os.open(tmpfile_path, os.O_WRONLY | os.O_CREAT), 'w') as tmpfile_fd:
-                tmpfile_fd.tell() < file_size
-                tmpfile_fd.write(str(os.urandom(1024)))
+                if tmpfile_fd.tell() < file_size:
+                    tmpfile_fd.write(str(os.urandom(1024)))
 
     def mkfile(self, file_path="", file_size=0, pattern="rand", block_size=512, mode=0o777, small=False):
         """
@@ -204,20 +172,6 @@ class GenericTestUtilities(object):
 
                 # Start timer in miliseconds
                 start_time = datetime.now()
-
-                """
-                # do low level file access...
-                with os.fdopen(os.open(tmpfile_path, os.O_WRONLY | os.O_CREAT), 'w') as tmpfile_fd:
-
-                    # do file writes...
-                    for i in range(blocks):
-                        tmp_buffer = os.urandom(block_size)
-                        tmpfile_fd.write(str(tmp_buffer))
-                        # tmpfile_fd.fsync()
-                    self.libc.sync()
-                os.unlink(tmpfile_path)
-                self.libc.sync()
-                """
                 
                 # tmpfile = os.open(tmpfile_path, os.O_WRONLY | os.O_CREAT, mode)
 
@@ -228,26 +182,15 @@ class GenericTestUtilities(object):
                         tmp_buffer = str(os.urandom(block_size))
                         tmpfile.write(tmp_buffer)
                         os.fsync(tmpfile)
-                '''
-                time.sleep(.01)
-                self.libc.sync()
-                os.close(tmpfile)
-                time.sleep(.01)
-                self.libc.sync()
-                time.sleep(.01)
-                os.unlink(tmpfile_path)
-                time.sleep(.01)
-                self.libc.sync()
-                '''
+
                 # capture end time
                 end_time = datetime.now()
-            except Exception as err:
+            except OSError:
                 self.logger.log(lp.WARNING, traceback.format_exc())
                 self.logger.log(lp.WARNING, "Exception trying to write temp file for "  + \
                                 "benchmarking...")
-                self.logger.log(lp.WARNING, "Exception thrown: " + str(err))
                 total_time = 0
-                raise(err)
+                raise
             else:
                 total_time = end_time - start_time
         return total_time
@@ -268,7 +211,7 @@ class GenericTestUtilities(object):
         try:
             self.rw.setCommand(runcmd)
             # def waitNpassThruStdout(self, chk_string=None, respawn=False, silent=True)
-            (myout, myerr, myretcode) = self.rw.waitNpassThruStdout(dev)
+            (myout, _, _) = self.rw.waitNpassThruStdout(dev)
             for line in myout:
                 try:
                     # Filesystem   512-blocks      Used Available Capacity iused     ifree %iused  Mounted on
@@ -278,7 +221,7 @@ class GenericTestUtilities(object):
                     capacityInPercent = look_for_freespace.group(1)
                     inodesUsed = look_for_freespace.group(2)
                     inodesFree = look_for_freespace.group(3)
-                except:
+                except OSError, re.error:
                     pass 
         except SubprocessError as Err:
             self.logger.log(lp.WARNING, traceback.format_exc())

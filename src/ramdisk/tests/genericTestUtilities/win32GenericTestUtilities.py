@@ -20,15 +20,6 @@ from subprocess import SubprocessError
 
 #--- non-native python libraries in this source tree
 
-if sys.platform.startswith("darwin"):
-    from ramdisk.lib.getLibc.macGetLibc import getLibc
-elif sys.platform.startswith("linux"):
-    from ramdisk.lib.getLibc.linuxGetLibc import getLibc
-elif sys.platform.startswith("win32"):
-    from ramdisk.lib.getLibc.winGetLibc import getLibc
-else:
-    raise Exception("Damn it Jim!!! What OS is this???")
-
 from ramdisk.lib.loggers import CyLogger
 from ramdisk.lib.loggers import LogPriority as lp
 from ramdisk.lib.run_commands import RunWith as rw
@@ -51,9 +42,7 @@ class MockWin32file():
 
 class GenericTestUtilities(object):
     """
-    Generic class based Yutilities for ramdisk testing...
-    
-    
+    Generic class based Yutilities for ramdisk testing...   
     """
     def __init__(self):
         """
@@ -64,33 +53,6 @@ class GenericTestUtilities(object):
         self.libc = getLibc()
 
         self.rw = rw(self.logger)
-
-    ################################################
-    ##### Helper Methods
-    @classmethod
-
-    def findLinuxLibC(self):
-        """
-        Find Linux Libc library...
-
-        
-        """
-        possible_paths = ["/lib/x86_64-linux-gnu/libc.so.6",
-                          "/lib/i386-linux-gnu/libc.so.6"]
-        for path in possible_paths:
-
-            if os.path.exists(path):
-                self.libcPath = path
-                self.libc = ctypes.CDLL(self.libcPath)
-                break
-
-    ################################################
-    @classmethod
-    def _pass(self):
-        """
-        Filler if a library didn't load properly
-        """
-        pass
 
     ################################################
 
@@ -132,17 +94,18 @@ class GenericTestUtilities(object):
             self.logger.log(lp.WARNING, "Cannot touch a file without a filename....")
         else:
             try:
-                fhandle = io.open(fname, "w")
-            except io.BlockingIOError as err:
+                with open(fname, "w") as myfile:
+                    pass
+            except io.BlockingIOError:
                 self.logger.log(lp.WARNING, traceback.format_exc())
                 self.logger.log(lp.WARNING, "Cannot open to touch: " + str(fname))
-                raise(err)
-            except io.UnsupportedOperation as err:
+                raise
+            except io.UnsupportedOperation:
                 self.logger.log(lp.WARNING, traceback.format_exc())
                 self.logger.log(lp.WARNING, "Cannot open to touch: " + str(fname))
-                raise(err)
+                raise
             else:
-                fhandle.close() 
+                myfile.close() 
 
     ################################################
 
@@ -156,29 +119,27 @@ class GenericTestUtilities(object):
             if not os.path.exists(str(path)):
                 try:
                     os.makedirs(str(path))
-                except OSError as err1:
+                except OSError:
                     self.logger.log(lp.WARNING, traceback.format_exc())
-                    self.logger.log(lp.WARNING, "Exception: " + str(err1))
-                    raise(err1)
+                    raise
         if not path:
             self.logger.log(lp.WARNING, "Bad path...")
         else:
             if not os.path.exists(str(path)):
                 try:
                     os.makedirs(str(path))
-                except OSError as err1:
+                except OSError:
+                    self.logger.log(lp.WARNING, traceback.format_exc())
                     self.logger.log(lp.WARNING, "OSError exception attempting to create directory: " + str(path))
-                    self.logger.log(lp.WARNING, "Exception: " + str(err1))
-                    raise(err1)
-                except Exception as err2:
-                    self.logger.log(lp.WARNING, "Unexpected Exception trying to makedirs: " + str(err2))
-                    raise(err2)
+                    raise
+                except Exception:
+                    self.logger.log(lp.WARNING, traceback.format_exc())
+                    self.logger.log(lp.WARNING, "Unexpected Exception trying to makedirs (directory): " + str(path))
+                    raise
 
     ################################################
     def mkfile(self, file_path="", file_size=0, pattern="rand", block_size=512, mode=0o777):
-        """
-        """
-        total_time = 0
+
         time.sleep(.08)
         if file_path and file_size:
             self.libc.sync()
@@ -194,8 +155,8 @@ class GenericTestUtilities(object):
 
             # do low level file access...
             with os.fdopen(os.open(tmpfile_path, os.O_WRONLY | os.O_CREAT), 'w') as tmpfile_fd:
-                tmpfile_fd.tell() < file_size
-                tmpfile_fd.write(str(os.urandom(1024)))
+                if tmpfile_fd.tell() < file_size:
+                    tmpfile_fd.write(str(os.urandom(1024)))
 
     def old_mkfile(self, file_path="", file_size=0, pattern="rand", block_size=512, mode=0o777):
         """
@@ -241,13 +202,12 @@ class GenericTestUtilities(object):
 
                 # capture end time
                 end_time = datetime.now()
-            except Exception as err:
+            except Exception:
                 self.logger.log(lp.WARNING, traceback.format_exc())
                 self.logger.log(lp.WARNING, "Exception trying to write temp file for "  + \
                                 "benchmarking...")
-                self.logger.log(lp.WARNING, "Exception thrown: " + str(err))
                 total_time = 0
-                raise(err)
+                raise
             else:
                 total_time = end_time - start_time
         return total_time
@@ -268,22 +228,20 @@ class GenericTestUtilities(object):
         try:
             self.rw.setCommand(runcmd)
             # def waitNpassThruStdout(self, chk_string=None, respawn=False, silent=True)
-            myout, myerr, myretcode = self.rw.waitNpassThruStdout(dev)
+            myout, _, _ = self.rw.waitNpassThruStdout(dev)
             for line in myout:
                 try:
                     # Filesystem   512-blocks      Used Available Capacity iused     ifree %iused  Mounted on
                     # /dev/disk3s1  478724992 219018232 195722792    53% 1167141 978613960    0%   /System/Volumes/Data
-                    look_for_freespace = re.match("\S+\s+\d+\s+\d+\s+\(d+)\s+\(d+)\S\s+\(d+)\s+(\d+)\s+\d+\S\s+\S+.*", line.strip())
+                    look_for_freespace = re.match(r"\S+\s+\d+\s+\d+\s+\(d+)\s+\(d+)\S\s+\(d+)\s+(\d+)\s+\d+\S\s+\S+.*", line.strip())
                     available = look_for_freespace.group(0)
                     capacityInPercent = look_for_freespace.group(1)
                     inodesUsed = look_for_freespace.group(2)
                     inodesFree = look_for_freespace.group(3)
-                except:
+                except re.error:
                     pass 
-        except SubprocessError as Err:
+        except SubprocessError:
             self.logger.log(lp.WARNING, traceback.format_exc())
             self.logger.log(lp.WARNING, "Exception thrown trying to find free space on device: " + str(dev) + " assumed fstype: " + str(fsType))
 
         return available, capacityInPercent, inodesUsed, inodesFree
-
-
