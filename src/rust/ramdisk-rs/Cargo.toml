@@ -1,0 +1,19 @@
+[package]
+name = "ramdisk"
+version = "0.2.0"
+edition = "2021"
+description = "Cross-platform interface for creating and managing ramdisks (Linux tmpfs, macOS hdiutil, Windows AIM)"
+license = "Unlicense"
+readme = "README.md"
+keywords = ["ramdisk", "tmpfs", "cross-platform", "devops"]
+categories = ["filesystem", "os"]
+
+[[bin]]
+name = "ramdisk"
+path = "src/bin/ramdisk.rs"
+
+[dependencies]
+thiserror = "1.0"
+
+[features]
+default = []
