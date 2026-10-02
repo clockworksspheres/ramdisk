@@ -155,7 +155,6 @@ public:
 ## Future work
 
 - Optional pure-user-space backends (e.g. FUSE on Linux, WinFsp on Windows)
-- Union / overlay mounts
 - More comprehensive unit tests
 - pkg-config / vcpkg / Conan packaging
 
