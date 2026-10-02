@@ -202,7 +202,6 @@ class CyLogger(Singleton):
         if self.rotate:
             try:
                 self.logr.handlers.RotatingFileHandler.doRollover()
-
             except (FileNotFoundError, IsADirectoryError, NotADirectoryError, OSError, ValueError, TypeError) as err:
                 self.logr.log(LogPriority.WARNING, "Exception: " + str(err))
                 self.logr.log(LogPriority.WARNING, traceback.format_exc())

@@ -1322,4 +1322,3 @@ def start_detached(cmd):
             stdin=subprocess.DEVNULL
         )
 
-
