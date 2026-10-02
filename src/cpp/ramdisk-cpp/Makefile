@@ -5,11 +5,31 @@ BUILDDIR  ?= build
 CMAKE     ?= cmake
 BUILDTYPE ?= Release
 
-.PHONY: all configure build clean distclean rebuild examples install help
+.PHONY: all configure build clean distclean rebuild examples install help check-deps
 
 all: build
 
-configure:
+check-deps:
+	@command -v $(CMAKE) >/dev/null 2>&1 || { \
+		echo ""; \
+		echo "ERROR: '$(CMAKE)' not found."; \
+		echo ""; \
+		echo "Install build dependencies:"; \
+		echo "  Debian/Ubuntu:  sudo apt update && sudo apt install -y build-essential cmake"; \
+		echo "  Fedora:         sudo dnf install -y gcc-c++ cmake make"; \
+		echo "  macOS:          xcode-select --install"; \
+		echo "                  brew install cmake   # if needed"; \
+		echo ""; \
+		exit 127; \
+	}
+	@command -v c++ >/dev/null 2>&1 || command -v g++ >/dev/null 2>&1 || command -v clang++ >/dev/null 2>&1 || { \
+		echo "ERROR: No C++ compiler found (c++/g++/clang++)."; \
+		echo "  Debian/Ubuntu:  sudo apt install -y build-essential"; \
+		echo "  macOS:          xcode-select --install"; \
+		exit 127; \
+	}
+
+configure: check-deps
 	@mkdir -p $(BUILDDIR)
 	$(CMAKE) -S . -B $(BUILDDIR) \
 		-DCMAKE_BUILD_TYPE=$(BUILDTYPE) \
@@ -45,5 +65,10 @@ help:
 	@echo "  make distclean    - delete entire $(BUILDDIR)/ directory"
 	@echo "  make rebuild      - distclean + build"
 	@echo "  make install      - install library and headers"
+	@echo "  make check-deps   - verify cmake and a C++ compiler are installed"
 	@echo ""
 	@echo "Variables: BUILDDIR=$(BUILDDIR) BUILDTYPE=$(BUILDTYPE)"
+	@echo ""
+	@echo "Dependencies:"
+	@echo "  Debian/Ubuntu:  sudo apt install -y build-essential cmake"
+	@echo "  macOS:          xcode-select --install && brew install cmake"

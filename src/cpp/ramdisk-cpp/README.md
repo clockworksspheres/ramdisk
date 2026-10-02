@@ -27,7 +27,39 @@ License: **Unlicense** (public domain) – same as the original.
 - CMake ≥ 3.16
 - Platform tools listed above
 
+### Install dependencies
+
+**Debian / Ubuntu:**
+```bash
+sudo apt update
+sudo apt install -y build-essential cmake
+```
+
+**Fedora:**
+```bash
+sudo dnf install -y gcc-c++ cmake make
+```
+
+**macOS:**
+```bash
+xcode-select --install          # compiler + SDKs
+brew install cmake              # if cmake is not already present
+```
+
 ## Building
+
+From the project root:
+
+```bash
+make                  # configure + build
+make clean            # clean objects
+make distclean        # remove build/ entirely
+make rebuild          # distclean + build
+```
+
+Binaries land in `build/` (e.g. `build/ramdisk_cli`).
+
+Or with CMake directly:
 
 ```bash
 mkdir build && cd build
