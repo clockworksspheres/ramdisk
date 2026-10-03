@@ -11,7 +11,10 @@ public:
     ~MacRamDisk() override;
 
     bool umount() override;
-    std::string getDevice() const override { return device_; }
+    /** Volume device shown to users / GUI (APFS volume), not the raw attach node. */
+    std::string getDevice() const override {
+        return !partition_.empty() ? partition_ : device_;
+    }
     std::string getMountPoint() const override { return mountPoint_; }
     bool success() const override { return success_; }
     std::tuple<bool, std::string, std::string> getData() const override;

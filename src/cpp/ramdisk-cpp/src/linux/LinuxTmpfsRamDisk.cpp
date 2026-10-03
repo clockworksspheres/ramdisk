@@ -14,6 +14,7 @@ LinuxTmpfsRamDisk::LinuxTmpfsRamDisk(const RamDiskOptions& opts)
     , mode_(opts.mode)
     , uid_(currentUid())
     , gid_(currentGid())
+    , sudoPassword_(opts.sudoPassword)
 {
     if (fsType_ != "tmpfs" && fsType_ != "ramfs") {
         throw RamDiskError("fsType must be 'tmpfs' or 'ramfs'");
@@ -62,23 +63,24 @@ bool LinuxTmpfsRamDisk::mount() {
     auto cmd = buildMountCommand();
     RD_LOG_INFO("Mounting: " + cmd);
 
-    // Prefer direct mount(2) when we are root; otherwise fall back to the
-    // external mount binary (which may require sudo / capabilities).
+    ProcessResult res;
     if (geteuid() == 0) {
-        // We still shell out for simplicity and full option support.
-        auto res = runShell(cmd);
+        res = runShell(cmd);
+    } else if (!sudoPassword_.empty()) {
+        RD_LOG_INFO("Not root — elevating with sudo -S");
+        res = runShellSudo(cmd, sudoPassword_);
+    } else {
+        // Try without sudo first (might have CAP_SYS_ADMIN)
+        res = runShell(cmd);
         if (!res.ok()) {
-            RD_LOG_ERROR("mount failed: " + res.stderrStr);
+            RD_LOG_ERROR("mount failed (need root or sudo password): " + res.stderrStr);
             return false;
         }
         return true;
     }
 
-    // Non-root: try the command; user is expected to have the necessary
-    // privileges or the call will fail with a clear error.
-    auto res = runShell(cmd);
     if (!res.ok()) {
-        RD_LOG_ERROR("mount failed (are you root / have CAP_SYS_ADMIN?): " + res.stderrStr);
+        RD_LOG_ERROR("mount failed: " + res.stderrStr + "\n" + res.stdoutStr);
         return false;
     }
     return true;
@@ -87,11 +89,25 @@ bool LinuxTmpfsRamDisk::mount() {
 bool LinuxTmpfsRamDisk::umount() {
     if (!success_) return false;
     RD_LOG_INFO("Unmounting " + mountPoint_);
-    auto res = runCommand({"umount", mountPoint_});
-    if (!res.ok()) {
-        // try lazy unmount
-        res = runCommand({"umount", "-l", mountPoint_});
+
+    ProcessResult res;
+    if (geteuid() == 0) {
+        res = runCommand({"umount", mountPoint_});
+        if (!res.ok()) {
+            res = runCommand({"umount", "-l", mountPoint_});
+        }
+    } else if (!sudoPassword_.empty()) {
+        res = runShellSudo("umount '" + mountPoint_ + "'", sudoPassword_);
+        if (!res.ok()) {
+            res = runShellSudo("umount -l '" + mountPoint_ + "'", sudoPassword_);
+        }
+    } else {
+        res = runCommand({"umount", mountPoint_});
+        if (!res.ok()) {
+            res = runCommand({"umount", "-l", mountPoint_});
+        }
     }
+
     if (res.ok()) {
         ownsMount_ = false;
         success_ = false;
@@ -102,9 +118,17 @@ bool LinuxTmpfsRamDisk::umount() {
 }
 
 bool LinuxTmpfsRamDisk::umountDevice(const std::string& mountPoint) {
+    // No password available at free-function level; try plain umount then sudo -n
     auto res = runCommand({"umount", mountPoint});
     if (!res.ok()) {
         res = runCommand({"umount", "-l", mountPoint});
+    }
+    if (!res.ok() && geteuid() != 0) {
+        // Non-interactive sudo (works if timestamp is still valid)
+        res = runShell("sudo -n umount '" + mountPoint + "' 2>/dev/null");
+        if (!res.ok()) {
+            res = runShell("sudo -n umount -l '" + mountPoint + "' 2>/dev/null");
+        }
     }
     return res.ok();
 }

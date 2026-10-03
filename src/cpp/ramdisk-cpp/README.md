@@ -57,13 +57,34 @@ make distclean        # remove build/ entirely
 make rebuild          # distclean + build
 ```
 
-Binaries land in `build/` (e.g. `build/ramdisk_cli`).
+Binaries land in `build/` (e.g. `build/ramdisk_cli`, `build/ramdisk_gui`).
+
+```bash
+make                  # library + CLI + GUI (if Qt6 found)
+make GUI=OFF          # skip Qt GUI
+```
+
+### Qt 6 GUI (port of PySide6 `ramdisk-setup.py`)
+
+**Install Qt:**
+```bash
+# Debian/Ubuntu
+sudo apt install -y qt6-base-dev
+
+# macOS
+brew install qt
+```
+
+**Run:**
+```bash
+./build/ramdisk_gui
+```
 
 Or with CMake directly:
 
 ```bash
 mkdir build && cd build
-cmake .. -DRAMDISK_BUILD_EXAMPLES=ON
+cmake .. -DRAMDISK_BUILD_EXAMPLES=ON -DRAMDISK_BUILD_GUI=ON
 cmake --build .
 ```
 
@@ -155,6 +176,7 @@ public:
 ## Future work
 
 - Optional pure-user-space backends (e.g. FUSE on Linux, WinFsp on Windows)
+- Union / overlay mounts
 - More comprehensive unit tests
 - pkg-config / vcpkg / Conan packaging
 
