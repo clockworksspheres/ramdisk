@@ -33,6 +33,7 @@ private:
     int           mode_;
     int           uid_;
     int           gid_;
+    std::string   sudoPassword_;
     bool          success_    = false;
     bool          ownsMount_  = false;
 };

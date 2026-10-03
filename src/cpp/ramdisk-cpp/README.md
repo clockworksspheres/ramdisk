@@ -48,21 +48,35 @@ brew install cmake              # if cmake is not already present
 
 ## Building
 
-From the project root:
+### Linux / macOS
 
 ```bash
 make                  # configure + build
 make clean            # clean objects
 make distclean        # remove build/ entirely
 make rebuild          # distclean + build
-```
-
-Binaries land in `build/` (e.g. `build/ramdisk_cli`, `build/ramdisk_gui`).
-
-```bash
-make                  # library + CLI + GUI (if Qt6 found)
 make GUI=OFF          # skip Qt GUI
 ```
+
+### Windows (PowerShell — recommended)
+
+```powershell
+.\build.ps1                 # configure + build
+.\build.ps1 -DistClean      # wipe build\ and rebuild
+.\build.ps1 -Gui:$false     # skip Qt GUI
+```
+
+### Windows (GNU make)
+
+The Makefile uses `cmake -E` (no Unix-only `rm`/`{` shell syntax):
+
+```powershell
+make
+make distclean
+make rebuild
+```
+
+Binaries land in `build/` (e.g. `build/ramdisk_cli`, `build/Release/ramdisk_cli.exe` on MSVC).
 
 ### Qt 6 GUI (port of PySide6 `ramdisk-setup.py`)
 

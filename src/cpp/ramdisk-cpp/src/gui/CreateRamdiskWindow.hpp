@@ -36,11 +36,13 @@ private:
     void addRow(const QString& device, const QString& mountPoint);
     void setStatus(const QString& msg);
     std::uint64_t availableMemoryMb() const;
+    /** Linux: prompt for sudo password if not root. Returns false if cancelled. */
+    bool ensureLinuxSudoPassword();
 
     Ui::MainWindow* ui_ = nullptr;
     bool updatingSize_ = false;
+    std::string linuxSudoPassword_;  // cached for this session
 
-    // Keep ownership of disks created without --release so we can track them;
-    // we call releaseOwnership() so they survive if the user wants them to.
+    // Keep ownership of disks created in this session (released so they stay mounted)
     std::vector<std::unique_ptr<ramdisk::IRamDisk>> ownedDisks_;
 };

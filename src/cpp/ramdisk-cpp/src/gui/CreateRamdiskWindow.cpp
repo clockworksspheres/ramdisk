@@ -3,12 +3,19 @@
 
 #include "ramdisk/Utils.hpp"
 #include "ramdisk/Logger.hpp"
+#include "ramdisk/Process.hpp"
 
 #include <QMessageBox>
 #include <QHeaderView>
 #include <QIntValidator>
 #include <QApplication>
 #include <QTableWidgetItem>
+#include <QInputDialog>
+#include <QLineEdit>
+
+#ifdef __linux__
+#  include <unistd.h>
+#endif
 
 CreateRamdiskWindow::CreateRamdiskWindow(QWidget* parent)
     : QMainWindow(parent)
@@ -103,6 +110,34 @@ void CreateRamdiskWindow::onSizeTextChanged(const QString& text) {
     updatingSize_ = false;
 }
 
+bool CreateRamdiskWindow::ensureLinuxSudoPassword() {
+#ifdef __linux__
+    if (geteuid() == 0) {
+        return true;  // already root
+    }
+    if (!linuxSudoPassword_.empty()) {
+        return true;  // already prompted this session
+    }
+    bool ok = false;
+    const QString pw = QInputDialog::getText(
+        this,
+        tr("Administrator privileges required"),
+        tr("Creating or ejecting a ramdisk requires root.\n"
+           "Enter your password for sudo:"),
+        QLineEdit::Password,
+        QString(),
+        &ok);
+    if (!ok || pw.isEmpty()) {
+        setStatus(tr("Cancelled — sudo password required"));
+        return false;
+    }
+    linuxSudoPassword_ = pw.toStdString();
+    return true;
+#else
+    return true;
+#endif
+}
+
 void CreateRamdiskWindow::onCreateClicked() {
     const auto sizeMb = static_cast<std::uint64_t>(ui_->sizeHorizontalSlider->value());
     if (sizeMb == 0) {
@@ -111,9 +146,18 @@ void CreateRamdiskWindow::onCreateClicked() {
         return;
     }
 
+#ifdef __linux__
+    if (!ensureLinuxSudoPassword()) {
+        return;
+    }
+#endif
+
     ramdisk::RamDiskOptions opts;
     opts.sizeMb = sizeMb;
     opts.mountPoint = ui_->mountLineEdit->text().trimmed().toStdString();
+#ifdef __linux__
+    opts.sudoPassword = linuxSudoPassword_;
+#endif
 
     setStatus(tr("Creating %1 MB ramdisk...").arg(sizeMb));
     QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -123,9 +167,13 @@ void CreateRamdiskWindow::onCreateClicked() {
         QApplication::restoreOverrideCursor();
 
         if (!disk || !disk->success()) {
+            // Wrong password? clear cache so next attempt re-prompts
+#ifdef __linux__
+            linuxSudoPassword_.clear();
+#endif
             QMessageBox::critical(this, tr("Create failed"),
                                   tr("Failed to create ramdisk.\n"
-                                     "On Linux you may need to run as root."));
+                                     "Check the password and that sudo is allowed."));
             setStatus(tr("Create failed"));
             return;
         }
@@ -141,6 +189,9 @@ void CreateRamdiskWindow::onCreateClicked() {
                            QString::fromStdString(mnt)));
     } catch (const std::exception& e) {
         QApplication::restoreOverrideCursor();
+#ifdef __linux__
+        linuxSudoPassword_.clear();
+#endif
         QMessageBox::critical(this, tr("Error"),
                               QString::fromUtf8(e.what()));
         setStatus(tr("Error: %1").arg(e.what()));
@@ -154,6 +205,12 @@ void CreateRamdiskWindow::onEjectClicked() {
                                  tr("Select a row in the table first."));
         return;
     }
+
+#ifdef __linux__
+    if (!ensureLinuxSudoPassword()) {
+        return;
+    }
+#endif
 
     // Remove from bottom to top so indices stay valid
     QList<int> rows;
@@ -178,26 +235,44 @@ void CreateRamdiskWindow::onEjectClicked() {
         }
 #endif
         setStatus(tr("Unmounting %1...").arg(target));
-        const bool ok = ramdisk::umount(target.toStdString());
-        if (!ok && !mount.isEmpty() && mount != target) {
-            // second try with mount point
-            if (ramdisk::umount(mount.toStdString())) {
-                ui_->tableWidget->removeRow(row);
-                setStatus(tr("Unmounted %1").arg(mount));
-                continue;
+
+        bool ok = false;
+#ifdef __linux__
+        if (geteuid() != 0 && !linuxSudoPassword_.empty()) {
+            auto res = ramdisk::runShellSudo(
+                "umount '" + target.toStdString() + "'", linuxSudoPassword_);
+            if (!res.ok()) {
+                res = ramdisk::runShellSudo(
+                    "umount -l '" + target.toStdString() + "'", linuxSudoPassword_);
             }
-            QMessageBox::warning(this, tr("Eject failed"),
-                                 tr("Could not unmount %1.\n"
-                                    "On Linux you may need root.").arg(target));
-            setStatus(tr("Eject failed: %1").arg(target));
-            continue;
+            ok = res.ok();
+            if (!ok && !mount.isEmpty() && mount != target) {
+                res = ramdisk::runShellSudo(
+                    "umount '" + mount.toStdString() + "'", linuxSudoPassword_);
+                ok = res.ok();
+            }
+            if (!ok) {
+                linuxSudoPassword_.clear();
+            }
+        } else {
+            ok = ramdisk::umount(target.toStdString());
+            if (!ok && !mount.isEmpty() && mount != target) {
+                ok = ramdisk::umount(mount.toStdString());
+            }
         }
+#else
+        ok = ramdisk::umount(target.toStdString());
+        if (!ok && !mount.isEmpty() && mount != target) {
+            ok = ramdisk::umount(mount.toStdString());
+        }
+#endif
         if (ok) {
             ui_->tableWidget->removeRow(row);
             setStatus(tr("Unmounted %1").arg(target));
         } else {
             QMessageBox::warning(this, tr("Eject failed"),
                                  tr("Could not unmount %1.").arg(target));
+            setStatus(tr("Eject failed: %1").arg(target));
         }
     }
 }
