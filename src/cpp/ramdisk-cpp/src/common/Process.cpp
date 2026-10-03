@@ -239,7 +239,7 @@ ProcessResult Process::communicate(int timeout_ms) {
 
     auto deadline = (timeout_ms > 0)
         ? std::chrono::steady_clock::now() + std::chrono::milliseconds(timeout_ms)
-        : std::chrono::steady_clock::time_point::max();
+        : (std::chrono::steady_clock::time_point::max)();
 
     std::string out, err;
     while (!waited_) {
