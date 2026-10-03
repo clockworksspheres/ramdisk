@@ -29,11 +29,15 @@ check-deps:
 		exit 127; \
 	}
 
+# Set GUI=OFF to skip Qt GUI:  make GUI=OFF
+GUI ?= ON
+
 configure: check-deps
 	@mkdir -p $(BUILDDIR)
 	$(CMAKE) -S . -B $(BUILDDIR) \
 		-DCMAKE_BUILD_TYPE=$(BUILDTYPE) \
-		-DRAMDISK_BUILD_EXAMPLES=ON
+		-DRAMDISK_BUILD_EXAMPLES=ON \
+		-DRAMDISK_BUILD_GUI=$(GUI)
 
 build: configure
 	$(CMAKE) --build $(BUILDDIR)
@@ -67,8 +71,8 @@ help:
 	@echo "  make install      - install library and headers"
 	@echo "  make check-deps   - verify cmake and a C++ compiler are installed"
 	@echo ""
-	@echo "Variables: BUILDDIR=$(BUILDDIR) BUILDTYPE=$(BUILDTYPE)"
+	@echo "Variables: BUILDDIR=$(BUILDDIR) BUILDTYPE=$(BUILDTYPE) GUI=$(GUI)"
 	@echo ""
 	@echo "Dependencies:"
-	@echo "  Debian/Ubuntu:  sudo apt install -y build-essential cmake"
-	@echo "  macOS:          xcode-select --install && brew install cmake"
+	@echo "  Debian/Ubuntu:  sudo apt install -y build-essential cmake qt6-base-dev"
+	@echo "  macOS:          xcode-select --install && brew install cmake qt"
