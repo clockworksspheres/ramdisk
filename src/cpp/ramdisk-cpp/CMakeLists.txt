@@ -8,6 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(RAMDISK_BUILD_EXAMPLES "Build example programs" ON)
 option(RAMDISK_BUILD_SHARED   "Build shared library"   OFF)
+option(RAMDISK_BUILD_GUI      "Build Qt 6 GUI (ramdisk_gui)" ON)
 
 # -----------------------------------------------------------------------------
 # Library
@@ -62,6 +63,36 @@ if(RAMDISK_BUILD_EXAMPLES)
 
     add_executable(ramdisk_cli examples/cli.cpp)
     target_link_libraries(ramdisk_cli PRIVATE ramdisk)
+endif()
+
+# -----------------------------------------------------------------------------
+# Qt 6 GUI (port of Python PySide6 ramdisk-setup / ui/main.py)
+# -----------------------------------------------------------------------------
+if(RAMDISK_BUILD_GUI)
+    set(CMAKE_AUTOMOC ON)
+    set(CMAKE_AUTOUIC ON)
+    set(CMAKE_AUTORCC ON)
+    set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_CURRENT_SOURCE_DIR}/ui)
+
+    find_package(Qt6 QUIET COMPONENTS Widgets)
+    if(Qt6_FOUND)
+        add_executable(ramdisk_gui
+            src/gui/main_gui.cpp
+            src/gui/CreateRamdiskWindow.cpp
+            src/gui/CreateRamdiskWindow.hpp
+            ui/mainwindow.ui
+        )
+        target_include_directories(ramdisk_gui PRIVATE
+            ${CMAKE_CURRENT_SOURCE_DIR}/src/gui
+            ${CMAKE_CURRENT_BINARY_DIR}   # for ui_mainwindow.h
+        )
+        target_link_libraries(ramdisk_gui PRIVATE ramdisk Qt6::Widgets)
+        message(STATUS "Qt6 found — building ramdisk_gui")
+    else()
+        message(WARNING "Qt6 Widgets not found — skipping ramdisk_gui. "
+                        "Install qt6-base-dev (Linux) or brew install qt (macOS). "
+                        "Or configure with -DRAMDISK_BUILD_GUI=OFF")
+    endif()
 endif()
 
 # -----------------------------------------------------------------------------
