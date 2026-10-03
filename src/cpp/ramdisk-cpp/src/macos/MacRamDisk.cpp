@@ -136,25 +136,57 @@ bool MacRamDisk::createAndMount() {
     }
     RD_LOG_INFO("Formatted APFS volume on " + device_);
 
-    // 3. Discover the actual volume node (often diskNs1s1 for APFS)
+    // 3. Discover the actual *volume* device (not the raw attach node).
+    //    eraseVolume / APFS often creates a second disk (e.g. disk4 → disk5)
+    //    or a slice (disk4s1 / disk4s1s1). Prefer whatever `mount` reports.
     partition_ = deviceMountedAt(defaultMount);
     if (partition_.empty()) {
-        auto list = runCommand({"/usr/sbin/diskutil", "list", device_});
+        auto list = runCommand({"/usr/sbin/diskutil", "list"});
         RD_LOG_DEBUG("diskutil list:\n" + list.stdoutStr);
 
-        // Prefer the longest matching /dev/diskN... path (volume > container)
-        static const std::regex re(R"(/dev/disk\d+(?:s\d+)*)");
-        std::string best;
-        for (auto it = std::sregex_iterator(list.stdoutStr.begin(),
-                                            list.stdoutStr.end(), re);
-             it != std::sregex_iterator(); ++it) {
-            if (it->str().size() > best.size()) {
-                best = it->str();
+        // Collect /dev/diskN paths and prefer a *different* whole disk
+        // that appears after our attach device (second consecutive disk).
+        static const std::regex wholeRe(R"(/dev/disk(\d+)\b)");
+        int baseNum = -1;
+        {
+            std::smatch m;
+            if (std::regex_search(device_, m, wholeRe)) {
+                baseNum = std::stoi(m[1].str());
             }
         }
-        partition_ = !best.empty() ? best : device_;
+        std::string secondDisk;
+        for (auto it = std::sregex_iterator(list.stdoutStr.begin(),
+                                            list.stdoutStr.end(), wholeRe);
+             it != std::sregex_iterator(); ++it) {
+            const int n = std::stoi((*it)[1].str());
+            if (baseNum >= 0 && n == baseNum + 1) {
+                secondDisk = "/dev/disk" + std::to_string(n);
+                break;
+            }
+        }
+
+        // Longest path under our device family (volume slice)
+        static const std::regex pathRe(R"(/dev/disk\d+(?:s\d+)*)");
+        std::string longest;
+        for (auto it = std::sregex_iterator(list.stdoutStr.begin(),
+                                            list.stdoutStr.end(), pathRe);
+             it != std::sregex_iterator(); ++it) {
+            const auto& s = it->str();
+            if (s.find(device_) == 0 && s.size() > longest.size()) {
+                longest = s;
+            }
+        }
+
+        if (!secondDisk.empty()) {
+            partition_ = secondDisk;
+        } else if (!longest.empty() && longest != device_) {
+            partition_ = longest;
+        } else {
+            partition_ = device_;
+        }
     }
-    RD_LOG_INFO("Volume device: " + partition_);
+    RD_LOG_INFO("Raw attach device: " + device_);
+    RD_LOG_INFO("Volume device (for GUI/eject): " + partition_);
 
     // If the caller wants the default /Volumes location, we're done.
     if (mountPoint_ == defaultMount) {
@@ -192,6 +224,12 @@ bool MacRamDisk::createAndMount() {
         return false;
     }
 
+    // Refresh volume device from the final mount point (source of truth)
+    auto mounted = deviceMountedAt(mountPoint_);
+    if (!mounted.empty()) {
+        partition_ = mounted;
+    }
+
     RD_LOG_INFO("Mounted " + partition_ + " at " + mountPoint_);
     return true;
 }
@@ -199,9 +237,14 @@ bool MacRamDisk::createAndMount() {
 bool MacRamDisk::umount() {
     if (!success_) return false;
 
-    RD_LOG_INFO("Unmounting / detaching " + device_);
-    // Prefer diskutil eject / hdiutil detach
-    auto res = runCommand({"/usr/sbin/diskutil", "eject", device_});
+    // Eject the volume device first; fall back to the raw attach node
+    const std::string vol = getDevice();
+    RD_LOG_INFO("Unmounting / detaching volume " + vol +
+                " (attach node " + device_ + ")");
+    auto res = runCommand({"/usr/sbin/diskutil", "eject", vol});
+    if (!res.ok()) {
+        res = runCommand({"/usr/sbin/diskutil", "eject", device_});
+    }
     if (!res.ok()) {
         res = runCommand({"/usr/bin/hdiutil", "detach", device_, "-force"});
     }
@@ -215,6 +258,7 @@ bool MacRamDisk::umount() {
 }
 
 bool MacRamDisk::umountDevice(const std::string& device) {
+    // GUI may pass the volume (second) device; try that, then hdiutil detach
     auto res = runCommand({"/usr/sbin/diskutil", "eject", device});
     if (!res.ok()) {
         res = runCommand({"/usr/bin/hdiutil", "detach", device, "-force"});
@@ -224,14 +268,15 @@ bool MacRamDisk::umountDevice(const std::string& device) {
 
 std::tuple<bool, std::string, std::string>
 MacRamDisk::getData() const {
-    return {success_, mountPoint_, device_};
+    // Report the volume device (second disk / APFS volume), not the raw attach node
+    return {success_, mountPoint_, getDevice()};
 }
 
 std::tuple<bool, std::string, std::string>
 MacRamDisk::getNlogData() {
     RD_LOG_INFO("Success: " + std::string(success_ ? "true" : "false"));
     RD_LOG_INFO("Mount point: " + mountPoint_);
-    RD_LOG_INFO("Device: " + device_);
+    RD_LOG_INFO("Device: " + getDevice());
     return getData();
 }
 
@@ -239,7 +284,7 @@ std::tuple<bool, std::string, std::string>
 MacRamDisk::getNprintData() {
     std::cout << "Success: " << (success_ ? "true" : "false") << '\n'
               << "Mount point: " << mountPoint_ << '\n'
-              << "Device: " << device_ << '\n';
+              << "Device: " << getDevice() << '\n';
     return getData();
 }
 
