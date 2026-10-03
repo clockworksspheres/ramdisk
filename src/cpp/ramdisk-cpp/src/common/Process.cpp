@@ -226,7 +226,7 @@ static std::string readFdAvailable(int fd) {
     return out;
 }
 
-ProcessResult Process::communicate(int timeout_ms) {
+ProcessResult Process::communicate(int timeout_ms, const std::string& stdinData) {
     ProcessResult res;
     if (!started_) {
         res.exitCode = -1;
@@ -234,6 +234,9 @@ ProcessResult Process::communicate(int timeout_ms) {
         return res;
     }
 
+    if (!stdinData.empty()) {
+        writeStdin(stdinData);
+    }
     // Close stdin so the child sees EOF if it was reading
     closeStdin();
 
@@ -444,12 +447,15 @@ static std::string readHandleAvailable(HANDLE h) {
     return out;
 }
 
-ProcessResult Process::communicate(int timeout_ms) {
+ProcessResult Process::communicate(int timeout_ms, const std::string& stdinData) {
     ProcessResult res;
     if (!started_) {
         res.exitCode = -1;
         res.stderrStr = "process not started";
         return res;
+    }
+    if (!stdinData.empty()) {
+        writeStdin(stdinData);
     }
     closeStdin();
 
@@ -542,6 +548,23 @@ ProcessResult runShell(const std::string& command, bool captureOutput) {
         return {-1, "", "spawn failed"};
     }
     return p.communicate();
+}
+
+ProcessResult runShellSudo(const std::string& command,
+                           const std::string& password,
+                           bool captureOutput) {
+#ifdef _WIN32
+    (void)password;
+    return runShell(command, captureOutput);
+#else
+    // sudo -S reads password from stdin; -p '' suppresses the prompt text
+    Process p;
+    if (!p.spawn({"sudo", "-S", "-p", "", "/bin/sh", "-c", command}, captureOutput)) {
+        return {-1, "", "sudo spawn failed"};
+    }
+    // Password must end with newline for sudo -S
+    return p.communicate(0, password + "\n");
+#endif
 }
 
 } // namespace ramdisk

@@ -75,10 +75,11 @@ public:
     std::optional<int> wait(int timeout_ms = 0);
 
     /**
-     * Read remaining stdout/stderr and wait for exit.
-     * Equivalent to Python Popen.communicate().
+     * Optionally write stdinData, close stdin, read stdout/stderr, wait for exit.
+     * Equivalent to Python Popen.communicate(input=...).
      */
-    ProcessResult communicate(int timeout_ms = 0);
+    ProcessResult communicate(int timeout_ms = 0,
+                              const std::string& stdinData = {});
 
     /**
      * Send SIGTERM (POSIX) or TerminateProcess (Windows).
@@ -124,5 +125,13 @@ ProcessResult runCommand(const std::vector<std::string>& args,
 
 /** Run a shell string and wait. */
 ProcessResult runShell(const std::string& command, bool captureOutput = true);
+
+/**
+ * Run a shell command elevated via `sudo -S` (password on stdin).
+ * Falls back to runShell on platforms without sudo.
+ */
+ProcessResult runShellSudo(const std::string& command,
+                           const std::string& password,
+                           bool captureOutput = true);
 
 } // namespace ramdisk

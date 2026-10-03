@@ -104,6 +104,7 @@ struct RamDiskOptions {
     bool          disableJournal  = false;        // macOS only
     std::string   fsType          = "tmpfs";      // Linux: "tmpfs" or "ramfs"
     int           mode            = 0700;         // Linux permission bits
+    std::string   sudoPassword;                   // Linux: used with sudo -S when not root
     // Windows: aim_ll must be on PATH
 };
 
