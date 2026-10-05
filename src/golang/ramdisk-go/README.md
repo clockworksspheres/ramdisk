@@ -241,6 +241,68 @@ ramdisk umount /mnt/buildcache
 
 On Linux, `create` and `umount` generally require root (or `CAP_SYS_ADMIN`).
 
+
+
+
+## Desktop GUI (Qt 6)
+
+A Qt 6 desktop UI lives in `cmd/ramdisk-gui`, mirroring the Python PySide6 app.
+
+It uses **[MIQT](https://github.com/mappu/miqt)** (`github.com/mappu/miqt/qt6`).
+
+### Features
+
+* Size slider + numeric field (MiB)
+* Optional mount-point field
+* **Create** / **Eject** / **Refresh** / **Quit**
+* Table of mounted ramdisks
+* Dark palette in evening hours
+
+### Build (macOS)
+
+Full details: **`cmd/ramdisk-gui/README.md`**.
+
+```bash
+xcode-select --install
+brew install qt pkg-config
+
+export QT_PREFIX="$(brew --prefix qt)"
+export PATH="$QT_PREFIX/bin:$PATH"
+export PKG_CONFIG_PATH="$QT_PREFIX/lib/pkgconfig:${PKG_CONFIG_PATH:-}"
+export SDKROOT="$(xcrun --sdk macosx --show-sdk-path)"
+export CXX="$(xcrun --find clang++)"
+export CC="$(xcrun --find clang)"
+export CGO_CXXFLAGS="-std=c++17 -stdlib=libc++ -isysroot ${SDKROOT}"
+export CGO_CFLAGS="-isysroot ${SDKROOT}"
+export CGO_LDFLAGS="-F${QT_PREFIX}/lib -Wl,-rpath,${QT_PREFIX}/lib -isysroot ${SDKROOT}"
+
+cd /path/to/ramdisk-go          # folder that contains cmd/
+go clean -cache
+cd cmd/ramdisk-gui
+go get github.com/mappu/miqt/qt6@latest
+CGO_ENABLED=1 go build -tags qt -ldflags="-s -w" -o ramdisk-gui .
+./ramdisk-gui
+```
+
+If you are already inside `cmd/ramdisk-gui`, do **not** run `cd cmd/ramdisk-gui` again.
+
+### Build (Linux)
+
+```bash
+sudo apt install qt6-base-dev build-essential pkg-config
+export CGO_CXXFLAGS="-std=c++17"
+cd cmd/ramdisk-gui
+go get github.com/mappu/miqt/qt6@latest
+CGO_ENABLED=1 go build -tags qt -ldflags="-s -w" -o ramdisk-gui .
+sudo ./ramdisk-gui
+```
+
+The CLI does not depend on Qt:
+
+```bash
+go build -o ramdisk ./cmd/ramdisk
+```
+
 ## License
 
 Unlicense (same as the original Python project).

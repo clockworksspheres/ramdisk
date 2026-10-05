@@ -500,3 +500,6 @@ func platformUmountPath(path string) error {
 	}
 	return err
 }
+
+// platformUmountPathWithPassword ignores password on non-Linux.
+func platformUmountPathWithPassword(path, password string) error { return platformUmountPath(path) }

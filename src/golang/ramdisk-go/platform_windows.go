@@ -138,3 +138,6 @@ func platformUmountPath(path string) error {
 	_, _, err = RunCmd(aimLL, "-R", "-u", path)
 	return err
 }
+
+// platformUmountPathWithPassword ignores password on non-Linux.
+func platformUmountPathWithPassword(path, password string) error { return platformUmountPath(path) }
