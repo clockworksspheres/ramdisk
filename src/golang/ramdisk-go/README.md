@@ -286,6 +286,12 @@ CGO_ENABLED=1 go build -tags qt -ldflags="-s -w" -o ramdisk-gui .
 
 If you are already inside `cmd/ramdisk-gui`, do **not** run `cd cmd/ramdisk-gui` again.
 
+### Build (Windows)
+
+See **`cmd/ramdisk-gui/README.md`** for the full Windows guide (MSYS2 UCRT64, Chocolatey, DLLs, aim_ll).
+
+Summary: build inside **MSYS2 UCRT64** with MinGW + Qt 6; run the `.exe` from normal Windows after copying Qt/MinGW DLLs and `platforms\qwindows.dll`. Requires **aim_ll.exe** (Arsenal Image Mounter).
+
 ### Build (Linux)
 
 ```bash
