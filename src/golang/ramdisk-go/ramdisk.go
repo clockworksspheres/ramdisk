@@ -137,3 +137,10 @@ func ListMounted() ([]MountInfo, error) {
 func UmountPath(path string) error {
 	return platformUmountPath(path)
 }
+
+// UmountPathWithPassword is Linux-only helper that elevates via `sudo -S`
+// using the given password (matches the Python GUI auth flow).
+// On non-Linux platforms the password is ignored and UmountPath is used.
+func UmountPathWithPassword(path, password string) error {
+	return platformUmountPathWithPassword(path, password)
+}

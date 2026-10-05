@@ -13,3 +13,6 @@ func platformListMounted() ([]MountInfo, error) {
 func platformUmountPath(path string) error {
 	return &UnsupportedPlatformError{}
 }
+
+// platformUmountPathWithPassword ignores password on non-Linux.
+func platformUmountPathWithPassword(path, password string) error { return platformUmountPath(path) }

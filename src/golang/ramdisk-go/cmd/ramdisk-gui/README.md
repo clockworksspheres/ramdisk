@@ -117,7 +117,10 @@ export CGO_CXXFLAGS="-std=c++17"
 cd /path/to/ramdisk-go/cmd/ramdisk-gui
 go get github.com/mappu/miqt/qt6@latest
 CGO_ENABLED=1 go build -tags qt -ldflags="-s -w" -o ramdisk-gui .
-sudo ./ramdisk-gui    # create/eject need privileges
+./ramdisk-gui
+# Create/Eject will pop up a PolicyKit (pkexec) admin password dialog.
+# Install if missing:  sudo apt install policykit-1
+# Headless/no pkexec: run with sudo ./ramdisk-gui
 ```
 
 ---

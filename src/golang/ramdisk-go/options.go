@@ -38,6 +38,11 @@ type Options struct {
 
 	// WindowsFsType is Windows-only: filesystem type passed to AIM (default "ntfs").
 	WindowsFsType string
+
+	// LinuxSudoPassword is Linux-only: when non-empty and the process is not
+	// root, mount/umount are run via `sudo -S` with this password (same model
+	// as the Python GUI local_auth dialog).
+	LinuxSudoPassword string
 }
 
 // DefaultOptions returns a sensible default Options value.

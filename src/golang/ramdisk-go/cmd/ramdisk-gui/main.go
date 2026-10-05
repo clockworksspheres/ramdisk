@@ -1,11 +1,16 @@
 //go:build qt
 
 // ramdisk-gui – Qt 6 desktop UI for ramdisk-go (MIQT v0.14 API).
+//
+// On Linux, Create and Eject each open a Local Authentication dialog
+// (same layout/algorithm as Python local_auth.ui / local_auth_widget.py):
+// collect password → sudo -S for the privileged mount/umount.
 package main
 
 import (
 	"fmt"
 	"os"
+	"os/user"
 	"runtime"
 	"strconv"
 	"strings"
@@ -51,6 +56,89 @@ func setDarkPalette() {
 	qt.QApplication_SetPalette(p)
 }
 
+// ---------------------------------------------------------------------------
+// Local Authentication dialog — mirrors Python local_auth.ui / local_auth_widget
+// ---------------------------------------------------------------------------
+
+type localAuthDialog struct {
+	*qt.QDialog
+	userEdit *qt.QLineEdit
+	passEdit *qt.QLineEdit
+	accepted bool
+	password string
+	username string
+}
+
+// newLocalAuthDialog builds the same controls as Python local_auth.ui:
+// title "Local Authentication", Username (read-only), Password (echo mode),
+// OK / Cancel. Shown on every Linux create and eject.
+func newLocalAuthDialog(parent *qt.QWidget) *localAuthDialog {
+	d := &localAuthDialog{QDialog: qt.NewQDialog(parent)}
+	d.SetWindowTitle("Local Authentication")
+	d.Resize(337, 206)
+
+	layout := qt.NewQVBoxLayout(d.QWidget)
+
+	title := qt.NewQLabel3("Local Authentication")
+	f := title.Font()
+	f.SetBold(true)
+	title.SetFont(f)
+	layout.AddWidget(title.QWidget)
+
+	layout.AddWidget(qt.NewQLabel3("Username").QWidget)
+	d.userEdit = qt.NewQLineEdit2()
+	if u, err := user.Current(); err == nil {
+		d.userEdit.SetText(u.Username)
+	}
+	d.userEdit.SetReadOnly(true)
+	layout.AddWidget(d.userEdit.QWidget)
+
+	layout.AddWidget(qt.NewQLabel3("Password").QWidget)
+	d.passEdit = qt.NewQLineEdit2()
+	d.passEdit.SetEchoMode(qt.QLineEdit__Password)
+	layout.AddWidget(d.passEdit.QWidget)
+
+	buttons := qt.NewQDialogButtonBox2()
+	buttons.SetStandardButtons(qt.QDialogButtonBox__Ok | qt.QDialogButtonBox__Cancel)
+	layout.AddWidget(buttons.QWidget)
+
+	buttons.OnAccepted(func() {
+		d.username = strings.TrimSpace(d.userEdit.Text())
+		d.password = d.passEdit.Text()
+		d.accepted = true
+		d.Accept()
+	})
+	buttons.OnRejected(func() {
+		d.accepted = false
+		d.password = ""
+		d.Reject()
+	})
+
+	d.passEdit.SetFocus()
+	return d
+}
+
+// promptLinuxAuth opens Local Authentication. Returns (password, true) on OK
+// with a non-empty password, otherwise ("", false). No-op on non-Linux.
+func promptLinuxAuth(parent *qt.QWidget) (string, bool) {
+	if runtime.GOOS != "linux" {
+		return "", true // non-Linux: no elevation needed for typical flows
+	}
+	if os.Geteuid() == 0 {
+		return "", true // already root
+	}
+	dlg := newLocalAuthDialog(parent)
+	dlg.Exec()
+	if !dlg.accepted || strings.TrimSpace(dlg.password) == "" {
+		return "", false
+	}
+	return dlg.password, true
+}
+
+// ---------------------------------------------------------------------------
+// Main window
+// ---------------------------------------------------------------------------
+
 type mainWindow struct {
 	*qt.QMainWindow
 
@@ -84,8 +172,6 @@ func newMainWindow() *mainWindow {
 	grid.AddWidget2(qt.NewQLabel3("Ramdisk Size (MiB)").QWidget, 1, 0)
 
 	maxMB := estimateMaxMB()
-
-	// NewQSlider2() = no parent; NewQSlider(parent) needs *QWidget
 	w.sizeSlider = qt.NewQSlider2()
 	w.sizeSlider.SetOrientation(qt.Horizontal)
 	w.sizeSlider.SetMinimum(1)
@@ -93,11 +179,9 @@ func newMainWindow() *mainWindow {
 	w.sizeSlider.SetValue(defaultSizeMB)
 	grid.AddWidget2(w.sizeSlider.QWidget, 2, 0)
 
-	// NewQLineEdit2() = no parent
 	w.sizeEdit = qt.NewQLineEdit2()
 	w.sizeEdit.SetText(strconv.Itoa(defaultSizeMB))
 	w.sizeEdit.SetMaximumWidth(100)
-	// QIntValidator embeds *QValidator — pass the embedded pointer
 	iv := qt.NewQIntValidator2(1, int(maxMB))
 	w.sizeEdit.SetValidator(iv.QValidator)
 	grid.AddWidget3(w.sizeEdit.QWidget, 2, 1, 1, 2)
@@ -121,7 +205,6 @@ func newMainWindow() *mainWindow {
 	w.quitBtn = qt.NewQPushButton3("Quit")
 	grid.AddWidget2(w.quitBtn.QWidget, 5, 3)
 
-	// NewQTableWidget3(rows, columns)
 	w.table = qt.NewQTableWidget3(0, 2)
 	w.table.SetHorizontalHeaderLabels([]string{"device", "mount point"})
 	w.table.HorizontalHeader().SetSectionResizeMode(qt.QHeaderView__Stretch)
@@ -186,7 +269,14 @@ func (w *mainWindow) onCreate() {
 		return
 	}
 
-	opts := ramdisk.Options{SizeMB: size}
+	// Linux: same algorithm as Python createRamdisk() — prompt every time
+	passwd, ok := promptLinuxAuth(w.QWidget)
+	if !ok {
+		w.statusBar.ShowMessage2("Authentication cancelled", 3000)
+		return
+	}
+
+	opts := ramdisk.Options{SizeMB: size, LinuxSudoPassword: passwd}
 	mp := strings.TrimSpace(w.mountEdit.Text())
 	if mp != "" && mp != "put mountpoint here" {
 		opts.MountPoint = mp
@@ -197,11 +287,7 @@ func (w *mainWindow) onCreate() {
 
 	rd, err := ramdisk.New(opts)
 	if err != nil {
-		msg := err.Error()
-		if _, ok := err.(*ramdisk.PrivilegeRequiredError); ok {
-			msg += "\n\nOn Linux, run this GUI with sudo (or grant CAP_SYS_ADMIN)."
-		}
-		qt.QMessageBox_Critical(w.QWidget, "Create failed", msg)
+		qt.QMessageBox_Critical(w.QWidget, "Create failed", err.Error())
 		w.statusBar.ShowMessage2("Create failed", 5000)
 		return
 	}
@@ -209,13 +295,35 @@ func (w *mainWindow) onCreate() {
 	info := rd.GetData()
 	_ = rd.Detach()
 
+	// Add the new row immediately so the user can select/eject it
+	// even if ListMounted is slow or filters the path.
+	w.addRow(info.Device, info.MountPoint)
+
 	w.statusBar.ShowMessage2(fmt.Sprintf("Mounted at %s", info.MountPoint), 8000)
 	w.mountEdit.SetText("")
+	// Full refresh keeps table in sync with the system
 	w.refreshTable()
 
 	qt.QMessageBox_Information(w.QWidget, "Ramdisk created",
 		fmt.Sprintf("success = %v\nmount   = %s\ndevice  = %s",
 			info.Success, info.MountPoint, info.Device))
+}
+
+// addRow inserts one device/mount-point pair if that mount path is not already listed.
+func (w *mainWindow) addRow(device, mountPoint string) {
+	if mountPoint == "" {
+		return
+	}
+	for r := 0; r < w.table.RowCount(); r++ {
+		if it := w.table.Item(r, 1); it != nil && it.Text() == mountPoint {
+			return // already present
+		}
+	}
+	row := w.table.RowCount()
+	w.table.InsertRow(row)
+	w.table.SetItem(row, 0, qt.NewQTableWidgetItem2(device))
+	w.table.SetItem(row, 1, qt.NewQTableWidgetItem2(mountPoint))
+	w.table.SelectRow(row)
 }
 
 func (w *mainWindow) onEject() {
@@ -239,10 +347,23 @@ func (w *mainWindow) onEject() {
 		return
 	}
 
+	// Linux: prompt for every eject (Python remove() + _LocalAuth)
+	passwd, ok := promptLinuxAuth(w.QWidget)
+	if !ok {
+		w.statusBar.ShowMessage2("Authentication cancelled", 3000)
+		return
+	}
+
 	w.statusBar.ShowMessage("Ejecting " + target + "…")
 	qt.QCoreApplication_ProcessEvents()
 
-	if err := ramdisk.UmountPath(target); err != nil {
+	var err error
+	if runtime.GOOS == "linux" && passwd != "" {
+		err = ramdisk.UmountPathWithPassword(target, passwd)
+	} else {
+		err = ramdisk.UmountPath(target)
+	}
+	if err != nil {
 		qt.QMessageBox_Critical(w.QWidget, "Eject failed", err.Error())
 		w.statusBar.ShowMessage2("Eject failed", 5000)
 		return
