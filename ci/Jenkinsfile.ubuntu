@@ -13,7 +13,7 @@ pipeline {
                     stages {
                         stage('debian 13 Build') { 
                             steps {
-                                dir('src/BuildScripts') {
+                                dir('src/python/BuildScripts') {
                                     sh './build.deb-based.sh' 
                                 } 
                             }
@@ -25,7 +25,7 @@ pipeline {
                     stages {
                         stage('Ubuntu 2404 Build') { 
                             steps {
-                                dir('src/BuildScripts') {
+                                dir('src/python/BuildScripts') {
                                     sh './build.deb-based.sh' 
                                 } 
                             }
@@ -45,7 +45,7 @@ pipeline {
                     stages {
                         stage('Ubuntu 2604 Test') { 
                             steps {
-                                dir('src/ramdisk/tests') {
+                                dir('src/python/ramdisk/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
                                     sh """
                                         . ${VENV}/bin/activate
@@ -69,7 +69,7 @@ pipeline {
                     stages {
                         stage('Ubuntu 2404 Test') { 
                             steps {
-                                dir('src/ramdisk/tests') {
+                                dir('src/python/ramdisk/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
                                     sh """
                                         . ${VENV}/bin/activate
