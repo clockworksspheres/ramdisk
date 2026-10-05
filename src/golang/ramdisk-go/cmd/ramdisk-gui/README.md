@@ -158,7 +158,8 @@ Those mean the MinGW/Qt toolchain is missing or not on `PATH`.
 |------|--------|
 | **Build** | MSYS2 **UCRT64** shell (MinGW + Qt 6 + CGO) |
 | **Run** | Normal Windows (Explorer, CMD, PowerShell) — **not** required to use UCRT64 |
-| **aim_ll** | Arsenal Image Mounter CLI must be on Windows `PATH` or next to the `.exe` |
+| **aim_ll** | Arsenal Image Mounter CLI on Windows `PATH` **or** next to the `.exe` |
+| **Elevation** | **Run as administrator** for Create/Eject (AIM driver access) |
 
 ### 1. Install MSYS2
 
@@ -180,8 +181,6 @@ Default location is often `C:\msys64` or under Chocolatey’s tools path (e.g. `
 
 Start menu → **MSYS2 UCRT64**  
 (not “MSYS2 MSYS” — UCRT64 is required for this build)
-
-Confirm:
 
 ```bash
 which pacman
@@ -207,8 +206,6 @@ If you see:
 go: cannot find GOROOT directory: 'go' binary is trimmed and GOROOT is not set
 ```
 
-run:
-
 ```bash
 export GOROOT=/ucrt64/lib/go
 export PATH="/ucrt64/bin:$PATH"
@@ -217,9 +214,7 @@ go env GOROOT
 go version
 ```
 
-To make it permanent, add those two `export` lines to `~/.bashrc` in the UCRT64 environment.
-
-Prefer `/ucrt64/bin/go` over a Chocolatey or go.dev Go on the Windows PATH when building inside UCRT64.
+Add those exports to `~/.bashrc` in UCRT64 to make them permanent. Prefer `/ucrt64/bin/go` over a Chocolatey or go.dev Go when building inside UCRT64.
 
 ### 5. Build the GUI (inside UCRT64)
 
@@ -228,7 +223,7 @@ export CGO_ENABLED=1
 export GOROOT=/ucrt64/lib/go
 export PATH="/ucrt64/bin:$PATH"
 
-# Windows path example: C:\Users\you\ramdisk-go → /c/Users/you/ramdisk-go
+# Example: C:\Users\you\...\ramdisk-go → /c/Users/you/.../ramdisk-go
 cd /c/Users/you/path/to/ramdisk-go/cmd/ramdisk-gui
 
 go get github.com/mappu/miqt/qt6@latest
@@ -248,19 +243,19 @@ which gcc pkg-config
 pkg-config --modversion Qt6Widgets
 ```
 
-### 6. Running the .exe (outside UCRT64 is fine)
+### 6. Deploy DLLs (required when running outside UCRT64)
 
-**UCRT64 is only for building.** The binary is a normal Windows program.
+A MinGW/Qt **dynamic** build does not work as a lone `.exe`. If DLLs are missing you get:
 
-If you double-click or run from Admin PowerShell and the process **exits immediately**, it is almost always **missing DLLs** (Qt and/or MinGW runtime) or the Qt platform plugin.
+| Symptom | Meaning |
+|---------|---------|
+| Exit code **`0xC0000135`** or **`-1073741515`** | `STATUS_DLL_NOT_FOUND` — a required DLL was not found |
+| Process starts and exits immediately, no window | Same (missing Qt/MinGW DLL or platform plugin) |
 
-#### 6a. Deploy DLLs next to the exe (recommended)
-
-In **UCRT64**, from the folder that contains `ramdisk-gui.exe`:
+#### 6a. Copy DLLs next to the exe (UCRT64)
 
 ```bash
-OUT=/c/Users/you/path/to/ramdisk-go/cmd/ramdisk-gui   # adjust
-cd "$OUT"
+cd /c/Users/you/path/to/ramdisk-go/cmd/ramdisk-gui
 
 cp /ucrt64/bin/Qt6Core.dll \
    /ucrt64/bin/Qt6Gui.dll \
@@ -268,64 +263,101 @@ cp /ucrt64/bin/Qt6Core.dll \
    /ucrt64/bin/libgcc_s_seh-1.dll \
    /ucrt64/bin/libstdc++-6.dll \
    /ucrt64/bin/libwinpthread-1.dll \
-   . 2>/dev/null
+   .
 
-# Other Qt/MinGW deps may be required; copy additional lib*.dll from /ucrt64/bin if needed
+# Broader set of Qt/MinGW deps (safe to copy extras)
+cp /ucrt64/bin/Qt6*.dll /ucrt64/bin/lib*.dll . 2>/dev/null
 
+# Qt platform plugin — required or Qt exits at startup
 mkdir -p platforms
 cp /ucrt64/share/qt6/plugins/platforms/qwindows.dll platforms/
 ```
 
-Also place **`aim_ll.exe`** (Arsenal Image Mounter CLI) in the same folder, or ensure it is on the **Windows** system/user `PATH`. The library looks for `aim_ll` / `aim_ll.exe` on `PATH`, next to the running executable, and in the current working directory.
+Also place **`aim_ll.exe`** in the same folder (or on the Windows `PATH`).  
+`FindBin` looks for `aim_ll` / `aim_ll.exe` on `PATH`, next to the running executable, and in the current working directory.
 
-Then from **PowerShell** or Explorer:
+Expected layout:
+
+```text
+ramdisk-gui.exe
+aim_ll.exe
+Qt6Core.dll
+Qt6Gui.dll
+Qt6Widgets.dll
+libgcc_s_seh-1.dll
+libstdc++-6.dll
+libwinpthread-1.dll
+… (other Qt/MinGW DLLs as needed)
+platforms\
+  qwindows.dll
+```
+
+#### 6b. Find still-missing DLLs
+
+```bash
+ldd ramdisk-gui.exe
+ldd ramdisk-gui.exe | grep -i "not found"
+```
+
+Copy any “not found” files from `/ucrt64/bin` into the exe folder.
+
+#### 6c. Temporary PATH test (PowerShell)
+
+If this starts the GUI, the problem was only DLL search path:
 
 ```powershell
 cd C:\Users\you\path\to\ramdisk-go\cmd\ramdisk-gui
-.\ramdisk-gui.exe
-echo "Exit code: $LASTEXITCODE"
-```
-
-#### 6b. Or put UCRT64 on PATH for one session
-
-```powershell
 $env:PATH = "C:\msys64\ucrt64\bin;" + $env:PATH
 # Chocolatey may use e.g. C:\tools\msys64\ucrt64\bin
 $env:QT_PLUGIN_PATH = "C:\msys64\ucrt64\share\qt6\plugins"
 .\ramdisk-gui.exe
+echo $LASTEXITCODE
 ```
 
-You still need `platforms\qwindows.dll` next to the exe **or** a correct `QT_PLUGIN_PATH`.
+### 7. Run as Administrator (Create / Eject)
 
-#### 6c. aim_ll not found inside UCRT64
+After DLLs load, Create may still fail with:
 
-MSYS2’s `PATH` is separate from Windows’. `aim_ll` installed for Windows is often invisible inside UCRT64.
-
-- **Preferred:** run `ramdisk-gui.exe` from normal PowerShell/CMD after step 6a, with `aim_ll.exe` on the Windows PATH or beside the exe.
-- **Or** in UCRT64 for one session:
-
-```bash
-export PATH="/c/Program Files/Arsenal Image Mounter:$PATH"
-# adjust to the real directory that contains aim_ll.exe
-./ramdisk-gui.exe
+```text
+Error controlling the Arsenal Image Mounter driver: Access is denied.
 ```
 
-Install Arsenal Image Mounter from: https://arsenalrecon.com/downloads
+and a non-zero exit from `aim_ll` (often **exit code 6**).
 
-#### 6d. Debug an immediate exit
+The AIM **driver** requires elevation. The Windows GUI does **not** show a password dialog (unlike Linux Local Auth). You must:
 
-1. Rebuild **without** `-H windowsgui` so a console stays open.
-2. Run from PowerShell and read any panic or DLL message.
-3. Check for a Windows dialog: “Qt6Core.dll / libstdc++-6.dll / qwindows.dll was not found”.
+1. Close the GUI.
+2. Right-click **PowerShell** / **Terminal** → **Run as administrator**, then:
 
 ```powershell
+cd C:\Users\you\path\to\ramdisk-go\cmd\ramdisk-gui
 .\ramdisk-gui.exe
-echo "Exit code: $LASTEXITCODE"
 ```
 
-### 7. Optional: cross-build with miqt-docker
+Or right-click `ramdisk-gui.exe` → **Run as administrator**.
 
-From Linux or macOS (no local Windows Qt toolchain):
+Confirm the driver works elevated:
+
+```powershell
+.\aim_ll.exe -l
+```
+
+Install the full **Arsenal Image Mounter** package (driver + CLI): https://arsenalrecon.com/downloads
+
+### 8. List / table (`aim_ll -l`)
+
+Listing matches Python `getMountDisks()` / Rust parsing of `aim_ll -l`:
+
+- Blocks starting with `Device number …`
+- In-memory markers (`memory` / `ram` / `Virtual Memory`)
+- `Mounted at …` for the mount path
+- Blank line ends a record
+
+After Create, the table is updated from the create result and from Refresh/`ListMounted`.
+
+### 9. Optional: cross-build with miqt-docker
+
+From Linux or macOS:
 
 ```bash
 go install github.com/mappu/miqt/cmd/miqt-docker@latest
@@ -337,14 +369,17 @@ See: https://github.com/mappu/miqt/blob/master/cmd/miqt-docker/README.md
 
 ### Windows checklist
 
-- [ ] MSYS2 installed; using **UCRT64** shell for build
-- [ ] `pacman` packages: go, gcc, pkg-config, qt6-base
-- [ ] `GOROOT=/ucrt64/lib/go` if Go complains about trimmed binary
+- [ ] MSYS2 installed; build in **UCRT64**
+- [ ] pacman packages: go, gcc, pkg-config, qt6-base
+- [ ] `GOROOT=/ucrt64/lib/go` if Go reports a trimmed binary
 - [ ] `CGO_ENABLED=1` and `pkg-config --modversion Qt6Widgets` works
 - [ ] Build with `-tags qt`
-- [ ] Deploy Qt + MinGW DLLs and `platforms\qwindows.dll` next to the exe
-- [ ] `aim_ll.exe` on Windows PATH or next to the exe
-- [ ] Run elevated if create/eject need administrator rights
+- [ ] Qt + MinGW DLLs and `platforms\qwindows.dll` next to the exe
+- [ ] No `0xC0000135` / `-1073741515` on launch
+- [ ] `aim_ll.exe` on PATH or next to the exe
+- [ ] **Run as administrator** for Create/Eject (avoids AIM “Access is denied”)
+- [ ] Arsenal Image Mounter **driver** installed, not only the CLI
+
 
 ---
 
