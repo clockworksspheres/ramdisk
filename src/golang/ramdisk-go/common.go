@@ -49,16 +49,52 @@ func RandomMountPoint() (string, error) {
 	return path, nil
 }
 
-// FindBin locates an executable on PATH (and common Unix locations).
+// FindBin locates an executable on PATH, next to this process's binary,
+// and common Unix absolute locations. On Windows it also tries name+".exe".
 func FindBin(name string) (string, error) {
-	if p, err := exec.LookPath(name); err == nil {
-		return p, nil
+	candidates := []string{name}
+	// Windows: LookPath and side-by-side often need the .exe suffix.
+	if filepath.Ext(name) == "" {
+		candidates = append(candidates, name+".exe")
 	}
+
+	for _, n := range candidates {
+		if p, err := exec.LookPath(n); err == nil {
+			return p, nil
+		}
+	}
+
+	// Same directory as the running executable (e.g. aim_ll.exe next to ramdisk-gui.exe)
+	if exe, err := os.Executable(); err == nil {
+		dir := filepath.Dir(exe)
+		// Resolve symlinks when possible so side-by-side works after installers
+		if real, err := filepath.EvalSymlinks(exe); err == nil {
+			dir = filepath.Dir(real)
+		}
+		for _, n := range candidates {
+			candidate := filepath.Join(dir, n)
+			if st, err := os.Stat(candidate); err == nil && !st.IsDir() {
+				return candidate, nil
+			}
+		}
+		// Also check current working directory (useful when launched from a shell)
+		if cwd, err := os.Getwd(); err == nil {
+			for _, n := range candidates {
+				candidate := filepath.Join(cwd, n)
+				if st, err := os.Stat(candidate); err == nil && !st.IsDir() {
+					return candidate, nil
+				}
+			}
+		}
+	}
+
 	// Absolute fallbacks common on Unix
 	for _, prefix := range []string{"/bin", "/usr/bin", "/sbin", "/usr/sbin", "/usr/local/bin", "/usr/local/sbin"} {
-		candidate := filepath.Join(prefix, name)
-		if st, err := os.Stat(candidate); err == nil && !st.IsDir() {
-			return candidate, nil
+		for _, n := range candidates {
+			candidate := filepath.Join(prefix, n)
+			if st, err := os.Stat(candidate); err == nil && !st.IsDir() {
+				return candidate, nil
+			}
 		}
 	}
 	return "", &ToolNotFoundError{Tool: name}

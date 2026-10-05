@@ -276,7 +276,7 @@ mkdir -p platforms
 cp /ucrt64/share/qt6/plugins/platforms/qwindows.dll platforms/
 ```
 
-Also place **`aim_ll.exe`** (Arsenal Image Mounter CLI) in the same folder, or ensure it is on the **Windows** system/user `PATH`.
+Also place **`aim_ll.exe`** (Arsenal Image Mounter CLI) in the same folder, or ensure it is on the **Windows** system/user `PATH`. The library looks for `aim_ll` / `aim_ll.exe` on `PATH`, next to the running executable, and in the current working directory.
 
 Then from **PowerShell** or Explorer:
 

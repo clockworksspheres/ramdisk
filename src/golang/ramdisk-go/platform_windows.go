@@ -29,7 +29,7 @@ func platformCreate(opts Options) (platformRamDisk, error) {
 
 	aimLL, err := FindBin("aim_ll")
 	if err != nil {
-		return nil, fmt.Errorf("%w – install Arsenal Image Mounter CLI (aim_ll.exe) and ensure it is on PATH", err)
+		return nil, fmt.Errorf("%w – install Arsenal Image Mounter CLI (aim_ll.exe), put it on PATH, or place aim_ll.exe next to this program", err)
 	}
 
 	mnt := opts.MountPoint
