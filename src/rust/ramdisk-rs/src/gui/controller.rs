@@ -140,23 +140,35 @@ impl qobject::RamdiskController {
         let row = *self.as_ref().selected_row();
         let mounts = lines_of(self.as_ref().mount_list_text());
         let devices = lines_of(self.as_ref().device_list_text());
+        let count = mounts.len().max(devices.len()) as i32;
 
-        let path = if row >= 0 {
-            let idx = row as usize;
-            let m = mounts.get(idx).cloned().unwrap_or_default();
-            let d = devices.get(idx).cloned().unwrap_or_default();
-            if !m.is_empty() {
-                m
-            } else {
-                d
-            }
+        // Default to the first mounted disk when nothing is selected
+        let row = if (row < 0 || row >= count) && count > 0 {
+            self.as_mut().set_selected_row(0);
+            0
         } else {
-            self.as_ref().mount_point().to_string()
+            row
         };
+
+        if row < 0 || row >= count {
+            self.as_mut().set_status_message(QString::from(
+                "No ramdisks to eject",
+            ));
+            return;
+        }
+
+        let idx = row as usize;
+        // Prefer mount path; fall back to device node (macOS eject resolves both)
+        let path = mounts
+            .get(idx)
+            .filter(|s| !s.is_empty())
+            .cloned()
+            .or_else(|| devices.get(idx).cloned())
+            .unwrap_or_default();
 
         if path.trim().is_empty() {
             self.as_mut()
-                .set_status_message(QString::from("No row selected and no mount path"));
+                .set_status_message(QString::from("Selected row has no mount path or device"));
             return;
         }
 
@@ -192,6 +204,12 @@ impl qobject::RamdiskController {
                 self.as_mut()
                     .set_mount_list_text(QString::from(mnts.join("\n").as_str()));
                 self.as_mut().set_row_count(count);
+                // Default selection: first mounted disk
+                if count > 0 {
+                    self.as_mut().set_selected_row(0);
+                } else {
+                    self.as_mut().set_selected_row(-1);
+                }
                 self.as_mut().set_status_message(QString::from(
                     format!("Found {count} ramdisk(s)").as_str(),
                 ));
