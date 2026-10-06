@@ -26,29 +26,29 @@ pub mod qobject {
 
         #[qinvokable]
         #[cxx_name = "createRamdisk"]
-        fn create_ramdisk(self: Pin<&mut Self>);
+        fn create_ramdisk(self: Pin<&mut RamdiskController>);
 
         #[qinvokable]
         #[cxx_name = "ejectSelected"]
-        fn eject_selected(self: Pin<&mut Self>);
+        fn eject_selected(self: Pin<&mut RamdiskController>);
 
         #[qinvokable]
         #[cxx_name = "refreshList"]
-        fn refresh_list(self: Pin<&mut Self>);
+        fn refresh_list(self: Pin<&mut RamdiskController>);
 
         #[qinvokable]
         #[cxx_name = "setSizeFromSlider"]
-        fn set_size_from_slider(self: Pin<&mut Self>, value: i32);
+        fn set_size_from_slider(self: Pin<&mut RamdiskController>, value: i32);
 
         /// Return the device string for row `index`.
         #[qinvokable]
         #[cxx_name = "deviceAt"]
-        fn device_at(&self, index: i32) -> QString;
+        fn device_at(self: &RamdiskController, index: i32) -> QString;
 
         /// Return the mount-point string for row `index`.
         #[qinvokable]
         #[cxx_name = "mountAt"]
-        fn mount_at(&self, index: i32) -> QString;
+        fn mount_at(self: &RamdiskController, index: i32) -> QString;
     }
 }
 
@@ -207,14 +207,14 @@ impl qobject::RamdiskController {
         self.set_size_mb(value.max(0));
     }
 
-    pub fn device_at(&self, index: i32) -> QString {
+    pub fn device_at(self: &Self, index: i32) -> QString {
         lines_of(self.device_list_text())
             .get(index as usize)
             .map(|s| QString::from(s.as_str()))
             .unwrap_or_default()
     }
 
-    pub fn mount_at(&self, index: i32) -> QString {
+    pub fn mount_at(self: &Self, index: i32) -> QString {
         lines_of(self.mount_list_text())
             .get(index as usize)
             .map(|s| QString::from(s.as_str()))
