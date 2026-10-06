@@ -25,6 +25,8 @@ Use one of these commands in your terminal:
   docker pull jenkins/jenkins:lts
   ```
 
+(Latest lts is jenkins/jenkins:lts-jdk25)
+
 - **Explicit recent LTS with specific JDK** (very common in 2025–2026)  
   ```bash
   docker pull jenkins/jenkins:lts-jdk21
