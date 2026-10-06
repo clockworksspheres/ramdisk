@@ -33,11 +33,13 @@ CreateRamdiskWindow::CreateRamdiskWindow(QWidget* parent)
 
     setupTable();
     setupConnections();
+    populateFromSystem();
 
     ui_->createPushButton->setDefault(true);
     ui_->mountLineEdit->setFocus();
-    setStatus(QString("Ready — platform: %1")
-                  .arg(QString::fromStdString(ramdisk::platformName())));
+    setStatus(QString("Ready — platform: %1 (%2 existing)")
+                  .arg(QString::fromStdString(ramdisk::platformName()))
+                  .arg(ui_->tableWidget->rowCount()));
 }
 
 CreateRamdiskWindow::~CreateRamdiskWindow() {
@@ -82,10 +84,33 @@ void CreateRamdiskWindow::setupConnections() {
 }
 
 void CreateRamdiskWindow::addRow(const QString& device, const QString& mountPoint) {
+    // Avoid duplicates (same mount point)
+    for (int r = 0; r < ui_->tableWidget->rowCount(); ++r) {
+        auto* m = ui_->tableWidget->item(r, 1);
+        if (m && m->text() == mountPoint) {
+            auto* d = ui_->tableWidget->item(r, 0);
+            if (d) d->setText(device);
+            return;
+        }
+    }
     const int row = ui_->tableWidget->rowCount();
     ui_->tableWidget->insertRow(row);
     ui_->tableWidget->setItem(row, 0, new QTableWidgetItem(device));
     ui_->tableWidget->setItem(row, 1, new QTableWidgetItem(mountPoint));
+}
+
+void CreateRamdiskWindow::populateFromSystem() {
+    ui_->tableWidget->setRowCount(0);
+    try {
+        const auto disks = ramdisk::listMountedRamDisks();
+        for (const auto& d : disks) {
+            addRow(QString::fromStdString(d.device),
+                   QString::fromStdString(d.mountPoint));
+        }
+        setStatus(tr("Found %1 existing ramdisk(s)").arg(static_cast<int>(disks.size())));
+    } catch (const std::exception& e) {
+        setStatus(tr("Could not enumerate mounts: %1").arg(e.what()));
+    }
 }
 
 void CreateRamdiskWindow::setStatus(const QString& msg) {
@@ -278,10 +303,7 @@ void CreateRamdiskWindow::onEjectClicked() {
 }
 
 void CreateRamdiskWindow::onRefreshClicked() {
-    // Table only tracks disks created in this session for now.
-    // A full OS scan would need platform-specific mount enumeration.
-    setStatus(tr("List shows ramdisks created in this session (%1)")
-                  .arg(ui_->tableWidget->rowCount()));
+    populateFromSystem();
 }
 
 void CreateRamdiskWindow::onQuitClicked() {

@@ -2,12 +2,14 @@
  * Simple command-line interface.
  *
  *   ramdisk_cli create [--size N] [--mount PATH] [--keep]
+ *   ramdisk_cli list
  *   ramdisk_cli umount <device|mountpoint>
  */
 
 #include "ramdisk/RamDisk.hpp"
 #include "ramdisk/Logger.hpp"
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <cstring>
 
@@ -15,6 +17,7 @@ static void usage(const char* prog) {
     std::cerr
         << "Usage:\n"
         << "  " << prog << " create [--size MB] [--mount PATH] [--keep]\n"
+        << "  " << prog << " list\n"
         << "  " << prog << " umount  <device|mountpoint>\n"
         << "\n"
         << "Options:\n"
@@ -25,6 +28,7 @@ static void usage(const char* prog) {
         << "Examples:\n"
         << "  " << prog << " create --size 512 --keep\n"
         << "  " << prog << " create --size 1024 --mount /tmp/ram0 --keep\n"
+        << "  " << prog << " list\n"
         << "  " << prog << " umount /dev/disk4\n"
         << "  " << prog << " umount /tmp/ram0\n";
 }
@@ -82,6 +86,28 @@ int main(int argc, char* argv[]) {
                 std::cin.get();
                 disk->umount();
             }
+        } catch (const std::exception& e) {
+            std::cerr << "Error: " << e.what() << '\n';
+            return 1;
+        }
+    } else if (cmd == "list" || cmd == "ls") {
+        try {
+            const auto disks = listMountedRamDisks();
+            if (disks.empty()) {
+                std::cout << "No ramdisks found.\n";
+                return 0;
+            }
+            std::cout << std::left
+                      << std::setw(24) << "DEVICE"
+                      << "MOUNT POINT\n";
+            std::cout << std::string(24, '-') << ' '
+                      << std::string(40, '-') << '\n';
+            for (const auto& d : disks) {
+                std::cout << std::left
+                          << std::setw(24) << d.device
+                          << d.mountPoint << '\n';
+            }
+            std::cout << "\n" << disks.size() << " ramdisk(s)\n";
         } catch (const std::exception& e) {
             std::cerr << "Error: " << e.what() << '\n';
             return 1;
