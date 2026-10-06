@@ -30,6 +30,9 @@ mod error;
 mod platform;
 mod common;
 
+#[cfg(feature = "gui")]
+pub mod gui;
+
 pub use error::{Error, Result};
 pub use common::{RamDiskOptions, MountInfo, LinuxFsType};
 

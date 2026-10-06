@@ -5,15 +5,29 @@ edition = "2021"
 description = "Cross-platform interface for creating and managing ramdisks (Linux tmpfs, macOS hdiutil, Windows AIM)"
 license = "Unlicense"
 readme = "README.md"
-keywords = ["ramdisk", "tmpfs", "cross-platform", "devops"]
+keywords = ["ramdisk", "tmpfs", "cross-platform", "devops", "qt"]
 categories = ["filesystem", "os"]
 
 [[bin]]
 name = "ramdisk"
 path = "src/bin/ramdisk.rs"
 
+[[bin]]
+name = "ramdisk-gui"
+path = "src/bin/ramdisk_gui.rs"
+required-features = ["gui"]
+
 [dependencies]
 thiserror = "1.0"
 
+# Optional GUI (CXX-Qt + QML) — enable with: cargo run --features gui --bin ramdisk-gui
+cxx = { version = "1.0", optional = true }
+cxx-qt = { version = "0.7", optional = true }
+cxx-qt-lib = { version = "0.7", optional = true, features = ["qt_full"] }
+
+[build-dependencies]
+cxx-qt-build = { version = "0.7", optional = true, features = ["link_qt_object_files"] }
+
 [features]
 default = []
+gui = ["dep:cxx", "dep:cxx-qt", "dep:cxx-qt-lib", "dep:cxx-qt-build"]

@@ -13,7 +13,7 @@ pipeline {
                     stages {
                         stage('rocky9 Build') { 
                             steps {
-                                dir('src/BuildScripts') {
+                                dir('src/python/BuildScripts') {
                                     sh './build.rh-based.sh' 
                                 } 
                             }
@@ -25,7 +25,7 @@ pipeline {
                     stages {
                         stage('rocky10 Build') { 
                             steps {
-                                dir('src/BuildScripts') {
+                                dir('src/python/BuildScripts') {
                                     sh './build.rh-based.sh' 
                                 } 
                             }
@@ -37,7 +37,7 @@ pipeline {
                     stages {
                         stage('Alma Build') { 
                             steps {
-                                dir('src/BuildScripts') {
+                                dir('src/python/BuildScripts') {
                                     sh './build.rh-based.sh' 
                                 } 
                             }
@@ -57,7 +57,7 @@ pipeline {
                     stages {
                         stage('Rocky9 Test') { 
                             steps {
-                                dir('src/ramdisk/tests') {
+                                dir('src/python/ramdisk/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
                                     sh """
                                         . ${VENV}/bin/activate
@@ -81,7 +81,7 @@ pipeline {
                     stages {
                         stage('Rocky10 Test') { 
                             steps {
-                                dir('src/ramdisk/tests') {
+                                dir('src/python/ramdisk/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
                                     sh """
                                         . ${VENV}/bin/activate
@@ -105,7 +105,7 @@ pipeline {
                     stages {
                         stage('alma Test') { 
                             steps {
-                                dir('src/ramdisk/tests') {
+                                dir('src/python/ramdisk/tests') {
                                     echo '----------=====### Starting Tests ###=====----------'
                                     sh """
                                         . ${VENV}/bin/activate

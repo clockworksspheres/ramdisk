@@ -269,6 +269,59 @@ ramdisk umount /mnt/buildcache
 
 On Linux, `create` and `umount` generally require root (or `CAP_SYS_ADMIN`).
 
+
+## Graphical UI (`ramdisk-gui`) — CXX-Qt / QML
+
+Port of the Python **PySide6** `ramdisk-setup.py` interface to **CXX-Qt** + QML.
+
+### UI features (same as the Python app)
+
+| Control | Action |
+|---------|--------|
+| Size slider + field | Set ramdisk size in MiB |
+| Mount point field | Optional path (empty → temp dir) |
+| **Create Ramdisk** | Create & leave mounted |
+| **Eject Ramdisk** | Unmount the selected table row |
+| **Refresh** | Re-scan mounted ramdisks |
+| Table | Device + mount point list |
+| **Quit** | Exit |
+
+### Prerequisites
+
+1. **Qt 6** with QML (open-source is fine)
+2. `qmake` on `PATH`, or set `QMAKE=/path/to/qmake`
+3. C/C++ toolchain
+
+**Install Qt briefly**
+
+```bash
+# macOS
+brew install qt
+
+# Ubuntu / Debian
+sudo apt install qt6-base-dev qt6-declarative-dev qmake6
+# ensure qmake points at Qt6, e.g.:
+export QMAKE=$(which qmake6)
+
+# Windows (Chocolatey)
+choco install qt6 -y
+# add Qt's bin dir to PATH so qmake is found
+```
+
+### Build & run
+
+```bash
+cargo run --features gui --bin ramdisk-gui
+```
+
+### Layout
+
+```
+qml/main.qml              # QML UI (mirrors main_n.ui)
+src/gui/controller.rs     # CXX-Qt QObject (create / eject / list)
+src/bin/ramdisk_gui.rs    # application entry point
+```
+
 ## License
 
 Unlicense (same as the original Python project).
