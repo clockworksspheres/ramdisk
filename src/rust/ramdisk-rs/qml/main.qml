@@ -17,14 +17,11 @@ ApplicationWindow {
         mount_point: ""
         selected_row: -1
 
-        // Populate as soon as the QObject is ready
         Component.onCompleted: refreshList()
     }
 
-    // Also refresh once the window is shown (covers late-ready QML bindings)
     Component.onCompleted: {
         controller.refreshList()
-        // One more pass after the event loop settles
         delayedRefresh.start()
     }
 
@@ -106,7 +103,15 @@ ApplicationWindow {
 
             Button {
                 text: qsTr("Eject Ramdisk")
-                onClicked: controller.ejectSelected()
+                onClicked: {
+                    // Prefer highlighted row; default to first mounted disk
+                    var row = table.currentIndex
+                    if (row < 0 && controller.row_count > 0)
+                        row = 0
+                    controller.selected_row = row
+                    table.currentIndex = row
+                    controller.ejectSelected()
+                }
             }
             Button {
                 text: qsTr("Refresh")
@@ -156,25 +161,26 @@ ApplicationWindow {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     clip: true
-                    // Re-bind when row_count changes
                     model: controller.row_count
+                    // Keep in sync with controller (one-way from clicks → controller)
                     currentIndex: controller.selected_row
+                    highlightFollowsCurrentItem: true
+                    focus: true
+                    keyNavigationEnabled: true
 
-                    highlight: Rectangle {
-                        color: palette.highlight
-                        opacity: 0.3
-                    }
-
-                    // Force re-evaluation of delegates when list text changes
                     property string _devKey: controller.device_list_text
                     property string _mntKey: controller.mount_list_text
 
                     delegate: ItemDelegate {
+                        id: rowDelegate
                         width: table.width
                         height: 32
                         required property int index
 
-                        // Depend on the keys so cells update after refresh
+                        // Selection state
+                        readonly property bool isSelected: table.currentIndex === index
+                                                      || controller.selected_row === index
+
                         readonly property string deviceText: {
                             var _ = table._devKey
                             return controller.deviceAt(index)
@@ -184,18 +190,36 @@ ApplicationWindow {
                             return controller.mountAt(index)
                         }
 
+                        // Paint selection on the delegate itself (ListView.highlight
+                        // is often covered by ItemDelegate's opaque background)
+                        background: Rectangle {
+                            color: rowDelegate.isSelected
+                                   ? (palette.active.highlight || "#0078d7")
+                                   : (rowDelegate.hovered
+                                      ? Qt.rgba(palette.mid.r, palette.mid.g, palette.mid.b, 0.35)
+                                      : "transparent")
+                            opacity: rowDelegate.isSelected ? 0.35 : 1.0
+                        }
+
                         contentItem: RowLayout {
+                            spacing: 0
                             Label {
                                 text: deviceText
                                 Layout.preferredWidth: parent.width * 0.4
                                 elide: Text.ElideRight
-                                color: palette.windowText
+                                color: rowDelegate.isSelected
+                                       ? (palette.highlightedText || palette.windowText)
+                                       : palette.windowText
+                                leftPadding: 8
                             }
                             Label {
                                 text: mountText
                                 Layout.fillWidth: true
                                 elide: Text.ElideMiddle
-                                color: palette.windowText
+                                color: rowDelegate.isSelected
+                                       ? (palette.highlightedText || palette.windowText)
+                                       : palette.windowText
+                                rightPadding: 8
                             }
                         }
 
@@ -204,9 +228,24 @@ ApplicationWindow {
                             controller.selected_row = index
                         }
                         onDoubleClicked: {
+                            table.currentIndex = index
                             controller.selected_row = index
                             controller.status_message =
                                 deviceText + " → " + mountText
+                        }
+                    }
+
+                    // Keyboard: Up/Down change selection and notify controller
+                    Keys.onUpPressed: {
+                        if (currentIndex > 0) {
+                            currentIndex = currentIndex - 1
+                            controller.selected_row = currentIndex
+                        }
+                    }
+                    Keys.onDownPressed: {
+                        if (currentIndex < model - 1) {
+                            currentIndex = currentIndex + 1
+                            controller.selected_row = currentIndex
                         }
                     }
 
