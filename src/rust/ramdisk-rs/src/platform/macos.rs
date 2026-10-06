@@ -260,22 +260,11 @@ impl MacRamDisk {
             return Ok(());
         }
 
-        let hdiutil = find_bin("hdiutil")?;
         if let Some(ref dev) = self.device {
-            let output = Command::new(&hdiutil)
-                .args(["detach", "-force", dev])
-                .output()?;
-            if !output.status.success() {
-                if let Ok(du) = find_bin("diskutil") {
-                    let _ = Command::new(&du)
-                        .args(["unmountDisk", "force", dev])
-                        .output();
-                    thread::sleep(Duration::from_millis(300));
-                    let _ = Command::new(&hdiutil)
-                        .args(["detach", "-force", dev])
-                        .output();
-                }
-            }
+            // Prefer full eject via the shared helper (unmountDisk + hdiutil detach)
+            let _ = umount_path(Path::new(dev));
+        } else {
+            let _ = umount_path(&self.mount_point);
         }
 
         self.mounted = false;
@@ -440,44 +429,94 @@ pub fn list_mounted() -> Result<Vec<MountInfo>> {
 pub fn umount_path(path: &Path) -> Result<()> {
     let hdiutil = find_bin("hdiutil")?;
     let diskutil = find_bin("diskutil")?;
-    let path_str = path.to_str().unwrap_or("");
+    let path_str = path.to_str().unwrap_or("").trim_end_matches('/');
 
-    // Unmount by path or device
-    let _ = Command::new(&diskutil)
-        .args(["unmount", "force", path_str])
-        .output();
+    // Resolve to the base disk device (/dev/diskN), never just a slice.
+    let base = resolve_base_device(path_str);
 
-    let base = if path_str.starts_with("/dev/") {
-        strip_slice(path_str).to_string()
-    } else {
-        // Resolve device from mount table
-        let mut found = None;
-        if let Ok(mount_out) = Command::new("mount").output() {
-            let txt = String::from_utf8_lossy(&mount_out.stdout);
-            for line in txt.lines() {
-                let parts: Vec<&str> = line.split_whitespace().collect();
-                if parts.len() >= 3 && parts[2] == path_str {
-                    found = Some(strip_slice(parts[0]).to_string());
-                    break;
-                }
-            }
-        }
-        found.unwrap_or_default()
-    };
-
-    if !base.is_empty() {
-        thread::sleep(Duration::from_millis(200));
-        // unmountDisk then detach
+    if base.is_empty() {
+        // Last-ditch: try unmount by the path alone, then give up with a clear error
         let _ = Command::new(&diskutil)
-            .args(["unmountDisk", "force", &base])
+            .args(["unmount", "force", path_str])
             .output();
-        thread::sleep(Duration::from_millis(200));
-        let _ = Command::new(&hdiutil)
+        return Err(Error::Other(format!(
+            "could not resolve a disk device for '{path_str}' to eject"
+        )));
+    }
+
+    // 1. Unmount any volumes on the disk
+    let _ = Command::new(&diskutil)
+        .args(["unmountDisk", "force", &base])
+        .output();
+    thread::sleep(Duration::from_millis(300));
+
+    // 2. Fully eject / detach the RAM disk so it disappears from diskutil list
+    let detach = Command::new(&hdiutil)
+        .args(["detach", "-force", &base])
+        .output()?;
+
+    if !detach.status.success() {
+        // Retry: diskutil eject, then hdiutil detach again
+        let _ = Command::new(&diskutil)
+            .args(["eject", &base])
+            .output();
+        thread::sleep(Duration::from_millis(300));
+        let detach2 = Command::new(&hdiutil)
             .args(["detach", "-force", &base])
-            .output();
+            .output()?;
+        if !detach2.status.success() {
+            return Err(cmd_err(
+                format!("hdiutil detach -force {base}"),
+                &detach2,
+            ));
+        }
     }
 
     Ok(())
+}
+
+/// Map a mount point or /dev node to the base disk, e.g. /dev/disk4.
+fn resolve_base_device(path_str: &str) -> String {
+    if path_str.starts_with("/dev/") {
+        return strip_slice(path_str).to_string();
+    }
+
+    // From `mount` table: "/dev/disk4s1 on /tmp/ram0 (...)"
+    if let Ok(mount_out) = Command::new("mount").output() {
+        let txt = String::from_utf8_lossy(&mount_out.stdout);
+        for line in txt.lines() {
+            let parts: Vec<&str> = line.split_whitespace().collect();
+            if parts.len() >= 3 && parts[1] == "on" {
+                let mnt = parts[2].trim_end_matches('/');
+                if mnt == path_str {
+                    return strip_slice(parts[0]).to_string();
+                }
+            }
+        }
+    }
+
+    // diskutil info <mount> often prints "Device Node: /dev/disk4s1"
+    if let Ok(info) = Command::new("diskutil")
+        .args(["info", path_str])
+        .output()
+    {
+        if info.status.success() {
+            let txt = String::from_utf8_lossy(&info.stdout);
+            for line in txt.lines() {
+                let lower = line.to_lowercase();
+                if lower.contains("device node") || lower.contains("part of whole") {
+                    if let Some(dev) = line.split(':').nth(1) {
+                        let dev = dev.trim();
+                        if dev.starts_with("/dev/disk") {
+                            return strip_slice(dev).to_string();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    String::new()
 }
 
 fn strip_slice(dev: &str) -> &str {

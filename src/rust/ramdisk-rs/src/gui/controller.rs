@@ -175,6 +175,9 @@ impl qobject::RamdiskController {
     }
 
     pub fn refresh_list(mut self: Pin<&mut Self>) {
+        // Reset first so QML sees a row_count change even if count is unchanged
+        self.as_mut().set_row_count(0);
+
         match list_mounted() {
             Ok(list) => {
                 let mut devs = Vec::new();
@@ -202,7 +205,6 @@ impl qobject::RamdiskController {
             }
         }
     }
-
     pub fn set_size_from_slider(self: Pin<&mut Self>, value: i32) {
         self.set_size_mb(value.max(0));
     }

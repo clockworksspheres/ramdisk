@@ -16,7 +16,23 @@ ApplicationWindow {
         size_mb: 512
         mount_point: ""
         selected_row: -1
-        Component.onCompleted: controller.refreshList()
+
+        // Populate as soon as the QObject is ready
+        Component.onCompleted: refreshList()
+    }
+
+    // Also refresh once the window is shown (covers late-ready QML bindings)
+    Component.onCompleted: {
+        controller.refreshList()
+        // One more pass after the event loop settles
+        delayedRefresh.start()
+    }
+
+    Timer {
+        id: delayedRefresh
+        interval: 150
+        repeat: false
+        onTriggered: controller.refreshList()
     }
 
     ColumnLayout {
@@ -140,6 +156,7 @@ ApplicationWindow {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     clip: true
+                    // Re-bind when row_count changes
                     model: controller.row_count
                     currentIndex: controller.selected_row
 
@@ -148,20 +165,34 @@ ApplicationWindow {
                         opacity: 0.3
                     }
 
+                    // Force re-evaluation of delegates when list text changes
+                    property string _devKey: controller.device_list_text
+                    property string _mntKey: controller.mount_list_text
+
                     delegate: ItemDelegate {
                         width: table.width
                         height: 32
                         required property int index
 
+                        // Depend on the keys so cells update after refresh
+                        readonly property string deviceText: {
+                            var _ = table._devKey
+                            return controller.deviceAt(index)
+                        }
+                        readonly property string mountText: {
+                            var _ = table._mntKey
+                            return controller.mountAt(index)
+                        }
+
                         contentItem: RowLayout {
                             Label {
-                                text: controller.deviceAt(index)
+                                text: deviceText
                                 Layout.preferredWidth: parent.width * 0.4
                                 elide: Text.ElideRight
                                 color: palette.windowText
                             }
                             Label {
-                                text: controller.mountAt(index)
+                                text: mountText
                                 Layout.fillWidth: true
                                 elide: Text.ElideMiddle
                                 color: palette.windowText
@@ -175,7 +206,7 @@ ApplicationWindow {
                         onDoubleClicked: {
                             controller.selected_row = index
                             controller.status_message =
-                                controller.deviceAt(index) + " → " + controller.mountAt(index)
+                                deviceText + " → " + mountText
                         }
                     }
 
