@@ -1,0 +1,8 @@
+# gold + --gc-sections often drops cxx-qt-lib's C++ cxxbridge object files,
+# causing undefined references like qbytearray_drop / qguiapplication_new.
+# Prefer the BFD linker on Linux.
+[target.aarch64-unknown-linux-gnu]
+rustflags = ["-C", "link-arg=-fuse-ld=bfd"]
+
+[target.x86_64-unknown-linux-gnu]
+rustflags = ["-C", "link-arg=-fuse-ld=bfd"]

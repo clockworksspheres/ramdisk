@@ -27,6 +27,10 @@ pub struct RamDiskOptions {
 
     /// Windows-only: filesystem type passed to AIM (default "ntfs").
     pub windows_fstype: String,
+
+    /// Linux-only: sudo password for non-root mount/umount (None = no elevation).
+    /// Prefer not logging this; clear after use.
+    pub sudo_password: Option<String>,
 }
 
 impl Default for RamDiskOptions {
@@ -40,6 +44,7 @@ impl Default for RamDiskOptions {
             linux_gid: None,
             macos_disable_journal: false,
             windows_fstype: "ntfs".to_string(),
+            sudo_password: None,
         }
     }
 }

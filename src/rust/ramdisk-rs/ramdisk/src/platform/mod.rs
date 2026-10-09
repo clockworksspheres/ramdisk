@@ -80,10 +80,10 @@ pub(crate) fn umount_path(path: &Path) -> Result<()> {
 }
 
 #[cfg(target_os = "linux")]
-mod linux;
+pub(crate) mod linux;
 
 #[cfg(target_os = "macos")]
-mod macos;
+pub(crate) mod macos;
 
 #[cfg(target_os = "windows")]
-mod windows;
+pub(crate) mod windows;

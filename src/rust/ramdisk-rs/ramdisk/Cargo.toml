@@ -1,0 +1,15 @@
+[package]
+name = "ramdisk"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Cross-platform interface for creating and managing ramdisks"
+readme = "../README.md"
+
+[[bin]]
+name = "ramdisk"
+path = "src/bin/ramdisk.rs"
+
+[dependencies]
+thiserror = "1.0"

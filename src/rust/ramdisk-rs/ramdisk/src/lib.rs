@@ -30,11 +30,18 @@ mod error;
 mod platform;
 mod common;
 
-#[cfg(feature = "gui")]
-pub mod gui;
+
+
 
 pub use error::{Error, Result};
 pub use common::{RamDiskOptions, MountInfo, LinuxFsType};
+
+/// Linux helper: stash sudo password for the next umount_path call.
+#[cfg(target_os = "linux")]
+pub fn set_pending_sudo_password(pw: Option<String>) {
+    platform::linux::set_pending_sudo_password(pw);
+}
+
 
 use std::path::{Path, PathBuf};
 
