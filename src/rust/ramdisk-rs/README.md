@@ -43,3 +43,11 @@ cargo run -p ramdisk-gui
 
 The GUI is a **separate package** so the CXX-Qt bridge and generated C++ are linked
 in the same binary (avoids undefined `cxxbridge` symbols when the bridge lived only in the library).
+
+## Repo files you can omit
+
+| Path | Keep? |
+|------|--------|
+| `Cargo.lock` | **Keep for apps/binaries** (reproducible builds). Optional for pure libraries. |
+| `.cargo/config.toml` | Optional. Only forces the BFD linker on Linux; safe to delete on macOS/Windows. |
+
