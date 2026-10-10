@@ -66,9 +66,8 @@ This is the preferred method for this project for jenkins pipeline setup, the ot
 ### ssh server side, ie VM guest
 
 ```
-sudo apt update
-sudo apt upgrade
-sudo apt install openssh-server
+sudo dnf update
+sudo dnf install openssh-server
 sudo systemctl enable --now ssh
 sudo systemctl status ssh
 sudo vim /etc/ssh/sshd_config
