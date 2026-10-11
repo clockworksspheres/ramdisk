@@ -1,7 +1,8 @@
 #!/usr/bin/env -S python -u
 """
 """
-import subprocess, SubprocessError
+import subprocess
+from subprocess import SubprocessError
 import re
 import sys
 import psutil
