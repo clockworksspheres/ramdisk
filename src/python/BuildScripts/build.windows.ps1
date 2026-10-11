@@ -25,8 +25,6 @@ if (!(Test-Path -Path $directory -PathType Container)) {
 pip install --upgrade pip
 pip install -r requirements.txt
 
-exit 1
-
 ####
 # Do every time, to make sure everyone knows source of E.ico icon, so 
 # proper license can be found
