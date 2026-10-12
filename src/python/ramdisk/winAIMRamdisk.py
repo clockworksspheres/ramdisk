@@ -502,8 +502,8 @@ def getMountDisks():
         line = line.strip()
         if re.search(r"\\\\\\\\", line):
             continue
-        elif re.match(f"Device number {line}"):
-            print("Looking for device: " + line)
+        elif re.match("Device number", line):
+            print(f"Looking for device: {line}")
             # anchor = True
             device = line.split()[-1]
             print("Found Device: " + device)
