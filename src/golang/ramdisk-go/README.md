@@ -288,9 +288,9 @@ If you are already inside `cmd/ramdisk-gui`, do **not** run `cd cmd/ramdisk-gui`
 
 ### Build (Windows)
 
-See **`cmd/ramdisk-gui/README.md`** for the full Windows guide (MSYS2 UCRT64, Chocolatey, DLLs, aim_ll, elevation).
+Full step-by-step instructions (MSYS2 UCRT64 install, pacman packages, GOROOT, `go build`, DLL deploy with `ldd`, PATH test, `aim_ll`, Run as administrator, list parsing, checklist) are in:
 
-Summary: build inside **MSYS2 UCRT64** with MinGW + Qt 6; deploy Qt/MinGW DLLs and `platforms\qwindows.dll` next to the exe; place **aim_ll.exe** beside the exe or on PATH; **Run as administrator** for Create/Eject (AIM driver). Exit `0xC0000135` / `-1073741515` means a missing DLL.
+**`cmd/ramdisk-gui/README.md`** → section **Windows build**
 
 ### Build (Linux)
 
