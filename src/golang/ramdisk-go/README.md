@@ -290,7 +290,7 @@ If you are already inside `cmd/ramdisk-gui`, do **not** run `cd cmd/ramdisk-gui`
 
 Full step-by-step instructions (MSYS2 UCRT64 install, pacman packages, GOROOT, `go build`, DLL deploy with `ldd`, PATH test, `aim_ll`, Run as administrator, list parsing, checklist) are in:
 
-**[`cmd/ramdisk-gui/README.md`](cmd/ramdisk-gui/README.md#Windows%20build)** → section **Windows build**
+**[`cmd/ramdisk-gui/README.md`](cmd/ramdisk-gui/README.md#Windows)** → section **Windows build**
 
 ### Build (Linux)
 
