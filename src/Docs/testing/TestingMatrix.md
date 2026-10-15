@@ -18,7 +18,7 @@ Some of the testing is provided by a Jenkins pipeline, but most of the testing i
 ### Hardware
 
 Developed on Apple Silicon and VM's on Apple Silicon, except for the 
-python code, which has also been tested on Intel.
+python code, which has also been tested on 64 bit Intel.
 
 ### OS's Tested
 
