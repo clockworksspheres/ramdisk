@@ -9,6 +9,6 @@ The python project is the origional ramdisk project.
 
 # Each language has it's own Eisenban Kanban board
 
-eisenban package can be found at:  https://github.com/clockworksspheres/eisenban
+eisenban project can be found at:  https://github.com/clockworksspheres/eisenban
 
 -----

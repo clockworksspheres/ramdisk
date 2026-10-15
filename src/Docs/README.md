@@ -10,9 +10,9 @@ __NOTE:__ Some of the documentation found in this tree are conversations with AI
 
 # Usage
 
-Basic usage can be found in [setup_ramdisk_example.py](../examples/setup_ramdisk_example.py)
+Basic usage can be found in [setup_ramdisk_example.py](../python/examples/setup_ramdisk_example.py)
 
-## The [Ramdisk interface](../ramdisk/RamDisk.py):
+## The [Ramdisk interface](../python/ramdisk/RamDisk.py):
 
 The following functionality is available for every operating system.  Other RamDisk methods may or may not be available for every operating sysytem.
 
@@ -38,9 +38,13 @@ ___umount(device)___: Function to unmount the ramdisk assigned 'device'.
 ___eject(device)___: Duplicate function to unmount the ramdisk assigned to 'device'
 * device: the operating system device the RamDisk is attached to.
 
-# [System Specifics](SystemSpecifics/README.md)
+# Documentation on [System Specifics](SystemSpecifics/README.md) for build environment, development notes and running
 
-# [ci-cd](ci-cd/README.md)
+# Documentation on [ci-cd](ci-cd/README.md) related setup, thoughts, etc.
 
-# [testing](testing/README.md)
+# [Testing](testing/README.md)
+
+Currently only the python project has tests.
+
+In the process of chossing either Google-test or Catch2 for C++ testing.
 
