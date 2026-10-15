@@ -17,6 +17,7 @@
 #include <tuple>
 #include <optional>
 #include <stdexcept>
+#include <vector>
 
 namespace ramdisk {
 
@@ -135,5 +136,18 @@ bool umount(const std::string& device);
 
 /** Alias. */
 bool eject(const std::string& device);
+
+/** One currently mounted ramdisk discovered from the OS. */
+struct MountedRamDisk {
+    std::string device;      // e.g. /dev/disk5s1 or "tmpfs"
+    std::string mountPoint;  // e.g. /tmp/ram0
+};
+
+/**
+ * Enumerate ramdisks currently mounted on this system
+ * (macOS: volumes named RAMDisk / from hdiutil ram://;
+ *  Linux: non-system tmpfs/ramfs mounts).
+ */
+std::vector<MountedRamDisk> listMountedRamDisks();
 
 } // namespace ramdisk

@@ -75,34 +75,35 @@ NOTE: the aim_ll.exe software must be acquired from
 
 Will correctly generate either a macRamdisk on macOS or a linuxTmpfsRamdisk (by default) on Linux, and winAIMRamdisk for windows, depending on which OS kernel one is running on.
 
-## Example code
+-----
 
-The examples directory provides examples on how to use various libraries, even beyond the ramdisk libraries in this code base.  Currently in flux.  Some are used for testing the ramdisk code base.
+# In progress work:
 
-The ramdisk example code is cross platform in an beta state.
+## Languages
 
-In the parent directory of the examples directory is ramdisk-setup.py, which is an example of using a PySide6 interface for the ramdisk library.
+The origional ramdisk project is written/tested in only python v3.10+, but examples do not work (specifically ramdisk-setup.py) with the latest version of python, as some of the libraries it depends on are behind the cutting edge version of python.
+
+Future plans to duplicate libraries, tests and examples in other languages as well.  Current ports are in proccess to language targets are C++, Go and Rust, all cross platform, like the original python project.  
+
+Ports have been primarily executed with [grok](http://grok.com), but are all still in various stages of progress on the various platforms.  Each ported language should have it's own set of readme's on setting up build environments, compiling and running.
 
 -----
 
 # Tracking - Eisenban - Kanban board for the project
 
-src/ramdiskBoard is a Kanban based project management board created by and managed by eisenban.
+Each language should have an eisenban based Kanban board.
+
+```
+src/cpp/ramdisk-cppBoard
+src/golang/ramdisk-goBoard
+src/python/ramdiskBoard
+src/rust/ramdisk-rsBoard
+```
 
 eisenban package can be found at:  https://github.com/clockworksspheres/eisenban
 
 -----
 
-# Future work:
-
-## Languages
-
-Currently written/tested in only python v3.10+, but examples do not work (specifically ramdisk-setup.py) with the latest version of python
-
-Future plans to duplicate libraries, tests and examples in other languages as well.  Potential next language targets are Go, Rust and C++.
-
 ## Contributions
 
 Very greatful for any contributions/pull requests to help with the project!
-
-

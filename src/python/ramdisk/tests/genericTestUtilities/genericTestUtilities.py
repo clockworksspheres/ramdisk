@@ -221,7 +221,7 @@ class GenericTestUtilities:
                     capacityInPercent = look_for_freespace.group(1)
                     inodesUsed = look_for_freespace.group(2)
                     inodesFree = look_for_freespace.group(3)
-                except OSError, re.error:
+                except (OSError, re.error):
                     pass 
         except SubprocessError as Err:
             self.logger.log(lp.WARNING, traceback.format_exc())

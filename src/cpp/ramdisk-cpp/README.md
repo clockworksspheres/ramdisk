@@ -85,6 +85,9 @@ Binaries land in `build/` (e.g. `build/ramdisk_cli`, `build/Release/ramdisk_cli.
 # Debian/Ubuntu
 sudo apt install -y qt6-base-dev
 
+# RedHat/Rocky/Alma
+sudo dnf install qt6-qtbase-devel
+
 # macOS
 brew install qt
 ```

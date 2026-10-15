@@ -1,4 +1,4 @@
-# Installing Jenkins Agent on macOS
+d# Installing Jenkins Agent on macOS
 
 prompt on chatgpt 26-01-05 (if later, try the prompt again to get better/newer info)
 

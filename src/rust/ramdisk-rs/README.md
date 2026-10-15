@@ -1,327 +1,164 @@
 # ramdisk (Rust)
 
-Cross-platform interface for creating and managing ramdisks.
+Cross-platform library, CLI, and optional Qt/QML GUI for creating and managing
+in-memory disks (ramdisks).
 
-Port of the Python library [clockworksspheres/ramdisk](https://github.com/clockworksspheres/ramdisk) to idiomatic Rust.
+Ported from [clockworksspheres/ramdisk](https://github.com/clockworksspheres/ramdisk).
 
-## Supported platforms
+| Platform | Backend |
+|----------|---------|
+| **Linux** | `tmpfs` / `ramfs` via `mount` (sudo when not root) |
+| **macOS** | `hdiutil` + APFS (detach/eject on umount) |
+| **Windows** | Arsenal Image Mounter (AIM) toolkit |
 
-| OS      | Backend                          | Privileges          | Notes                                      |
-|---------|----------------------------------|---------------------|--------------------------------------------|
-| Linux   | `tmpfs` / `ramfs` via `mount`    | root (or CAP_SYS_ADMIN) | size limit enforced for tmpfs             |
-| macOS   | `hdiutil` + `diskutil` (APFS)    | normal user         | no root required                           |
-| Windows | Arsenal Image Mounter (`aim_ll`) | Administrator       | `aim_ll.exe` must be on `PATH`             |
+## Workspace layout
 
----
-
-## Installing Rust / Cargo and platform dependencies
-
-### Linux
-
-**Rust / Cargo** – official installer (recommended):
-
-```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-source "$HOME/.cargo/env"
+```text
+ramdisk-rs/                 workspace root
+├── ramdisk/                library + `ramdisk` CLI
+└── ramdisk-gui/            CXX-Qt / QML GUI binary
 ```
 
-Or via your distro package manager (versions may lag):
+| Crate | Role |
+|-------|------|
+| `ramdisk` | Library + CLI (`cargo run -p ramdisk -- …`) |
+| `ramdisk-gui` | GUI (`cargo run -p ramdisk-gui`) — separate package so CXX-Qt links correctly |
 
-```bash
-# Debian / Ubuntu
-sudo apt update && sudo apt install -y build-essential curl
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
-# Fedora / RHEL / Rocky
-sudo dnf install -y gcc make curl
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
-# Arch
-sudo pacman -S --needed base-devel curl
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-```
-
-**System tools used by the library** (usually already present):
-
-- `mount` / `umount` (from `util-linux`)
-- A C toolchain (`gcc` or `clang`) so Cargo can link native code if needed
-
-No extra packages beyond a normal build environment are required for the Linux backend.
-
----
+## Install Rust (Cargo)
 
 ### macOS (Homebrew)
 
-**1. Install Homebrew** (if you don’t already have it):
-
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-**2. Install Rust / Cargo via Homebrew:**
-
 ```bash
 brew install rust
+# or: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
-
-Alternatively you can use the official installer (works fine alongside Homebrew):
-
-```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-```
-
-**3. System tools**
-
-`hdiutil` and `diskutil` ship with macOS – nothing extra to install.
-
-Verify:
-
-```bash
-which hdiutil diskutil cargo rustc
-cargo --version
-```
-
----
 
 ### Windows (Chocolatey)
 
-**1. Install Chocolatey** (run an elevated PowerShell / CMD):
-
 ```powershell
-Set-ExecutionPolicy Bypass -Scope Process -Force
-[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+choco install rust
+# or use https://rustup.rs
 ```
 
-**2. Install Rust / Cargo via Chocolatey:**
+### Linux (Debian / Ubuntu)
 
-```powershell
-choco install rust -y
-# or the more complete toolchain:
-choco install rustup.install -y
+```bash
+sudo apt install -y cargo rustc
+# For a newer toolchain: https://rustup.rs
+# GUI needs rustc ≥ 1.85; pin cxx to 1.0.186 (see Cargo.toml).
 ```
 
-After installation open a **new** terminal so `cargo` and `rustc` are on `PATH`.
+## CLI
 
-**3. Install the Arsenal Image Mounter CLI (`aim_ll`)**
+```bash
+cargo build -p ramdisk
+cargo run -p ramdisk -- help
 
-The Windows backend depends on `aim_ll.exe` from the [Arsenal Image Mounter](https://github.com/ArsenalRecon/Arsenal-Image-Mounter) project.
+# Create 512 MiB ramdisk (stays mounted after exit)
+cargo run -p ramdisk -- create --size 512 --mount /tmp/ram0
 
-- Download the latest release from the [Arsenal Image Mounter releases](https://github.com/ArsenalRecon/Arsenal-Image-Mounter/releases) page, or
-- Place `aim_ll.exe` somewhere that is on your system `PATH` (for example `C:\Tools\aim_ll.exe` and add that folder to PATH).
-
-Verify:
-
-```powershell
-cargo --version
-aim_ll -h
+# List / unmount
+cargo run -p ramdisk -- list
+cargo run -p ramdisk -- umount /tmp/ram0
 ```
 
-You will also need the **Microsoft C++ Build Tools** (or a full Visual Studio installation) so the Rust MSVC toolchain can link. Chocolatey can install them:
+On **Linux**, create/umount as a non-root user may require sudo (password prompt or run as root).
 
-```powershell
-choco install visualstudio2022buildtools -y
-# or the lighter package
-choco install visualstudio2022-workload-vctools -y
-```
+On **macOS**, `umount` fully **ejects** the disk (`diskutil unmountDisk` + `hdiutil detach -force`).
 
----
-
-## Quick start
-
-Add the crate to your project:
-
-```toml
-[dependencies]
-ramdisk = { path = "…" }   # or version from crates.io once published
-```
+## Library example
 
 ```rust
 use ramdisk::{RamDisk, RamDiskOptions};
 
 fn main() -> ramdisk::Result<()> {
-    // 512 MiB, temporary mount point
-    let rd = RamDisk::with_size(512)?;
+    let rd = RamDisk::new(RamDiskOptions {
+        size_mb: 512,
+        mount_point: None, // temporary path
+        ..Default::default()
+    })?;
 
-    println!("success  = {}", rd.success());
-    println!("mount    = {}", rd.mount_point().display());
-    println!("device   = {:?}", rd.device());
-    println!("version  = {}", rd.version());
+    println!("mounted at {}", rd.mount_point().display());
 
-    // Use the filesystem at rd.mount_point() …
+    // Keep the mount after the process exits:
+    let info = rd.detach();
+    println!("left mounted at {}", info.mount_point.display());
 
-    rd.umount()?;   // or just drop the handle
+    // Or unmount before exit:
+    // rd.umount()?;
     Ok(())
 }
 ```
 
-### Explicit options
+`detach()` leaves the OS mount active. `umount()` / `Drop` unmounts (and on macOS, ejects).
 
-```rust
-use ramdisk::{RamDisk, RamDiskOptions, LinuxFsType};
-use std::path::PathBuf;
+## Graphical UI (CXX-Qt + QML)
 
-let opts = RamDiskOptions {
-    size_mb: 1024,
-    mount_point: Some(PathBuf::from("/mnt/myram")),
-    linux_fstype: LinuxFsType::Tmpfs,
-    linux_mode: 0o755,
-    ..Default::default()
-};
-let rd = RamDisk::new(opts)?;
+Requires **Qt 6** and a working `qmake` / `qmake6`.
+
+### Debian 13 (trixie)
+
+```bash
+sudo apt update
+sudo apt install -y \
+  build-essential cmake pkg-config \
+  qt6-base-dev qt6-declarative-dev qt6-tools-dev \
+  qml6-module-qtquick qml6-module-qtquick-controls \
+  qml6-module-qtquick-layouts qml6-module-qtqml \
+  qml6-module-qtquick-window
+
+export QMAKE=$(command -v qmake6)
+cargo run -p ramdisk-gui
 ```
 
-## API surface (mirrors the original Python library)
+If you see `cxxbridge1$NNN$…` undefined references, pin the cxx ABI:
 
-| Python                         | Rust                                      |
-|--------------------------------|-------------------------------------------|
-| `RamDisk(size, mountpoint)`    | `RamDisk::new(RamDiskOptions{…})`         |
-| `ramdisk.getData()`            | `rd.get_data() → MountInfo`               |
-| `ramdisk.getMountPoint()`      | `rd.mount_point()`                        |
-| `ramdisk.getDevice()`          | `rd.device()`                             |
-| `ramdisk.umount()`             | `rd.umount()`                             |
-| `getMountedDisks()`            | `ramdisk::list_mounted()`                 |
-| `umount(device)`               | `ramdisk::umount_path(path)`              |
+```bash
+cargo update -p cxx --precise 1.0.186
+cargo update -p cxx-gen --precise 0.7.186
+# or: ./fix-cxx-abi.sh
+```
 
-## Platform notes
+### macOS (Homebrew)
 
-### Linux
-- Uses `mount -t tmpfs -o size=…m,uid=…,gid=…,mode=…`.
-- Requires root (or the `CAP_SYS_ADMIN` capability). The library returns a clear `PrivilegeRequired` error when the process is not privileged.
-- `ramfs` is also supported but has **no size limit** – the process can consume all RAM.
+```bash
+brew install rust qt
+export QMAKE="$(brew --prefix qt)/bin/qmake"
+# or: export QMAKE=$(command -v qmake6)
 
-### macOS
-- Creates a `ram://` device with `hdiutil attach -nomount`, partitions it as APFS, then mounts at the requested path.
-- Runs as a normal user; no sudo needed.
+cargo run -p ramdisk-gui
+```
+
+macOS links against **libc++** (not libstdc++).
 
 ### Windows
-- Requires the [Arsenal Image Mounter](https://github.com/ArsenalRecon/Arsenal-Image-Mounter) command-line tool (`aim_ll.exe`) to be installed and on `PATH`.
-- The process typically needs Administrator rights.
 
-## Building / testing
-
-```bash
-cargo build
-cargo test          # unit tests only; integration tests need privileges
+```powershell
+# Install Qt 6 (e.g. via aqtinstall or the Qt online installer)
+# Ensure qmake is on PATH, then:
+$env:QMAKE = "C:\path\to\qmake.exe"
+cargo run -p ramdisk-gui
 ```
 
-On Linux you will need to run integration tests as root (or with appropriate capabilities) for the mount to succeed.
+### GUI behaviour
 
+- **Create** / **Eject** on Linux as non-root opens a **Local Authentication** dialog (sudo password), matching the Python `local_auth_widget`.
+- Table lists mounted ramdisks (including under `/tmp` on Linux).
+- Default selection for eject is the **first** row.
+- After create, the mount remains active (same as CLI `detach`).
 
-## Command-line tool (`ramdisk`)
+## Repo files
 
-Build and install the binary:
+| Path | Keep? |
+|------|--------|
+| `Cargo.lock` | **Yes** for this workspace (reproducible binary builds). |
+| `.cargo/config.toml` | Optional. Forces the BFD linker on Linux; **safe to delete on macOS/Windows**. |
 
-```bash
-cargo build --release
-# optional: install into ~/.cargo/bin
-cargo install --path .
-```
+## Features / versions
 
-### Commands
-
-```text
-ramdisk create [--size <MiB>] [--mount <path>] [--keep]
-ramdisk list
-ramdisk umount <mount-or-device>
-ramdisk info
-ramdisk help
-```
-
-| Command | Description |
-|---------|-------------|
-| `create` / `c` | Create and mount a ramdisk |
-| `list` / `ls` / `l` | List currently mounted ramdisks |
-| `umount` / `unmount` / `u` | Unmount by mount point or device |
-| `info` / `i` | Show version and platform backend |
-| `help` | Show help |
-
-**Create options**
-
-| Flag | Description | Default |
-|------|-------------|---------|
-| `--size`, `-s` | Size in MiB | `512` |
-| `--mount`, `-m` | Explicit mount path | temp directory |
-| `--keep`, `-k` | Stay running until Enter; then unmount | leave mounted |
-
-**Mount lifetime**
-
-- **Default (`create` without `--keep`)** – the ramdisk **stays mounted** after the process exits. Use `ramdisk umount <path>` later to remove it.
-- **`--keep`** – the process waits for Enter, then unmounts before exiting.
-- From library code, call `rd.detach()` instead of `rd.umount()` / dropping if you want the mount to survive.
-
-
-**Examples**
-
-```bash
-# 1 GiB ramdisk at a temp path, leave it mounted
-ramdisk create --size 1024
-
-# 256 MiB at a fixed path, wait for Enter then unmount
-ramdisk create -s 256 -m /mnt/buildcache --keep
-
-# List known ramdisks
-ramdisk list
-
-# Unmount later
-ramdisk umount /mnt/buildcache
-```
-
-On Linux, `create` and `umount` generally require root (or `CAP_SYS_ADMIN`).
-
-
-## Graphical UI (`ramdisk-gui`) — CXX-Qt / QML
-
-Port of the Python **PySide6** `ramdisk-setup.py` interface to **CXX-Qt** + QML.
-
-### UI features (same as the Python app)
-
-| Control | Action |
-|---------|--------|
-| Size slider + field | Set ramdisk size in MiB |
-| Mount point field | Optional path (empty → temp dir) |
-| **Create Ramdisk** | Create & leave mounted |
-| **Eject Ramdisk** | Unmount the selected table row |
-| **Refresh** | Re-scan mounted ramdisks |
-| Table | Device + mount point list |
-| **Quit** | Exit |
-
-### Prerequisites
-
-1. **Qt 6** with QML (open-source is fine)
-2. `qmake` on `PATH`, or set `QMAKE=/path/to/qmake`
-3. C/C++ toolchain
-
-**Install Qt briefly**
-
-```bash
-# macOS
-brew install qt
-
-# Ubuntu / Debian
-sudo apt install qt6-base-dev qt6-declarative-dev qmake6
-# ensure qmake points at Qt6, e.g.:
-export QMAKE=$(which qmake6)
-
-# Windows (Chocolatey)
-choco install qt6 -y
-# add Qt's bin dir to PATH so qmake is found
-```
-
-### Build & run
-
-```bash
-cargo run --features gui --bin ramdisk-gui
-```
-
-### Layout
-
-```
-qml/main.qml              # QML UI (mirrors main_n.ui)
-src/gui/controller.rs     # CXX-Qt QObject (create / eject / list)
-src/bin/ramdisk_gui.rs    # application entry point
-```
+- Rust **1.85+**
+- GUI: `cxx` **1.0.186**, `cxx-qt` / `cxx-qt-lib` / `cxx-qt-build` **0.7.3** (pinned for ABI stability)
 
 ## License
 
-Unlicense (same as the original Python project).
+Unlicense (public domain), consistent with the original project intent.

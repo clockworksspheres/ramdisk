@@ -33,6 +33,7 @@ private slots:
 private:
     void setupConnections();
     void setupTable();
+    void populateFromSystem();
     void addRow(const QString& device, const QString& mountPoint);
     void setStatus(const QString& msg);
     std::uint64_t availableMemoryMb() const;
