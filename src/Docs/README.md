@@ -44,7 +44,3 @@ ___eject(device)___: Duplicate function to unmount the ramdisk assigned to 'devi
 
 # [Testing](testing/README.md)
 
-Currently only the python project has tests.
-
-In the process of chossing either Google-test or Catch2 for C++ testing.
-
