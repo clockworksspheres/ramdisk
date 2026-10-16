@@ -26,8 +26,8 @@ Time has allowed for the following
 
 []() | C++ | Golang | Python | Rust
  ---|------------|-------------|---------------|---------------
-macOS 27 | yes, cli and gui | in progress | Yes, cli and gui | Yes, cli and gui
-Windows 11 | - | - | Yes | -
+macOS 27 | yes, cli and gui | yes, cli and gui | Yes, cli and gui | Yes, cli and gui
+Windows 11 | - | - | yes, cli and gui | -
 Debian 13 | yes, cli and gui | in progress | Yes, cli and gui | yes, cli and gui
 Ubuntu 2404 | yes, cli and gui | yes, cli and gui | yes, cli and gui | in progress
 Rocky Linux 10 | - | - | yes, cli and gui | -
