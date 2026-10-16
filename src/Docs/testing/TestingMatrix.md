@@ -26,11 +26,11 @@ Time has allowed for the following
 
 []() | C++ | Golang | Python | Rust
  ---|------------|-------------|---------------|---------------
-macOS | in progress | in progress | Yes | in progress
-Windows | in progress | in progress | Yes | in progress
-Debian | in progress | in progress | Yes | in progress
-Ubuntu | not currently | not currently | Yes | not currently
-Rocky Linux | in progress | in progress | Yes | in progress
-Alma Linux | not currently | not currently | Yes | not currently
+macOS 27 | yes, cli and gui | yes, cli and gui | Yes, cli and gui | Yes, cli and gui
+Windows 11 | - | - | yes, cli and gui | -
+Debian 13 | yes, cli and gui | in progress | Yes, cli and gui | yes, cli and gui
+Ubuntu 2404 | yes, cli and gui | yes, cli and gui | yes, cli and gui | in progress
+Rocky Linux 10 | - | - | yes, cli and gui | -
+Alma Linux 10 | - | - | yes, cli and gui | -
 
 Python has automated CI/CD with the above OS's in Jenkins.  All other languages are manually tested on the above OSs.
