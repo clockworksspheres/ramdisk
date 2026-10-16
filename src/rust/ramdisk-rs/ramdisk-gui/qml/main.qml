@@ -18,6 +18,14 @@ ApplicationWindow {
         selected_row: -1
 
         Component.onCompleted: refreshList()
+
+        // Open Local Auth dialog when elevation is required (Linux)
+        onAuth_requiredChanged: {
+            if (auth_required)
+                localAuthDialog.open()
+            else
+                localAuthDialog.close()
+        }
     }
 
     Component.onCompleted: {
@@ -30,6 +38,59 @@ ApplicationWindow {
         interval: 150
         repeat: false
         onTriggered: controller.refreshList()
+    }
+
+    // ---- Local Authentication dialog (port of local_auth_widget) ----
+    Dialog {
+        id: localAuthDialog
+        title: qsTr("Local Authentication")
+        modal: true
+        anchors.centerIn: parent
+        standardButtons: Dialog.Ok | Dialog.Cancel
+        closePolicy: Popup.CloseOnEscape
+
+        onAccepted: {
+            controller.submitAuth(passField.text)
+            passField.text = ""
+        }
+        onRejected: {
+            controller.cancelAuth()
+            passField.text = ""
+        }
+
+        // Focus password when shown
+        onOpened: {
+            passField.forceActiveFocus()
+            passField.selectAll()
+        }
+
+        ColumnLayout {
+            anchors.fill: parent
+            spacing: 10
+
+            Label {
+                text: qsTr("Root privileges are required to mount or unmount a ramdisk.")
+                wrapMode: Text.WordWrap
+                Layout.preferredWidth: 280
+            }
+
+            Label { text: qsTr("Username") }
+            TextField {
+                id: userField
+                Layout.fillWidth: true
+                text: controller.auth_username
+                readOnly: true
+            }
+
+            Label { text: qsTr("Password") }
+            TextField {
+                id: passField
+                Layout.fillWidth: true
+                echoMode: TextInput.Password
+                placeholderText: qsTr("sudo password")
+                Keys.onReturnPressed: localAuthDialog.accept()
+            }
+        }
     }
 
     ColumnLayout {
@@ -104,7 +165,6 @@ ApplicationWindow {
             Button {
                 text: qsTr("Eject Ramdisk")
                 onClicked: {
-                    // Prefer highlighted row; default to first mounted disk
                     var row = table.currentIndex
                     if (row < 0 && controller.row_count > 0)
                         row = 0
@@ -162,7 +222,6 @@ ApplicationWindow {
                     Layout.fillHeight: true
                     clip: true
                     model: controller.row_count
-                    // Keep in sync with controller (one-way from clicks → controller)
                     currentIndex: controller.selected_row
                     highlightFollowsCurrentItem: true
                     focus: true
@@ -177,7 +236,6 @@ ApplicationWindow {
                         height: 32
                         required property int index
 
-                        // Selection state
                         readonly property bool isSelected: table.currentIndex === index
                                                       || controller.selected_row === index
 
@@ -190,8 +248,6 @@ ApplicationWindow {
                             return controller.mountAt(index)
                         }
 
-                        // Paint selection on the delegate itself (ListView.highlight
-                        // is often covered by ItemDelegate's opaque background)
                         background: Rectangle {
                             color: rowDelegate.isSelected
                                    ? (palette.active.highlight || "#0078d7")
@@ -207,18 +263,14 @@ ApplicationWindow {
                                 text: deviceText
                                 Layout.preferredWidth: parent.width * 0.4
                                 elide: Text.ElideRight
-                                color: rowDelegate.isSelected
-                                       ? (palette.highlightedText || palette.windowText)
-                                       : palette.windowText
+                                color: palette.windowText
                                 leftPadding: 8
                             }
                             Label {
                                 text: mountText
                                 Layout.fillWidth: true
                                 elide: Text.ElideMiddle
-                                color: rowDelegate.isSelected
-                                       ? (palette.highlightedText || palette.windowText)
-                                       : palette.windowText
+                                color: palette.windowText
                                 rightPadding: 8
                             }
                         }
@@ -235,7 +287,6 @@ ApplicationWindow {
                         }
                     }
 
-                    // Keyboard: Up/Down change selection and notify controller
                     Keys.onUpPressed: {
                         if (currentIndex > 0) {
                             currentIndex = currentIndex - 1

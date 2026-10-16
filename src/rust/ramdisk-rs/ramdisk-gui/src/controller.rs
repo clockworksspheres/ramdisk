@@ -1,5 +1,5 @@
-//! QObject bridge: size / mount point / create / eject / list.
-//! Mirrors `ramdisk.ui.main._CreateRamdisk` from the Python PySide6 UI.
+//! QObject bridge: size / mount point / create / eject / list / local auth.
+//! Mirrors PySide6 `_CreateRamdisk` + `_LocalAuth`.
 
 #[cxx_qt::bridge]
 pub mod qobject {
@@ -14,13 +14,17 @@ pub mod qobject {
         #[qproperty(i32, size_mb)]
         #[qproperty(QString, mount_point)]
         #[qproperty(QString, status_message)]
-        /// Newline-separated device paths (parallel to mount_list_text).
         #[qproperty(QString, device_list_text)]
-        /// Newline-separated mount paths (parallel to device_list_text).
         #[qproperty(QString, mount_list_text)]
         #[qproperty(i32, selected_row)]
         #[qproperty(i32, max_size_mb)]
         #[qproperty(i32, row_count)]
+        /// True when the Local Auth dialog should be shown (Linux, non-root).
+        #[qproperty(bool, auth_required)]
+        /// Pre-filled username for the auth dialog.
+        #[qproperty(QString, auth_username)]
+        /// "create" or "eject" — which action resumes after auth.
+        #[qproperty(QString, pending_action)]
         #[namespace = "ramdisk_gui"]
         type RamdiskController = super::RamdiskControllerRust;
 
@@ -40,22 +44,36 @@ pub mod qobject {
         #[cxx_name = "setSizeFromSlider"]
         fn set_size_from_slider(self: Pin<&mut RamdiskController>, value: i32);
 
-        /// Return the device string for row `index`.
         #[qinvokable]
         #[cxx_name = "deviceAt"]
         fn device_at(self: &RamdiskController, index: i32) -> QString;
 
-        /// Return the mount-point string for row `index`.
         #[qinvokable]
         #[cxx_name = "mountAt"]
         fn mount_at(self: &RamdiskController, index: i32) -> QString;
+
+        /// Called when Local Auth dialog is accepted with a password.
+        #[qinvokable]
+        #[cxx_name = "submitAuth"]
+        fn submit_auth(self: Pin<&mut RamdiskController>, password: QString);
+
+        /// Called when Local Auth dialog is cancelled.
+        #[qinvokable]
+        #[cxx_name = "cancelAuth"]
+        fn cancel_auth(self: Pin<&mut RamdiskController>);
+
+        /// Whether the process is already root (no dialog needed).
+        #[qinvokable]
+        #[cxx_name = "isRoot"]
+        fn is_root_q(self: &RamdiskController) -> bool;
     }
 }
 
 use core::pin::Pin;
+use cxx_qt::CxxQtType;
 use cxx_qt_lib::QString;
 
-use crate::{list_mounted, umount_path, RamDisk, RamDiskOptions};
+use ramdisk::{list_mounted, umount_path, RamDisk, RamDiskOptions};
 
 pub struct RamdiskControllerRust {
     size_mb: i32,
@@ -66,11 +84,17 @@ pub struct RamdiskControllerRust {
     selected_row: i32,
     max_size_mb: i32,
     row_count: i32,
+    auth_required: bool,
+    auth_username: QString,
+    pending_action: QString,
+    /// Held only while an elevated action is in progress; cleared after use.
+    sudo_password: Option<String>,
 }
 
 impl Default for RamdiskControllerRust {
     fn default() -> Self {
         let max = available_mem_mb().unwrap_or(8192).min(i32::MAX as u64) as i32;
+        let user = current_username();
         Self {
             size_mb: 512,
             mount_point: QString::from(""),
@@ -80,6 +104,10 @@ impl Default for RamdiskControllerRust {
             selected_row: -1,
             max_size_mb: max,
             row_count: 0,
+            auth_required: false,
+            auth_username: QString::from(user.as_str()),
+            pending_action: QString::from(""),
+            sudo_password: None,
         }
     }
 }
@@ -94,7 +122,71 @@ fn lines_of(s: &QString) -> Vec<String> {
 }
 
 impl qobject::RamdiskController {
+    pub fn is_root_q(self: &Self) -> bool {
+        is_root()
+    }
+
     pub fn create_ramdisk(mut self: Pin<&mut Self>) {
+        #[cfg(target_os = "linux")]
+        {
+            if !is_root() && self.rust().sudo_password.is_none() {
+                self.as_mut()
+                    .set_pending_action(QString::from("create"));
+                self.as_mut().set_auth_required(true);
+                self.as_mut()
+                    .set_status_message(QString::from("Authentication required to create ramdisk"));
+                return;
+            }
+        }
+        self.as_mut().do_create();
+    }
+
+    pub fn eject_selected(mut self: Pin<&mut Self>) {
+        #[cfg(target_os = "linux")]
+        {
+            if !is_root() && self.rust().sudo_password.is_none() {
+                self.as_mut()
+                    .set_pending_action(QString::from("eject"));
+                self.as_mut().set_auth_required(true);
+                self.as_mut()
+                    .set_status_message(QString::from("Authentication required to eject ramdisk"));
+                return;
+            }
+        }
+        self.as_mut().do_eject();
+    }
+
+    pub fn submit_auth(mut self: Pin<&mut Self>, password: QString) {
+        let pw = password.to_string();
+        if pw.is_empty() {
+            self.as_mut()
+                .set_status_message(QString::from("Password cannot be empty"));
+            return;
+        }
+        // Store for the pending action only
+        self.as_mut().rust_mut().sudo_password = Some(pw);
+        self.as_mut().set_auth_required(false);
+
+        let action = self.as_ref().pending_action().to_string();
+        if action == "eject" {
+            self.as_mut().do_eject();
+        } else {
+            self.as_mut().do_create();
+        }
+        // Clear password from memory after the action
+        self.as_mut().rust_mut().sudo_password = None;
+        self.as_mut().set_pending_action(QString::from(""));
+    }
+
+    pub fn cancel_auth(mut self: Pin<&mut Self>) {
+        self.as_mut().set_auth_required(false);
+        self.as_mut().rust_mut().sudo_password = None;
+        self.as_mut().set_pending_action(QString::from(""));
+        self.as_mut()
+            .set_status_message(QString::from("Authentication cancelled"));
+    }
+
+    fn do_create(mut self: Pin<&mut Self>) {
         let size = *self.as_ref().size_mb();
         if size <= 0 {
             self.as_mut()
@@ -114,6 +206,7 @@ impl qobject::RamdiskController {
         let opts = RamDiskOptions {
             size_mb: size as u64,
             mount_point: mount_opt,
+            sudo_password: self.rust().sudo_password.clone(),
             ..Default::default()
         };
 
@@ -136,13 +229,12 @@ impl qobject::RamdiskController {
         }
     }
 
-    pub fn eject_selected(mut self: Pin<&mut Self>) {
+    fn do_eject(mut self: Pin<&mut Self>) {
         let row = *self.as_ref().selected_row();
         let mounts = lines_of(self.as_ref().mount_list_text());
         let devices = lines_of(self.as_ref().device_list_text());
         let count = mounts.len().max(devices.len()) as i32;
 
-        // Default to the first mounted disk when nothing is selected
         let row = if (row < 0 || row >= count) && count > 0 {
             self.as_mut().set_selected_row(0);
             0
@@ -151,14 +243,12 @@ impl qobject::RamdiskController {
         };
 
         if row < 0 || row >= count {
-            self.as_mut().set_status_message(QString::from(
-                "No ramdisks to eject",
-            ));
+            self.as_mut()
+                .set_status_message(QString::from("No ramdisks to eject"));
             return;
         }
 
         let idx = row as usize;
-        // Prefer mount path; fall back to device node (macOS eject resolves both)
         let path = mounts
             .get(idx)
             .filter(|s| !s.is_empty())
@@ -170,6 +260,13 @@ impl qobject::RamdiskController {
             self.as_mut()
                 .set_status_message(QString::from("Selected row has no mount path or device"));
             return;
+        }
+
+        #[cfg(target_os = "linux")]
+        {
+            ramdisk::set_pending_sudo_password(
+                self.rust().sudo_password.clone(),
+            );
         }
 
         match umount_path(std::path::Path::new(path.trim())) {
@@ -187,7 +284,6 @@ impl qobject::RamdiskController {
     }
 
     pub fn refresh_list(mut self: Pin<&mut Self>) {
-        // Reset first so QML sees a row_count change even if count is unchanged
         self.as_mut().set_row_count(0);
 
         match list_mounted() {
@@ -204,7 +300,6 @@ impl qobject::RamdiskController {
                 self.as_mut()
                     .set_mount_list_text(QString::from(mnts.join("\n").as_str()));
                 self.as_mut().set_row_count(count);
-                // Default selection: first mounted disk
                 if count > 0 {
                     self.as_mut().set_selected_row(0);
                 } else {
@@ -223,6 +318,7 @@ impl qobject::RamdiskController {
             }
         }
     }
+
     pub fn set_size_from_slider(self: Pin<&mut Self>, value: i32) {
         self.set_size_mb(value.max(0));
     }
@@ -258,4 +354,28 @@ fn available_mem_mb() -> Option<u64> {
     {
         Some(8192)
     }
+}
+
+fn is_root() -> bool {
+    #[cfg(target_os = "linux")]
+    {
+        std::fs::read_to_string("/proc/self/status")
+            .ok()
+            .and_then(|s| {
+                s.lines()
+                    .find(|l| l.starts_with("Uid:"))
+                    .and_then(|l| l.split_whitespace().nth(1)?.parse::<u32>().ok())
+            })
+            == Some(0)
+    }
+    #[cfg(not(target_os = "linux"))]
+    {
+        false
+    }
+}
+
+fn current_username() -> String {
+    std::env::var("USER")
+        .or_else(|_| std::env::var("USERNAME"))
+        .unwrap_or_else(|_| "user".into())
 }
