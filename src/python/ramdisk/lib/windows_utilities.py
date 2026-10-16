@@ -31,7 +31,7 @@ if sys.platform.lower().startswith("win"):
             finally:
                 # Close the token handle
                 win32api.CloseHandle(hToken)
-    except (OSError, TypeError) as e:
+        except (OSError, TypeError) as e:
             print(f"Error opening process token: {e}")
             return False
 

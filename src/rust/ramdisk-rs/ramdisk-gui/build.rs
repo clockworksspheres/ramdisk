@@ -31,7 +31,14 @@ fn main() {
         .qt_module("Network")
         .build();
 
-    println!("cargo:rustc-link-lib=stdc++");
+    // Linux: libstdc++; macOS/BSD: libc++ (usually already linked as -lc++)
+    let target = env::var("TARGET").unwrap_or_default();
+    if target.contains("linux") {
+        println!("cargo:rustc-link-lib=stdc++");
+    } else if target.contains("apple") || target.contains("darwin") {
+        println!("cargo:rustc-link-lib=c++");
+    }
+
     println!("cargo:rerun-if-changed=src/controller.rs");
     println!("cargo:rerun-if-changed=qml/main.qml");
 }

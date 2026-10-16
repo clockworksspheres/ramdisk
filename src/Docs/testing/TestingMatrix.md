@@ -1,4 +1,6 @@
-# Testing Matrix for the mvm project
+# Testing Matrix for the Ramdisk project
+
+This document only pertains to the python project.  As the other language project mature, each will either be added to this document, or split out into language specific sets of tables.
 
 ## Testing Methods
 
@@ -6,75 +8,29 @@ Some of the testing is provided by a Jenkins pipeline, but most of the testing i
 
 ### Runs on
 
- []() | macOS Host | Windows Host | Linux Host
+ []() | Linux | macOS | Windows
  ---|------------|-------------|---------------
- UTM | Available | N/A | N/A
- HyperV | N/A | Available | N/A
- VirtualBox | Available | Available | Available
- VMware | Available | Available | Available
- QEMU | Available | Available | Available
- KVM | N/A | N/A | Available
+ C++ | yes | yes | in progress
+ python | yes | yes | yes
+ Golang | in progress | in progress | in progress
+ Rust | in progress | in progress | in progress
 
-### Capabilities
+### Hardware
 
- []() | Hypervisor Type | Provides Emulation | provides HW Virtualization | Nested Virtualization 
- --- | --- | --- | --- | ---
- UTM | 2 | Yes | Yes | in some cases
- HyperV | 1 | ?? | Yes | Yes, only for Windows guests
- VirtualBox | 2 | Yes | Yes | If supported by initial guest
- VMware | 2 | ?? | Yes | If supported by initial guest
- QEMU | 2 | Yes | Yes | if supported by initial guest
- KVM | 1 | ?? | Yes | ??
-
-### Tested - guest on a Host hardware
-
-Time has allowed for the following
-
-[]() | macOS Host | Windows Host | Linux Host
- ---|------------|-------------|---------------
-UTM | Yes | N/A | N/A
-HyperV | N/A | Yes | N/A
-VirtualBox | Yes | Yes | Yes (nested vm)
-VMware | Yes | No | No
-QEMU | (via UTM) | No | No
-KVM | No | No | No
+Developed on Apple Silicon and VM's on Apple Silicon, except for the 
+python code, which has also been tested on 64 bit Intel.
 
 ### OS's Tested
 
 Time has allowed for the following
 
-[]() | macOS guest | Windows guest | Linux guest
- ---|------------|-------------|---------------
-macOS | Yes | Not Supported | Not Supported
-Windows | Yes | Yes | No
-Debian | Yes | Yes | Yes
-Ubuntu | Yes | Yes | Yes
-Rocky Linux | Yes | No | No
-Alma Linux | Yes | No | No
+[]() | C++ | Golang | Python | Rust
+ ---|------------|-------------|---------------|---------------
+macOS 27 | yes, cli and gui | yes, cli and gui | Yes, cli and gui | Yes, cli and gui
+Windows 11 | - | - | yes, cli and gui | -
+Debian 13 | yes, cli and gui | in progress | Yes, cli and gui | yes, cli and gui
+Ubuntu 2404 | yes, cli and gui | yes, cli and gui | yes, cli and gui | in progress
+Rocky Linux 10 | - | - | yes, cli and gui | -
+Alma Linux 10 | - | - | yes, cli and gui | -
 
-## As a Guest on macOS
-
-Time has allowed for the following
-
-[]() | macOS | Windows | Debian | Ubuntu | Rocky | Alma
- ---| --- | --- | --- | --- | --- | ---
-UTM | Yes | Yes | Yes | No | No | No 
-HyperV | N/A | Yes | Yes | Yes | No | No
-VirtualBox | No | Yes | Yes | Yes | No | No
-VMware | No | No | Yes | Yes | Yes | Yes
-QEMU | (via UTM) | (via UTM) | (via UTM) | No | No | No
-KVM | N/A | No | No | No | No | No
-
-## As a Guest on Windows
-
-Time has allowed for the following
-
-Virtualbox - Debian & Ubuntu
-</br>HyperV - Ubuntu & Windows
-
-## As a Guest on Linux
-
-Time has allowed for the following - project doesn't have hardware to put Linux on to test guest OSs.  Linux Guest OS's on a Linux Host have to be tested in a hyperV provided Linux OS, where the guest inside the Linux OS being emulated rather than virtualized.
-
-Virtualbox (Emulated as a VM in a Ubuntu VM, on HyperV)- Debian
-
+Python has automated CI/CD with the above OS's in Jenkins.  All other languages are manually tested on the above OSs.

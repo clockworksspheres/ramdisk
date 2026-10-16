@@ -22,7 +22,7 @@ unittest.
 
 # CI/CD
 
-Currently running Jenkins, and testing per OS family at a time.
+Currently running Jenkins, one meta pipeline with macOS 27, Debian 13, Rocky 10 and Windows 11, as well as testing per OS family at a time.
 
 Wrote the [mvm](https://github.com/clockworksspheres/mvm.git)
 tool and [jenkinsTools](https://github.com/clockworksspheres/jenkinsTools.git)

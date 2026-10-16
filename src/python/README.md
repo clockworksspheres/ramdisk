@@ -12,4 +12,12 @@ To build an app, or executable from ramdisk-setup.py, use the src/BuildScripts/b
 
 You can either use the python environment created by the build process above, or install the required libraries via src/requirements.txt.  Instructions are in the requirements.txt on using a python virtual environment to install and use the required libraries.
 
+## Example code
+
+The examples directory provides examples on how to use various libraries, even beyond the ramdisk libraries in this code base.  Currently in flux.  Some are used for testing the ramdisk code base.
+
+The ramdisk example code is cross platform in an beta state.
+
+In the parent directory of the examples directory is ramdisk-setup.py, which is an example of using a PySide6 interface for the ramdisk library.
+
 
