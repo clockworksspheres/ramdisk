@@ -61,9 +61,14 @@ make GUI=OFF          # skip Qt GUI
 ### Windows (PowerShell — recommended)
 
 ```powershell
-.\build.ps1                 # configure + build
-.\build.ps1 -DistClean      # wipe build\ and rebuild
+.\build.ps1                 # configure + build the command line ramdisk
+$env:CMAKE_PREFIX_PATH = "C:\Qt\6.<QT-VERSION>\msvc2022_<HW-TYPE>" 
+.\build.ps1 -DistClean      # wipe build\ and rebuild, including the GUI
 .\build.ps1 -Gui:$false     # skip Qt GUI
+# install libraries to so the gui works:
+$env:PATH = "C:\Qt\6.11.2\msvc2022_arm64\bin\;$env:PATH"
+windeployqt .\build\Release\ramdisk_gui.exe
+cp <c:\path\to\aim_ll.exe> .\build\Release\
 ```
 
 ### Windows (GNU make)
