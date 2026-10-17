@@ -1,4 +1,4 @@
-# ramdisk-go
+d# ramdisk-go
 
 Cross-platform interface for creating and managing ramdisks.
 
@@ -292,7 +292,9 @@ Full step-by-step instructions (MSYS2 UCRT64 install, pacman packages, GOROOT, `
 
 **[`cmd/ramdisk-gui/README.md`](cmd/ramdisk-gui/README.md#Windows-build)** → section **Windows build**
 
-### Build (Linux)
+### Build 
+
+##### Debian based
 
 ```bash
 sudo apt install qt6-base-dev build-essential pkg-config
@@ -302,6 +304,19 @@ go get github.com/mappu/miqt/qt6@latest
 CGO_ENABLED=1 go build -tags qt -ldflags="-s -w" -o ramdisk-gui .
 sudo ./ramdisk-gui
 ```
+
+##### RedHat based
+
+```bash
+sudo dnf install pkg-config qt6-qtbase-devel
+sudo dnf groupinstall "Development Tools"
+export CGO_CXXFLAGS="-std=c++17"
+cd cmd/ramdisk-gui
+go get github.com/mappu/miqt/qt6@latest
+CGO_ENABLED=1 go build -tags qt -ldflags="-s -w" -o ramdisk-gui .
+sudo ./ramdisk-gui
+```
+
 
 The CLI does not depend on Qt:
 

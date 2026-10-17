@@ -76,6 +76,28 @@ nmcli device show enp2s0
 
 again.
 
+If DNS isn't working:
+
+```bash
+nmcli connection show --active
+```
+
+Find the connection name, then set DNS servers (example uses Cloudflare and Google):
+
+```bash
+sudo nmcli connection modify "YOUR_CONNECTION" ipv4.ignore-auto-dns yes
+sudo nmcli connection modify "YOUR_CONNECTION" ipv4.dns "1.1.1.1 8.8.8.8"
+sudo nmcli connection up "YOUR_CONNECTION"
+```
+
+If you use IPv6, configure it too, or disable automatic IPv6 DNS similarly:
+
+```bash
+sudo nmcli connection modify "YOUR_CONNECTION" ipv6.ignore-auto-dns yes
+sudo nmcli connection modify "YOUR_CONNECTION" ipv6.dns "2606:4700:4700::1111 2001:4860:4860::8888"
+sudo nmcli connection up "YOUR_CONNECTION"
+```
+
 ## Upping idle timeout time for GUI lockscreen
 
 **Increase Lock Screen Timeout on Rocky Linux 9**
