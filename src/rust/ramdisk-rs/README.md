@@ -48,6 +48,10 @@ sudo apt install -y cargo rustc
 # GUI needs rustc ≥ 1.85; pin cxx to 1.0.186 (see Cargo.toml).
 ```
 
+```bash
+sudo dnf install rustc cargo 
+```
+
 ## CLI
 
 ```bash
@@ -111,12 +115,38 @@ export QMAKE=$(command -v qmake6)
 cargo run -p ramdisk-gui
 ```
 
+For Ubuntu2604:
+
+```bash
+sudo apt update
+sudo apt install -y \
+  build-essential cmake pkg-config \
+  qt6-base-dev qt6-declarative-dev qt6-tools-dev \
+  qml6-module-qtquick qml6-module-qtquick-controls \
+  qml6-module-qtquick-layouts qml6-module-qtqml \
+  qml6-module-qtquick-window
+  
+  sudo apt install qt6-declarative-dev
+
+export QMAKE=$(command -v qmake6)
+cargo run -p ramdisk-gui
+```
+
 If you see `cxxbridge1$NNN$…` undefined references, pin the cxx ABI:
 
 ```bash
 cargo update -p cxx --precise 1.0.186
 cargo update -p cxx-gen --precise 0.7.186
 # or: ./fix-cxx-abi.sh
+```
+
+### RHEL based systems
+
+```bash
+sudo dnf install qt6-qtdeclarative-devel pkg-config qt6-qtbase-devel
+sudo dnf groupinstall "Development Tools"
+export QMAKE=$(command -v qmake6)
+cargo run -p ramdisk-gui
 ```
 
 ### macOS (Homebrew)
