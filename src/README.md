@@ -7,7 +7,7 @@ The python project is the origional ramdisk project.
 
 C++, golang and rust ports of the project can be found in the "ports" directory.
 
-See the [text matrix](Docs/testing/TestMatrix.md) in the Docs directory to see what OS platforms the software works on
+See the [text matrix](Docs/testing/TestingMatrix.md) in the Docs directory to see what OS platforms the software works on
 
 -----
 
