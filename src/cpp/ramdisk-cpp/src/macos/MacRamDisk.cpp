@@ -21,7 +21,9 @@ MacRamDisk::MacRamDisk(const RamDiskOptions& opts)
         mountPoint_ = makeTempDir("ramdisk-");
     } else {
         mountPoint_ = opts.mountPoint;
-        ensureDirectory(mountPoint_);
+        if (!ensureDirectory(mountPoint_)) {
+            throw RamDiskError("Cannot create mount directory: " + mountPoint_);
+        }
     }
 
     success_ = createAndMount();
@@ -121,8 +123,19 @@ bool MacRamDisk::createAndMount() {
     }
     RD_LOG_INFO("Attached device: " + device_);
 
-    // 2. Format as APFS (auto-mounts under /Volumes/RAMDisk)
-    const std::string volName = "RAMDisk";
+    // 2. Format as APFS (auto-mounts under /Volumes/<volName>)
+    //    Use mount-point basename as volume label when possible.
+    std::string volName = "RAMDisk";
+    {
+        auto pos = mountPoint_.find_last_of('/');
+        if (pos != std::string::npos && pos + 1 < mountPoint_.size()) {
+            auto base = mountPoint_.substr(pos + 1);
+            // Volume names cannot be empty or contain '/'; keep simple
+            if (!base.empty() && base.find('/') == std::string::npos) {
+                volName = base;
+            }
+        }
+    }
     const std::string defaultMount = "/Volumes/" + volName;
 
     auto erase = runCommand({
@@ -137,15 +150,11 @@ bool MacRamDisk::createAndMount() {
     RD_LOG_INFO("Formatted APFS volume on " + device_);
 
     // 3. Discover the actual *volume* device (not the raw attach node).
-    //    eraseVolume / APFS often creates a second disk (e.g. disk4 → disk5)
-    //    or a slice (disk4s1 / disk4s1s1). Prefer whatever `mount` reports.
     partition_ = deviceMountedAt(defaultMount);
     if (partition_.empty()) {
         auto list = runCommand({"/usr/sbin/diskutil", "list"});
         RD_LOG_DEBUG("diskutil list:\n" + list.stdoutStr);
 
-        // Collect /dev/diskN paths and prefer a *different* whole disk
-        // that appears after our attach device (second consecutive disk).
         static const std::regex wholeRe(R"(/dev/disk(\d+)\b)");
         int baseNum = -1;
         {
@@ -165,7 +174,6 @@ bool MacRamDisk::createAndMount() {
             }
         }
 
-        // Longest path under our device family (volume slice)
         static const std::regex pathRe(R"(/dev/disk\d+(?:s\d+)*)");
         std::string longest;
         for (auto it = std::sregex_iterator(list.stdoutStr.begin(),
@@ -187,6 +195,7 @@ bool MacRamDisk::createAndMount() {
     }
     RD_LOG_INFO("Raw attach device: " + device_);
     RD_LOG_INFO("Volume device (for GUI/eject): " + partition_);
+    RD_LOG_INFO("Requested mount point: " + mountPoint_);
 
     // If the caller wants the default /Volumes location, we're done.
     if (mountPoint_ == defaultMount) {
@@ -195,41 +204,64 @@ bool MacRamDisk::createAndMount() {
     }
 
     // 4. Move the mount to the requested path
+    //    Use unmountDisk on the whole attach node so APFS containers let go.
     runCommand({"/usr/sbin/diskutil", "unmount", "force", defaultMount});
     runCommand({"/usr/sbin/diskutil", "unmount", "force", partition_});
+    runCommand({"/usr/sbin/diskutil", "unmountDisk", "force", device_});
+    // Brief settle — diskutil sometimes races with mount
+    runCommand({"/bin/sleep", "1"});
 
     ensureDirectory(mountPoint_);
 
-    auto mnt = runCommand({
+    ProcessResult mnt;
+    // Preferred: diskutil mount -mountPoint <path> <volume>
+    mnt = runCommand({
         "/usr/sbin/diskutil", "mount", "-mountPoint",
         mountPoint_, partition_
     });
     if (!mnt.ok()) {
-        RD_LOG_WARN("mount volume failed (" + trim(mnt.stderrStr) +
-                    "), trying whole device...");
+        RD_LOG_WARN("diskutil mount volume failed: " + trim(mnt.stderrStr));
         mnt = runCommand({
             "/usr/sbin/diskutil", "mount", "-mountPoint",
             mountPoint_, device_
         });
     }
     if (!mnt.ok()) {
-        RD_LOG_WARN("diskutil mount failed (" + trim(mnt.stderrStr) +
-                    "), trying mount_apfs...");
+        RD_LOG_WARN("diskutil mount device failed: " + trim(mnt.stderrStr));
         mnt = runCommand({"/sbin/mount_apfs", partition_, mountPoint_});
     }
-    if (!mnt.ok()) {
-        RD_LOG_ERROR("Failed to mount at " + mountPoint_ + ": " +
-                     mnt.stderrStr + "\n" + mnt.stdoutStr);
+    if (!mnt.ok() && partition_ != device_) {
+        mnt = runCommand({"/sbin/mount_apfs", device_, mountPoint_});
+    }
+
+    // 5. Verify the volume is actually at the requested path (not still under /Volumes)
+    auto atRequested = deviceMountedAt(mountPoint_);
+    if (atRequested.empty()) {
+        // Maybe mounted at default still
+        auto atDefault = deviceMountedAt(defaultMount);
+        if (!atDefault.empty()) {
+            RD_LOG_WARN("Volume still at " + defaultMount +
+                        " — retrying move to " + mountPoint_);
+            runCommand({"/usr/sbin/diskutil", "unmount", "force", defaultMount});
+            runCommand({"/bin/sleep", "1"});
+            mnt = runCommand({
+                "/usr/sbin/diskutil", "mount", "-mountPoint",
+                mountPoint_, atDefault
+            });
+            atRequested = deviceMountedAt(mountPoint_);
+        }
+    }
+
+    if (atRequested.empty()) {
+        RD_LOG_ERROR("Failed to mount at requested path " + mountPoint_ +
+                     ". diskutil said: " + trim(mnt.stderrStr) +
+                     "\n" + trim(mnt.stdoutStr));
         runCommand({"/usr/bin/hdiutil", "detach", device_, "-force"});
         return false;
     }
 
-    // Refresh volume device from the final mount point (source of truth)
-    auto mounted = deviceMountedAt(mountPoint_);
-    if (!mounted.empty()) {
-        partition_ = mounted;
-    }
-
+    partition_ = atRequested;
+    // Confirm mountPoint_ is what the OS reports (normalize if needed)
     RD_LOG_INFO("Mounted " + partition_ + " at " + mountPoint_);
     return true;
 }

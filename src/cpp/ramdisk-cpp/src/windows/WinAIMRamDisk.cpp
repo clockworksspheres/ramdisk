@@ -21,10 +21,27 @@ WinAIMRamDisk::WinAIMRamDisk(const RamDiskOptions& opts)
         mountPoint_ = "R:";
     } else {
         mountPoint_ = opts.mountPoint;
-        // Normalise trailing slashes
+        // Normalise: forward slashes → backslashes, strip trailing separators
+        for (char& c : mountPoint_) {
+            if (c == '/') c = '\\';
+        }
         while (!mountPoint_.empty() &&
                (mountPoint_.back() == '\\' || mountPoint_.back() == '/')) {
             mountPoint_.pop_back();
+        }
+        // Drive letter only → ensure "X:" form (aim_ll accepts "R:" or "R:\")
+        if (mountPoint_.size() == 1) {
+            mountPoint_ += ':';
+        }
+        // Bare drive letter (e.g. "R:") — do not create a directory
+        const bool bareDrive =
+            (mountPoint_.size() == 2 && mountPoint_[1] == ':');
+        if (!bareDrive) {
+            // Directory mount (e.g. C:\Users\me\ram0) — create if missing
+            if (!ensureDirectory(mountPoint_)) {
+                throw RamDiskError(
+                    "Cannot create mount directory: " + mountPoint_);
+            }
         }
     }
 
@@ -41,15 +58,23 @@ WinAIMRamDisk::~WinAIMRamDisk() {
 
 bool WinAIMRamDisk::create() {
     // aim_ll -a -s <size>M -m <mount> -p "/fs:ntfs /q /y"
+    // Mount can be a drive letter (R:) or an empty directory path.
+    std::string mntArg = mountPoint_;
+    // For bare drive letters, AIM is happier with "R:" than "R:\"
+    if (mntArg.size() == 2 && mntArg[1] == ':') {
+        // keep as-is
+    }
+
     std::ostringstream cmd;
     cmd << "aim_ll -a -s " << sizeMb_ << "M"
-        << " -m \"" << mountPoint_ << "\""
+        << " -m \"" << mntArg << "\""
         << " -p \"/fs:ntfs /q /y\"";
 
     RD_LOG_INFO("Running: " + cmd.str());
     auto res = runShell(cmd.str());
+    const std::string combined = res.stdoutStr + "\n" + res.stderrStr;
 
-    if (!res.ok() && res.stdoutStr.find("Created device") == std::string::npos) {
+    if (!res.ok() && combined.find("Created device") == std::string::npos) {
         RD_LOG_ERROR("aim_ll failed. Is Arsenal Image Mounter installed and on PATH?\n"
                      + res.stderrStr + "\n" + res.stdoutStr);
         return false;
@@ -58,14 +83,25 @@ bool WinAIMRamDisk::create() {
     // Parse "Created device X" from output
     std::regex re(R"(Created device\s+(\S+))", std::regex::icase);
     std::smatch m;
-    if (std::regex_search(res.stdoutStr, m, re)) {
+    if (std::regex_search(combined, m, re)) {
         device_ = m[1].str();
     } else {
-        // Fallback: try stderr or whole output
-        if (std::regex_search(res.stderrStr, m, re)) {
-            device_ = m[1].str();
-        } else {
-            device_ = "unknown";
+        device_ = "unknown";
+    }
+
+    // Prefer the mount path AIM reports ("Mounted at ...")
+    auto pos = combined.find("Mounted at ");
+    if (pos != std::string::npos) {
+        std::string reported = combined.substr(pos + 11);
+        // first line only
+        auto nl = reported.find_first_of("\r\n");
+        if (nl != std::string::npos) reported = reported.substr(0, nl);
+        while (!reported.empty() &&
+               (reported.back() == ' ' || reported.back() == '\t')) {
+            reported.pop_back();
+        }
+        if (!reported.empty()) {
+            mountPoint_ = reported;
         }
     }
 
@@ -92,7 +128,21 @@ bool WinAIMRamDisk::umount() {
 }
 
 bool WinAIMRamDisk::umountDevice(const std::string& device) {
-    auto res = runCommand({"aim_ll", "-R", "-u", device});
+    // Accept either AIM device number ("0") or a mount path ("R:" / "R:\...")
+    ProcessResult res;
+    if (!device.empty() &&
+        (device.find(':') != std::string::npos || device.find('\\') != std::string::npos)) {
+        // Looks like a mount point / drive letter
+        res = runShell("aim_ll -R -m \"" + device + "\"");
+        if (!res.ok()) {
+            res = runCommand({"aim_ll", "-R", "-u", device});
+        }
+    } else {
+        res = runCommand({"aim_ll", "-R", "-u", device});
+        if (!res.ok()) {
+            res = runShell("aim_ll -R -m \"" + device + "\"");
+        }
+    }
     return res.ok();
 }
 

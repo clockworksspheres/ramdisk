@@ -74,6 +74,36 @@ if(RAMDISK_BUILD_GUI)
     set(CMAKE_AUTORCC ON)
     set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_CURRENT_SOURCE_DIR}/ui)
 
+    # Help find_package on Windows when CMAKE_PREFIX_PATH was not set
+    if(WIN32 AND NOT Qt6_DIR AND NOT DEFINED ENV{Qt6_DIR})
+        file(GLOB _qt_msvc_candidates
+            "C:/Qt/*/msvc*_64"
+            "C:/Qt/*/*/msvc*_64"
+            "$ENV{USERPROFILE}/Qt/*/msvc*_64"
+        )
+        file(GLOB _qt_mingw_candidates
+            "C:/Qt/*/mingw*_64"
+            "C:/Qt/*/*/mingw*_64"
+        )
+        # Prefer MSVC kits when using MSVC
+        if(MSVC AND _qt_msvc_candidates)
+            list(SORT _qt_msvc_candidates)
+            list(GET _qt_msvc_candidates -1 _qt_hint)
+            list(APPEND CMAKE_PREFIX_PATH "${_qt_hint}")
+            message(STATUS "Qt hint (MSVC): ${_qt_hint}")
+        elseif(_qt_msvc_candidates)
+            list(SORT _qt_msvc_candidates)
+            list(GET _qt_msvc_candidates -1 _qt_hint)
+            list(APPEND CMAKE_PREFIX_PATH "${_qt_hint}")
+            message(STATUS "Qt hint: ${_qt_hint}")
+        elseif(_qt_mingw_candidates)
+            list(SORT _qt_mingw_candidates)
+            list(GET _qt_mingw_candidates -1 _qt_hint)
+            list(APPEND CMAKE_PREFIX_PATH "${_qt_hint}")
+            message(STATUS "Qt hint (MinGW): ${_qt_hint}")
+        endif()
+    endif()
+
     find_package(Qt6 QUIET COMPONENTS Widgets)
     if(Qt6_FOUND)
         add_executable(ramdisk_gui
@@ -89,9 +119,14 @@ if(RAMDISK_BUILD_GUI)
         target_link_libraries(ramdisk_gui PRIVATE ramdisk Qt6::Widgets)
         message(STATUS "Qt6 found — building ramdisk_gui")
     else()
-        message(WARNING "Qt6 Widgets not found — skipping ramdisk_gui. "
-                        "Install qt6-base-dev (Linux) or brew install qt (macOS). "
-                        "Or configure with -DRAMDISK_BUILD_GUI=OFF")
+        message(WARNING
+            "Qt6 Widgets not found — skipping ramdisk_gui.\n"
+            "  Windows: choco install qt6-base-dev -y\n"
+            "           or: aqt install-qt windows desktop 6.8.0 win64_msvc2022_64 -O C:/Qt\n"
+            "           then: .\\build.ps1 -DistClean -QtPath C:\\Qt\\6.8.0\\msvc2022_64\n"
+            "  Linux:   sudo apt install qt6-base-dev\n"
+            "  macOS:   brew install qt\n"
+            "  Or configure with -DRAMDISK_BUILD_GUI=OFF")
     endif()
 endif()
 
