@@ -111,11 +111,28 @@ bool isMemoryAvailable(std::uint64_t sizeMb) {
 }
 
 bool ensureDirectory(const std::string& path) {
+    if (path.empty()) {
+        return false;
+    }
     std::error_code ec;
     if (fs::exists(path, ec)) {
-        return fs::is_directory(path, ec);
+        if (fs::is_directory(path, ec)) {
+            return true;
+        }
+        RD_LOG_ERROR("Mount path exists but is not a directory: " + path);
+        return false;
     }
-    return fs::create_directories(path, ec);
+    if (fs::create_directories(path, ec)) {
+        RD_LOG_INFO("Created mount directory: " + path);
+        return true;
+    }
+    // create_directories can return false if another process created it
+    if (fs::is_directory(path, ec)) {
+        return true;
+    }
+    RD_LOG_ERROR("Failed to create mount directory '" + path + "': " +
+                 ec.message());
+    return false;
 }
 
 int currentUid() {

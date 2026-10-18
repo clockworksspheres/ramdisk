@@ -29,7 +29,9 @@ LinuxTmpfsRamDisk::LinuxTmpfsRamDisk(const RamDiskOptions& opts)
         mountPoint_ = makeTempDir("ramdisk-");
     } else {
         mountPoint_ = opts.mountPoint;
-        ensureDirectory(mountPoint_);
+        if (!ensureDirectory(mountPoint_)) {
+            throw RamDiskError("Cannot create mount directory: " + mountPoint_);
+        }
     }
 
     success_ = mount();

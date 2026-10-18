@@ -58,9 +58,32 @@ std::vector<MountedRamDisk> listMountedRamDisks() {
     std::vector<MountedRamDisk> out;
 
 #if defined(__APPLE__)
-    // diskutil list → find lines containing RAMDisk (volume name we use)
+    // Prefer hdiutil info (image-path ram://); also diskutil volume names.
+    std::set<std::string> ramDevIds;
+    auto hdi = runCommand({"/usr/bin/hdiutil", "info"});
+    if (hdi.ok()) {
+        std::istringstream iss(hdi.stdoutStr);
+        std::string line;
+        bool inRamBlock = false;
+        while (std::getline(iss, line)) {
+            if (line.find("image-path") != std::string::npos &&
+                line.find("ram://") != std::string::npos) {
+                inRamBlock = true;
+            }
+            if (inRamBlock) {
+                static const std::regex devRe(R"(/dev/(disk\d+(?:s\d+)*))");
+                std::smatch m;
+                if (std::regex_search(line, m, devRe)) {
+                    ramDevIds.insert(m[1].str());
+                }
+                if (line.find_first_not_of(" \t\r\n") == std::string::npos) {
+                    inRamBlock = false;
+                }
+            }
+        }
+    }
+
     auto list = runCommand({"/usr/sbin/diskutil", "list"});
-    std::set<std::string> ramDevIds; // e.g. "disk5s1"
     {
         std::istringstream iss(list.stdoutStr);
         std::string line;
@@ -69,7 +92,6 @@ std::vector<MountedRamDisk> listMountedRamDisks() {
                 line.find("RAMDISK") == std::string::npos) {
                 continue;
             }
-            // Last token is often the identifier: diskNsM
             std::istringstream ls(line);
             std::string tok, last;
             while (ls >> tok) last = tok;
@@ -83,7 +105,6 @@ std::vector<MountedRamDisk> listMountedRamDisks() {
     {
         std::istringstream iss(mnt.stdoutStr);
         std::string line;
-        // /dev/disk5s1 on /Volumes/RAMDisk (apfs, local, ...)
         static const std::regex re(
             R"(^(/dev/disk\d+(?:s\d+)*)\s+on\s+(\S+))");
         std::smatch m;
@@ -91,22 +112,22 @@ std::vector<MountedRamDisk> listMountedRamDisks() {
             if (!std::regex_search(line, m, re)) continue;
             const std::string devPath = m[1].str();
             const std::string mountPt = m[2].str();
-            // Match by short id (disk5s1)
             const auto slash = devPath.find_last_of('/');
             const std::string shortId =
                 (slash == std::string::npos) ? devPath : devPath.substr(slash + 1);
-            if (ramDevIds.count(shortId)) {
+            bool match = ramDevIds.count(shortId) > 0;
+            if (!match) {
+                for (const auto& id : ramDevIds) {
+                    if (shortId.rfind(id, 0) == 0 || id.rfind(shortId, 0) == 0) {
+                        match = true;
+                        break;
+                    }
+                }
+            }
+            if (match) {
                 out.push_back({devPath, mountPt});
             }
         }
-    }
-
-    // Also pick up custom mount points: hdiutil info for image-path ram://
-    auto hdi = runCommand({"/usr/bin/hdiutil", "info"});
-    if (hdi.ok() && hdi.stdoutStr.find("ram://") != std::string::npos) {
-        // Parse blocks; simple approach: any /dev/diskN already in mount
-        // that is not yet listed and whose hdiutil block mentions ram://
-        // (handled adequately by RAMDisk name match for our creates)
     }
 
 #elif defined(__linux__)
@@ -135,8 +156,92 @@ std::vector<MountedRamDisk> listMountedRamDisks() {
     }
 
 #elif defined(_WIN32)
-    // AIM: best-effort — not enumerated without aim_ll list support
-    (void)out;
+    // Parse `aim_ll -l` the same way as the Python winAIMRamdisk.getMountDisks():
+    //
+    //   Device number 0
+    //   ...
+    //   Mounted at R:\
+    //
+    //   Device number 1
+    //   ...
+    auto res = runCommand({"aim_ll", "-l"});
+    // aim_ll may write to stdout or stderr depending on version
+    std::string text = res.stdoutStr;
+    if (text.empty()) {
+        text = res.stderrStr;
+    }
+    if (text.empty() && !res.ok()) {
+        RD_LOG_WARN("aim_ll -l failed (is Arsenal Image Mounter / aim_ll on PATH?): " +
+                    res.stderrStr);
+    } else {
+        std::istringstream iss(text);
+        std::string line;
+        std::string currentDevice;
+        std::string currentMount;
+        auto flush = [&]() {
+            if (!currentDevice.empty() && !currentMount.empty()) {
+                // Skip UNC-style / odd paths that Python skips (\\\\\\\\)
+                if (currentMount.find("\\\\") == 0 &&
+                    currentMount.find(":\\") == std::string::npos) {
+                    // still allow drive letters; only skip pure UNC noise
+                }
+                out.push_back({currentDevice, currentMount});
+            }
+            currentDevice.clear();
+            currentMount.clear();
+        };
+
+        while (std::getline(iss, line)) {
+            // trim
+            while (!line.empty() && (line.back() == '\r' || line.back() == ' ' ||
+                                    line.back() == '\t')) {
+                line.pop_back();
+            }
+            size_t start = 0;
+            while (start < line.size() &&
+                   (line[start] == ' ' || line[start] == '\t')) {
+                ++start;
+            }
+            line = line.substr(start);
+
+            if (line.empty()) {
+                flush();
+                continue;
+            }
+            // Skip lines that are mostly backslashes (Python: re.search(r"\\\\\\\\"))
+            if (line.find("\\\\\\\\") != std::string::npos) {
+                continue;
+            }
+
+            // "Device number 0" / "Device number 12"
+            if (line.rfind("Device number", 0) == 0) {
+                // Starting a new device block — flush previous if complete
+                if (!currentDevice.empty() && !currentMount.empty()) {
+                    flush();
+                }
+                std::istringstream ls(line);
+                std::string w, last;
+                while (ls >> w) last = w;
+                currentDevice = last;
+                currentMount.clear();
+                continue;
+            }
+
+            // "... Mounted at R:\"  or  "Mounted at C:\Users\...\ram"
+            auto pos = line.find("Mounted at ");
+            if (pos != std::string::npos) {
+                currentMount = line.substr(pos + std::string("Mounted at ").size());
+                // trim trailing whitespace / CR
+                while (!currentMount.empty() &&
+                       (currentMount.back() == ' ' || currentMount.back() == '\r' ||
+                        currentMount.back() == '\t')) {
+                    currentMount.pop_back();
+                }
+                continue;
+            }
+        }
+        flush(); // last block may not end with a blank line
+    }
 #endif
 
     RD_LOG_INFO("listMountedRamDisks: found " + std::to_string(out.size()));
