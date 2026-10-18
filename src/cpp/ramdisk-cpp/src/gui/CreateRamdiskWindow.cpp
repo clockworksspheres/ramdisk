@@ -196,9 +196,16 @@ void CreateRamdiskWindow::onCreateClicked() {
 #ifdef __linux__
             linuxSudoPassword_.clear();
 #endif
-            QMessageBox::critical(this, tr("Create failed"),
-                                  tr("Failed to create ramdisk.\n"
-                                     "Check the password and that sudo is allowed."));
+            QString detail = tr("Failed to create ramdisk.");
+#ifdef __linux__
+            detail += tr("\nCheck the sudo password and that sudo is allowed.");
+#elif defined(__APPLE__)
+            detail += tr("\nOn macOS, hdiutil/diskutil should not need a password "
+                         "for a user-owned mount path.");
+#elif defined(_WIN32)
+            detail += tr("\nIs Arsenal Image Mounter (aim_ll) installed and on PATH?");
+#endif
+            QMessageBox::critical(this, tr("Create failed"), detail);
             setStatus(tr("Create failed"));
             return;
         }

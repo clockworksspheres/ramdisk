@@ -5,6 +5,7 @@
 
 #include <regex>
 #include <sstream>
+#include <vector>
 
 namespace ramdisk {
 
@@ -60,26 +61,55 @@ std::string extractDevPath(const std::string& text) {
     return {};
 }
 
+/** Resolve symlinks (macOS: /tmp → /private/tmp). */
+std::string realPathOrSelf(const std::string& path) {
+    auto res = runCommand({"/usr/bin/realpath", path});
+    if (res.ok()) {
+        auto p = trim(res.stdoutStr);
+        if (!p.empty()) return p;
+    }
+    // realpath may fail if path does not exist yet
+    if (path.rfind("/tmp", 0) == 0) {
+        return "/private" + path;  // /tmp/foo → /private/tmp/foo
+    }
+    if (path.rfind("/var", 0) == 0) {
+        return "/private" + path;
+    }
+    return path;
+}
+
 /**
- * After eraseVolume, the volume is mounted at /Volumes/<name>.
- * Find the device node that is currently mounted there via `mount`.
+ * Find the device node mounted at mountPath via `mount`.
+ * Handles macOS symlink roots (/tmp → /private/tmp).
  */
 std::string deviceMountedAt(const std::string& mountPath) {
     auto res = runCommand({"/sbin/mount"});
-    // Lines look like: /dev/disk4s1s1 on /Volumes/RAMDisk (apfs, local, ...)
+    // Lines: /dev/disk4s1s1 on /Volumes/RAMDisk (apfs, local, ...)
+    std::vector<std::string> candidates;
+    candidates.push_back(mountPath);
+    const auto resolved = realPathOrSelf(mountPath);
+    if (resolved != mountPath) {
+        candidates.push_back(resolved);
+    }
+    // Also try stripping /private prefix if present
+    if (mountPath.rfind("/private/", 0) == 0) {
+        candidates.push_back(mountPath.substr(8));  // "/private".size()==8
+    }
+
     std::istringstream iss(res.stdoutStr);
     std::string line;
-    const std::string needle = " on " + mountPath + " ";
     while (std::getline(iss, line)) {
-        auto pos = line.find(needle);
-        if (pos != std::string::npos) {
-            return extractDevPath(line.substr(0, pos));
-        }
-        // Also accept end-of-line without trailing space in options
-        const std::string needle2 = " on " + mountPath;
-        pos = line.find(needle2);
-        if (pos != std::string::npos) {
-            return extractDevPath(line.substr(0, pos));
+        for (const auto& mp : candidates) {
+            // Require " on <path> " or " on <path>(" so /tmp/ram0 ≠ /tmp/ram01
+            const std::string needleSp = " on " + mp + " ";
+            const std::string needlePar = " on " + mp + "(";
+            auto pos = line.find(needleSp);
+            if (pos == std::string::npos) {
+                pos = line.find(needlePar);
+            }
+            if (pos != std::string::npos) {
+                return extractDevPath(line.substr(0, pos));
+            }
         }
     }
     return {};
@@ -234,10 +264,23 @@ bool MacRamDisk::createAndMount() {
         mnt = runCommand({"/sbin/mount_apfs", device_, mountPoint_});
     }
 
-    // 5. Verify the volume is actually at the requested path (not still under /Volumes)
+    // 5. Verify the volume is at the requested path (not only under /Volumes).
+    //    diskutil often prints "Volume … mounted" on success even when `mount`
+    //    shows /private/tmp/... instead of /tmp/...
     auto atRequested = deviceMountedAt(mountPoint_);
     if (atRequested.empty()) {
-        // Maybe mounted at default still
+        const std::string combined = trim(mnt.stdoutStr) + "\n" + trim(mnt.stderrStr);
+        const bool diskutilSaysMounted =
+            combined.find("mounted") != std::string::npos ||
+            combined.find("Mounted") != std::string::npos;
+        if (diskutilSaysMounted && mnt.ok()) {
+            // Trust diskutil; prefer partition_ we already know
+            atRequested = !partition_.empty() ? partition_ : device_;
+            RD_LOG_INFO("diskutil reported mount OK; accepting path " + mountPoint_ +
+                        " (device " + atRequested + ")");
+        }
+    }
+    if (atRequested.empty()) {
         auto atDefault = deviceMountedAt(defaultMount);
         if (!atDefault.empty()) {
             RD_LOG_WARN("Volume still at " + defaultMount +
@@ -249,6 +292,9 @@ bool MacRamDisk::createAndMount() {
                 mountPoint_, atDefault
             });
             atRequested = deviceMountedAt(mountPoint_);
+            if (atRequested.empty() && mnt.ok()) {
+                atRequested = atDefault;
+            }
         }
     }
 
@@ -261,7 +307,6 @@ bool MacRamDisk::createAndMount() {
     }
 
     partition_ = atRequested;
-    // Confirm mountPoint_ is what the OS reports (normalize if needed)
     RD_LOG_INFO("Mounted " + partition_ + " at " + mountPoint_);
     return true;
 }
