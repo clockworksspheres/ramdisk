@@ -15,3 +15,5 @@ testmntpnt
 .qtcreator
 *qtcreator
 Cargo.lock
+targt
+.vscode
