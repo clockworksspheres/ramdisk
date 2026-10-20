@@ -5,6 +5,10 @@
 
 Licensing and information about [AIMtk here](https://arsenalrecon.com/products/arsenal-image-mounter):  
 
+
+## Pleases file an issue if you find a problem or problems with this documentation.
+
+
 ## Installing AIM
 
 
