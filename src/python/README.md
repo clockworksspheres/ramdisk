@@ -1,23 +1,49 @@
-## To run/build the ramdisk-setup.py script
 
-To build the example Pyside6 app that leverages the ramdisk library, please go into the BuildScripts directory and run the script appropriate to your operating system.
+# Ramdisk interface
 
-Install the requirements.txt dependancies to leverage the ramdisk library directly.
+Interface to Ramdisk, provided by the RamDisk.py:
 
-## Building
+## example usage
 
-To build an app, or executable from ramdisk-setup.py, use the src/BuildScripts/build.* scripts, There is currently only a by-hand build process for the windows PySide6 ramdisk-setup.exe.  Binary can be found in src/dist after a successful build.d
+```
+from ramdisk.RamDisk import RamDisk, umount
 
-## Leveraging the required libraries to leverage the ramdisk project
+# creates a disk of size 512Mb, at mount point /tmp/ram0
+myramdisk = RamDisk(512, "/tmp/ram0")
 
-You can either use the python environment created by the build process above, or install the required libraries via src/requirements.txt.  Instructions are in the requirements.txt on using a python virtual environment to install and use the required libraries.
+# unmount the ramdisk
+umount("/tmp/ram0")
+```
 
-## Example code
+## Ramdisk class
 
-The examples directory provides examples on how to use various libraries, even beyond the ramdisk libraries in this code base.  Currently in flux.  Some are used for testing the ramdisk code base.
+myramdisk = ramdisk.Ramdisk(size, mountpoint)
 
-The ramdisk example code is cross platform in an beta state.
+Creates a ramdisk with the above parameters.
 
-In the parent directory of the examples directory is ramdisk-setup.py, which is an example of using a PySide6 interface for the ramdisk library.
+* If no mountpoint is given, it will create a random mountpoint
 
+* If no size is given, the default size if 512Mb. If 0 or negative
+ number is given, a SizeInvalidError will be raised.
 
+#### myramdisk.getData()
+
+Getter for mount data, and if the mounting of a ramdisk was successful.
+Does not print or log the data.
+
+Returns:  (self.success, str(self.mntPoint), str(self.myRamdiskDev))
+
+#### myramdisk.getNlogData()
+
+Getter for mount data, and if the mounting of a ramdisk was successful.
+Also logs data.
+
+Returns: (self.success, str(self.mntPoint), str(self.myRamdiskDev))
+
+#### myramdisk.umount()
+
+Unmount the disk connected with this instance.
+
+## umount(device)
+
+   Eject the ramdisk.
