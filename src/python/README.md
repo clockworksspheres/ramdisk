@@ -47,3 +47,9 @@ Unmount the disk connected with this instance.
 ## umount(device)
 
    Eject the ramdisk.
+
+# OS Specific Ramdisks
+
+Linux and macOS do not require any third party software to work.
+
+Windows does - [here is what is required for the ramdisk software to work on Windows](http://github.com/clockworksspheres/ramdisk/blob/ux/src/Docs/SystemSpecifics/Windows/setUpRamdiskDriver.md)
