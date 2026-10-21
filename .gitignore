@@ -2,6 +2,7 @@
 *.bak
 testlink
 *.icloud
+*.egg-info
 .idea
 __pycache__
 .DS_Store
