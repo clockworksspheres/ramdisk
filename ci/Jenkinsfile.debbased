@@ -24,7 +24,7 @@ pipeline {
                     agent { label 'ubuntu2404' }
                     stages {
                         stage('Ubuntu 2404 Build') { 
-                            ateps {
+                            steps {
                                 dir('src/python-ramdisk/BuildScripts') {
                                     sh './build.deb-based.sh' 
                                 } 
