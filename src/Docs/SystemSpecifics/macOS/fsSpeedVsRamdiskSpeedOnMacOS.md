@@ -1,4 +1,4 @@
-# why is filesystem access faster than ramdisk on macos?
+d# why is filesystem access faster than ramdisk on macos?
 
 
 It usually **isn't** — a RAM disk still wins on raw sequential throughput. But for many real-world workloads, native APFS on NVMe can be *comparable* or even *faster*. Here's why:
