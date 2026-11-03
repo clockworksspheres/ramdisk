@@ -279,3 +279,23 @@ If you want, tell me:
     
 
 I can give you a **targeted fix instead of guesswork**.
+
+
+
+---
+---
+---
+
+# FAQ:
+
+## pyside6 on debian 13 - "This plugin does not support propagateSizeHints() and This Plugin does not support raise()
+
+This warning occurs because the **Qt** platform plugin (typically **xcb**) does not implement the `propagateSizeHints()` and `raise()` functions, which is common in headless environments, remote sessions (SSH/X11 forwarding), or when the necessary system libraries are missing. The issue is primarily cosmetic and indicates that window managers cannot automatically adjust window sizes or bring them to the foreground programmatically.
+
+To resolve this on **Debian**, ensure the **PySide6** and its dependencies are correctly installed. You can suppress the warning or fix underlying library issues by installing the required X11 and xcb libraries:
+
+``` bash
+sudo apt update
+sudo apt install libxcb-cursor0 libxcb-xinerama0 libxcb-shape0 libxcb-xfixes0   
+```
+
