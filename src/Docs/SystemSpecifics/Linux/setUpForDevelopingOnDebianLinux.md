@@ -6,6 +6,7 @@ Put user in group file, under "sudo".  Then reboot.
 
 ```
 sudo apt install net-tools
+sudo apt install binutils
 sudo apt install vim
 sudo apt install git
 sudo apt install python3-pip
