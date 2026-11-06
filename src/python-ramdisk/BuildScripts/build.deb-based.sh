@@ -38,7 +38,7 @@ else
    source $actfile
 fi
 
-sudo rm /tmp/*.log
+rm /tmp/*.log
 
 cp BuildScripts/build.deb-based.spec .
 
