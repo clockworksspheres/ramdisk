@@ -38,6 +38,8 @@ else
    source $actfile
 fi
 
+sudo rm /tmp/*.log
+
 cp BuildScripts/build.deb-based.spec .
 
 pyinstaller --clean -y build.deb-based.spec

@@ -106,6 +106,7 @@ pipeline {
                                         . ${VENV}/bin/activate
                                         sudo ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
                                         sudo chgrp -R wheel test-reports
+                                        sudo chown -R $USER /tmp/*.log
                                     """
                                     echo '----------=====### Finished Tests ###=====----------'
                                     junit 'test-reports/results.xml'
@@ -130,6 +131,7 @@ pipeline {
                                         . ${VENV}/bin/activate
                                         sudo ${VENV}/bin/python -m pytest -v --junit-xml test-reports/results.xml
                                         sudo chgrp -R sudo test-reports
+                                        sudo chown -R $USER /tmp/*.log
                                     """
                                     echo '----------=====### Finished Tests ###=====----------'
                                     junit 'test-reports/results.xml'

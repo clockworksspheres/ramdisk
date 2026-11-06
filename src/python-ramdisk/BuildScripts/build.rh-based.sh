@@ -39,6 +39,8 @@ else
    source $actfile
 fi
 
+sudo rm /tmp/*.log
+
 cp BuildScripts/build.rh-based.spec .
 
 pyinstaller --clean -y build.rh-based.spec
